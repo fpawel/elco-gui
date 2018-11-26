@@ -47,7 +47,7 @@ function ProductColumnWidth(column: TProductColumn; canvas: TCanvas;
 
 implementation
 
-uses System.SysUtils;
+uses server_data_types_helpers, System.SysUtils;
 
 function ff(v: TSQLFloat): string;
 begin

@@ -10,14 +10,14 @@ type
     public
         FFloat64: Extended;
         FValid: Boolean;
-        function Str: string;
+        //function Str: string;
     end;
 
     TSQLString = class
     public
         FString: String;
         FValid: Boolean;
-        function Str: string;
+        //function Str: string;
     end;
 
     TSQLBool = class
@@ -30,7 +30,7 @@ type
     public
         FInt64: int64;
         FValid: Boolean;
-        function Str: string;
+        //function Str: string;
     end;
 
     TProduct = class
@@ -199,29 +199,29 @@ begin
     result := TJson.JsonToObject<TParty>(AJsonString)
 end;
 
-function TSQLFloat.Str: string;
-begin
-    if FValid then
-        result := floattostr(FFloat64)
-    else
-        result := '';
-end;
-
-function TSQLInt64.Str: string;
-begin
-    if FValid then
-        result := inttostr(FInt64)
-    else
-        result := '';
-end;
-
-function TSQLString.Str: string;
-begin
-    if FValid then
-        result := FString
-    else
-        result := '';
-end;
+//function TSQLFloat.Str: string;
+//begin
+//    if FValid then
+//        result := floattostr(FFloat64)
+//    else
+//        result := '';
+//end;
+//
+//function TSQLInt64.Str: string;
+//begin
+//    if FValid then
+//        result := inttostr(FInt64)
+//    else
+//        result := '';
+//end;
+//
+//function TSQLString.Str: string;
+//begin
+//    if FValid then
+//        result := FString
+//    else
+//        result := '';
+//end;
 
 
 

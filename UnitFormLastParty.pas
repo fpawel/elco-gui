@@ -65,7 +65,7 @@ var
 
 implementation
 
-uses stringgridutils, stringutils, superobject, UnitServerApp;
+uses stringgridutils, stringutils, superobject, UnitServerApp, server_data_types_helpers;
 
 {$R *.dfm}
 

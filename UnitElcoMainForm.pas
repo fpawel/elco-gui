@@ -77,10 +77,13 @@ begin
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
+var ww:Word;
 begin
     if FInitialized then
         exit;
     FInitialized := true;
+
+
 
     with FormParties do
     begin

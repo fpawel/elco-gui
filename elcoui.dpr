@@ -20,7 +20,8 @@ uses
   superxmlparser in 'utils\superobject\superxmlparser.pas',
   pipe in 'utils\pipe.pas',
   UnitServerApp in 'UnitServerApp.pas' {ServerApp: TDataModule},
-  server_data_types in 'data\server_data_types.pas';
+  server_data_types in 'data\server_data_types.pas',
+  server_data_types_helpers in 'data\server_data_types_helpers.pas';
 
 {$R *.res}
 
