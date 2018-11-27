@@ -67,7 +67,7 @@ implementation
 
 {$R *.dfm}
 
-uses UnitDataModule1, stringgridutils, stringutils,
+uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     server_data_types, services, UnitFormParty;
 
