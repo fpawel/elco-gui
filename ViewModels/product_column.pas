@@ -2,7 +2,7 @@ unit product_column;
 
 interface
 
-uses dbutils, classes, server_data_types, Vcl.graphics;
+uses dbutils, classes, server_data_types, server_data_types_helpers, Vcl.graphics;
 
 type
     TProductColumn = (pcPlace, pcFirmware, pcSerial,  pcFon20,
@@ -47,9 +47,9 @@ function ProductColumnWidth(column: TProductColumn; canvas: TCanvas;
 
 implementation
 
-uses server_data_types_helpers, System.SysUtils;
+uses System.SysUtils;
 
-function ff(v: TSQLFloat): string;
+function ff(v: TNullFloat64): string;
 begin
     if v.FValid then
         Result := floattostr(v.FFloat64)
@@ -57,7 +57,7 @@ begin
         Result := '';
 end;
 
-function Chk(v: TSQLFloat; c: TSQLBool): RProductValue;
+function Chk(v: TNullFloat64; c: TNullBool): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;

@@ -43,13 +43,13 @@ var
 
 implementation
 
-uses stringgridutils, stringutils, UnitServerApp;
+uses stringgridutils, services, stringutils;
 
 {$R *.dfm}
 
 procedure TFormParty.FormCreate(Sender: TObject);
 begin
-    Party := ServerApp.lastparty;
+    Party := services.TLastParty.Party;
 end;
 
 procedure TFormParty.StringGrid1DrawCell(Sender: TObject;

@@ -37,34 +37,34 @@ type
     public 
         FProductID : Int64;
         FPartyID : Int64;
-        FSerial : TTNullInt64;
+        FSerial : TNullInt64;
         FPlace : Integer;
         FCreatedAt : TDateTime;
-        FIFMinus20 : TTNullFloat64;
-        FIFPlus20 : TTNullFloat64;
-        FIFPlus50 : TTNullFloat64;
-        FISMinus20 : TTNullFloat64;
-        FISPlus20 : TTNullFloat64;
-        FISPlus50 : TTNullFloat64;
-        FI13 : TTNullFloat64;
-        FI24 : TTNullFloat64;
-        FI35 : TTNullFloat64;
-        FI26 : TTNullFloat64;
-        FI17 : TTNullFloat64;
-        FNotMeasured : TTNullFloat64;
-        FKSensMinus20 : TTNullFloat64;
-        FKSens20 : TTNullFloat64;
-        FKSens50 : TTNullFloat64;
-        FDFon20 : TTNullFloat64;
-        FDFon50 : TTNullFloat64;
-        FDNotMeasured : TTNullFloat64;
-        FOKFon20 : TTNullBool;
-        FOKDFon20 : TTNullBool;
-        FOKKSens20 : TTNullBool;
-        FOKDFon50 : TTNullBool;
-        FOKKSens50 : TTNullBool;
-        FOKDNotMeasured : TTNullBool;
-        FNotOk : TTNullBool;
+        FIFMinus20 : TNullFloat64;
+        FIFPlus20 : TNullFloat64;
+        FIFPlus50 : TNullFloat64;
+        FISMinus20 : TNullFloat64;
+        FISPlus20 : TNullFloat64;
+        FISPlus50 : TNullFloat64;
+        FI13 : TNullFloat64;
+        FI24 : TNullFloat64;
+        FI35 : TNullFloat64;
+        FI26 : TNullFloat64;
+        FI17 : TNullFloat64;
+        FNotMeasured : TNullFloat64;
+        FKSensMinus20 : TNullFloat64;
+        FKSens20 : TNullFloat64;
+        FKSens50 : TNullFloat64;
+        FDFon20 : TNullFloat64;
+        FDFon50 : TNullFloat64;
+        FDNotMeasured : TNullFloat64;
+        FOKFon20 : TNullBool;
+        FOKDFon20 : TNullBool;
+        FOKKSens20 : TNullBool;
+        FOKDFon50 : TNullBool;
+        FOKKSens50 : TNullBool;
+        FOKDNotMeasured : TNullBool;
+        FNotOk : TNullBool;
         FHasFirmware : Boolean;
         FProduction : Boolean;
         FAppliedProductTypeName : string;
@@ -77,8 +77,8 @@ type
         FLifetimeMonths : Int64;
         FLc64 : Boolean;
         FPointsMethod : Int64;
-        FProductTypeName : TTNullString;
-        FNote : TTNullString;
+        FProductTypeName : TNullString;
+        FNote : TNullString;
          
         constructor Create;
         destructor Destroy;
@@ -87,14 +87,14 @@ type
     TParty = class 
     public 
         FPartyID : Int64;
+        FOldPartyID : TNullString;
         FCreatedAt : TDateTime;
         FUpdatedAt : TDateTime;
         FProductTypeName : string;
         FConcentration1 : Double;
         FConcentration2 : Double;
         FConcentration3 : Double;
-        FNote : TTNullString;
-        FLast : Boolean;
+        FNote : TNullString;
         FProducts : TArray<TProduct>;
          
         constructor Create;
@@ -104,9 +104,9 @@ type
 implementation 
     uses Rest.Json;   
       
-//
-//TProduct
-//
+
+{ TProduct }
+
  
 constructor TProduct.Create;
 begin
@@ -202,18 +202,21 @@ begin
     
 end;
   
-//
-//TParty
-//
+
+{ TParty }
+
  
 constructor TParty.Create;
 begin
+    FOldPartyID := TNullString.Create;
     FNote := TNullString.Create;
     
 end;
  
 destructor TParty.Destroy;
 begin
+    if Assigned(FOldPartyID) then 
+        FOldPartyID.Free;
     if Assigned(FNote) then 
         FNote.Free;
     

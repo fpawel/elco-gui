@@ -37,6 +37,7 @@ procedure SuperObject_SetField(x:ISuperObject; field:string; v:boolean);overload
 procedure SuperObject_SetField(x:ISuperObject; field:string; v:string);overload;
 
 procedure SuperObject_Get(x:ISuperObject; var v:int64);overload;
+procedure SuperObject_Get(x:ISuperObject; var v:integer);overload;
 procedure SuperObject_Get(x:ISuperObject; var v:double);overload;
 procedure SuperObject_Get(x:ISuperObject; var v:boolean);overload;
 procedure SuperObject_Get(x:ISuperObject; var v:string);overload;
@@ -232,6 +233,11 @@ end;
 procedure SuperObject_Get(x:ISuperObject; var v:string);
 begin
     v := x.AsString;
+end;
+
+procedure SuperObject_Get(x:ISuperObject; var v:integer);overload;
+begin
+    v := x.AsInteger;
 end;
 
 

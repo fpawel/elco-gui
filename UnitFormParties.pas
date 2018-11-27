@@ -57,17 +57,13 @@ type
 var
     FormParties: TFormParties;
 
-
-
-
 implementation
 
 {$R *.dfm}
 
 uses stringutils, superobject,
-    dateutils,
-    UnitFormParty, UnitServerApp;
-
+    dateutils, services,
+    UnitFormParty;
 
 procedure TFormParties.FormCreate(Sender: TObject);
 begin
@@ -89,7 +85,8 @@ procedure TFormParties.TreeView1Change(Sender: TBaseVirtualTree;
 begin
     if Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty) then
     begin
-        FormParty.Party := ServerApp.Party(TreeData[Node].Value);
+        FormParty.Party := services.TPartiesCatalogue.Party
+          (TreeData[Node].Value);
         Node := TreeView1.GetFirst;
         while Assigned(Node) do
         begin
@@ -186,17 +183,15 @@ procedure TFormParties.CreatePartiesNodes(ParentNode: PVirtualNode);
 var
     Node: PVirtualNode;
     NodeData: PTreeData;
-    req, i: ISuperobject;
+    Party: TParty;
 begin
-    req := SO;
-    req.i['Year'] := TreeData[ParentNode.Parent.Parent].Value;
-    req.i['Month'] := TreeData[ParentNode.Parent].Value;
-    req.i['Day'] := TreeData[ParentNode].Value;
-    for i in ServerApp.GetJsonResult('PartiesCatalogue.Parties', req) do
+
+    for Party in TPartiesCatalogue.Parties(TreeData[ParentNode.Parent.Parent]
+      .Value, TreeData[ParentNode.Parent].Value, TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         NodeData := TreeData[Node];
-        NodeData.Party := TParty.FromJsonString(i.AsJson);
+        NodeData.Party := Party;
         NodeData.Value := NodeData.Party.FPartyID;
         NodeData.NodeKind := trdParty;
     end;
@@ -205,17 +200,14 @@ end;
 procedure TFormParties.CreateDaysNodes(ParentNode: PVirtualNode);
 var
     Node: PVirtualNode;
-    req, i: ISuperobject;
+    day: integer;
 begin
-    req := SO;
-    req.i['Year'] := TreeData[ParentNode.Parent].Value;
-    req.i['Month'] := TreeData[ParentNode].Value;
-
-    for i in ServerApp.GetJsonResult('PartiesCatalogue.Days', req) do
+    for day in TPartiesCatalogue.Days(TreeData[ParentNode.Parent].Value,
+      TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         TreeView1.HasChildren[Node] := true;
-        TreeData[Node].Value := i.AsInteger;
+        TreeData[Node].Value := day;
         TreeData[Node].NodeKind := trdDay;
         if IsActivePartyNode(Node) then
         begin
@@ -227,16 +219,14 @@ end;
 procedure TFormParties.CreateMonthsNodes(ParentNode: PVirtualNode);
 var
     Node: PVirtualNode;
-    req, i: ISuperobject;
+    month: integer;
 begin
 
-    req := SO;
-    req.i['Year'] := TreeData[ParentNode].Value;
-    for i in ServerApp.GetJsonResult('PartiesCatalogue.Months', req) do
+    for month in TPartiesCatalogue.Months(TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         TreeView1.HasChildren[Node] := true;
-        TreeData[Node].Value := i.AsInteger;
+        TreeData[Node].Value := month;
         TreeData[Node].NodeKind := trdMonth;
 
         if IsActivePartyNode(Node) then
@@ -249,14 +239,13 @@ end;
 procedure TFormParties.CreateYearsNodes;
 var
     Node: PVirtualNode;
-    req, i: ISuperobject;
+    year: integer;
 begin
     TreeView1.Clear;
-    req := SO;
-    for i in ServerApp.GetJsonResult('PartiesCatalogue.Years', req) do
+    for year in TPartiesCatalogue.Years do
     begin
         Node := TreeView1.AddChild(nil);
-        TreeData[Node].Value := i.AsInteger;
+        TreeData[Node].Value := year;
         TreeData[Node].NodeKind := trdYear;
         TreeView1.HasChildren[Node] := true;
         if IsActivePartyNode(Node) then

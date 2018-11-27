@@ -102,11 +102,6 @@
             <Form>ElcoMainForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="UnitDataModule1.pas">
-            <Form>DataModule1</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="utils\dbutils.pas"/>
         <DCCReference Include="utils\stringgridutils.pas"/>
         <DCCReference Include="utils\stringutils.pas"/>
@@ -131,13 +126,9 @@
         <DCCReference Include="utils\superobject\supertypes.pas"/>
         <DCCReference Include="utils\superobject\superxmlparser.pas"/>
         <DCCReference Include="utils\pipe.pas"/>
-        <DCCReference Include="UnitServerApp.pas">
-            <Form>ServerApp</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="data\server_data_types.pas"/>
-        <DCCReference Include="data\server_data_types_helpers.pas"/>
+        <DCCReference Include="api\server_data_types.pas"/>
+        <DCCReference Include="api\server_data_types_helpers.pas"/>
+        <DCCReference Include="api\services.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

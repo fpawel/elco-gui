@@ -1,4 +1,4 @@
-unit UnitFormLastParty;
+﻿unit UnitFormLastParty;
 
 interface
 
@@ -14,7 +14,7 @@ type
         StringGrid1: TStringGrid;
         PanelError: TPanel;
         ImageList1: TImageList;
-    ComboBox1: TComboBox;
+        ComboBox1: TComboBox;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -27,15 +27,15 @@ type
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1KeyDown(Sender: TObject; var Key: Word;
           Shift: TShiftState);
-    procedure ComboBox1CloseUp(Sender: TObject);
-    procedure ComboBox1DropDown(Sender: TObject);
-    procedure ComboBox1Exit(Sender: TObject);
+        procedure ComboBox1CloseUp(Sender: TObject);
+        procedure ComboBox1DropDown(Sender: TObject);
+        procedure ComboBox1Exit(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
 
         FParty: TParty;
-        FProducts: TProducts;
+        FProducts: TArray<TProduct>;
         FColumns: TProductColumns;
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
@@ -44,11 +44,9 @@ type
           ta: TAlignment);
         procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 
-
-
         procedure UpdateSerial(ACol, ARow: Integer; Value: string);
         procedure UpdateNote(ACol, ARow: Integer; Value: string);
-        procedure UpdateProductType(ACol,ARow: Integer; Value: string);
+        procedure UpdateProductType(ACol, ARow: Integer; Value: string);
 
         property ProductValues[ColumnIndex, RowIndex: Integer]: RProductValue
           read GetProductValue;
@@ -65,7 +63,8 @@ var
 
 implementation
 
-uses stringgridutils, stringutils, superobject, UnitServerApp, server_data_types_helpers;
+uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
+    services;
 
 {$R *.dfm}
 
@@ -108,7 +107,7 @@ begin
     else
         grd.Options := grd.Options - [goEditing];
 
-    case FColumns[ ACol ] of
+    case FColumns[ACol] of
         pcProdType:
             begin
                 r := grd.CellRect(ACol, ARow);
@@ -174,7 +173,6 @@ procedure TFormLastParty.StringGrid1MouseDown(Sender: TObject;
 var
     ACol, ARow: Integer;
     p: TProduct;
-    r: ISuperObject;
 begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
@@ -183,21 +181,17 @@ begin
         exit;
     try
         p := FProducts[ARow - 1];
-        r := SA([p.FPlace]);
-        r := ServerApp.GetJsonResult
-          ('LastParty.ToggleProductProductionAtPlace', r);
+        p.FProductID := TLastParty.ToggleProductProductionAtPlace(p.FPlace);
         p.FProduction := not p.FProduction;
-        p.FProductID := r.AsInteger;
         PanelError.Visible := false;
     except
-        on E: Exception do
+        on E: TRemoteError do
         begin
             PanelError.Caption := Format('%s: %s: %s',
               [ProductValues[0, ARow - 1].Value,
               product_column_name[FColumns[ACol]], E.Message]);
-            PanelError.Visible := true;
+            PanelError.Visible := True;
         end;
-
     end;
     StringGrid_RedrawRow(StringGrid1, ARow);
 
@@ -280,20 +274,32 @@ begin
 
         ComboBox1.Hide;
 
-        if MessageDlg(Format('������� ������ ��� %s?',
+        if MessageDlg
+          (Format('Подтвердите необходимость удаления данных ЭХЯ %s?',
           [ProductValues[0, Row - 1].Value]), mtConfirmation, [mbYes, mbNo], 0)
           <> mrYes then
             exit;
 
-        ServerApp.GetJsonResult('LastParty.DeleteProductAtPlace',
-          SA([Row - 1]));
-        p.Free;
-        p := TProduct.Create;
-        p.FPlace := Row - 1;
-        FProducts[Row - 1] := p;
-        Cells[0, Row] := ProductValues[0, Row - 1].Value;
-        for ACol := 1 to colcount - 1 do
-            Cells[ACol, Row] := '';
+        try
+            TLastParty.DeleteProductAtPlace(Row - 1);
+            p.Free;
+            p := TProduct.Create;
+            p.FPlace := Row - 1;
+            FProducts[Row - 1] := p;
+            Cells[0, Row] := ProductValues[0, Row - 1].Value;
+            for ACol := 1 to colcount - 1 do
+                Cells[ACol, Row] := '';
+            PanelError.Visible := false;
+        except
+            on E: TRemoteError do
+            begin
+                PanelError.Caption :=
+                  Format('%s: %s: %s', [ProductValues[0, Row - 1].Value,
+                  product_column_name[FColumns[ACol]], E.Message]);
+                PanelError.Visible := True;
+            end;
+        end;
+
     end;
 
 end;
@@ -330,20 +336,21 @@ begin
             Cells[Col, Row] := Items[ItemIndex]
         else
             Cells[Col, Row] := '';
-        UpdateProductType(col, Row, ComboBox1.Text)
+        UpdateProductType(Col, Row, ComboBox1.Text)
     end;
     StringGrid1.SetFocus;
 end;
 
 procedure TFormLastParty.ComboBox1DropDown(Sender: TObject);
-var i:ISuperObject;
+var
+    i: string;
 begin
-     ComboBox1.Items.Clear;
-     ComboBox1.Items.Add('');
-     for i in ServerApp.GetJsonResult('ProductTypes.Names', SO) do
-        ComboBox1.Items.Add(i.AsString);
-end;
+    ComboBox1.Items.Clear;
+    ComboBox1.Items.Add('');
+    for i in TProductTypes.Names do
+            ComboBox1.Items.Add(i);
 
+end;
 
 procedure TFormLastParty.ComboBox1Exit(Sender: TObject);
 begin
@@ -397,21 +404,21 @@ end;
 
 procedure TFormLastParty.reload_data;
 var
-    I: Integer;
+    i: Integer;
 begin
-    for I := 0 to 95 do
-        FProducts[I] := nil;
-    FParty := ServerApp.lastparty;
+    for i := 0 to 95 do
+        FProducts[i] := nil;
+    FParty := TLastParty.Party;
 
-    for I := 0 to Length(FParty.FProducts) - 1 do
-        FProducts[FParty.FProducts[I].FPlace] := FParty.FProducts[I];
+    for i := 0 to Length(FParty.FProducts) - 1 do
+        FProducts[FParty.FProducts[i].FPlace] := FParty.FProducts[i];
 
-    for I := 0 to 95 do
+    for i := 0 to 95 do
     begin
-        if not Assigned(FProducts[I]) then
+        if not Assigned(FProducts[i]) then
         begin
-            FProducts[I] := TProduct.Create;
-            FProducts[I].FPlace := I;
+            FProducts[i] := TProduct.Create;
+            FProducts[i].FPlace := i;
         end;
     end;
     FColumns := GetProductColumns(FProducts,
@@ -428,26 +435,22 @@ end;
 procedure TFormLastParty.UpdateNote(ACol, ARow: Integer; Value: string);
 var
     p: TProduct;
-    r: ISuperObject;
+
 begin
     try
         p := FProducts[ARow - 1];
-        r := SO;
-        r.I['Place'] := p.FPlace;
-        r.S['Note'] := Value;
-        r := ServerApp.GetJsonResult('LastParty.SetProductNoteAtPlace', r);
+        p.FProductID := TLastParty.SetProductNoteAtPlace(p.FPlace, Value);
         p.FNote.FString := Value;
-        p.FNote.FValid := true;
-        p.FProductID := r.AsInteger;
+        p.FNote.FValid := True;
         PanelError.Visible := false;
     except
         on E: Exception do
         begin
 
             PanelError.Caption := Format('%s: %s: "%s": %s',
-              [ProductValues[0, ARow - 1].Value,  product_column_name[pcNote],
+              [ProductValues[0, ARow - 1].Value, product_column_name[pcNote],
               Value, E.Message]);
-            PanelError.Visible := true;
+            PanelError.Visible := True;
         end;
     end;
 
@@ -462,29 +465,24 @@ begin
 
 end;
 
-procedure TFormLastParty.UpdateProductType(ACol,ARow: Integer; Value: string);
+procedure TFormLastParty.UpdateProductType(ACol, ARow: Integer; Value: string);
 var
     p: TProduct;
-    r: ISuperObject;
 begin
     try
         p := FProducts[ARow - 1];
-        r := SO;
-        r.I['Place'] := p.FPlace;
-        r.S['ProductType'] := Value;
-        r := ServerApp.GetJsonResult('LastParty.SetProductTypeAtPlace', r);
+        p.FProductID := TLastParty.SetProductTypeAtPlace(p.FPlace, Value);
         p.FProductTypeName.FString := Value;
-        p.FProductTypeName.FValid := Trim(value) <> '';
-        p.FProductID := r.AsInteger;
+        p.FProductTypeName.FValid := Trim(Value) <> '';
         PanelError.Visible := false;
     except
-        on E: Exception do
+        on E: TRemoteError do
         begin
 
             PanelError.Caption := Format('%s: %s: "%s": %s',
-              [ProductValues[ 0, ARow - 1].Value, product_column_name[pcProdType],
-              Value, E.Message]);
-            PanelError.Visible := true;
+              [ProductValues[0, ARow - 1].Value,
+              product_column_name[pcProdType], Value, E.Message]);
+            PanelError.Visible := True;
         end;
     end;
 
@@ -502,15 +500,12 @@ end;
 procedure TFormLastParty.UpdateSerial(ACol, ARow: Integer; Value: string);
 var
     p: TProduct;
-    r: ISuperObject;
 begin
     try
         p := FProducts[ARow - 1];
-        r := SA([p.FPlace, strtoint(Value)]);
-        r := ServerApp.GetJsonResult('LastParty.SetProductSerialAtPlace', r);
+        p.FProductID := TLastParty.SetProductSerialAtPlace(p.FPlace, strtoint(Value));
         p.FSerial.FInt64 := strtoint(Value);
-        p.FSerial.FValid := true;
-        p.FProductID := r.AsInteger;
+        p.FSerial.FValid := True;
         PanelError.Visible := false;
     except
         on E: Exception do
@@ -519,7 +514,7 @@ begin
             PanelError.Caption := Format('%s: %s: "%s": %s',
               [ProductValues[0, ARow - 1].Value, product_column_name[pcSerial],
               Value, E.Message]);
-            PanelError.Visible := true;
+            PanelError.Visible := True;
         end;
     end;
 

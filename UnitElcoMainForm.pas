@@ -69,7 +69,7 @@ implementation
 
 uses UnitDataModule1, stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    UnitServerApp, server_data_types, UnitFormParty;
+    server_data_types, services, UnitFormParty;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
@@ -124,7 +124,7 @@ begin
     if PageControl.ActivePage = TabSheetParties then
     begin
         if Assigned( FormParty.Party )  then
-            FormParty.Party := ServerApp.Party(FormParty.Party.FPartyID);
+            FormParty.Party := TPartiesCatalogue.Party(FormParty.Party.FPartyID);
 
     end
     else if PageControl.ActivePage = TabSheetParty then

@@ -5,17 +5,17 @@ interface
 uses server_data_types;
 
 type
-    TSQLFloatHelper = class helper for TSQLFloat
+    TNullFloat64Helper = class helper for TNullFloat64
       function GetStr: string;
       property Str : string read GetStr;
     end;
 
-    TSQLStringHelper = class helper for TSQLString
+    TNullStringHelper = class helper for TNullString
       function GetStr: string;
       property Str : string read GetStr;
     end;
 
-    TSQLInt64Helper = class helper for TSQLInt64
+    TNullInt64Helper = class helper for TNullInt64
       function GetStr: string;
       property Str : string read GetStr;
     end;
@@ -27,7 +27,7 @@ implementation
 
 uses sysutils;
 
-function TSQLFloatHelper.GetStr: string;
+function TNullFloat64Helper.GetStr: string;
 begin
     if FValid then
         result := floattostr(FFloat64)
@@ -35,7 +35,7 @@ begin
         result := '';
 end;
 
-function TSQLStringHelper.GetStr: string;
+function TNullStringHelper.GetStr: string;
 begin
     if FValid then
         result := FString
@@ -43,7 +43,7 @@ begin
         result := '';
 end;
 
-function TSQLInt64Helper.GetStr: string;
+function TNullInt64Helper.GetStr: string;
 begin
     if FValid then
         result := inttostr(FInt64)
