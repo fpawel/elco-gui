@@ -4,7 +4,7 @@ interface
 
 uses System.Classes, Winapi.Windows, REST.Json, System.SyncObjs,
     System.Generics.Collections,
-    sysutils, ujsonrpc, superobject;
+    sysutils, superobject;
 
 type
     TPipe = class
@@ -15,19 +15,116 @@ type
         FId: integer;
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
-        function _GetResponse(request: string): string;
+
     public
 
         { Public declarations }
         Constructor Create(AName: string);
-        function GetResponse(const method: string; params: ISuperObject)
-          : IJsonRpcParsed;
+
+        function GetResponse(request: TBytes): TBytes;
     end;
+
+    TRemoteError = class(Exception);
+
+function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
+
+function Pipe_GetJsonrpcResult(pipe: TPipe; const method: string;
+  params: ISuperObject): ISuperObject;
+
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:int64);overload;
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:double);overload;
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:boolean);overload;
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:string);overload;
+
+procedure SuperObject_Get(x:ISuperObject; var v:int64);overload;
+procedure SuperObject_Get(x:ISuperObject; var v:double);overload;
+procedure SuperObject_Get(x:ISuperObject; var v:boolean);overload;
+procedure SuperObject_Get(x:ISuperObject; var v:string);overload;
 
 implementation
 
 uses System.WideStrUtils, System.dateutils, vcl.forms,
-    math, inifiles;
+    math, ujsonrpc, inifiles;
+
+function Pipe_GetJsonrpcParcedResponse(pipe: TPipe; const method: string;
+  params: ISuperObject): IJsonRpcParsed;
+var
+    requestObj: IJsonRpcMessage;
+    strResponse: string;
+begin
+    pipe.FId := pipe.FId + 1;
+    requestObj := TJsonRpcMessage.request(pipe.FId, method, params);
+    strResponse := Pipe_GetUTF8Response(pipe, requestObj.AsJSon(true, true));
+    exit(TJsonRpcMessage.Parse(strResponse));
+end;
+
+function formatMessagetype(mt: TJsonRpcObjectType): string;
+begin
+    case mt of
+        jotInvalid:
+            exit('invalid');
+        jotRequest:
+            exit('request');
+        jotNotification:
+            exit('notification');
+        jotSuccess:
+            exit('success');
+        jotError:
+            exit('error');
+    end;
+end;
+
+function Pipe_GetJsonrpcResult(pipe: TPipe; const method: string;
+  params: ISuperObject): ISuperObject;
+var
+    r: IJsonRpcParsed;
+    mt: TJsonRpcObjectType;
+    rx: ISuperObject;
+begin
+    r := Pipe_GetJsonrpcParcedResponse(pipe, method, params);
+    if not Assigned(r) then
+        raise Exception.Create(Format('%s%s: unexpected nil response',
+          [method, params.AsString]));
+
+    if not Assigned(r.GetMessagePayload) then
+        raise Exception.Create(Format('%s%s: unexpected nil message payload',
+          [method, params.AsString]));
+
+    rx := r.GetMessagePayload.AsJsonObject;
+
+    if not Assigned(r.GetMessagePayload) then
+        raise Exception.Create
+          (Format('%s%s: unexpected nil message json object',
+          [method, params.AsString]));
+
+    if Assigned(rx['result']) then
+    begin
+        result := rx['result'];
+        exit;
+    end;
+
+    if Assigned(rx['error.message']) then
+        raise TRemoteError.Create(rx['error'].S['message']);
+
+    if Assigned(r.GetMessagePayload) then
+        raise Exception.Create(Format('%s%s'#13'%s'#13'message type: %s',
+          [method, params.AsString, r.GetMessagePayload,
+          formatMessagetype(r.GetMessageType)]));
+
+    raise Exception.Create(Format('%s%s'#13'message type: %s',
+      [method, params.AsString, formatMessagetype(r.GetMessageType)]));
+
+end;
+
+function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
+var
+    bytes_to_write: TBytes;
+    read_Buffer: TBytes;
+begin
+    bytes_to_write := TEncoding.UTF8.GetBytes(request);
+    read_Buffer := pipe.GetResponse(bytes_to_write);
+    result := TEncoding.UTF8.GetString(read_Buffer);
+end;
 
 function _LastError: string;
 var
@@ -52,19 +149,19 @@ begin
     if not(WriteFile(_hPipe, Buffer, numberOfbytesToWrite, writen_count, nil))
     then
     begin
-        _hPipe := CreateFileW(PWideChar('\\.\pipe\elco'), GENERIC_READ or
-          GENERIC_WRITE, FILE_SHARE_READ or FILE_SHARE_WRITE, nil,
-          OPEN_EXISTING, 0, 0);
-        assert(_hPipe <> INVALID_HANDLE_VALUE, 'can not connect server pipe: ' + _LastError);
+        _hPipe := CreateFileW(PWideChar(FName), GENERIC_READ or GENERIC_WRITE,
+          FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING, 0, 0);
+        assert(_hPipe <> INVALID_HANDLE_VALUE, 'can not connect "' + FName +
+          '": ' + _LastError);
 
         assert(WriteFile(_hPipe, Buffer, numberOfbytesToWrite, writen_count,
-          nil), 'WriteFile: ' + _LastError);
+          nil), FName + ': WriteFile: ' + _LastError);
 
     end;
 
     assert(writen_count = numberOfbytesToWrite,
-      Format('WriteFile: writen_count=%d, must be %d',
-      [writen_count, numberOfbytesToWrite]));
+      Format('%s: WriteFile: writen_count=%d, must be %d', [FName, writen_count,
+      numberOfbytesToWrite]));
 
 end;
 
@@ -73,23 +170,18 @@ var
     read_count: DWORD;
 begin
     assert(ReadFile(_hPipe, Buffer, numberOfbytesToRead, read_count, nil),
-      'ReadFile: ' + _LastError);
+      FName + ' ReadFile: ' + _LastError);
 
     assert(read_count = numberOfbytesToRead,
-      Format('ReadFile: writen_count=%d, must be %d',
-      [read_count, numberOfbytesToRead]));
+      Format('%s: ReadFile: writen_count=%d, must be %d', [FName, read_count,
+      numberOfbytesToRead]));
 end;
 
-function TPipe._GetResponse(request: string): string;
+function TPipe.GetResponse(request: TBytes): TBytes;
 var
-    bytes_to_write: TBytes;
     avail_count, read_count: DWORD;
-
-    read_Buffer: TBytes;
 begin
-    bytes_to_write := TEncoding.UTF8.GetBytes(request);
-    _WriteFile(bytes_to_write[0], length(bytes_to_write));
-
+    _WriteFile(request[0], length(request));
     avail_count := 0;
     while avail_count = 0 do
     begin
@@ -100,25 +192,47 @@ begin
           @avail_count, // _Out_opt_ LPDWORD lpTotalBytesAvail,
           nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
           );
-          Application.ProcessMessages;
+        Application.ProcessMessages;
     end;
-
-    SetLength(read_Buffer, avail_count);
-
-    _ReadFile(read_Buffer[0], avail_count);
-    result := TEncoding.UTF8.GetString(read_Buffer);
+    SetLength(result, avail_count);
+    _ReadFile(result[0], avail_count);
 end;
 
-function TPipe.GetResponse(const method: string; params: ISuperObject)
-  : IJsonRpcParsed;
-var
-    requestObj: IJsonRpcMessage;
-    strResponse: string;
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:int64);
 begin
-    FId := FId + 1;
-    requestObj := TJsonRpcMessage.request(FId, method, params);
-    strResponse := _GetResponse(requestObj.AsJSon(true, true));
-    exit(TJsonRpcMessage.Parse(strResponse));
+    x.I[field] := v;
 end;
+
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:double);
+begin
+    x.D[field] := v;
+end;
+
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:boolean);
+begin
+    x.B[field] := v;
+end;
+procedure SuperObject_SetField(x:ISuperObject; field:string; v:string);
+begin
+    x.S[field] := v;
+end;
+
+procedure SuperObject_Get(x:ISuperObject; var v:int64);
+begin
+    v := x.AsInteger;
+end;
+procedure SuperObject_Get(x:ISuperObject; var v:double);
+begin
+    v := x.AsDouble;
+end;
+procedure SuperObject_Get(x:ISuperObject; var v:boolean);
+begin
+    v := x.AsBoolean;
+end;
+procedure SuperObject_Get(x:ISuperObject; var v:string);
+begin
+    v := x.AsString;
+end;
+
 
 end.

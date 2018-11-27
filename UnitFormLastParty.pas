@@ -184,7 +184,7 @@ begin
     try
         p := FProducts[ARow - 1];
         r := SA([p.FPlace]);
-        r := ServerApp.MustGetResult
+        r := ServerApp.GetJsonResult
           ('LastParty.ToggleProductProductionAtPlace', r);
         p.FProduction := not p.FProduction;
         p.FProductID := r.AsInteger;
@@ -285,7 +285,7 @@ begin
           <> mrYes then
             exit;
 
-        ServerApp.MustGetResult('LastParty.DeleteProductAtPlace',
+        ServerApp.GetJsonResult('LastParty.DeleteProductAtPlace',
           SA([Row - 1]));
         p.Free;
         p := TProduct.Create;
@@ -340,7 +340,7 @@ var i:ISuperObject;
 begin
      ComboBox1.Items.Clear;
      ComboBox1.Items.Add('');
-     for i in ServerApp.MustGetResult('ProductTypes.Names', SO) do
+     for i in ServerApp.GetJsonResult('ProductTypes.Names', SO) do
         ComboBox1.Items.Add(i.AsString);
 end;
 
@@ -435,7 +435,7 @@ begin
         r := SO;
         r.I['Place'] := p.FPlace;
         r.S['Note'] := Value;
-        r := ServerApp.MustGetResult('LastParty.SetProductNoteAtPlace', r);
+        r := ServerApp.GetJsonResult('LastParty.SetProductNoteAtPlace', r);
         p.FNote.FString := Value;
         p.FNote.FValid := true;
         p.FProductID := r.AsInteger;
@@ -472,7 +472,7 @@ begin
         r := SO;
         r.I['Place'] := p.FPlace;
         r.S['ProductType'] := Value;
-        r := ServerApp.MustGetResult('LastParty.SetProductTypeAtPlace', r);
+        r := ServerApp.GetJsonResult('LastParty.SetProductTypeAtPlace', r);
         p.FProductTypeName.FString := Value;
         p.FProductTypeName.FValid := Trim(value) <> '';
         p.FProductID := r.AsInteger;
@@ -507,7 +507,7 @@ begin
     try
         p := FProducts[ARow - 1];
         r := SA([p.FPlace, strtoint(Value)]);
-        r := ServerApp.MustGetResult('LastParty.SetProductSerialAtPlace', r);
+        r := ServerApp.GetJsonResult('LastParty.SetProductSerialAtPlace', r);
         p.FSerial.FInt64 := strtoint(Value);
         p.FSerial.FValid := true;
         p.FProductID := r.AsInteger;

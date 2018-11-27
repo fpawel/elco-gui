@@ -57,6 +57,9 @@ type
 var
     FormParties: TFormParties;
 
+
+
+
 implementation
 
 {$R *.dfm}
@@ -64,6 +67,7 @@ implementation
 uses stringutils, superobject,
     dateutils,
     UnitFormParty, UnitServerApp;
+
 
 procedure TFormParties.FormCreate(Sender: TObject);
 begin
@@ -188,8 +192,7 @@ begin
     req.i['Year'] := TreeData[ParentNode.Parent.Parent].Value;
     req.i['Month'] := TreeData[ParentNode.Parent].Value;
     req.i['Day'] := TreeData[ParentNode].Value;
-
-    for i in ServerApp.MustGetResult('PartiesCatalogue.Parties', req) do
+    for i in ServerApp.GetJsonResult('PartiesCatalogue.Parties', req) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         NodeData := TreeData[Node];
@@ -208,7 +211,7 @@ begin
     req.i['Year'] := TreeData[ParentNode.Parent].Value;
     req.i['Month'] := TreeData[ParentNode].Value;
 
-    for i in ServerApp.MustGetResult('PartiesCatalogue.Days', req) do
+    for i in ServerApp.GetJsonResult('PartiesCatalogue.Days', req) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         TreeView1.HasChildren[Node] := true;
@@ -229,8 +232,7 @@ begin
 
     req := SO;
     req.i['Year'] := TreeData[ParentNode].Value;
-
-    for i in ServerApp.MustGetResult('PartiesCatalogue.Months', req) do
+    for i in ServerApp.GetJsonResult('PartiesCatalogue.Months', req) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         TreeView1.HasChildren[Node] := true;
@@ -251,7 +253,7 @@ var
 begin
     TreeView1.Clear;
     req := SO;
-    for i in ServerApp.MustGetResult('PartiesCatalogue.Years', req) do
+    for i in ServerApp.GetJsonResult('PartiesCatalogue.Years', req) do
     begin
         Node := TreeView1.AddChild(nil);
         TreeData[Node].Value := i.AsInteger;
