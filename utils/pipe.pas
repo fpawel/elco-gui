@@ -13,6 +13,7 @@ type
         _hPipe: THANDLE; // дескриптор
         FName: string;
         FId: integer;
+        FBusy: boolean;
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
 
@@ -20,27 +21,32 @@ type
 
         { Public declarations }
         Constructor Create(AName: string);
-
         function GetResponse(request: TBytes): TBytes;
+        property Busy: boolean read FBusy;
     end;
 
     TRemoteError = class(Exception);
+    EPipeBusy = class(Exception);
 
 function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
 
 function Pipe_GetJsonrpcResult(pipe: TPipe; const method: string;
   params: ISuperObject): ISuperObject;
 
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:int64);overload;
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:double);overload;
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:boolean);overload;
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:string);overload;
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: int64); overload;
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: double); overload;
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: boolean); overload;
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: string); overload;
 
-procedure SuperObject_Get(x:ISuperObject; var v:int64);overload;
-procedure SuperObject_Get(x:ISuperObject; var v:integer);overload;
-procedure SuperObject_Get(x:ISuperObject; var v:double);overload;
-procedure SuperObject_Get(x:ISuperObject; var v:boolean);overload;
-procedure SuperObject_Get(x:ISuperObject; var v:string);overload;
+procedure SuperObject_Get(x: ISuperObject; var v: int64); overload;
+procedure SuperObject_Get(x: ISuperObject; var v: integer); overload;
+procedure SuperObject_Get(x: ISuperObject; var v: double); overload;
+procedure SuperObject_Get(x: ISuperObject; var v: boolean); overload;
+procedure SuperObject_Get(x: ISuperObject; var v: string); overload;
 
 implementation
 
@@ -141,6 +147,7 @@ Constructor TPipe.Create(AName: string);
 begin
     FName := AName;
     FId := 0;
+    FBusy := false;
 end;
 
 procedure TPipe._WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
@@ -182,63 +189,75 @@ function TPipe.GetResponse(request: TBytes): TBytes;
 var
     avail_count, read_count: DWORD;
 begin
-    _WriteFile(request[0], length(request));
-    avail_count := 0;
-    while avail_count = 0 do
-    begin
-        PeekNamedPipe(_hPipe, // _In_      HANDLE  hNamedPipe,
-          nil, // _Out_opt_ LPVOID  lpBuffer,
-          0, // _In_      DWORD   nBufferSize,
-          nil, // _Out_opt_ LPDWORD lpBytesRead,
-          @avail_count, // _Out_opt_ LPDWORD lpTotalBytesAvail,
-          nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
-          );
-        Application.ProcessMessages;
+    if FBusy then
+        raise EPipeBusy.Create('pipe is busy');
+    FBusy := true;
+    try
+        _WriteFile(request[0], length(request));
+        avail_count := 0;
+        while avail_count = 0 do
+        begin
+            PeekNamedPipe(_hPipe, // _In_      HANDLE  hNamedPipe,
+              nil, // _Out_opt_ LPVOID  lpBuffer,
+              0, // _In_      DWORD   nBufferSize,
+              nil, // _Out_opt_ LPDWORD lpBytesRead,
+              @avail_count, // _Out_opt_ LPDWORD lpTotalBytesAvail,
+              nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
+              );
+            // Sleep(50);
+            Application.ProcessMessages;
+        end;
+        SetLength(result, avail_count);
+        _ReadFile(result[0], avail_count);
+
+    finally
+        FBusy := false;
     end;
-    SetLength(result, avail_count);
-    _ReadFile(result[0], avail_count);
 end;
 
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:int64);
+procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);
 begin
     x.I[field] := v;
 end;
 
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:double);
+procedure SuperObject_SetField(x: ISuperObject; field: string; v: double);
 begin
     x.D[field] := v;
 end;
 
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:boolean);
+procedure SuperObject_SetField(x: ISuperObject; field: string; v: boolean);
 begin
     x.B[field] := v;
 end;
-procedure SuperObject_SetField(x:ISuperObject; field:string; v:string);
+
+procedure SuperObject_SetField(x: ISuperObject; field: string; v: string);
 begin
     x.S[field] := v;
 end;
 
-procedure SuperObject_Get(x:ISuperObject; var v:int64);
+procedure SuperObject_Get(x: ISuperObject; var v: int64);
 begin
     v := x.AsInteger;
 end;
-procedure SuperObject_Get(x:ISuperObject; var v:double);
+
+procedure SuperObject_Get(x: ISuperObject; var v: double);
 begin
     v := x.AsDouble;
 end;
-procedure SuperObject_Get(x:ISuperObject; var v:boolean);
+
+procedure SuperObject_Get(x: ISuperObject; var v: boolean);
 begin
     v := x.AsBoolean;
 end;
-procedure SuperObject_Get(x:ISuperObject; var v:string);
+
+procedure SuperObject_Get(x: ISuperObject; var v: string);
 begin
     v := x.AsString;
 end;
 
-procedure SuperObject_Get(x:ISuperObject; var v:integer);overload;
+procedure SuperObject_Get(x: ISuperObject; var v: integer); overload;
 begin
     v := x.AsInteger;
 end;
-
 
 end.

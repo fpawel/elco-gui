@@ -26,76 +26,77 @@ object FormFirmware: TFormFirmware
     TabOrder = 0
     object Label1: TLabel
       Left = 0
-      Top = 0
+      Top = 32
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1044#1072#1090#1072
+      ExplicitTop = 0
       ExplicitWidth = 29
     end
     object Label2: TLabel
       Left = 0
-      Top = 50
+      Top = 82
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1057#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088
-      ExplicitTop = 53
+      ExplicitTop = 50
       ExplicitWidth = 99
     end
     object Label5: TLabel
       Left = 0
-      Top = 150
+      Top = 182
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1045#1076#1080#1085#1080#1094#1099' '#1080#1079#1084#1077#1088#1077#1085#1080#1103
-      ExplicitTop = 164
+      ExplicitTop = 150
       ExplicitWidth = 118
     end
     object Label3: TLabel
       Left = 0
-      Top = 100
+      Top = 132
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
-      ExplicitTop = 106
+      ExplicitTop = 100
       ExplicitWidth = 70
     end
     object Label4: TLabel
       Left = 0
-      Top = 200
+      Top = 232
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1043#1072#1079
-      ExplicitTop = 216
+      ExplicitTop = 200
       ExplicitWidth = 20
     end
     object Label6: TLabel
       Left = 0
-      Top = 250
+      Top = 282
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1064#1082#1072#1083#1072
-      ExplicitTop = 271
+      ExplicitTop = 250
       ExplicitWidth = 39
     end
     object Label7: TLabel
       Left = 0
-      Top = 295
+      Top = 327
       Width = 116
       Height = 16
       Align = alTop
       Caption = #1063#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
-      ExplicitTop = 319
+      ExplicitTop = 295
       ExplicitWidth = 107
     end
     object DateTimePicker1: TDateTimePicker
       Left = 0
-      Top = 21
+      Top = 53
       Width = 116
       Height = 24
       Align = alTop
@@ -103,271 +104,301 @@ object FormFirmware: TFormFirmware
       Time = 43432.487553599540000000
       Color = clGradientInactiveCaption
       TabOrder = 0
-      ExplicitWidth = 176
+      ExplicitTop = 21
     end
-    object Edit1: TEdit
+    object EditSerial: TEdit
       Left = 0
-      Top = 71
+      Top = 103
       Width = 116
       Height = 24
       Align = alTop
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 1
       Text = '100'
-      ExplicitWidth = 176
+      ExplicitTop = 71
     end
-    object ComboBox3: TComboBox
+    object ComboBoxUnits: TComboBox
       Left = 0
-      Top = 171
+      Top = 203
       Width = 116
       Height = 24
       Align = alTop
       BevelInner = bvNone
       BevelOuter = bvNone
       Style = csOwnerDrawFixed
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ItemHeight = 18
       ItemIndex = 0
+      ParentFont = False
       TabOrder = 2
       Text = #1084#1075'/'#1084'3'
       Items.Strings = (
         #1084#1075'/'#1084'3'
         'ppm')
-      ExplicitTop = 176
-      ExplicitWidth = 176
+      ExplicitTop = 171
     end
     object Panel4: TPanel
       Left = 0
-      Top = 16
+      Top = 48
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitTop = 17
-      ExplicitWidth = 176
+      ExplicitTop = 16
     end
     object Panel2: TPanel
       Left = 0
-      Top = 45
+      Top = 77
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 4
-      ExplicitLeft = 6
-      ExplicitTop = 51
-      ExplicitWidth = 176
+      ExplicitTop = 45
     end
     object Panel11: TPanel
       Left = 0
-      Top = 166
+      Top = 198
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 5
-      ExplicitLeft = -8
-      ExplicitTop = 119
-      ExplicitWidth = 176
+      ExplicitTop = 166
     end
     object Panel13: TPanel
       Left = 0
-      Top = 66
+      Top = 98
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 6
-      ExplicitTop = 73
-      ExplicitWidth = 176
+      ExplicitTop = 66
     end
-    object ComboBox1: TComboBox
+    object ComboBoxProductType: TComboBox
       Left = 0
-      Top = 121
+      Top = 153
       Width = 116
       Height = 24
       Align = alTop
       BevelInner = bvNone
       BevelOuter = bvNone
       Style = csOwnerDrawFixed
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ItemHeight = 18
       ItemIndex = 0
+      ParentFont = False
       TabOrder = 7
       Text = '035'
       Items.Strings = (
         '035')
-      ExplicitWidth = 176
+      ExplicitTop = 121
     end
-    object ComboBox2: TComboBox
+    object ComboBoxGas: TComboBox
       Left = 0
-      Top = 221
+      Top = 253
       Width = 116
       Height = 24
       Align = alTop
       BevelInner = bvNone
       BevelOuter = bvNone
       Style = csOwnerDrawFixed
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ItemHeight = 18
       ItemIndex = 0
+      ParentFont = False
       TabOrder = 8
       Text = 'CO'
       Items.Strings = (
         'CO')
-      ExplicitTop = 231
-      ExplicitWidth = 176
+      ExplicitTop = 221
     end
-    object Edit2: TEdit
+    object EditScale: TEdit
       Left = 0
-      Top = 266
+      Top = 298
       Width = 116
       Height = 24
       Align = alTop
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 9
       Text = '0'
-      ExplicitTop = 281
-      ExplicitWidth = 176
+      ExplicitTop = 266
     end
     object Panel15: TPanel
       Left = 0
-      Top = 145
+      Top = 177
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 10
-      ExplicitTop = 160
-      ExplicitWidth = 176
+      ExplicitTop = 145
     end
     object Panel16: TPanel
       Left = 0
-      Top = 116
+      Top = 148
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 11
-      ExplicitLeft = 6
-      ExplicitTop = 114
-      ExplicitWidth = 176
+      ExplicitTop = 116
     end
     object Panel17: TPanel
       Left = 0
-      Top = 245
+      Top = 277
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 12
-      ExplicitTop = 276
-      ExplicitWidth = 176
+      ExplicitTop = 245
     end
     object Panel18: TPanel
       Left = 0
-      Top = 195
+      Top = 227
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 13
-      ExplicitTop = 223
-      ExplicitWidth = 176
+      ExplicitTop = 195
     end
     object Panel20: TPanel
       Left = 0
-      Top = 216
+      Top = 248
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 14
-      ExplicitLeft = 6
-      ExplicitTop = 247
-      ExplicitWidth = 176
+      ExplicitTop = 216
     end
     object Panel21: TPanel
       Left = 0
-      Top = 95
+      Top = 127
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 15
-      ExplicitTop = 102
-      ExplicitWidth = 176
+      ExplicitTop = 95
     end
     object Panel5: TPanel
       Left = 0
-      Top = 290
+      Top = 322
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 16
-      ExplicitLeft = 6
-      ExplicitTop = 299
-      ExplicitWidth = 176
+      ExplicitTop = 290
     end
-    object Edit3: TEdit
+    object EditSens: TEdit
       Left = 0
-      Top = 316
+      Top = 348
       Width = 116
       Height = 24
       Align = alTop
-      Color = clGradientInactiveCaption
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 17
       Text = '100'
-      ExplicitLeft = -6
-      ExplicitTop = 332
-      ExplicitWidth = 176
+      ExplicitTop = 316
     end
     object Panel6: TPanel
       Left = 0
-      Top = 340
+      Top = 372
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 18
-      ExplicitLeft = -5
-      ExplicitTop = 372
-      ExplicitWidth = 176
+      ExplicitTop = 340
     end
     object Panel7: TPanel
       Left = 0
-      Top = 311
+      Top = 343
       Width = 116
       Height = 5
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 19
-      ExplicitLeft = 6
-      ExplicitTop = 355
-      ExplicitWidth = 176
+      ExplicitTop = 311
     end
-  end
-  object Panel1: TPanel
-    Left = 377
-    Top = 5
-    Width = 456
-    Height = 598
-    Align = alClient
-    BevelOuter = bvNone
-    TabOrder = 1
-    ExplicitLeft = 380
-    ExplicitTop = 8
-    object Panel12: TPanel
+    object Panel9: TPanel
       Left = 0
       Top = 0
-      Width = 456
+      Width = 116
       Height = 32
       Align = alTop
       Alignment = taLeftJustify
       BevelOuter = bvNone
-      Caption = '  '#1043#1088#1072#1092#1080#1082' '#1090#1077#1088#1084#1086#1082#1086#1084#1087#1077#1085#1089#1072#1094#1080#1080
+      Color = clGradientInactiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGray
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 20
+      ExplicitTop = 8
+    end
+  end
+  object Panel1: TPanel
+    Left = 401
+    Top = 5
+    Width = 432
+    Height = 598
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitLeft = 377
+    ExplicitWidth = 456
+    object Panel12: TPanel
+      Left = 0
+      Top = 0
+      Width = 432
+      Height = 32
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = '           '#1043#1088#1072#1092#1080#1082' '#1090#1077#1088#1084#1086#1082#1086#1084#1087#1077#1085#1089#1072#1094#1080#1080
       Color = clGradientInactiveCaption
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clGray
@@ -377,12 +408,12 @@ object FormFirmware: TFormFirmware
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitTop = 8
+      ExplicitWidth = 456
     end
     object Chart1: TChart
       Left = 0
       Top = 32
-      Width = 456
+      Width = 432
       Height = 566
       Legend.Alignment = laBottom
       Legend.CheckBoxes = True
@@ -409,17 +440,34 @@ object FormFirmware: TFormFirmware
         'TChart')
       Title.Visible = False
       Title.VertMargin = 0
-      RightAxis.Visible = False
       TopAxis.Visible = False
       View3D = False
       Align = alClient
       BevelOuter = bvNone
       Color = clWindow
       TabOrder = 1
-      ExplicitLeft = 3
-      ExplicitTop = 38
+      ExplicitWidth = 456
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
+      object Series1: TFastLineSeries
+        SeriesColor = clBlue
+        Title = #1060#1086#1085
+        LinePen.Color = clBlue
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
+      object Series2: TFastLineSeries
+        SeriesColor = clRed
+        Title = #1050#1095
+        VertAxis = aRightAxis
+        LinePen.Color = clRed
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
+      end
     end
   end
   object Panel3: TPanel
@@ -430,25 +478,24 @@ object FormFirmware: TFormFirmware
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = -137
-    ExplicitWidth = 970
   end
   object Panel8: TPanel
     Left = 121
     Top = 5
-    Width = 256
+    Width = 280
     Height = 598
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 3
-    object StringGrid1: TStringGrid
+    object StringGrid2: TStringGrid
       AlignWithMargins = True
       Left = 3
-      Top = 264
-      Width = 250
-      Height = 331
-      Align = alClient
+      Top = 35
+      Width = 274
+      Height = 191
+      Align = alTop
       BorderStyle = bsNone
+      Color = clInfoBk
       ColCount = 3
       DefaultColWidth = 80
       DefaultDrawing = False
@@ -459,41 +506,20 @@ object FormFirmware: TFormFirmware
       GradientEndColor = clBlack
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
       TabOrder = 0
-      OnDrawCell = StringGrid2DrawCell
-      ExplicitLeft = 6
-      ExplicitTop = 267
-      RowHeights = (
-        24)
-    end
-    object StringGrid2: TStringGrid
-      AlignWithMargins = True
-      Left = 3
-      Top = 35
-      Width = 250
-      Height = 191
-      Align = alTop
-      BorderStyle = bsNone
-      ColCount = 3
-      DefaultColWidth = 80
-      DefaultDrawing = False
-      FixedColor = clBackground
-      FixedCols = 0
-      RowCount = 1
-      FixedRows = 0
-      GradientEndColor = clBlack
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
-      TabOrder = 1
       Visible = False
       OnDrawCell = StringGrid2DrawCell
-      ExplicitLeft = 0
-      ExplicitTop = 32
+      ExplicitWidth = 250
+      ColWidths = (
+        80
+        80
+        80)
       RowHeights = (
         24)
     end
     object PanelConsoleHeader: TPanel
       Left = 0
       Top = 0
-      Width = 256
+      Width = 280
       Height = 32
       Align = alTop
       Alignment = taLeftJustify
@@ -506,11 +532,10 @@ object FormFirmware: TFormFirmware
       Font.Style = [fsBold]
       ParentBackground = False
       ParentFont = False
-      TabOrder = 2
-      ExplicitLeft = 6
-      ExplicitTop = -3
+      TabOrder = 1
+      ExplicitWidth = 256
       object ToolBar4: TToolBar
-        Left = 224
+        Left = 248
         Top = 0
         Width = 32
         Align = alRight
@@ -521,6 +546,7 @@ object FormFirmware: TFormFirmware
         EdgeOuter = esNone
         Images = ImageList3
         TabOrder = 0
+        ExplicitLeft = 224
         object ToolButton1: TToolButton
           Left = 0
           Top = 0
@@ -556,47 +582,6 @@ object FormFirmware: TFormFirmware
           ImageIndex = 3
         end
       end
-      object Panel19: TPanel
-        Left = 65
-        Top = 0
-        Width = 159
-        Height = 32
-        Align = alClient
-        Alignment = taLeftJustify
-        BevelOuter = bvNone
-        Caption = '  '#1042#1074#1086#1076
-        Color = clGradientInactiveCaption
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clGray
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 2
-        ExplicitLeft = 0
-        ExplicitTop = 8
-        ExplicitWidth = 456
-      end
-    end
-    object Panel9: TPanel
-      Left = 0
-      Top = 229
-      Width = 256
-      Height = 32
-      Align = alTop
-      Alignment = taLeftJustify
-      BevelOuter = bvNone
-      Caption = '  '#1058#1077#1088#1084#1086#1082#1086#1084#1087#1077#1085#1089#1072#1094#1080#1103
-      Color = clGradientInactiveCaption
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clGray
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentBackground = False
-      ParentFont = False
-      TabOrder = 3
     end
   end
   object Panel10: TPanel
@@ -607,8 +592,6 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = 3
-    ExplicitHeight = 600
   end
   object ImageList3: TImageList
     ColorDepth = cd32Bit
@@ -620,7 +603,7 @@ object FormFirmware: TFormFirmware
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010400D401040319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010400D401080319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

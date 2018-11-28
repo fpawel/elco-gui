@@ -34,6 +34,7 @@ type
         class function Stored( param1: Int64) : TFlashInfo;
          
     end; 
+
 implementation 
     uses Rest.Json;  
 

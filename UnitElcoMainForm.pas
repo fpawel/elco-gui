@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    Vcl.Menus;
+    Vcl.Menus, pipe;
 
 type
     TElcoMainForm = class(TForm)
@@ -55,6 +55,7 @@ type
     private
         { Private declarations }
         FInitialized: Boolean;
+        procedure AppException(Sender: TObject; E: Exception);
     public
         { Public declarations }
     end;
@@ -74,6 +75,7 @@ uses stringgridutils, stringutils,
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
     FInitialized := false;
+    Application.OnException := AppException;
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -146,6 +148,16 @@ begin
     with ToolButtonParty do
         with ClientToScreen(Point(0, Height)) do
             PopupMenu1.Popup(x, Y);
+end;
+
+procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
+begin
+    if e is EPipeBusy then
+    begin
+        OutputDebugStringW(PWideChar(e.Message));
+        exit;
+    end;
+    Application.ShowException(E);
 end;
 
 end.

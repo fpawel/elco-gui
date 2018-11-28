@@ -201,41 +201,14 @@ end;
 procedure TFormLastParty.StringGrid1DblClick(Sender: TObject);
 var
     ACol, ARow: Integer;
-    p: TProduct;
     pt: TPoint;
-    f: TFlashInfo;
 begin
     GetCursorPos(pt);
     pt :=  StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-
     if (ARow < 0) or (ARow > Length(FProducts)) then
         exit;
-
-    p := FProducts[ARow - 1];
-    try
-        f := TProductFirmware.Stored(p.FProductID);
-    except
-        on E: TRemoteError do
-        begin
-            try
-                f := TProductFirmware.Calculated(p.FProductID);
-            except
-                on E: TRemoteError do;
-            end;
-        end;
-    end;
-
-    with FormFirmware do
-    begin
-        if Assigned(f) then
-        begin
-            DateTimePicker1.DateTime := f.FTime;
-            Edit1.Text := FloatToStr(f.FSerial);
-        end;
-        Show;
-    end;
-
+    FormFirmware.SetProduct(FProducts[ARow - 1]);
 end;
 
 procedure TFormLastParty.StringGrid1DrawCell(Sender: TObject;

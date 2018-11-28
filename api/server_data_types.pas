@@ -113,6 +113,7 @@ type
         FProductType : string;
         FGas : string;
         FUnits : string;
+        FScale : string;
         
     end;
  
