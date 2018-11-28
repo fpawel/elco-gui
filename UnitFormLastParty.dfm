@@ -35,6 +35,7 @@ object FormLastParty: TFormLastParty
     GradientEndColor = clBlack
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
     TabOrder = 0
+    OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
     OnKeyDown = StringGrid1KeyDown
     OnMouseDown = StringGrid1MouseDown
@@ -99,7 +100,7 @@ object FormLastParty: TFormLastParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E0024C0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002540314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

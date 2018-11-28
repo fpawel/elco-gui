@@ -96,9 +96,24 @@ type
         FConcentration3 : Double;
         FNote : TNullString;
         FProducts : TArray<TProduct>;
+        FLast : Boolean;
          
         constructor Create;
         destructor Destroy;
+    end;
+ 
+    TFlashInfo = class 
+    public 
+        FTemp : TArray<Double>;
+        FFon : TArray<Double>;
+        FSens : TArray<Double>;
+        FTime : TDateTime;
+        FSensitivity : Double;
+        FSerial : Double;
+        FProductType : string;
+        FGas : string;
+        FUnits : string;
+        
     end;
  
 implementation 
@@ -221,6 +236,6 @@ begin
         FNote.Free;
     
 end;
-
+ 
 
 end.

@@ -32,6 +32,7 @@ object ElcoMainForm: TElcoMainForm
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 2
   end
   object Panel4: TPanel
     Left = 965
@@ -285,26 +286,14 @@ object ElcoMainForm: TElcoMainForm
     end
     object TabSheetParty: TTabSheet
       Caption = #1055#1072#1088#1090#1080#1103
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSheetSettings: TTabSheet
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object ImageList3: TImageList
@@ -317,7 +306,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300D401E80219001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300D401F40219001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -684,7 +673,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 576
     Top = 266
     Bitmap = {
-      494C0101020024035C0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010102002403680314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

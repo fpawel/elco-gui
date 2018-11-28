@@ -16,6 +16,7 @@ type
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
+        procedure StringGrid1DblClick(Sender: TObject);
     private
         { Private declarations }
         FParty: TParty;
@@ -43,7 +44,7 @@ var
 
 implementation
 
-uses stringgridutils, services, stringutils;
+uses stringgridutils, services, stringutils, UnitFormFirmware, pipe;
 
 {$R *.dfm}
 
@@ -52,8 +53,48 @@ begin
     Party := services.TLastParty.Party;
 end;
 
-procedure TFormParty.StringGrid1DrawCell(Sender: TObject;
-  ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+procedure TFormParty.StringGrid1DblClick(Sender: TObject);
+var
+    ACol, ARow: Integer;
+    p: TProduct;
+    pt: TPoint;
+    f: TFlashInfo;
+begin
+    GetCursorPos(pt);
+    StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
+    if (ARow < 0) or (ARow > Length(FParty.FProducts)) then
+        exit;
+    p := FParty.FProducts[ARow - 1];
+    try
+        f := TProductFirmware.Stored(p.FProductID);
+    except
+        on E: TRemoteError do
+        begin
+            try
+                f := TProductFirmware.Calculated(p.FProductID);
+            except
+                on E: TRemoteError do;
+            end;
+        end;
+    end;
+
+    with FormFirmware do
+    begin
+        if Assigned(f) then
+        begin
+            DateTimePicker1.DateTime := f.FTime;
+            Edit1.Text := FloatToStr(f.FSerial);
+
+
+        end;
+    end;
+
+    FormFirmware.Show;
+
+end;
+
+procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
 var
     grd: TStringGrid;
     cnv: TCanvas;
@@ -102,7 +143,10 @@ begin
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
               p.FProduction);
         pcFirmware:
-            DrawCellFirmware(Rect, State);
+            if p.FHasFirmware then
+                DrawCellFirmware(Rect, State)
+            else
+                StringGrid1.Canvas.FillRect(Rect);
 
     else
         case ProductValues[ACol, ARow - 1].Valid of
@@ -119,7 +163,7 @@ begin
     StringGrid_DrawCellBounds(cnv, ACol, ARow, Rect);
 end;
 
-procedure TFormParty.DrawCellFirmware(Rect: TRect;State: TGridDrawState);
+procedure TFormParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 var
     bmp: TBitmap;
 begin
@@ -129,7 +173,7 @@ begin
     else
         ImageList1.GetBitmap(0, bmp);
     StringGrid1.Canvas.FillRect(Rect);
-    StringGrid_DrawCellBmp(StringGrid1, Rect,  bmp);
+    StringGrid_DrawCellBmp(StringGrid1, Rect, bmp);
     bmp.Free
 end;
 
@@ -184,8 +228,8 @@ begin
         for ACol := 0 to ColCount - 1 do
         begin
             Cells[ACol, 0] := product_column_name[FColumns[ACol]];
-            ColWidths[ACol] :=
-                ProductColumnWidth(FColumns[ACol], StringGrid1.Canvas, FParty.FProducts);
+            ColWidths[ACol] := ProductColumnWidth(FColumns[ACol],
+              StringGrid1.Canvas, FParty.FProducts);
         end;
 
         for ARow := 1 to RowCount - 1 do
