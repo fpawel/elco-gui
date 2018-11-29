@@ -13,7 +13,7 @@ type
         _hPipe: THANDLE; // дескриптор
         FName: string;
         FId: integer;
-        FBusy: boolean;
+        FRemoteError: string;
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
 
@@ -22,11 +22,9 @@ type
         { Public declarations }
         Constructor Create(AName: string);
         function GetResponse(request: TBytes): TBytes;
-        property Busy: boolean read FBusy;
     end;
 
-    TRemoteError = class(Exception);
-    EPipeBusy = class(Exception);
+    ERemoteError = class(Exception);
 
 function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
 
@@ -111,7 +109,7 @@ begin
     end;
 
     if Assigned(rx['error.message']) then
-        raise TRemoteError.Create(rx['error'].S['message']);
+        raise ERemoteError.Create(rx['error'].S['message']);
 
     if Assigned(r.GetMessagePayload) then
         raise Exception.Create(Format('%s%s'#13'%s'#13'message type: %s',
@@ -147,7 +145,7 @@ Constructor TPipe.Create(AName: string);
 begin
     FName := AName;
     FId := 0;
-    FBusy := false;
+    FRemoteError := '';
 end;
 
 procedure TPipe._WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
@@ -188,31 +186,30 @@ end;
 function TPipe.GetResponse(request: TBytes): TBytes;
 var
     avail_count, read_count: DWORD;
+    t:TDateTime;
 begin
-    if FBusy then
-        raise EPipeBusy.Create('pipe is busy');
-    FBusy := true;
-    try
-        _WriteFile(request[0], length(request));
-        avail_count := 0;
-        while avail_count = 0 do
-        begin
-            PeekNamedPipe(_hPipe, // _In_      HANDLE  hNamedPipe,
-              nil, // _Out_opt_ LPVOID  lpBuffer,
-              0, // _In_      DWORD   nBufferSize,
-              nil, // _Out_opt_ LPDWORD lpBytesRead,
-              @avail_count, // _Out_opt_ LPDWORD lpTotalBytesAvail,
-              nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
-              );
-            // Sleep(50);
-            Application.ProcessMessages;
-        end;
-        SetLength(result, avail_count);
-        _ReadFile(result[0], avail_count);
+    FRemoteError := '';
+    _WriteFile(request[0], length(request));
+    avail_count := 0;
+    t := now;
+    while avail_count = 0 do
+    begin
+        if not PeekNamedPipe(_hPipe, // _In_      HANDLE  hNamedPipe,
+          nil, // _Out_opt_ LPVOID  lpBuffer,
+          0, // _In_      DWORD   nBufferSize,
+          nil, // _Out_opt_ LPDWORD lpBytesRead,
+          @avail_count, // _Out_opt_ LPDWORD lpTotalBytesAvail,
+          nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
+          ) then
+            raise Exception.Create('pipe error: ' + _LastError);
 
-    finally
-        FBusy := false;
+//        if SecondsBetween(t, now) > 5 then
+//            raise Exception.Create('pipe hangs');
+
+        Application.ProcessMessages;
     end;
+    SetLength(result, avail_count);
+    _ReadFile(result[0], avail_count);
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);

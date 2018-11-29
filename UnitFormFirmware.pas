@@ -8,40 +8,11 @@ uses
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
     Vcl.ExtCtrls, server_data_types, server_data_types_helpers,
     System.ImageList, Vcl.ImgList, Vcl.ToolWin, Vcl.Grids, VclTee.TeeGDIPlus,
-    VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, pipe, VCLTee.Series;
+    VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, pipe, VclTee.Series;
 
 type
     TFormFirmware = class(TForm)
-        Panel14: TPanel;
-        Label1: TLabel;
-        DateTimePicker1: TDateTimePicker;
-        Label2: TLabel;
-        EditSerial: TEdit;
-        Label5: TLabel;
-        ComboBoxUnits: TComboBox;
-        Panel4: TPanel;
-        Panel2: TPanel;
-        Panel11: TPanel;
-        Panel13: TPanel;
-        Label3: TLabel;
-        ComboBoxProductType: TComboBox;
-        Label4: TLabel;
-        ComboBoxGas: TComboBox;
-        Label6: TLabel;
-        EditScale: TEdit;
-        Panel15: TPanel;
-        Panel16: TPanel;
-        Panel17: TPanel;
-        Panel18: TPanel;
-        Panel20: TPanel;
-        Panel21: TPanel;
-        Panel1: TPanel;
         Panel3: TPanel;
-        Panel5: TPanel;
-        Label7: TLabel;
-        EditSens: TEdit;
-        Panel6: TPanel;
-        Panel7: TPanel;
         Panel8: TPanel;
         StringGrid2: TStringGrid;
         PanelConsoleHeader: TPanel;
@@ -52,9 +23,22 @@ type
         ToolButton2: TToolButton;
         ToolButton3: TToolButton;
         Panel10: TPanel;
-        Panel12: TPanel;
-        Chart1: TChart;
-        Panel9: TPanel;
+    FlowPanel1: TFlowPanel;
+    Label2: TLabel;
+    EditSerial: TEdit;
+    Label3: TLabel;
+    ComboBoxProductType: TComboBox;
+    Label5: TLabel;
+    ComboBoxUnits: TComboBox;
+    Label4: TLabel;
+    ComboBoxGas: TComboBox;
+    Label6: TLabel;
+    EditScale: TEdit;
+    Label7: TLabel;
+    EditSens: TEdit;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    Chart1: TChart;
     Series1: TFastLineSeries;
     Series2: TFastLineSeries;
         procedure ToolButton1Click(Sender: TObject);
@@ -62,6 +46,7 @@ type
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
+        procedure Chart1AfterDraw(Sender: TObject);
     private
         { Private declarations }
         procedure DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
@@ -78,12 +63,52 @@ implementation
 
 {$R *.dfm}
 
-uses stringgridutils, stringutils, services, dateutils, math;
+uses System.Types, stringgridutils, stringutils, services, dateutils, math;
+
+const
+    main_temperatures: array [0 .. 7] of double = (-40, -20, 0, 20, 30,
+      40, 45, 50);
+
+function is_main_temperature(x: double): boolean;
+var
+    t: double;
+begin
+    for t in main_temperatures do
+        if t = x then
+            exit(true);
+    exit(false);
+end;
+
+function pow2(x: Extended): Extended;
+begin
+    exit(IntPower(x, 2));
+end;
 
 procedure TFormFirmware.FormCreate(Sender: TObject);
 var
     s: string;
 begin
+    with Chart1.BottomAxis.Grid do
+    begin
+        Style := psDashDotDot;
+        Color := clGray;
+        Width := 0;
+    end;
+
+    with Chart1.LeftAxis.Grid do
+    begin
+        Style := psDashDotDot;
+        Color := clGray;
+        Width := 0;
+    end;
+
+    with Chart1.RightAxis.Grid do
+    begin
+        Style := psDashDotDot;
+        Color := clGray;
+        Width := 0;
+    end;
+
     ComboBoxProductType.Items.Clear;
     ComboBoxUnits.Items.Clear;
     ComboBoxGas.Items.Clear;
@@ -124,10 +149,87 @@ begin
 
 end;
 
-procedure TFormFirmware.DrawCellText(text: string; ACnv: TCanvas;
-  Rect: TRect; ta: TAlignment);
+procedure TFormFirmware.Chart1AfterDraw(Sender: TObject);
 var
-    X, Y, txt_width, txt_height: Integer;
+    i, xPos, yPos, a, b: Integer;
+    ser: TChartSeries;
+
+    marker_place: boolean;
+    marker_rects: array of TRect;
+    marker_rect, r2: TRect;
+    marker_text: string;
+begin
+
+    // ShowCurrentScaleValues;
+
+    Chart1.Canvas.Pen.Style := psSolid;
+    Chart1.Canvas.Pen.Width := 1;
+    Chart1.Canvas.Pen.Mode := pmCopy;
+    Chart1.Canvas.Font.Size := 12;
+
+    for ser in Chart1.SeriesList do
+    begin
+        if not ser.Active then
+            continue;
+
+        Chart1.Canvas.Pen.Color := ser.Color;
+        Chart1.Canvas.Brush.Color := ser.Color;
+
+        for i := ser.FirstValueIndex to ser.LastValueIndex do
+        begin
+            if not is_main_temperature(ser.XValues[i]) then
+                continue;
+
+            xPos := ser.CalcXPos(i);
+            yPos := ser.CalcYPos(i);
+
+            if not PtInRect(Chart1.ChartRect, Point(xPos, yPos)) then
+                continue;
+
+            if (i > ser.FirstValueIndex) AND (i < ser.LastValueIndex) AND
+              (pow2(xPos - a) + pow2(yPos - b) < pow2(7)) then
+                continue;
+
+            Chart1.Canvas.Ellipse(xPos - 5, yPos - 5, xPos + 5, yPos + 5);
+            // Chart1.Canvas.Donut(xPos, yPos, 3, 3, -1, 361, 100);
+            a := xPos;
+            b := yPos;
+
+            marker_text := Format('%g', [ser.YValues[i]]);
+            with marker_rect do
+            begin
+                Left := xPos + 10;
+                Top := yPos + 10 - Canvas.TextHeight(marker_text);
+                Right := xPos + 10 + Canvas.TextWidth(marker_text);
+                Bottom := yPos + 10 ;
+            end;
+
+            marker_place := true;
+            for r2 in marker_rects do
+            begin
+                if System.Types.IntersectRect(marker_rect, r2) then
+                begin
+                    marker_place := false;
+                    break;
+                end;
+            end;
+            if marker_place then
+            begin
+                Chart1.Canvas.Font.Color := ser.Color;
+                Chart1.Canvas.TextOut(marker_rect.Left, marker_rect.Top,
+                  marker_text);
+                SetLength(marker_rects, length(marker_rects) + 1);
+                marker_rects[length(marker_rects) - 1] := marker_rect;
+            end;
+        end;
+    end;
+
+end;
+
+procedure TFormFirmware.DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
+  ta: TAlignment);
+var
+    x, Y, txt_width, txt_height: Integer;
 begin
     // s := AGrd.Cells[ACol, ARow];
     with ACnv do
@@ -137,46 +239,46 @@ begin
             text := cut_str(text, ACnv, Rect.Width);
         txt_width := TextWidth(text);
         txt_height := TextHeight(text);
-        X := Rect.Left + 3;
+        x := Rect.Left + 3;
         if ta = taRightJustify then
-            X := Rect.Right - 3 - round(txt_width)
+            x := Rect.Right - 3 - round(txt_width)
         else if ta = taCenter then
-            X := Rect.Left + round((Rect.Width - txt_width) / 2.0);
+            x := Rect.Left + round((Rect.Width - txt_width) / 2.0);
         Y := Rect.Top + round((Rect.Height - txt_height) / 2.0);
-        TextRect(Rect, X, Y, text);
+        TextRect(Rect, x, Y, text);
     end;
 end;
 
-procedure SetComboBoxText(X: TComboBox; text: String);
+procedure SetComboBoxText(x: TComboBox; text: String);
 begin
-    X.ItemIndex := X.Items.IndexOf(text);
+    x.ItemIndex := x.Items.IndexOf(text);
+end;
+
+procedure correct_axis_oreders(ax: TChartAxis; min_v, max_v:double);
+var    d_ax: double;
+begin
+    if min_v = max_v then
+        exit;
+    d_ax := (max_v - min_v) * 0.1;
+    ax.SetMinMax(min_v - d_ax, max_v + d_ax);
 end;
 
 procedure TFormFirmware.SetProduct(p: TProduct);
 var
-    f: TFlashInfo;
+    f: TProductFirmwareInfo;
     i: Integer;
+
+
 begin
-    f := nil;
-    try
-        f := TProductFirmware.Stored(p.FProductID);
-    except
-        on E: TRemoteError do;
-    end;
 
-    if not Assigned(f) then
-        try
-            f := TProductFirmware.Calculated(p.FProductID);
-        except
-            on E: TRemoteError do;
-        end;
-
-    if not Assigned(f) then
-        exit;
+     if p.FHasFirmware then
+         f := TProductFirmware.Stored(p.FProductID)
+     else
+        f := TProductFirmware.Calculate(p.FProductID);
 
     DateTimePicker1.DateTime := f.FTime;
-    EditSerial.text := FloatToStr(f.FSerial);
-    EditSens.text := FloatToStr(RoundTo(f.FSensitivity, -3));
+    EditSerial.text := f.FSerial;
+    EditSens.text := f.FSensitivity;
     EditScale.text := f.FScale;
     SetComboBoxText(ComboBoxProductType, f.FProductType);
     SetComboBoxText(ComboBoxUnits, f.FUnits);
@@ -185,18 +287,17 @@ begin
     Series1.Clear;
     Series2.Clear;
 
-    for i :=0 to length(f.FTemp) -1 do
+    for i := 0 to length(f.FTemp) - 1 do
     begin
         Series1.AddXY(f.FTemp[i], f.FFon[i]);
         Series2.AddXY(f.FTemp[i], f.FSens[i]);
-
     end;
-
-
-
     f.Free;
-    Show;
 
+    correct_axis_oreders(Chart1.BottomAxis, -125, 125);
+    correct_axis_oreders(Chart1.LeftAxis, Series1.MinYValue, Series1.MaxYValue);
+    correct_axis_oreders(Chart1.RightAxis, Series2.MinYValue, Series2.MaxYValue);
+    Show;
 end;
 
 end.

@@ -152,11 +152,7 @@ end;
 
 procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
 begin
-    if e is EPipeBusy then
-    begin
-        OutputDebugStringW(PWideChar(e.Message));
-        exit;
-    end;
+    OutputDebugStringW(PWideChar(e.Message));
     Application.ShowException(E);
 end;
 

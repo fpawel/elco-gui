@@ -186,7 +186,7 @@ begin
         p.FProduction := not p.FProduction;
         PanelError.Visible := false;
     except
-        on E: TRemoteError do
+        on E: ERemoteError do
         begin
             PanelError.Caption := Format('%s: %s: %s',
               [ProductValues[0, ARow - 1].Value,
@@ -305,7 +305,7 @@ begin
                 Cells[ACol, Row] := '';
             PanelError.Visible := false;
         except
-            on E: TRemoteError do
+            on E: ERemoteError do
             begin
                 PanelError.Caption :=
                   Format('%s: %s: %s', [ProductValues[0, Row - 1].Value,
@@ -490,7 +490,7 @@ begin
         p.FProductTypeName.FValid := Trim(Value) <> '';
         PanelError.Visible := false;
     except
-        on E: TRemoteError do
+        on E: ERemoteError do
         begin
 
             PanelError.Caption := Format('%s: %s: "%s": %s',
