@@ -42,6 +42,7 @@ type
     TProductFirmware = class
     public
         class function Calculate(param1: Int64): TProductFirmwareInfo;
+        class function CalculateTempPoints(Values: TArray<string>): TTempPoints;
         class function Stored(param1: Int64): TProductFirmwareInfo;
 
     end;
@@ -348,6 +349,22 @@ begin
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.Calculate', req);
 
     Result := TJson.JsonToObject<TProductFirmwareInfo>(resp.AsJson);
+
+end;
+
+class function TProductFirmware.CalculateTempPoints(Values: TArray<string>)
+  : TTempPoints;
+var
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+    SuperObject_SetField(req, 'Values', Values);
+
+    resp := Pipe_GetJsonrpcResult(pipe_conn,
+      'ProductFirmware.CalculateTempPoints', req);
+
+    Result := TJson.JsonToObject<TTempPoints>(resp.AsJson);
 
 end;
 

@@ -1,4 +1,4 @@
-unit UnitFormFirmware;
+﻿unit UnitFormFirmware;
 
 interface
 
@@ -17,40 +17,48 @@ type
         StringGrid2: TStringGrid;
         PanelConsoleHeader: TPanel;
         ImageList3: TImageList;
-        ToolBar4: TToolBar;
-        ToolButton1: TToolButton;
         ToolBar1: TToolBar;
         ToolButton2: TToolButton;
         ToolButton3: TToolButton;
         Panel10: TPanel;
-    FlowPanel1: TFlowPanel;
-    Label2: TLabel;
-    EditSerial: TEdit;
-    Label3: TLabel;
-    ComboBoxProductType: TComboBox;
-    Label5: TLabel;
-    ComboBoxUnits: TComboBox;
-    Label4: TLabel;
-    ComboBoxGas: TComboBox;
-    Label6: TLabel;
-    EditScale: TEdit;
-    Label7: TLabel;
-    EditSens: TEdit;
-    Label1: TLabel;
-    DateTimePicker1: TDateTimePicker;
-    Chart1: TChart;
-    Series1: TFastLineSeries;
-    Series2: TFastLineSeries;
-        procedure ToolButton1Click(Sender: TObject);
+        FlowPanel1: TFlowPanel;
+        Label2: TLabel;
+        EditSerial: TEdit;
+        Label3: TLabel;
+        ComboBoxProductType: TComboBox;
+        Label5: TLabel;
+        ComboBoxUnits: TComboBox;
+        Label4: TLabel;
+        ComboBoxGas: TComboBox;
+        Label6: TLabel;
+        EditScale: TEdit;
+        Label7: TLabel;
+        EditSens: TEdit;
+        Label1: TLabel;
+        DateTimePicker1: TDateTimePicker;
+        Chart1: TChart;
+        Series1: TFastLineSeries;
+        Series2: TFastLineSeries;
         procedure FormDeactivate(Sender: TObject);
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
         procedure Chart1AfterDraw(Sender: TObject);
+        procedure ToolButton2Click(Sender: TObject);
+        procedure ToolButton3Click(Sender: TObject);
+        procedure StringGrid2MouseDown(Sender: TObject; Button: TMouseButton;
+          Shift: TShiftState; X, Y: Integer);
     private
         { Private declarations }
         procedure DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
           ta: TAlignment);
+        procedure SetTemperaturePointsChart(ATemp: TArray<Double>;
+          AFon: TArray<Double>; ASens: TArray<Double>);
+        procedure SetTemperaturePointsGrid(ATemp: TArray<Double>;
+          AFon: TArray<Double>; ASens: TArray<Double>);
+
+        function GetTemperatureValues: TArray<string>;
+
     public
         { Public declarations }
         procedure SetProduct(p: TProduct);
@@ -66,22 +74,22 @@ implementation
 uses System.Types, stringgridutils, stringutils, services, dateutils, math;
 
 const
-    main_temperatures: array [0 .. 7] of double = (-40, -20, 0, 20, 30,
+    main_temperatures: array [0 .. 7] of Double = (-40, -20, 0, 20, 30,
       40, 45, 50);
 
-function is_main_temperature(x: double): boolean;
+function is_main_temperature(X: Double): boolean;
 var
-    t: double;
+    t: Double;
 begin
     for t in main_temperatures do
-        if t = x then
+        if t = X then
             exit(true);
     exit(false);
 end;
 
-function pow2(x: Extended): Extended;
+function pow2(X: Extended): Extended;
 begin
-    exit(IntPower(x, 2));
+    exit(IntPower(X, 2));
 end;
 
 procedure TFormFirmware.FormCreate(Sender: TObject);
@@ -120,6 +128,13 @@ begin
     for s in TProductTypes.Units do
         ComboBoxUnits.Items.Add(s);
 
+    with StringGrid2 do
+    begin
+        Cells[0, RowCount - 1] := 'T⁰C';
+        Cells[1, RowCount - 1] := 'Фон, мкА';
+        Cells[2, RowCount - 1] := 'Кч, %';
+    end;
+
 end;
 
 procedure TFormFirmware.FormDeactivate(Sender: TObject);
@@ -136,17 +151,68 @@ begin
     AGRd := Sender As TStringGrid;
     ACnv := AGRd.Canvas;
     ACnv.Font.Assign(AGRd.Font);
-    ACnv.Brush.Color := AGRd.Color;
-    DrawCellText(AGRd.cells[ACol, ARow], ACnv, Rect, taCenter);
+
+    if ARow = 0 then
+        ACnv.Brush.Color := cl3DLight
+    else if gdSelected in State then
+        ACnv.Brush.Color := clGradientInactiveCaption
+    else
+        ACnv.Brush.Color := AGRd.Color;
+
+    DrawCellText(AGRd.Cells[ACol, ARow], ACnv, Rect, taCenter);
     StringGrid_DrawCellBounds(ACnv, ACol, ARow, Rect);
 end;
 
-procedure TFormFirmware.ToolButton1Click(Sender: TObject);
+procedure TFormFirmware.StringGrid2MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-    ToolButton1.ImageIndex := Integer(not boolean(ToolButton1.ImageIndex));
-    StringGrid2.Visible := ToolButton1.ImageIndex = 1;
-    ToolBar1.Visible := StringGrid2.Visible;
+    if Button = mbRight then
+        with StringGrid2 do
+        begin
+            if RowCount > 1 then
+                Row := RowCount - 1;
+        end;
 
+end;
+
+procedure TFormFirmware.ToolButton2Click(Sender: TObject);
+var
+    cl, ro: Integer;
+begin
+    with StringGrid2 do
+    begin
+        RowCount := RowCount + 1;
+        if Row > 0 then
+        begin
+            for ro := RowCount - 1 downto Row do
+                for cl := 0 to ColCount - 1 do
+                    Cells[cl, ro + 1] := Cells[cl, ro];
+            for cl := 0 to ColCount - 1 do
+                Cells[cl, Row + 1] := '';
+            Row := Row + 1;
+        end;
+    end;
+    with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+        SetTemperaturePointsChart(FTemp, FFon, FSens);
+end;
+
+procedure TFormFirmware.ToolButton3Click(Sender: TObject);
+var
+    cl, ro: Integer;
+begin
+    with StringGrid2 do
+    begin
+        if Row > 0 then
+        begin
+            for ro := Row to RowCount - 1 do
+                for cl := 0 to ColCount - 1 do
+                    Cells[cl, ro] := Cells[cl, ro + 1];
+        end;
+        RowCount := RowCount - 1;
+    end;
+
+    with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+        SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
 procedure TFormFirmware.Chart1AfterDraw(Sender: TObject);
@@ -157,7 +223,7 @@ var
     marker_place: boolean;
     marker_rects: array of TRect;
     marker_rect, r2: TRect;
-    marker_text: string;
+    value_format, marker_text: string;
 begin
 
     // ShowCurrentScaleValues;
@@ -195,13 +261,17 @@ begin
             a := xPos;
             b := yPos;
 
-            marker_text := Format('%g', [ser.YValues[i]]);
+            value_format := Chart1.LeftAxis.AxisValuesFormat;
+            if ser = Series2 then
+                value_format := Chart1.RightAxis.AxisValuesFormat;
+
+            marker_text := FormatFloat(value_format, ser.YValues[i]);
             with marker_rect do
             begin
                 Left := xPos + 10;
                 Top := yPos + 10 - Canvas.TextHeight(marker_text);
                 Right := xPos + 10 + Canvas.TextWidth(marker_text);
-                Bottom := yPos + 10 ;
+                Bottom := yPos + 10;
             end;
 
             marker_place := true;
@@ -229,7 +299,7 @@ end;
 procedure TFormFirmware.DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
   ta: TAlignment);
 var
-    x, Y, txt_width, txt_height: Integer;
+    X, Y, txt_width, txt_height: Integer;
 begin
     // s := AGrd.Cells[ACol, ARow];
     with ACnv do
@@ -239,27 +309,29 @@ begin
             text := cut_str(text, ACnv, Rect.Width);
         txt_width := TextWidth(text);
         txt_height := TextHeight(text);
-        x := Rect.Left + 3;
+        X := Rect.Left + 3;
         if ta = taRightJustify then
-            x := Rect.Right - 3 - round(txt_width)
+            X := Rect.Right - 3 - round(txt_width)
         else if ta = taCenter then
-            x := Rect.Left + round((Rect.Width - txt_width) / 2.0);
+            X := Rect.Left + round((Rect.Width - txt_width) / 2.0);
         Y := Rect.Top + round((Rect.Height - txt_height) / 2.0);
-        TextRect(Rect, x, Y, text);
+        TextRect(Rect, X, Y, text);
     end;
 end;
 
-procedure SetComboBoxText(x: TComboBox; text: String);
+procedure SetComboBoxText(X: TComboBox; text: String);
 begin
-    x.ItemIndex := x.Items.IndexOf(text);
+    X.ItemIndex := X.Items.IndexOf(text);
 end;
 
-procedure correct_axis_oreders(ax: TChartAxis; min_v, max_v:double);
-var    d_ax: double;
+procedure correct_axis_oreders(ax: TChartAxis; min_v, max_v: Double);
+var
+    d_ax: Double;
 begin
     if min_v = max_v then
-        exit;
-    d_ax := (max_v - min_v) * 0.1;
+        d_ax := 1
+    else
+        d_ax := (max_v - min_v) * 0.1;
     ax.SetMinMax(min_v - d_ax, max_v + d_ax);
 end;
 
@@ -267,13 +339,13 @@ procedure TFormFirmware.SetProduct(p: TProduct);
 var
     f: TProductFirmwareInfo;
     i: Integer;
-
+    has_null: boolean;
 
 begin
 
-     if p.FHasFirmware then
-         f := TProductFirmware.Stored(p.FProductID)
-     else
+    if p.FHasFirmware then
+        f := TProductFirmware.Stored(p.FProductID)
+    else
         f := TProductFirmware.Calculate(p.FProductID);
 
     DateTimePicker1.DateTime := f.FTime;
@@ -283,21 +355,75 @@ begin
     SetComboBoxText(ComboBoxProductType, f.FProductType);
     SetComboBoxText(ComboBoxUnits, f.FUnits);
     SetComboBoxText(ComboBoxGas, f.FGas);
+    SetTemperaturePointsChart(f.FTemp, f.FFon, f.FSens);
+    SetTemperaturePointsGrid(f.FTemp, f.FFon, f.FSens);
+    f.Free;
+    Show;
+end;
 
+function TFormFirmware.GetTemperatureValues: TArray<string>;
+var
+    n, i: Integer;
+begin
+    with StringGrid2 do
+    begin
+        SetLength(Result, 3 * (RowCount - 1));
+        for i := 1 to RowCount - 1 do
+        begin
+            n := (i - 1) * 3;
+            Result[n + 0] := Cells[0, i + 0];
+            Result[n + 1] := Cells[1, i + 1];
+            Result[n + 2] := Cells[2, i + 2];
+        end;
+    end;
+
+end;
+
+procedure TFormFirmware.SetTemperaturePointsChart(ATemp: TArray<Double>;
+  AFon: TArray<Double>; ASens: TArray<Double>);
+var
+    i: Integer;
+begin
     Series1.Clear;
     Series2.Clear;
-
-    for i := 0 to length(f.FTemp) - 1 do
+    for i := 0 to length(ATemp) - 1 do
     begin
-        Series1.AddXY(f.FTemp[i], f.FFon[i]);
-        Series2.AddXY(f.FTemp[i], f.FSens[i]);
+        Series1.AddXY(ATemp[i], AFon[i]);
+        Series2.AddXY(ATemp[i], ASens[i]);
     end;
-    f.Free;
-
     correct_axis_oreders(Chart1.BottomAxis, -125, 125);
     correct_axis_oreders(Chart1.LeftAxis, Series1.MinYValue, Series1.MaxYValue);
-    correct_axis_oreders(Chart1.RightAxis, Series2.MinYValue, Series2.MaxYValue);
-    Show;
+    correct_axis_oreders(Chart1.RightAxis, Series2.MinYValue,
+      Series2.MaxYValue);
+
+end;
+
+procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
+  AFon: TArray<Double>; ASens: TArray<Double>);
+var
+    i: Integer;
+    has_null: boolean;
+begin
+    StringGrid2.RowCount := 1;
+    has_null := false;
+    for i := 0 to length(ATemp) - 1 do
+    begin
+        if is_main_temperature(ATemp[i]) then
+            with StringGrid2 do
+            begin
+                if (ATemp[i] = 0) then
+                begin
+                    if has_null then
+                        continue;
+                    has_null := true;
+                end;
+
+                RowCount := RowCount + 1;
+                Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
+                Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
+                Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
+            end;
+    end;
 end;
 
 end.

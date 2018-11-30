@@ -24,7 +24,6 @@ object FormFirmware: TFormFirmware
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 833
   end
   object Panel8: TPanel
     Left = 5
@@ -34,13 +33,15 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 8
     object StringGrid2: TStringGrid
       AlignWithMargins = True
       Left = 3
-      Top = 263
-      Width = 310
-      Height = 126
-      Align = alTop
+      Top = 231
+      Width = 278
+      Height = 439
+      Align = alClient
       BorderStyle = bsNone
       Color = clInfoBk
       ColCount = 3
@@ -53,10 +54,10 @@ object FormFirmware: TFormFirmware
       GradientEndColor = clBlack
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
       TabOrder = 0
-      Visible = False
       OnDrawCell = StringGrid2DrawCell
-      ExplicitLeft = 6
-      ExplicitTop = 266
+      OnMouseDown = StringGrid2MouseDown
+      ExplicitLeft = 0
+      ExplicitTop = 234
       ColWidths = (
         80
         80
@@ -65,14 +66,14 @@ object FormFirmware: TFormFirmware
         24)
     end
     object PanelConsoleHeader: TPanel
-      Left = 0
+      Left = 284
       Top = 228
-      Width = 316
-      Height = 32
-      Align = alTop
+      Width = 32
+      Height = 445
+      Align = alRight
       Alignment = taLeftJustify
       BevelOuter = bvNone
-      Color = clGradientInactiveCaption
+      Color = clWindow
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clGray
       Font.Height = -13
@@ -81,33 +82,11 @@ object FormFirmware: TFormFirmware
       ParentBackground = False
       ParentFont = False
       TabOrder = 1
-      ExplicitTop = -15
-      ExplicitWidth = 280
-      object ToolBar4: TToolBar
-        Left = 284
-        Top = 0
-        Width = 32
-        Align = alRight
-        ButtonHeight = 31
-        ButtonWidth = 32
-        Caption = 'ToolBar1'
-        EdgeInner = esNone
-        EdgeOuter = esNone
-        Images = ImageList3
-        TabOrder = 0
-        ExplicitLeft = 248
-        object ToolButton1: TToolButton
-          Left = 0
-          Top = 0
-          Caption = 'ToolButton1'
-          ImageIndex = 0
-          OnClick = ToolButton1Click
-        end
-      end
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
         Width = 65
+        Height = 445
         Align = alLeft
         ButtonHeight = 31
         ButtonWidth = 32
@@ -115,20 +94,24 @@ object FormFirmware: TFormFirmware
         EdgeInner = esNone
         EdgeOuter = esNone
         Images = ImageList3
-        TabOrder = 1
-        Visible = False
+        TabOrder = 0
+        ExplicitLeft = 3
+        ExplicitTop = 6
+        ExplicitHeight = 316
         object ToolButton2: TToolButton
           Left = 0
           Top = 0
           Caption = 'ToolButton1'
           ImageIndex = 2
-          OnClick = ToolButton1Click
+          Wrap = True
+          OnClick = ToolButton2Click
         end
         object ToolButton3: TToolButton
-          Left = 32
-          Top = 0
+          Left = 0
+          Top = 31
           Caption = 'ToolButton3'
           ImageIndex = 3
+          OnClick = ToolButton3Click
         end
       end
     end
@@ -141,8 +124,6 @@ object FormFirmware: TFormFirmware
       BevelOuter = bvNone
       FlowStyle = fsTopBottomLeftRight
       TabOrder = 2
-      ExplicitTop = -51
-      ExplicitWidth = 405
       object Label2: TLabel
         AlignWithMargins = True
         Left = 3
@@ -315,7 +296,6 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitHeight = 598
   end
   object Chart1: TChart
     Left = 321
@@ -354,10 +334,8 @@ object FormFirmware: TFormFirmware
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 3
-    ExplicitLeft = 488
-    ExplicitTop = 161
-    ExplicitWidth = 344
-    ExplicitHeight = 296
+    ExplicitLeft = 324
+    ExplicitTop = 8
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object Series1: TFastLineSeries
@@ -390,7 +368,7 @@ object FormFirmware: TFormFirmware
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010400D401100319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010400D401140319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

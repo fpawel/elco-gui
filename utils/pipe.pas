@@ -40,6 +40,9 @@ procedure SuperObject_SetField(x: ISuperObject; field: string;
 procedure SuperObject_SetField(x: ISuperObject; field: string;
   v: string); overload;
 
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: TArray<string>); overload;
+
 procedure SuperObject_Get(x: ISuperObject; var v: int64); overload;
 procedure SuperObject_Get(x: ISuperObject; var v: integer); overload;
 procedure SuperObject_Get(x: ISuperObject; var v: double); overload;
@@ -186,7 +189,7 @@ end;
 function TPipe.GetResponse(request: TBytes): TBytes;
 var
     avail_count, read_count: DWORD;
-    t:TDateTime;
+    t: TDateTime;
 begin
     FRemoteError := '';
     _WriteFile(request[0], length(request));
@@ -203,8 +206,8 @@ begin
           ) then
             raise Exception.Create('pipe error: ' + _LastError);
 
-//        if SecondsBetween(t, now) > 5 then
-//            raise Exception.Create('pipe hangs');
+        // if SecondsBetween(t, now) > 5 then
+        // raise Exception.Create('pipe hangs');
 
         Application.ProcessMessages;
     end;
@@ -255,6 +258,15 @@ end;
 procedure SuperObject_Get(x: ISuperObject; var v: integer); overload;
 begin
     v := x.AsInteger;
+end;
+
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: TArray<string>);
+var i:integer;
+begin
+    x.O[field] := SA([]);
+    for i :=0 to length(v)-1 do
+        x.A[field].S[i] := v[i];
 end;
 
 end.
