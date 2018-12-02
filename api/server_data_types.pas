@@ -125,6 +125,36 @@ type
         
     end;
  
+    TConfigProperty = class 
+    public 
+        FHint : string;
+        FName : string;
+        FValue : string;
+        FDefaultValue : string;
+        FError : string;
+        FMin : TNullFloat64;
+        FMax : TNullFloat64;
+        FValueType : Integer;
+        FList : TArray<string>;
+         
+        constructor Create;
+        destructor Destroy;
+    end;
+ 
+    TConfigSection = class 
+    public 
+        FName : string;
+        FHint : string;
+        FProperties : TArray<TConfigProperty>;
+        
+    end;
+ 
+    TConfigSections = class 
+    public 
+        FSections : TArray<TConfigSection>;
+        
+    end;
+ 
 implementation 
     uses Rest.Json;   
       
@@ -243,6 +273,26 @@ begin
         FOldPartyID.Free;
     if Assigned(FNote) then 
         FNote.Free;
+    
+end;
+    
+
+{ TConfigProperty }
+
+ 
+constructor TConfigProperty.Create;
+begin
+    FMin := TNullFloat64.Create;
+    FMax := TNullFloat64.Create;
+    
+end;
+ 
+destructor TConfigProperty.Destroy;
+begin
+    if Assigned(FMin) then 
+        FMin.Free;
+    if Assigned(FMax) then 
+        FMax.Free;
     
 end;
   

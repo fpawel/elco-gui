@@ -70,7 +70,7 @@ implementation
 
 uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    server_data_types, services, UnitFormParty;
+    server_data_types, services, UnitFormParty, PropertiesFormUnit;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
@@ -83,8 +83,6 @@ begin
     if FInitialized then
         exit;
     FInitialized := true;
-
-
 
     with FormParties do
     begin
@@ -110,7 +108,15 @@ begin
         Parent := FormParties;
         BorderStyle := bsNone;
         Align := alClient;
+        Show;
+    end;
 
+    with PropertiesForm do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetSettings;
+        BorderStyle := bsNone;
+        Align := alClient;
         Show;
     end;
 
@@ -124,15 +130,19 @@ begin
     PageControl.Repaint;
     if PageControl.ActivePage = TabSheetParties then
     begin
-        if Assigned( FormParty.Party )  then
-            FormParty.Party := TPartiesCatalogue.Party(FormParty.Party.FPartyID);
+        if Assigned(FormParty.Party) then
+            FormParty.Party := TPartiesCatalogue.Party
+              (FormParty.Party.FPartyID);
 
     end
     else if PageControl.ActivePage = TabSheetParty then
     begin
         FormLastParty.reload_data;
         FormLastParty.update_view;
-
+    end
+    else if PageControl.ActivePage = TabSheetSettings then
+    begin
+        PropertiesForm.SetConfig(TSettingsSvc.Get);
     end;
 
 end;
@@ -152,7 +162,7 @@ end;
 
 procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
 begin
-    OutputDebugStringW(PWideChar(e.Message));
+    OutputDebugStringW(PWideChar(E.Message));
     Application.ShowException(E);
 end;
 

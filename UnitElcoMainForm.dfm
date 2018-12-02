@@ -1,7 +1,7 @@
 object ElcoMainForm: TElcoMainForm
   Left = 0
   Top = 0
-  Caption = 'ElcoMainForm'
+  Caption = #1069#1061#1071'. '#1051#1072#1073#1086#1088#1072#1090#1086#1088#1080#1103' 73.'
   ClientHeight = 610
   ClientWidth = 970
   Color = clWhite
@@ -56,7 +56,7 @@ object ElcoMainForm: TElcoMainForm
     Top = 5
     Width = 960
     Height = 600
-    ActivePage = TabSheetStend
+    ActivePage = TabSheetSettings
     Align = alClient
     MultiLine = True
     OwnerDraw = True
@@ -285,10 +285,18 @@ object ElcoMainForm: TElcoMainForm
     end
     object TabSheetParty: TTabSheet
       Caption = #1055#1072#1088#1090#1080#1103
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object TabSheetSettings: TTabSheet
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
@@ -305,7 +313,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300D401000319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300D401040319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -672,7 +680,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 576
     Top = 266
     Bitmap = {
-      494C010102002403740314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010102002403780314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

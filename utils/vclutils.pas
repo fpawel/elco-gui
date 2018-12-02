@@ -14,9 +14,30 @@ procedure ModifyControl(const AControl: TControl; const ARef: TControlProc);
 procedure PageControl_DrawVerticalTab(Control: TCustomTabControl;
   TabIndex: integer; const Rect: system.Types.TRect; Active: boolean);
 
+procedure ConvertImagesToHighColor(ImageList: TImageList);
+
 implementation
 
-uses Winapi.Windows;
+uses Winapi.commctrl, Winapi.Windows;
+
+procedure ConvertImagesToHighColor(ImageList: TImageList);
+
+// To show smooth images we have to convert the image list from 16 colors to high color.
+
+var
+    IL: TImageList;
+
+begin
+    // Have to create a temporary copy of the given list, because the list is cleared on handle creation.
+    IL := TImageList.Create(nil);
+    IL.Assign(ImageList);
+
+    with ImageList do
+        Handle := ImageList_Create(Width, Height, ILC_COLOR16 or ILC_MASK,
+          Count, AllocBy);
+    ImageList.Assign(IL);
+    IL.Free;
+end;
 
 procedure ModifyControl(const AControl: TControl; const ARef: TControlProc);
 var

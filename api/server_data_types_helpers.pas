@@ -5,27 +5,27 @@ interface
 uses server_data_types;
 
 type
+    
+
     TNullFloat64Helper = class helper for TNullFloat64
-      function GetStr: string;
-      property Str : string read GetStr;
+        function GetStr: string;
+        property Str: string read GetStr;
     end;
 
     TNullStringHelper = class helper for TNullString
-      function GetStr: string;
-      property Str : string read GetStr;
+        function GetStr: string;
+        property Str: string read GetStr;
     end;
 
     TNullInt64Helper = class helper for TNullInt64
-      function GetStr: string;
-      property Str : string read GetStr;
+        function GetStr: string;
+        property Str: string read GetStr;
     end;
-
-
-
 
 implementation
 
 uses sysutils;
+
 
 function TNullFloat64Helper.GetStr: string;
 begin
@@ -46,7 +46,7 @@ end;
 function TNullInt64Helper.GetStr: string;
 begin
     if FValid then
-        result := inttostr(FInt64)
+        result := IntToStr(FInt64)
     else
         result := '';
 end;

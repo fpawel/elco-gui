@@ -1,7 +1,7 @@
 object FormFirmware: TFormFirmware
   Left = 0
   Top = 0
-  Caption = 'FormFirmware'
+  Caption = '"'#1055#1088#1086#1096#1080#1074#1082#1072'"'
   ClientHeight = 678
   ClientWidth = 980
   Color = clWindow
@@ -33,14 +33,12 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 8
     object StringGrid2: TStringGrid
       AlignWithMargins = True
       Left = 3
-      Top = 231
+      Top = 252
       Width = 278
-      Height = 439
+      Height = 418
       Align = alClient
       BorderStyle = bsNone
       Color = clInfoBk
@@ -56,8 +54,8 @@ object FormFirmware: TFormFirmware
       TabOrder = 0
       OnDrawCell = StringGrid2DrawCell
       OnMouseDown = StringGrid2MouseDown
-      ExplicitLeft = 0
-      ExplicitTop = 234
+      OnSelectCell = StringGrid2SelectCell
+      OnSetEditText = StringGrid2SetEditText
       ColWidths = (
         80
         80
@@ -67,9 +65,9 @@ object FormFirmware: TFormFirmware
     end
     object PanelConsoleHeader: TPanel
       Left = 284
-      Top = 228
+      Top = 249
       Width = 32
-      Height = 445
+      Height = 424
       Align = alRight
       Alignment = taLeftJustify
       BevelOuter = bvNone
@@ -86,7 +84,7 @@ object FormFirmware: TFormFirmware
         Left = 0
         Top = 0
         Width = 65
-        Height = 445
+        Height = 424
         Align = alLeft
         ButtonHeight = 31
         ButtonWidth = 32
@@ -95,9 +93,6 @@ object FormFirmware: TFormFirmware
         EdgeOuter = esNone
         Images = ImageList3
         TabOrder = 0
-        ExplicitLeft = 3
-        ExplicitTop = 6
-        ExplicitHeight = 316
         object ToolButton2: TToolButton
           Left = 0
           Top = 0
@@ -119,7 +114,7 @@ object FormFirmware: TFormFirmware
       Left = 0
       Top = 0
       Width = 316
-      Height = 228
+      Height = 249
       Align = alTop
       BevelOuter = bvNone
       FlowStyle = fsTopBottomLeftRight
@@ -158,13 +153,13 @@ object FormFirmware: TFormFirmware
         Left = 3
         Top = 86
         Width = 148
-        Height = 24
+        Height = 26
         Align = alTop
         BevelInner = bvNone
         BevelOuter = bvNone
         Style = csOwnerDrawFixed
         Color = clInfoBk
-        ItemHeight = 18
+        ItemHeight = 20
         ItemIndex = 0
         TabOrder = 1
         Text = '035'
@@ -174,7 +169,7 @@ object FormFirmware: TFormFirmware
       object Label5: TLabel
         AlignWithMargins = True
         Left = 3
-        Top = 117
+        Top = 119
         Width = 137
         Height = 18
         Align = alTop
@@ -183,15 +178,15 @@ object FormFirmware: TFormFirmware
       object ComboBoxUnits: TComboBox
         AlignWithMargins = True
         Left = 3
-        Top = 142
+        Top = 144
         Width = 148
-        Height = 24
+        Height = 26
         Align = alTop
         BevelInner = bvNone
         BevelOuter = bvNone
         Style = csOwnerDrawFixed
         Color = clInfoBk
-        ItemHeight = 18
+        ItemHeight = 20
         ItemIndex = 0
         TabOrder = 2
         Text = #1084#1075'/'#1084'3'
@@ -202,7 +197,7 @@ object FormFirmware: TFormFirmware
       object Label4: TLabel
         AlignWithMargins = True
         Left = 3
-        Top = 173
+        Top = 177
         Width = 23
         Height = 18
         Align = alTop
@@ -211,15 +206,15 @@ object FormFirmware: TFormFirmware
       object ComboBoxGas: TComboBox
         AlignWithMargins = True
         Left = 3
-        Top = 198
+        Top = 202
         Width = 148
-        Height = 24
+        Height = 26
         Align = alTop
         BevelInner = bvNone
         BevelOuter = bvNone
         Style = csOwnerDrawFixed
         Color = clInfoBk
-        ItemHeight = 18
+        ItemHeight = 20
         ItemIndex = 0
         TabOrder = 3
         Text = 'CO'
@@ -279,7 +274,7 @@ object FormFirmware: TFormFirmware
         Left = 159
         Top = 144
         Width = 146
-        Height = 24
+        Height = 26
         Margins.Left = 5
         Date = 43432.487553599540000000
         Time = 43432.487553599540000000
@@ -334,8 +329,6 @@ object FormFirmware: TFormFirmware
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 3
-    ExplicitLeft = 324
-    ExplicitTop = 8
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object Series1: TFastLineSeries
@@ -348,10 +341,10 @@ object FormFirmware: TFormFirmware
       YValues.Order = loNone
     end
     object Series2: TFastLineSeries
-      SeriesColor = clRed
+      SeriesColor = clTeal
       Title = #1050#1095
       VertAxis = aRightAxis
-      LinePen.Color = clRed
+      LinePen.Color = clTeal
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'
@@ -368,7 +361,7 @@ object FormFirmware: TFormFirmware
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010400D401140319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010400D4011C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -48,8 +48,14 @@ type
         procedure ToolButton3Click(Sender: TObject);
         procedure StringGrid2MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
+        procedure StringGrid2SelectCell(Sender: TObject; ACol, ARow: Integer;
+          var CanSelect: Boolean);
+        procedure StringGrid2SetEditText(Sender: TObject; ACol, ARow: Integer;
+          const Value: string);
     private
         { Private declarations }
+        Last_Edited_Col, Last_Edited_Row: Integer;
+
         procedure DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
           ta: TAlignment);
         procedure SetTemperaturePointsChart(ATemp: TArray<Double>;
@@ -77,7 +83,7 @@ const
     main_temperatures: array [0 .. 7] of Double = (-40, -20, 0, 20, 30,
       40, 45, 50);
 
-function is_main_temperature(X: Double): boolean;
+function is_main_temperature(X: Double): Boolean;
 var
     t: Double;
 begin
@@ -175,6 +181,46 @@ begin
 
 end;
 
+procedure TFormFirmware.StringGrid2SelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+    // When selecting a cell
+    with Sender as TStringGrid do
+        if EditorMode then
+        begin // It was a cell being edited
+            EditorMode := false; // Deactivate the editor
+            // Do an extra check if the LastEdited_ACol and LastEdited_ARow are not -1 already.
+            // This is to be able to use also the arrow-keys up and down in the Grid.
+            if (Last_Edited_Col <> -1) and (Last_Edited_Row <> -1) then
+                StringGrid2SetEditText(Sender as TStringGrid, Last_Edited_Col,
+                  Last_Edited_Row, Cells[Last_Edited_Col, Last_Edited_Row]);
+            // Just make the call
+        end;
+    // Do whatever else wanted
+end;
+
+procedure TFormFirmware.StringGrid2SetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+    With Sender as TStringGrid do
+        // Fired on every change
+        if Not EditorMode // goEditing must be 'True' in Options
+        then
+        begin // Only after user ends editing the cell
+            Last_Edited_Col := -1; // Indicate no cell is edited
+            Last_Edited_Row := -1; // Indicate no cell is edited
+            // Do whatever wanted after user has finish editing a cell
+            with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+                SetTemperaturePointsChart(FTemp, FFon, FSens);
+
+        end
+        else
+        begin // The cell is being editted
+            Last_Edited_Col := ACol; // Remember column of cell being edited
+            Last_Edited_Row := ARow; // Remember row of cell being edited
+        end;
+end;
+
 procedure TFormFirmware.ToolButton2Click(Sender: TObject);
 var
     cl, ro: Integer;
@@ -220,7 +266,7 @@ var
     i, xPos, yPos, a, b: Integer;
     ser: TChartSeries;
 
-    marker_place: boolean;
+    marker_place: Boolean;
     marker_rects: array of TRect;
     marker_rect, r2: TRect;
     value_format, marker_text: string;
@@ -339,7 +385,7 @@ procedure TFormFirmware.SetProduct(p: TProduct);
 var
     f: TProductFirmwareInfo;
     i: Integer;
-    has_null: boolean;
+    has_null: Boolean;
 
 begin
 
@@ -371,9 +417,9 @@ begin
         for i := 1 to RowCount - 1 do
         begin
             n := (i - 1) * 3;
-            Result[n + 0] := Cells[0, i + 0];
-            Result[n + 1] := Cells[1, i + 1];
-            Result[n + 2] := Cells[2, i + 2];
+            Result[n + 0] := Cells[0, i];
+            Result[n + 1] := Cells[1, i];
+            Result[n + 2] := Cells[2, i];
         end;
     end;
 
@@ -402,7 +448,7 @@ procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
   AFon: TArray<Double>; ASens: TArray<Double>);
 var
     i: Integer;
-    has_null: boolean;
+    has_null: Boolean;
 begin
     StringGrid2.RowCount := 1;
     has_null := false;
