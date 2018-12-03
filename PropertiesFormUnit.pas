@@ -200,8 +200,6 @@ begin
         if FMax.FValid then
             HintText := HintText + #13 + 'максимум: ' + floattostr(FMax.FFloat64);
 
-        HintText := HintText + #13 + 'по умолчанию: ' + FDefaultValue;
-
         if FError <> '' then
             HintText := HintText + #13#13 + '"' + FValue + '": ' + FError;
     end;

@@ -37,12 +37,17 @@ type
 
         FParty: TParty;
         FProducts: TArray<TProduct>;
+        FStendValues: TArray<string>;
         FColumns: TProductColumns;
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
 
+        procedure DrawCellStr(ACol, ARow: Integer; Rect: TRect; ta: TAlignment;
+          str: string);
+
         procedure DrawCellText(ACol, ARow: Integer; Rect: TRect;
           ta: TAlignment);
+
         procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 
         procedure UpdateSerial(ACol, ARow: Integer; Value: string);
@@ -72,6 +77,7 @@ uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
 procedure TFormLastParty.FormCreate(Sender: TObject);
 begin
     SetLength(FProducts, 96);
+    SetLength(FStendValues, 96);
     reload_data;
     Update_View;
 end;
@@ -204,7 +210,7 @@ var
     pt: TPoint;
 begin
     GetCursorPos(pt);
-    pt :=  StringGrid1.ScreenToClient(pt);
+    pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
     if (ARow < 0) or (ARow > Length(FProducts)) then
         exit;
@@ -255,6 +261,9 @@ begin
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
+        pcStend:
+            DrawCellStr(ACol, ARow, Rect, ProdColumnAlignment(pcStend),
+              FStendValues[ARow - 1]);
     else
         case ProductValues[ACol, ARow - 1].Valid of
             vpvInvalid:
@@ -318,28 +327,32 @@ begin
 
 end;
 
-procedure TFormLastParty.DrawCellText(ACol, ARow: Integer; Rect: TRect;
-  ta: TAlignment);
+procedure TFormLastParty.DrawCellStr(ACol, ARow: Integer; Rect: TRect;
+  ta: TAlignment; str: string);
 var
-    s: string;
     X, Y, txt_width, txt_height: Integer;
 begin
-    s := StringGrid1.Cells[ACol, ARow];
     with StringGrid1.Canvas do
     begin
 
-        if TextWidth(s) + 3 > Rect.Width then
-            s := cut_str(s, StringGrid1.Canvas, Rect.Width);
-        txt_width := TextWidth(s);
-        txt_height := TextHeight(s);
+        if TextWidth(str) + 3 > Rect.Width then
+            str := cut_str(str, StringGrid1.Canvas, Rect.Width);
+        txt_width := TextWidth(str);
+        txt_height := TextHeight(str);
         X := Rect.Left + 3;
         if ta = taRightJustify then
             X := Rect.Right - 3 - round(txt_width)
         else if ta = taCenter then
             X := Rect.Left + round((Rect.Width - txt_width) / 2.0);
         Y := Rect.Top + round((Rect.Height - txt_height) / 2.0);
-        TextRect(Rect, X, Y, s);
+        TextRect(Rect, X, Y, str);
     end;
+end;
+
+procedure TFormLastParty.DrawCellText(ACol, ARow: Integer; Rect: TRect;
+  ta: TAlignment);
+begin
+    DrawCellStr(ACol, ARow, Rect, ta, StringGrid1.Cells[ACol, ARow]);
 end;
 
 procedure TFormLastParty.ComboBox1CloseUp(Sender: TObject);
@@ -419,6 +432,7 @@ end;
 procedure TFormLastParty.reload_data;
 var
     i: Integer;
+    FColumnsS: TProductColumnsSet;
 begin
     for i := 0 to 95 do
         FProducts[i] := nil;
@@ -434,9 +448,19 @@ begin
             FProducts[i] := TProduct.Create;
             FProducts[i].FPlace := i;
         end;
+        FStendValues[i] := '?';
     end;
-    FColumns := GetProductColumns(FProducts,
-      [pcPlace, pcSerial, pcProdType, pcNote]);
+
+    FColumnsS := [pcPlace, pcSerial, pcProdType, pcNote];
+    for i := 0 to 95 do
+        if FStendValues[i] <> '' then
+        begin
+            FColumnsS := FColumnsS + [pcStend];
+            break;
+        end;
+
+    FColumns := GetProductColumns(FProducts, FColumnsS);
+
 end;
 
 function TFormLastParty.GetProductValue(ColumnIndex, RowIndex: Integer)
@@ -468,11 +492,11 @@ begin
         end;
     end;
 
-    if Value <> p.FNote.Str then
+    if Value <> p.FNote.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FNote.Str;
+            Cells[ACol, ARow] := p.FNote.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -500,11 +524,11 @@ begin
         end;
     end;
 
-    if Value <> p.FProductTypeName.Str then
+    if Value <> p.FProductTypeName.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FProductTypeName.Str;
+            Cells[ACol, ARow] := p.FProductTypeName.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -533,11 +557,11 @@ begin
         end;
     end;
 
-    if Value <> p.FSerial.Str then
+    if Value <> p.FSerial.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FSerial.Str;
+            Cells[ACol, ARow] := p.FSerial.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);

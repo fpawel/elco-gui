@@ -176,6 +176,14 @@ begin
                         CellText := inttostr(p.Value);
                 end;
             end;
+        2:
+            begin
+                case p.NodeKind of
+                    trdParty:
+                        if p.Party.FNote.FValid then
+                            CellText := p.Party.FNote.FString;
+                end;
+            end;
     end;
 end;
 

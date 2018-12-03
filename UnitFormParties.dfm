@@ -16,7 +16,7 @@ object FormParties: TFormParties
   PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
-    Left = 217
+    Left = 385
     Top = 0
     Width = 5
     Height = 510
@@ -27,7 +27,7 @@ object FormParties: TFormParties
   object TreeView1: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 217
+    Width = 385
     Height = 510
     Align = alLeft
     DefaultNodeHeight = 25
@@ -58,6 +58,10 @@ object FormParties: TFormParties
         Position = 1
         Width = 34
         WideText = #8470
+      end
+      item
+        Position = 2
+        WideText = #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
       end>
   end
   object ImageList1: TImageList
@@ -68,7 +72,7 @@ object FormParties: TFormParties
     Left = 120
     Top = 40
     Bitmap = {
-      494C010105009C00AC0110001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010105009C00B00110001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

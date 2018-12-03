@@ -13,8 +13,6 @@ type
     TElcoMainForm = class(TForm)
         Panel1: TPanel;
         Panel14: TPanel;
-        Panel4: TPanel;
-        Panel8: TPanel;
         ImageList3: TImageList;
         SplitterConsoleHoriz: TSplitter;
         PanelConsolePlaceholderBottom: TPanel;
@@ -28,24 +26,22 @@ type
         ToolButtonConsoleHide: TToolButton;
         PopupMenu1: TPopupMenu;
         N4: TMenuItem;
-        N1: TMenuItem;
-        N6: TMenuItem;
         N7: TMenuItem;
-        N10: TMenuItem;
         N11: TMenuItem;
-        N2: TMenuItem;
         PageControlMain: TPageControl;
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
-        Panel2: TPanel;
-        ToolBarParty: TToolBar;
-        ToolButtonParty: TToolButton;
-        PanelStendMessage: TPanel;
+    PanelWorkTools: TPanel;
         TabSheetStend: TTabSheet;
         TabSheetSettings: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
+    Panel3: TPanel;
+    ToolBar1: TToolBar;
+    ToolButtonMainMenu: TToolButton;
+    N1: TMenuItem;
+    N2: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -155,7 +151,7 @@ end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
 begin
-    with ToolButtonParty do
+    with ToolButtonMainMenu do
         with ClientToScreen(Point(0, Height)) do
             PopupMenu1.Popup(x, Y);
 end;

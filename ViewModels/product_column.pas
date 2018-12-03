@@ -2,10 +2,11 @@ unit product_column;
 
 interface
 
-uses dbutils, classes, server_data_types, server_data_types_helpers, Vcl.graphics;
+uses dbutils, classes, server_data_types, server_data_types_helpers,
+    Vcl.graphics;
 
 type
-    TProductColumn = (pcPlace, pcFirmware, pcSerial,  pcFon20,
+    TProductColumn = (pcPlace, pcFirmware, pcSerial, pcStend, pcFon20,
       pcFon20_2, pcSens20, pcKSens20,
 
       pcFon50, pcSens50, pcKSens50,
@@ -27,8 +28,9 @@ type
 
 const
     product_column_name: array [TProductColumn] of string = ('№', 'Ф', 'Зав.№',
-       'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50', 'Ч.50', 'Kч50',
-      'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2', 'ПГС1', 'неизм.', 'исполнение', 'прим.');
+      'показания', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50', 'Ч.50',
+      'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2', 'ПГС1', 'неизм.',
+      'исполнение', 'примичание');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;
@@ -85,11 +87,17 @@ begin
             pcPlace:
                 exit(ProdVal(inttostr((FPlace div 8) + 1) + '.' +
                   inttostr((FPlace mod 8) + 1)));
+
             pcFirmware:
                 ;
+
             pcSerial:
                 if FSerial.FValid then
                     Result.Value := inttostr(FSerial.FInt64);
+
+            pcStend:
+                ;
+
             pcProdType:
                 if FProductTypeName.FValid then
                     Result.Value := FProductTypeName.FString;
@@ -195,8 +203,9 @@ end;
 
 function ProductColumnWidth(column: TProductColumn; canvas: TCanvas;
   prods: TArray<TProduct>): integer;
-var p:TProduct;
-    w:integer;
+var
+    p: TProduct;
+    w: integer;
 begin
 
     case column of
@@ -206,12 +215,12 @@ begin
         Result := 60;
     end;
 
-    w := Canvas.TextWidth(product_column_name[column]);
+    w := canvas.TextWidth(product_column_name[column]);
     if Result < w + 30 then
         Result := w + 30;
     for p in prods do
     begin
-        w := Canvas.TextWidth(GetProductColumnValue(p, column).Value);
+        w := canvas.TextWidth(GetProductColumnValue(p, column).Value);
         if Result < w + 30 then
             Result := w + 30;
     end;

@@ -130,7 +130,6 @@ type
         FHint : string;
         FName : string;
         FValue : string;
-        FDefaultValue : string;
         FError : string;
         FMin : TNullFloat64;
         FMax : TNullFloat64;
