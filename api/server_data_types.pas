@@ -154,6 +154,13 @@ type
         
     end;
  
+    TTextMessage = class 
+    public 
+        FText : string;
+        FLevel : Integer;
+        
+    end;
+ 
 implementation 
     uses Rest.Json;   
       
@@ -294,6 +301,6 @@ begin
         FMax.Free;
     
 end;
-  
+   
 
 end.

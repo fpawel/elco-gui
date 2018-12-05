@@ -25,7 +25,8 @@ uses
   config_helpers in 'api\config_helpers.pas',
   PropertyValueEditors in 'PropertyValueEditors.pas',
   listports in 'utils\listports.pas',
-  PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm};
+  PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm},
+  notify_services in 'api\notify_services.pas';
 
 {$R *.res}
 

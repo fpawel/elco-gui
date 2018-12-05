@@ -23,8 +23,6 @@ object ElcoMainForm: TElcoMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = -2
-    ExplicitWidth = 970
   end
   object Panel14: TPanel
     Left = 0
@@ -34,7 +32,6 @@ object ElcoMainForm: TElcoMainForm
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 600
   end
   object PageControlMain: TPageControl
     Left = 5
@@ -51,20 +48,12 @@ object ElcoMainForm: TElcoMainForm
     TabWidth = 60
     OnChange = PageControlMainChange
     OnDrawTab = PageControlMainDrawTab
-    ExplicitWidth = 960
-    ExplicitHeight = 600
     object TabSheetParty: TTabSheet
       Caption = #1055#1072#1088#1090#1080#1103
-      ExplicitLeft = 102
-      ExplicitTop = 2
-      ExplicitWidth = 852
-      ExplicitHeight = 592
     end
     object TabSheetStend: TTabSheet
       Caption = #1057#1090#1077#1085#1076
       ImageIndex = 2
-      ExplicitWidth = 852
-      ExplicitHeight = 592
       object SplitterConsoleHoriz: TSplitter
         Left = 0
         Top = 360
@@ -88,8 +77,6 @@ object ElcoMainForm: TElcoMainForm
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 0
-        ExplicitTop = 392
-        ExplicitWidth = 852
         object PanelConsole: TPanel
           Left = 0
           Top = 0
@@ -100,7 +87,6 @@ object ElcoMainForm: TElcoMainForm
           BevelOuter = bvNone
           ParentColor = True
           TabOrder = 0
-          ExplicitWidth = 852
           object RichEdit1: TRichEdit
             Left = 0
             Top = 32
@@ -118,7 +104,6 @@ object ElcoMainForm: TElcoMainForm
             ScrollBars = ssVertical
             TabOrder = 0
             Zoom = 100
-            ExplicitWidth = 852
           end
           object PanelConsoleHeader: TPanel
             Left = 0
@@ -178,6 +163,7 @@ object ElcoMainForm: TElcoMainForm
               Left = 758
               Top = 0
               Width = 66
+              Height = 29
               Align = alRight
               ButtonHeight = 31
               ButtonWidth = 32
@@ -207,12 +193,16 @@ object ElcoMainForm: TElcoMainForm
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 852
       ExplicitHeight = 592
     end
     object TabSheetSettings: TTabSheet
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 852
       ExplicitHeight = 592
     end
@@ -234,8 +224,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
-    ExplicitLeft = 939
-    ExplicitTop = 8
     object ToolBar1: TToolBar
       Left = 0
       Top = 0
@@ -248,7 +236,6 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 0
-      ExplicitWidth = 28
       object ToolButtonMainMenu: TToolButton
         Left = 0
         Top = 0
@@ -279,8 +266,6 @@ object ElcoMainForm: TElcoMainForm
     ParentFont = False
     TabOrder = 4
     Visible = False
-    ExplicitLeft = -1
-    ExplicitTop = 580
     object ToolBarStop: TToolBar
       Left = 935
       Top = 0
@@ -294,8 +279,6 @@ object ElcoMainForm: TElcoMainForm
       Images = ImageList4
       TabOrder = 0
       Visible = False
-      ExplicitLeft = 0
-      ExplicitHeight = 968
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
@@ -317,7 +300,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300D401080319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300D4010C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -678,7 +661,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 576
     Top = 266
     Bitmap = {
-      494C0101020024037C0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010102002403800314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

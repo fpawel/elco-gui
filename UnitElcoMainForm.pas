@@ -141,6 +141,7 @@ begin
         PropertiesForm.SetConfig(TSettingsSvc.Get);
     end;
 
+
 end;
 
 procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
