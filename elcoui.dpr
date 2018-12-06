@@ -26,7 +26,8 @@ uses
   PropertyValueEditors in 'PropertyValueEditors.pas',
   listports in 'utils\listports.pas',
   PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm},
-  notify_services in 'api\notify_services.pas';
+  notify_services in 'api\notify_services.pas',
+  ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas';
 
 {$R *.res}
 

@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    Vcl.Menus, pipe;
+    Vcl.Menus, pipe, ComponentBaloonHintU, Vcl.Imaging.pngimage;
 
 type
     TElcoMainForm = class(TForm)
@@ -32,28 +32,48 @@ type
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
-    PanelWorkTools: TPanel;
+        PanelWorkTools: TPanel;
         TabSheetStend: TTabSheet;
         TabSheetSettings: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
-    Panel3: TPanel;
-    ToolBar1: TToolBar;
-    ToolButtonMainMenu: TToolButton;
-    N1: TMenuItem;
-    N2: TMenuItem;
+        Panel3: TPanel;
+        ToolBar1: TToolBar;
+        ToolButtonMainMenu: TToolButton;
+        N1: TMenuItem;
+        N2: TMenuItem;
+        PanelMessageBox: TPanel;
+        PanelMessageBoxTitle: TPanel;
+        ToolBar2: TToolBar;
+        ToolButton3: TToolButton;
+        Image1: TImage;
+        ImageList90: TImageList;
+    MemolMessageBoxText: TMemo;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
         procedure PageControlMainChange(Sender: TObject);
         procedure PageControlMainDrawTab(Control: TCustomTabControl;
           TabIndex: Integer; const Rect: TRect; Active: Boolean);
+        procedure FormResize(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
+        FhWndTip: THandle;
         procedure AppException(Sender: TObject; E: Exception);
+
+        procedure HandleCopydata(var Message: TMessage); message WM_COPYDATA;
+        procedure WMWindowPosChanged(var AMessage: TMessage);
+          message WM_WINDOWPOSCHANGED;
+        procedure WMEnterSizeMove(var Msg: TMessage); message WM_ENTERSIZEMOVE;
+
+        procedure WMActivateApp(var AMessage: TMessage); message WM_ACTIVATEAPP;
     public
         { Public declarations }
+        procedure ShowBalloonTip(c: TWinControl; Icon: TIconKind;
+          const Title, Text: string);
     end;
 
 var
@@ -66,12 +86,40 @@ implementation
 
 uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    server_data_types, services, UnitFormParty, PropertiesFormUnit;
+    server_data_types, services, UnitFormParty, PropertiesFormUnit,
+    notify_services;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
     FInitialized := false;
     Application.OnException := AppException;
+    SetOnHardwareError(
+        procedure(s: string)
+        begin
+            PanelMessageBoxTitle.Caption := 'Ошибка оборудования';
+            MemolMessageBoxText.Text := s;
+            MemolMessageBoxText.Font.Color := clRed;
+            PanelMessageBox.Visible := true;
+            FormResize(self);
+        end);
+    SetOnReadCurrent(
+        procedure(v: TReadCurrent)
+        begin
+            v.Free;
+        end
+    )
+
+end;
+
+procedure TElcoMainForm.FormResize(Sender: TObject);
+begin
+
+    if PanelMessageBox.Visible then
+    begin
+        PanelMessageBox.Left := Left + ClientWidth div 2 -
+          PanelMessageBox.Width div 2;
+        PanelMessageBox.Top := Top + ClientHeight div 2 - PanelMessageBox.Top div 2;
+    end;
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -141,13 +189,17 @@ begin
         PropertiesForm.SetConfig(TSettingsSvc.Get);
     end;
 
-
 end;
 
 procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
-  TabIndex: Integer; const Rect: TRect; Active: Boolean);
+TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
     PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+end;
+
+procedure TElcoMainForm.ToolButton3Click(Sender: TObject);
+begin
+    PanelMessageBox.Hide;
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
@@ -161,6 +213,41 @@ procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
 begin
     OutputDebugStringW(PWideChar(E.Message));
     Application.ShowException(E);
+end;
+
+procedure TElcoMainForm.ShowBalloonTip(c: TWinControl; Icon: TIconKind;
+const Title, Text: string);
+begin
+    CloseWindow(FhWndTip);
+    FhWndTip := ComponentBaloonHintU.ShowBalloonTip(c, Icon, Title, Text);
+end;
+
+procedure TElcoMainForm.WMEnterSizeMove(var Msg: TMessage);
+begin
+    CloseWindow(FhWndTip);
+    inherited;
+end;
+
+procedure TElcoMainForm.WMWindowPosChanged(var AMessage: TMessage);
+begin
+    CloseWindow(FhWndTip);
+    inherited;
+end;
+
+procedure TElcoMainForm.WMActivateApp(var AMessage: TMessage);
+begin
+    CloseWindow(FhWndTip);
+    inherited;
+end;
+
+procedure TElcoMainForm.HandleCopydata(var Message: TMessage);
+begin
+    notify_services.HandleCopydata(Message);
+end;
+
+procedure TElcoMainForm.N11Click(Sender: TObject);
+begin
+    TRunnerSvc.RunReadCurrent;
 end;
 
 end.

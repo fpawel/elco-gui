@@ -4,26 +4,26 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TTextMessageHandler = reference to procedure (x:TTextMessage);
     TStringHandler = reference to procedure (x:string);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
 
-procedure SetOnMessageBox( AHandler : TTextMessageHandler);
-procedure SetOnStatusMessage( AHandler : TStringHandler);
+procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
+procedure SetOnHardwareError( AHandler : TStringHandler);
 
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdMessageBox, 
-    CmdStatusMessage);
+    TServerAppCmd = (CmdReadCurrent, 
+    CmdHardwareError);
 
 var
-    _OnMessageBox : TTextMessageHandler;
-    _OnStatusMessage : TStringHandler;
+    _OnReadCurrent : TReadCurrentHandler;
+    _OnHardwareError : TStringHandler;
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -37,17 +37,17 @@ begin
     Message.result := 1;
     SetString(str, PWideChar(cd.lpData), cd.cbData div 2);
     case cmd of
-        CmdMessageBox:
+        CmdReadCurrent:
         begin
-            if not Assigned(_OnMessageBox) then
-                raise Exception.Create('_OnMessageBox must be set');
-            _OnMessageBox(TJson.JsonToObject<TTextMessage>(str));
+            if not Assigned(_OnReadCurrent) then
+                raise Exception.Create('_OnReadCurrent must be set');
+            _OnReadCurrent(TJson.JsonToObject<TReadCurrent>(str));
         end;
-        CmdStatusMessage:
+        CmdHardwareError:
         begin
-            if not Assigned(_OnStatusMessage) then
-                raise Exception.Create('_OnStatusMessage must be set');
-            _OnStatusMessage(str);
+            if not Assigned(_OnHardwareError) then
+                raise Exception.Create('_OnHardwareError must be set');
+            _OnHardwareError(str);
         end;
         
     else
@@ -55,17 +55,17 @@ begin
     end;
 end;
 
-procedure SetOnMessageBox( AHandler : TTextMessageHandler);
+procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
 begin
-    if Assigned(_OnMessageBox) then
-        raise Exception.Create('_OnMessageBox already set');
-    _OnMessageBox := AHandler;
+    if Assigned(_OnReadCurrent) then
+        raise Exception.Create('_OnReadCurrent already set');
+    _OnReadCurrent := AHandler;
 end;
-procedure SetOnStatusMessage( AHandler : TStringHandler);
+procedure SetOnHardwareError( AHandler : TStringHandler);
 begin
-    if Assigned(_OnStatusMessage) then
-        raise Exception.Create('_OnStatusMessage already set');
-    _OnStatusMessage := AHandler;
+    if Assigned(_OnHardwareError) then
+        raise Exception.Create('_OnHardwareError already set');
+    _OnHardwareError := AHandler;
 end;
 
 

@@ -39,6 +39,10 @@ type
         class function Get( ) : TConfigSections;
         class procedure SetValue( param1: string; param2: string; param3: string) ;
          
+    end; TRunnerSvc = class 
+    public
+        class procedure RunReadCurrent( ) ;
+         
     end; 
 
 
@@ -458,6 +462,18 @@ begin
     req.AsArray.Add(param3) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.SetValue', req);
+    
+end;
+
+  
+class procedure TRunnerSvc.RunReadCurrent( ) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunReadCurrent', req);
     
 end;
 

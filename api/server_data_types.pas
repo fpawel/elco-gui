@@ -154,10 +154,10 @@ type
         
     end;
  
-    TTextMessage = class 
+    TReadCurrent = class 
     public 
-        FText : string;
-        FLevel : Integer;
+        FValues : TArray<Double>;
+        FPlace : Integer;
         
     end;
  
