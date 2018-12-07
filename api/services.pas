@@ -42,6 +42,7 @@ type
     end; TRunnerSvc = class 
     public
         class procedure RunReadCurrent( ) ;
+        class procedure StopHardware( ) ;
          
     end; 
 
@@ -474,6 +475,18 @@ begin
     req := SO;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunReadCurrent', req);
+    
+end;
+
+ 
+class procedure TRunnerSvc.StopHardware( ) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.StopHardware', req);
     
 end;
 

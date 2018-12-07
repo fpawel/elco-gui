@@ -37,7 +37,6 @@ type
 
         FParty: TParty;
         FProducts: TArray<TProduct>;
-        FStendValues: TArray<string>;
         FColumns: TProductColumns;
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
@@ -61,6 +60,7 @@ type
         { Public declarations }
         procedure reload_data;
         procedure Update_View;
+        procedure SetCurrents(place: Integer; v: TArray<double>);
 
     end;
 
@@ -77,7 +77,6 @@ uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
 procedure TFormLastParty.FormCreate(Sender: TObject);
 begin
     SetLength(FProducts, 96);
-    SetLength(FStendValues, 96);
     reload_data;
     Update_View;
 end;
@@ -262,8 +261,7 @@ begin
             else
                 StringGrid1.Canvas.FillRect(Rect);
         pcStend:
-            DrawCellStr(ACol, ARow, Rect, ProdColumnAlignment(pcStend),
-              FStendValues[ARow - 1]);
+            DrawCellText(ACol, ARow, Rect, ProdColumnAlignment(pcStend));
     else
         case ProductValues[ACol, ARow - 1].Valid of
             vpvInvalid:
@@ -360,10 +358,10 @@ begin
     with ComboBox1, StringGrid1 do
     begin
         if ItemIndex <> -1 then
-            Cells[Col, Row] := Items[ItemIndex]
+            Cells[col, Row] := Items[ItemIndex]
         else
-            Cells[Col, Row] := '';
-        UpdateProductType(Col, Row, ComboBox1.Text)
+            Cells[col, Row] := '';
+        UpdateProductType(col, Row, ComboBox1.Text)
     end;
     StringGrid1.SetFocus;
 end;
@@ -429,15 +427,23 @@ begin
     end;
 end;
 
+procedure TFormLastParty.SetCurrents(place: Integer; v: TArray<double>);
+var
+    i: Integer;
+begin
+    for i := 0 to 7 do
+        StringGrid1.Cells[3, 1 + place * 8 + i] := floattostr(v[i]);
+
+
+end;
+
 procedure TFormLastParty.reload_data;
 var
     i: Integer;
-    FColumnsS: TProductColumnsSet;
 begin
+    FParty := TLastParty.Party;
     for i := 0 to 95 do
         FProducts[i] := nil;
-    FParty := TLastParty.Party;
-
     for i := 0 to Length(FParty.FProducts) - 1 do
         FProducts[FParty.FProducts[i].FPlace] := FParty.FProducts[i];
 
@@ -448,18 +454,10 @@ begin
             FProducts[i] := TProduct.Create;
             FProducts[i].FPlace := i;
         end;
-        FStendValues[i] := '?';
     end;
 
-    FColumnsS := [pcPlace, pcSerial, pcProdType, pcNote];
-    for i := 0 to 95 do
-        if FStendValues[i] <> '' then
-        begin
-            FColumnsS := FColumnsS + [pcStend];
-            break;
-        end;
-
-    FColumns := GetProductColumns(FProducts, FColumnsS);
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcStend, pcSerial,
+      pcProdType, pcNote]);
 
 end;
 

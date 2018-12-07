@@ -27,18 +27,20 @@ object ElcoMainForm: TElcoMainForm
   end
   object Panel14: TPanel
     Left = 0
-    Top = 5
+    Top = 36
     Width = 5
-    Height = 573
+    Height = 543
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 5
+    ExplicitHeight = 573
   end
   object PageControlMain: TPageControl
     Left = 5
-    Top = 5
-    Width = 932
-    Height = 573
+    Top = 36
+    Width = 963
+    Height = 543
     ActivePage = TabSheetParty
     Align = alClient
     MultiLine = True
@@ -49,18 +51,23 @@ object ElcoMainForm: TElcoMainForm
     TabWidth = 60
     OnChange = PageControlMainChange
     OnDrawTab = PageControlMainDrawTab
+    ExplicitTop = 5
+    ExplicitWidth = 932
+    ExplicitHeight = 573
     object TabSheetParty: TTabSheet
       Caption = #1055#1072#1088#1090#1080#1103
-      ExplicitLeft = 102
-      ExplicitTop = 6
+      ExplicitWidth = 824
+      ExplicitHeight = 565
     end
     object TabSheetStend: TTabSheet
       Caption = #1057#1090#1077#1085#1076
       ImageIndex = 2
+      ExplicitWidth = 824
+      ExplicitHeight = 565
       object SplitterConsoleHoriz: TSplitter
         Left = 0
-        Top = 360
-        Width = 824
+        Top = 330
+        Width = 855
         Height = 5
         Cursor = crVSplit
         Align = alBottom
@@ -72,28 +79,31 @@ object ElcoMainForm: TElcoMainForm
       end
       object PanelConsolePlaceholderBottom: TPanel
         Left = 0
-        Top = 365
-        Width = 824
+        Top = 335
+        Width = 855
         Height = 200
         Align = alBottom
         Alignment = taLeftJustify
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 0
+        ExplicitTop = 365
+        ExplicitWidth = 824
         object PanelConsole: TPanel
           Left = 0
           Top = 0
-          Width = 824
+          Width = 855
           Height = 200
           Align = alClient
           Alignment = taLeftJustify
           BevelOuter = bvNone
           ParentColor = True
           TabOrder = 0
+          ExplicitWidth = 824
           object RichEdit1: TRichEdit
             Left = 0
             Top = 32
-            Width = 824
+            Width = 855
             Height = 168
             Align = alClient
             BorderStyle = bsNone
@@ -107,11 +117,12 @@ object ElcoMainForm: TElcoMainForm
             ScrollBars = ssVertical
             TabOrder = 0
             Zoom = 100
+            ExplicitWidth = 824
           end
           object PanelConsoleHeader: TPanel
             Left = 0
             Top = 0
-            Width = 824
+            Width = 855
             Height = 32
             Align = alTop
             Alignment = taLeftJustify
@@ -125,6 +136,7 @@ object ElcoMainForm: TElcoMainForm
             ParentBackground = False
             ParentFont = False
             TabOrder = 1
+            ExplicitWidth = 824
             object Panel6: TPanel
               Left = 0
               Top = 0
@@ -146,7 +158,7 @@ object ElcoMainForm: TElcoMainForm
             object Panel7: TPanel
               Left = 129
               Top = 0
-              Width = 629
+              Width = 660
               Height = 32
               Align = alClient
               Alignment = taLeftJustify
@@ -159,9 +171,10 @@ object ElcoMainForm: TElcoMainForm
               ParentColor = True
               ParentFont = False
               TabOrder = 1
+              ExplicitWidth = 629
             end
             object ToolBar4: TToolBar
-              Left = 758
+              Left = 789
               Top = 0
               Width = 66
               Align = alRight
@@ -172,6 +185,7 @@ object ElcoMainForm: TElcoMainForm
               EdgeOuter = esNone
               Images = ImageList3
               TabOrder = 0
+              ExplicitLeft = 758
               object ToolButtonMoveConsoleUp: TToolButton
                 Left = 0
                 Top = 0
@@ -192,18 +206,22 @@ object ElcoMainForm: TElcoMainForm
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
+      ExplicitWidth = 824
+      ExplicitHeight = 565
     end
     object TabSheetSettings: TTabSheet
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
       ImageIndex = 3
+      ExplicitWidth = 824
+      ExplicitHeight = 565
     end
   end
   object Panel3: TPanel
-    Left = 937
+    Left = 0
     Top = 5
-    Width = 31
-    Height = 573
-    Align = alRight
+    Width = 968
+    Height = 31
+    Align = alTop
     Alignment = taLeftJustify
     BevelOuter = bvNone
     Color = clGradientInactiveCaption
@@ -215,11 +233,13 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
+    ExplicitTop = 3
     object ToolBar1: TToolBar
       Left = 0
       Top = 0
-      Width = 31
-      Height = 30
+      Width = 30
+      Height = 31
+      Align = alLeft
       ButtonHeight = 30
       ButtonWidth = 30
       Caption = 'ToolBar1'
@@ -227,6 +247,7 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 0
+      ExplicitHeight = 968
       object ToolButtonMainMenu: TToolButton
         Left = 0
         Top = 0
@@ -238,12 +259,77 @@ object ElcoMainForm: TElcoMainForm
         OnClick = ToolButtonPartyClick
       end
     end
+    object ToolBarStop: TToolBar
+      Left = 30
+      Top = 0
+      Width = 33
+      Height = 31
+      Align = alLeft
+      ButtonHeight = 30
+      ButtonWidth = 30
+      Caption = 'ToolBarStop'
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      Images = ImageList4
+      TabOrder = 1
+      Visible = False
+      ExplicitLeft = 935
+      ExplicitHeight = 32
+      object ToolButton2: TToolButton
+        Left = 0
+        Top = 0
+        Hint = #1055#1088#1077#1088#1074#1072#1090#1100' '#1074#1099#1087#1086#1083#1085#1077#1085#1080#1077
+        Caption = 'ToolButtonStop'
+        ImageIndex = 1
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = ToolButton2Click
+      end
+    end
+    object PanelStatus: TPanel
+      Left = 73
+      Top = 0
+      Width = 895
+      Height = 31
+      Align = alClient
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Color = clGradientInactiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 2
+      ExplicitLeft = 79
+      ExplicitTop = -2
+    end
+    object Panel4: TPanel
+      Left = 63
+      Top = 0
+      Width = 10
+      Height = 31
+      Align = alLeft
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Color = clGradientInactiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGray
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 3
+    end
   end
   object PanelWorkTools: TPanel
     Left = 0
-    Top = 578
+    Top = 579
     Width = 968
-    Height = 32
+    Height = 31
     Align = alBottom
     Alignment = taLeftJustify
     BevelOuter = bvNone
@@ -257,29 +343,7 @@ object ElcoMainForm: TElcoMainForm
     ParentFont = False
     TabOrder = 4
     Visible = False
-    object ToolBarStop: TToolBar
-      Left = 935
-      Top = 0
-      Width = 33
-      Align = alRight
-      ButtonHeight = 30
-      ButtonWidth = 30
-      Caption = 'ToolBarStop'
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Images = ImageList4
-      TabOrder = 0
-      Visible = False
-      object ToolButton2: TToolButton
-        Left = 0
-        Top = 0
-        Hint = #1055#1088#1077#1088#1074#1072#1090#1100' '#1074#1099#1087#1086#1083#1085#1077#1085#1080#1077
-        Caption = 'ToolButtonStop'
-        ImageIndex = 1
-        ParentShowHint = False
-        ShowHint = True
-      end
-    end
+    ExplicitTop = 578
   end
   object PanelMessageBox: TPanel
     Left = 277
@@ -420,7 +484,6 @@ object ElcoMainForm: TElcoMainForm
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitLeft = 8
       object ToolBar2: TToolBar
         Left = 399
         Top = 0
@@ -433,7 +496,6 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList3
         TabOrder = 0
-        ExplicitLeft = 315
         object ToolButton3: TToolButton
           Left = 0
           Top = 0
@@ -457,7 +519,6 @@ object ElcoMainForm: TElcoMainForm
       ParentColor = True
       ReadOnly = True
       TabOrder = 1
-      ExplicitHeight = 163
     end
   end
   object ImageList3: TImageList
@@ -470,7 +531,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300D401140319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300D4011C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -832,7 +893,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010102002403880314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010102002403900314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1056,7 +1117,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 320
     Top = 418
     Bitmap = {
-      494C01010100240330035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010100240338035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

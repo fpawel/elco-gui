@@ -48,7 +48,9 @@ type
         ToolButton3: TToolButton;
         Image1: TImage;
         ImageList90: TImageList;
-    MemolMessageBoxText: TMemo;
+        MemolMessageBoxText: TMemo;
+        PanelStatus: TPanel;
+        Panel4: TPanel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -56,8 +58,9 @@ type
         procedure PageControlMainDrawTab(Control: TCustomTabControl;
           TabIndex: Integer; const Rect: TRect; Active: Boolean);
         procedure FormResize(Sender: TObject);
-    procedure N11Click(Sender: TObject);
-    procedure ToolButton3Click(Sender: TObject);
+        procedure N11Click(Sender: TObject);
+        procedure ToolButton3Click(Sender: TObject);
+        procedure ToolButton2Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -105,20 +108,40 @@ begin
     SetOnReadCurrent(
         procedure(v: TReadCurrent)
         begin
+            FormLastParty.SetCurrents(v.FPlace, v.FValues);
             v.Free;
-        end
-    )
+        end);
+    SetOnHardwareStarted(
+        procedure(s: string)
+        begin
+            ToolBarStop.Visible := true;
+            PanelStatus.Caption := s;
+
+        end);
+    SetOnHardwareStopped(
+        procedure(s: string)
+        begin
+            ToolBarStop.Visible := false;
+            PanelStatus.Caption := s;
+
+        end);
+
+    SetOnStatus(
+        procedure(s: string)
+        begin
+            PanelStatus.Caption := s;
+        end);
 
 end;
 
 procedure TElcoMainForm.FormResize(Sender: TObject);
 begin
-
     if PanelMessageBox.Visible then
     begin
-        PanelMessageBox.Left := Left + ClientWidth div 2 -
-          PanelMessageBox.Width div 2;
-        PanelMessageBox.Top := Top + ClientHeight div 2 - PanelMessageBox.Top div 2;
+
+        PanelMessageBox.Left := ClientWidth div 2 - PanelMessageBox.Width div 2;
+        PanelMessageBox.Top := ClientHeight div 2 -
+          PanelMessageBox.Height div 2;
     end;
 end;
 
@@ -195,6 +218,11 @@ procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
 TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
     PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+end;
+
+procedure TElcoMainForm.ToolButton2Click(Sender: TObject);
+begin
+    TRunnerSvc.StopHardware;
 end;
 
 procedure TElcoMainForm.ToolButton3Click(Sender: TObject);
