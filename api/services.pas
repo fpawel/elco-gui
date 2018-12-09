@@ -36,7 +36,10 @@ type
          
     end; TSettingsSvc = class 
     public
-        class function Get( ) : TConfigSections;
+        class function ChangePredefined( param1: string) : string;
+        class function Predefined( ) : string;
+        class function Sections( ) : TConfigSections;
+        class function SetDefaultPredefined( ) : string;
         class procedure SetValue( param1: string; param2: string; param3: string) ;
          
     end; TRunnerSvc = class 
@@ -434,18 +437,73 @@ begin
 end;
 
   
-class function TSettingsSvc.Get( ) : TConfigSections;
+class function TSettingsSvc.ChangePredefined( param1: string) : string;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.ChangePredefined', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
+            
+        
+    
+end;
+
+ 
+class function TSettingsSvc.Predefined( ) : string;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.Get', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.Predefined', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
+            
+        
+    
+end;
+
+ 
+class function TSettingsSvc.Sections( ) : TConfigSections;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.Sections', req);
     
         
              
                 Result := TJson.JsonToObject < TConfigSections > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TSettingsSvc.SetDefaultPredefined( ) : string;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.SetDefaultPredefined', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
             
         
     

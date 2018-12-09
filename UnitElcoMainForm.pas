@@ -51,6 +51,9 @@ type
         MemolMessageBoxText: TMemo;
         PanelStatus: TPanel;
         Panel4: TPanel;
+    ToolBar3: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -61,6 +64,7 @@ type
         procedure N11Click(Sender: TObject);
         procedure ToolButton3Click(Sender: TObject);
         procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -90,7 +94,7 @@ implementation
 uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     server_data_types, services, UnitFormParty, PropertiesFormUnit,
-    notify_services;
+    notify_services, UnitFormEditText;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
@@ -209,7 +213,7 @@ begin
     end
     else if PageControl.ActivePage = TabSheetSettings then
     begin
-        PropertiesForm.SetConfig(TSettingsSvc.Get);
+        PropertiesForm.SetConfig(TSettingsSvc.Sections);
     end;
 
 end;
@@ -218,6 +222,12 @@ procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
 TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
     PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+end;
+
+procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
+begin
+    FormEditText.Show;
+
 end;
 
 procedure TElcoMainForm.ToolButton2Click(Sender: TObject);

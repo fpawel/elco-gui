@@ -75,7 +75,7 @@ type
 implementation
 
 uses
-    listports, vclutils, stringutils, services, pipe;
+    listports, vclutils, stringutils, services, RTTI, pipe;
 
 constructor TChangedPropertyValue.Create(p: PConfigData);
 begin
@@ -193,6 +193,17 @@ begin
 
     end;
 
+    if FEdit is TEdit then
+        EditOnChange(FEdit)
+    else if FEdit is TComboBox then
+        ComboBoxOnChange(FEdit)
+    else if FEdit is TCheckBox then
+        CheckBoxOnChange(FEdit)
+    else
+        raise Exception.Create('unknown case: ' + TRttiEnumerationType.GetName
+          (FConfigData.Prop.ValueType) + '' );
+    FTree.InvalidateNode(FNode);
+
 end;
 
 // ----------------------------------------------------------------------------------------------------------------------
@@ -244,7 +255,7 @@ begin
             style := csDropDown;
             ItemHeight := 22;
             ItemIndex := Items.IndexOf(FConfigData.Prop.FValue);
-            OnChange := ComboBoxOnChange;
+            //OnChange := ComboBoxOnChange;
         end;
     end
 
@@ -259,7 +270,7 @@ begin
             Text := FConfigData.Prop.FValue;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
-            OnChange := EditOnChange;
+            //OnChange := EditOnChange;
 
         end;
     end
@@ -275,7 +286,7 @@ begin
             Text := FConfigData.Prop.FValue;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
-            OnChange := EditOnChange;
+            //OnChange := EditOnChange;
         end;
     end
     else if FConfigData.Prop.ValueType = VtFloat then
@@ -289,7 +300,7 @@ begin
             Text := FConfigData.Prop.FValue;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
-            OnChange := EditOnChange;
+            //OnChange := EditOnChange;
         end;
     end
 
@@ -301,8 +312,8 @@ begin
 
             Visible := False;
             Parent := Tree;
-            Checked := not FConfigData.Prop.Bool;
-            CheckBoxOnChange(FEdit);
+            // Checked := not FConfigData.Prop.Bool;
+            // CheckBoxOnChange(FEdit);
             Caption := '---';
             OnClick := CheckBoxOnChange;
         end;
@@ -367,7 +378,7 @@ begin
         except
             on E: ERemoteError do
             begin
-                FConfigData.prop.FError := e.Message;
+                FConfigData.Prop.FError := E.Message;
             end;
         end;
     end;

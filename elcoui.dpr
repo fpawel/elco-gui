@@ -27,7 +27,8 @@ uses
   listports in 'utils\listports.pas',
   PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm},
   notify_services in 'api\notify_services.pas',
-  ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas';
+  ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
+  UnitFormEditText in 'UnitFormEditText.pas' {FormEditText};
 
 {$R *.res}
 
@@ -40,5 +41,6 @@ begin
   Application.CreateForm(TFormParty, FormParty);
   Application.CreateForm(TFormFirmware, FormFirmware);
   Application.CreateForm(TPropertiesForm, PropertiesForm);
+  Application.CreateForm(TFormEditText, FormEditText);
   Application.Run;
 end.
