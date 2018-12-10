@@ -1,7 +1,8 @@
 object PropertiesForm: TPropertiesForm
   Left = 397
   Top = 294
-  ClientHeight = 320
+  BorderStyle = bsSizeToolWin
+  ClientHeight = 324
   ClientWidth = 677
   Color = clBtnFace
   ParentFont = True
@@ -3131,7 +3132,7 @@ object PropertiesForm: TPropertiesForm
     Left = 0
     Top = 0
     Width = 677
-    Height = 320
+    Height = 324
     Align = alClient
     BorderStyle = bsNone
     Colors.BorderColor = clWindowText
@@ -3173,6 +3174,7 @@ object PropertiesForm: TPropertiesForm
     OnIncrementalSearch = VST3IncrementalSearch
     OnInitChildren = VST3InitChildren
     OnInitNode = VST3InitNode
+    ExplicitHeight = 320
     Columns = <
       item
         Color = clWindow
@@ -3204,7 +3206,7 @@ object PropertiesForm: TPropertiesForm
     Left = 422
     Top = 224
     Bitmap = {
-      494C010107001300800010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010107001300840010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

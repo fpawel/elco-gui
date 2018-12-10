@@ -28,7 +28,9 @@ uses
   PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm},
   notify_services in 'api\notify_services.pas',
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
-  UnitFormEditText in 'UnitFormEditText.pas' {FormEditText};
+  UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
+  UnitFormSelectWorkDialog in 'UnitFormSelectWorkDialog.pas' {FormSelectWorkDialog},
+  UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog};
 
 {$R *.res}
 
@@ -42,5 +44,7 @@ begin
   Application.CreateForm(TFormFirmware, FormFirmware);
   Application.CreateForm(TPropertiesForm, PropertiesForm);
   Application.CreateForm(TFormEditText, FormEditText);
+  Application.CreateForm(TFormSelectWorkDialog, FormSelectWorkDialog);
+  Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
   Application.Run;
 end.

@@ -44,7 +44,7 @@ type
          
     end; TRunnerSvc = class 
     public
-        class procedure RunReadCurrent( ) ;
+        class procedure RunReadCurrent( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean; param5: Boolean; param6: Boolean; param7: Boolean; param8: Boolean; param9: Boolean; param10: Boolean; param11: Boolean; param12: Boolean) ;
         class procedure StopHardware( ) ;
          
     end; 
@@ -525,12 +525,24 @@ begin
 end;
 
   
-class procedure TRunnerSvc.RunReadCurrent( ) ;
+class procedure TRunnerSvc.RunReadCurrent( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean; param5: Boolean; param6: Boolean; param7: Boolean; param8: Boolean; param9: Boolean; param10: Boolean; param11: Boolean; param12: Boolean) ;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
-    req := SO;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    req.AsArray.Add(param2) ;
+    req.AsArray.Add(param3) ;
+    req.AsArray.Add(param4) ;
+    req.AsArray.Add(param5) ;
+    req.AsArray.Add(param6) ;
+    req.AsArray.Add(param7) ;
+    req.AsArray.Add(param8) ;
+    req.AsArray.Add(param9) ;
+    req.AsArray.Add(param10) ;
+    req.AsArray.Add(param11) ;
+    req.AsArray.Add(param12) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunReadCurrent', req);
     

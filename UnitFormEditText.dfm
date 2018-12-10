@@ -1,8 +1,9 @@
 object FormEditText: TFormEditText
   Left = 0
   Top = 0
+  BorderStyle = bsSizeToolWin
   Caption = #1050#1086#1085#1092#1080#1075#1091#1088#1072#1094#1080#1103' '#1089#1090#1077#1085#1076#1072' 6364'
-  ClientHeight = 653
+  ClientHeight = 657
   ClientWidth = 748
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
@@ -233,7 +234,7 @@ object FormEditText: TFormEditText
     Left = 656
     Top = 0
     Width = 92
-    Height = 653
+    Height = 657
     Align = alRight
     ButtonHeight = 86
     ButtonWidth = 87
@@ -242,6 +243,7 @@ object FormEditText: TFormEditText
     EdgeOuter = esNone
     Images = ImageList4
     TabOrder = 0
+    ExplicitHeight = 653
     object ToolButton2: TToolButton
       Left = 0
       Top = 0
@@ -280,7 +282,7 @@ object FormEditText: TFormEditText
     Left = 0
     Top = 0
     Width = 656
-    Height = 653
+    Height = 657
     Align = alClient
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
@@ -294,7 +296,7 @@ object FormEditText: TFormEditText
     TabOrder = 1
     Zoom = 100
     OnChange = RichEdit1Change
-    ExplicitWidth = 624
+    ExplicitHeight = 653
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit
@@ -306,7 +308,7 @@ object FormEditText: TFormEditText
     Left = 424
     Top = 90
     Bitmap = {
-      494C01010300B403D80350005000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300B403DC0350005000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400100005000000001002000000000000090
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

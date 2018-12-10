@@ -205,11 +205,10 @@ begin
           nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
           ) then
             raise Exception.Create('pipe error: ' + _LastError);
-
         // if SecondsBetween(t, now) > 5 then
         // raise Exception.Create('pipe hangs');
-
         Application.ProcessMessages;
+        //Sleep(50);
     end;
     SetLength(result, avail_count);
     _ReadFile(result[0], avail_count);

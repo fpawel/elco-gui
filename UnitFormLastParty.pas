@@ -185,8 +185,13 @@ begin
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
     if ACol > 0 then
         exit;
+    p := FProducts[ARow - 1];
+    if not Assigned(p) then
+        exit;
+
+
     try
-        p := FProducts[ARow - 1];
+
         p.FProductID := TLastParty.ToggleProductProductionAtPlace(p.FPlace);
         p.FProduction := not p.FProduction;
         PanelError.Visible := false;

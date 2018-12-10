@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    Vcl.Menus, pipe, ComponentBaloonHintU, Vcl.Imaging.pngimage;
+    Vcl.Menus, pipe, ComponentBaloonHintU, Vcl.Imaging.pngimage, inifiles;
 
 type
     TElcoMainForm = class(TForm)
@@ -34,7 +34,6 @@ type
         ImageList4: TImageList;
         PanelWorkTools: TPanel;
         TabSheetStend: TTabSheet;
-        TabSheetSettings: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
         Panel3: TPanel;
@@ -51,9 +50,15 @@ type
         MemolMessageBoxText: TMemo;
         PanelStatus: TPanel;
         Panel4: TPanel;
-    ToolBar3: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton4: TToolButton;
+        ToolBar3: TToolBar;
+        ToolButton1: TToolButton;
+        ToolButton4: TToolButton;
+        PanelDialog: TPanel;
+        Image2: TImage;
+        PanelDialogStatus: TPanel;
+        ToolBar5: TToolBar;
+        ToolButton5: TToolButton;
+        MemoPanelDialogText: TMemo;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -64,7 +69,9 @@ type
         procedure N11Click(Sender: TObject);
         procedure ToolButton3Click(Sender: TObject);
         procedure ToolButton2Click(Sender: TObject);
-    procedure ToolButton1Click(Sender: TObject);
+        procedure ToolButton1Click(Sender: TObject);
+        procedure FormClose(Sender: TObject; var Action: TCloseAction);
+        procedure ToolButton4Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -79,6 +86,7 @@ type
         procedure WMActivateApp(var AMessage: TMessage); message WM_ACTIVATEAPP;
     public
         { Public declarations }
+        FIni: TIniFile;
         procedure ShowBalloonTip(c: TWinControl; Icon: TIconKind;
           const Title, Text: string);
     end;
@@ -94,10 +102,32 @@ implementation
 uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     server_data_types, services, UnitFormParty, PropertiesFormUnit,
-    notify_services, UnitFormEditText;
+    notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils;
+
+procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+    wp: WINDOWPLACEMENT;
+    fs: TFileStream;
+    i: Integer;
+begin
+
+    fs := TFileStream.Create(TPath.Combine(ExtractFilePath(paramstr(0)),
+      'window.position'), fmOpenWrite or fmCreate);
+    if not GetWindowPlacement(Handle, wp) then
+        raise Exception.Create('GetWindowPlacement: false');
+    fs.Write(wp, SizeOf(wp));
+    fs.Free;
+
+    with FormSelectStendPlacesDialog.CheckListBox1 do
+        for i := 0 to 11 do
+            FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
+              Checked[i]);
+
+end;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
+    FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
     Application.OnException := AppException;
     SetOnHardwareError(
@@ -118,13 +148,15 @@ begin
     SetOnHardwareStarted(
         procedure(s: string)
         begin
-            ToolBarStop.Visible := true;
+            PanelMessageBox.Hide;
+            ToolBarStop.Show;
             PanelStatus.Caption := s;
 
         end);
     SetOnHardwareStopped(
         procedure(s: string)
         begin
+            PanelDialog.Hide;
             ToolBarStop.Visible := false;
             PanelStatus.Caption := s;
 
@@ -142,18 +174,42 @@ procedure TElcoMainForm.FormResize(Sender: TObject);
 begin
     if PanelMessageBox.Visible then
     begin
-
         PanelMessageBox.Left := ClientWidth div 2 - PanelMessageBox.Width div 2;
         PanelMessageBox.Top := ClientHeight div 2 -
           PanelMessageBox.Height div 2;
     end;
+
+    if PanelDialog.Visible then
+    begin
+        PanelDialog.Left := ClientWidth div 2 - PanelDialog.Width div 2;
+        PanelDialog.Top := ClientHeight div 2 - PanelDialog.Height div 2;
+    end;
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
+var
+    wp: WINDOWPLACEMENT;
+    fs: TFileStream;
+    FileName: string;
+    i: Integer;
 begin
     if FInitialized then
         exit;
     FInitialized := true;
+
+    FileName := TPath.Combine(ExtractFilePath(paramstr(0)), 'window.position');
+    if FileExists(FileName) then
+    begin
+        fs := TFileStream.Create(FileName, fmOpenRead);
+        fs.Read(wp, SizeOf(wp));
+        fs.Free;
+        SetWindowPlacement(Handle, wp);
+    end;
+
+    with FormSelectStendPlacesDialog.CheckListBox1 do
+        for i := 0 to 11 do
+            Checked[i] := FIni.ReadBool('FormSelectStendPlacesDialog',
+              inttostr(i), false);
 
     with FormParties do
     begin
@@ -182,15 +238,6 @@ begin
         Show;
     end;
 
-    with PropertiesForm do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetSettings;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
 end;
 
 procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
@@ -210,10 +257,6 @@ begin
     begin
         FormLastParty.reload_data;
         FormLastParty.update_view;
-    end
-    else if PageControl.ActivePage = TabSheetSettings then
-    begin
-        PropertiesForm.SetConfig(TSettingsSvc.Sections);
     end;
 
 end;
@@ -227,6 +270,7 @@ end;
 procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
 begin
     FormEditText.Show;
+    ShowWindow(FormEditText.Handle, SW_RESTORE);
 
 end;
 
@@ -238,6 +282,19 @@ end;
 procedure TElcoMainForm.ToolButton3Click(Sender: TObject);
 begin
     PanelMessageBox.Hide;
+end;
+
+procedure TElcoMainForm.ToolButton4Click(Sender: TObject);
+begin
+    with ToolBar3 do
+        with ClientToScreen(Point(0, Height)) do
+        begin
+            PropertiesForm.SetConfig(TSettingsSvc.Sections);
+            PropertiesForm.Left := x - 5 - PropertiesForm.Width;
+            PropertiesForm.Top := Y + 5;
+            PropertiesForm.Show;
+            ShowWindow(PropertiesForm.Handle, SW_RESTORE);
+        end;
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
@@ -285,7 +342,14 @@ end;
 
 procedure TElcoMainForm.N11Click(Sender: TObject);
 begin
-    TRunnerSvc.RunReadCurrent;
+    with ToolButtonMainMenu do
+        with ClientToScreen(Point(0, Height)) do
+        begin
+            ToolButtonMainMenu.PopupMenu.CloseMenu;
+            FormSelectStendPlacesDialog.Left := x + 5;
+            FormSelectStendPlacesDialog.Top := Y + 5;
+            FormSelectStendPlacesDialog.Show;
+        end;
 end;
 
 end.
