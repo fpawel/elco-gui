@@ -25,8 +25,6 @@ object FormSelectStendPlacesDialog: TFormSelectStendPlacesDialog
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 268
-    ExplicitHeight = 117
     object CheckListBox1: TCheckListBox
       Left = 0
       Top = 0
@@ -52,8 +50,6 @@ object FormSelectStendPlacesDialog: TFormSelectStendPlacesDialog
         '12')
       Style = lbOwnerDrawFixed
       TabOrder = 0
-      ExplicitWidth = 232
-      ExplicitHeight = 113
     end
     object ToolBarStop: TToolBar
       Left = 283
@@ -68,8 +64,6 @@ object FormSelectStendPlacesDialog: TFormSelectStendPlacesDialog
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 1
-      ExplicitLeft = 232
-      ExplicitHeight = 113
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
@@ -92,7 +86,7 @@ object FormSelectStendPlacesDialog: TFormSelectStendPlacesDialog
     Left = 536
     Top = 41
     Bitmap = {
-      494C010101003003480319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C0101010030034C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

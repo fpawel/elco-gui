@@ -15,14 +15,15 @@ procedure SetOnHardwareError( AHandler : TStringHandler);
 procedure SetOnHardwareStarted( AHandler : TStringHandler);
 procedure SetOnHardwareStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
+procedure SetOnWarning( AHandler : TStringHandler);
 
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, 
-    CmdStatus);
+    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, 
+    CmdWarning);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -30,6 +31,7 @@ var
     _OnHardwareStarted : TStringHandler;
     _OnHardwareStopped : TStringHandler;
     _OnStatus : TStringHandler;
+    _OnWarning : TStringHandler;
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -73,6 +75,12 @@ begin
                 raise Exception.Create('_OnStatus must be set');
             _OnStatus(str);
         end;
+        CmdWarning:
+        begin
+            if not Assigned(_OnWarning) then
+                raise Exception.Create('_OnWarning must be set');
+            _OnWarning(str);
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -108,6 +116,12 @@ begin
     if Assigned(_OnStatus) then
         raise Exception.Create('_OnStatus already set');
     _OnStatus := AHandler;
+end;
+procedure SetOnWarning( AHandler : TStringHandler);
+begin
+    if Assigned(_OnWarning) then
+        raise Exception.Create('_OnWarning already set');
+    _OnWarning := AHandler;
 end;
 
 

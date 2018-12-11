@@ -133,8 +133,14 @@ begin
     SetOnHardwareError(
         procedure(s: string)
         begin
+
+            if PanelMessageBox.Visible then
+                MemolMessageBoxText.Text := MemolMessageBoxText.Text + #10#13#10#13
+            else
+                MemolMessageBoxText.Text := '';
+
             PanelMessageBoxTitle.Caption := 'Ошибка оборудования';
-            MemolMessageBoxText.Text := s;
+            MemolMessageBoxText.Text := MemolMessageBoxText.Text + s;
             MemolMessageBoxText.Font.Color := clRed;
             PanelMessageBox.Visible := true;
             FormResize(self);
@@ -166,6 +172,18 @@ begin
         procedure(s: string)
         begin
             PanelStatus.Caption := s;
+        end);
+
+    SetOnWarning(
+        procedure(content: string)
+        var
+            s: string;
+        begin
+            s := content + #10#13#10#13;
+            s := s + 'Нажмите OK чтобы игнорировать ошибку и продолжить технологический процесс.'#10#13#10#13;
+            s := s + 'Нажмите ОТМЕНА чтобы прервать технологический процесс.';
+            if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
+                TRunnerSvc.StopHardware;
         end);
 
 end;
