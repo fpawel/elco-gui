@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{4C04B0E7-D297-440F-96FB-A7B0982713EC}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="elcoui.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="elcoui">
+        <MSBuild Projects="elcoui.dproj"/>
+    </Target>
+    <Target Name="elcoui:Clean">
+        <MSBuild Projects="elcoui.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="elcoui:Make">
+        <MSBuild Projects="elcoui.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="elcoui"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="elcoui:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="elcoui:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

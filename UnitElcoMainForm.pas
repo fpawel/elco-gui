@@ -7,7 +7,8 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    Vcl.Menus, pipe, ComponentBaloonHintU, Vcl.Imaging.pngimage, inifiles;
+    server_data_types, Vcl.Menus, pipe, ComponentBaloonHintU,
+    Vcl.Imaging.pngimage, inifiles;
 
 type
     TElcoMainForm = class(TForm)
@@ -32,7 +33,7 @@ type
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
-    PanelStatusBottom: TPanel;
+        PanelStatusBottom: TPanel;
         TabSheetStend: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
@@ -57,7 +58,16 @@ type
         ToolBar5: TToolBar;
         ToolButton5: TToolButton;
         MemoPanelDialogText: TMemo;
-    LabelStatusTop: TLabel;
+        LabelStatusTop: TLabel;
+        PanelDelay: TPanel;
+        LabelDelayElepsedTime: TLabel;
+        LabelProgress: TLabel;
+        LabelWhat: TLabel;
+        TimerDelay: TTimer;
+        ToolBar6: TToolBar;
+        ToolButtonStop: TToolButton;
+        Panel2: TPanel;
+        ProgressBar1: TProgressBar;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -71,12 +81,16 @@ type
         procedure ToolButton1Click(Sender: TObject);
         procedure FormClose(Sender: TObject; var Action: TCloseAction);
         procedure ToolButton4Click(Sender: TObject);
-    procedure N4Click(Sender: TObject);
+        procedure N4Click(Sender: TObject);
+        procedure ToolButtonStopClick(Sender: TObject);
+        procedure TimerDelayTimer(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
         FhWndTip: THandle;
         procedure AppException(Sender: TObject; E: Exception);
+
+        procedure SetupDelay(i: TDelayInfo);
 
         procedure HandleCopydata(var Message: TMessage); message WM_COPYDATA;
         procedure WMWindowPosChanged(var AMessage: TMessage);
@@ -99,11 +113,11 @@ implementation
 
 {$R *.dfm}
 
-uses stringgridutils, stringutils,
+uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    server_data_types, services, UnitFormParty, PropertiesFormUnit,
+    services, UnitFormParty, PropertiesFormUnit,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
-  UnitFormDelay, UnitFormSelectWorkDialog;
+    UnitFormSelectWorkDialog, dateutils, math;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
@@ -126,8 +140,7 @@ begin
 
     with FormSelectWorkDialog.CheckListBox1 do
         for i := 0 to 4 do
-            FIni.WriteBool('FormSelectWorkDialog', inttostr(i),
-              Checked[i]);
+            FIni.WriteBool('FormSelectWorkDialog', inttostr(i), Checked[i]);
 
 end;
 
@@ -142,7 +155,8 @@ begin
         begin
 
             if PanelMessageBox.Visible then
-                MemolMessageBoxText.Text := MemolMessageBoxText.Text + #10#13#10#13
+                MemolMessageBoxText.Text := MemolMessageBoxText.Text +
+                  #10#13#10#13
             else
                 MemolMessageBoxText.Text := '';
 
@@ -192,11 +206,12 @@ begin
             if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
                 TRunnerSvc.StopHardware;
         end);
-    SetOnDelay(procedure (x:TDelayInfo)
-    begin
-        FormDelay.Setup(x);
-        x.Free;
-    end);
+    SetOnDelay(
+        procedure(x: TDelayInfo)
+        begin
+            SetupDelay(x);
+            x.Free;
+        end);
 
 end;
 
@@ -273,15 +288,6 @@ begin
         Show;
     end;
 
-    with FormDelay do
-    begin
-        FormDelay.Parent := PanelStatusBottom;
-        //FormDelay.Parent := Panel3;
-        BorderStyle := bsNone;
-        Visible := false;
-        Align := alClient;
-    end;
-
 end;
 
 procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
@@ -309,6 +315,23 @@ procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
 TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
     PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+end;
+
+procedure TElcoMainForm.TimerDelayTimer(Sender: TObject);
+var
+    s: string;
+    v: TDateTime;
+begin
+    s := LabelDelayElepsedTime.Caption;
+    if TryStrToTime(s, v) then
+        LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
+          IncSecond(v));
+    ProgressBar1.Position := ProgressBar1.Position +
+      Integer(TimerDelay.Interval);
+
+    LabelProgress.Caption :=
+      inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
+
 end;
 
 procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
@@ -348,9 +371,28 @@ begin
             PopupMenu1.Popup(x, Y);
 end;
 
-procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
+procedure TElcoMainForm.ToolButtonStopClick(Sender: TObject);
 begin
-    OutputDebugStringW(PWideChar(E.Message));
+    TRunnerSvc.SkipDelay;
+end;
+
+procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
+    var
+   stackList: TJclStackInfoList; //JclDebug.pas
+   sl: TStringList;
+   stacktrace:string;
+begin
+
+
+    stackList := JclCreateStackList(False, 0, Caller(0, False));
+    sl := TStringList.Create;
+    stackList.AddToStrings(sl, True, false, true, false);
+    stacktrace := sl.Text;
+    sl.Free;
+    stacklist.Free;
+
+    OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
+    //    Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Œ¯Ë·Í‡', MB_ICONERROR or MB_OK  );
     Application.ShowException(E);
 end;
 
@@ -398,7 +440,7 @@ end;
 
 procedure TElcoMainForm.N4Click(Sender: TObject);
 begin
-     with ToolButtonMainMenu do
+    with ToolButtonMainMenu do
         with ClientToScreen(Point(0, Height)) do
         begin
             ToolButtonMainMenu.PopupMenu.CloseMenu;
@@ -406,6 +448,18 @@ begin
             FormSelectWorkDialog.Top := Y + 5;
             FormSelectWorkDialog.Show;
         end;
+end;
+
+procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
+begin
+
+    LabelDelayElepsedTime.Caption := '00:00:00';
+    LabelWhat.Caption := i.FWhat;
+    LabelProgress.Caption := '';
+    ProgressBar1.Position := 0;
+    ProgressBar1.Max := i.FTimeSeconds * 1000;
+    PanelDelay.Visible := i.FRun;
+    TimerDelay.Enabled := i.FRun;
 end;
 
 end.

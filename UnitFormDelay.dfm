@@ -2,8 +2,8 @@ object FormDelay: TFormDelay
   Left = 0
   Top = 0
   Caption = 'FormDelay'
-  ClientHeight = 32
-  ClientWidth = 1016
+  ClientHeight = 31
+  ClientWidth = 495
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,119 +14,89 @@ object FormDelay: TFormDelay
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 18
-  object Panel1: TPanel
-    Left = 393
-    Top = 0
-    Width = 623
-    Height = 32
-    Align = alClient
-    Alignment = taLeftJustify
-    BevelOuter = bvNone
-    TabOrder = 0
-    object LabelCurrentTime: TLabel
-      Left = 74
-      Top = 0
-      Width = 58
-      Height = 32
-      Align = alLeft
-      Caption = '00:00:00'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clTeal
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Layout = tlCenter
-      ExplicitHeight = 18
-    end
-    object LabelTotalTime: TLabel
-      Left = 0
-      Top = 0
-      Width = 58
-      Height = 32
-      Align = alLeft
-      Caption = '00:00:00'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clNavy
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Layout = tlCenter
-      ExplicitHeight = 18
-    end
-    object LabelWhat: TLabel
-      Left = 195
-      Top = 0
-      Width = 23
-      Height = 32
-      Align = alLeft
-      Caption = '?dd'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clNavy
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Layout = tlCenter
-      ExplicitHeight = 18
-    end
-    object LabelProgress: TLabel
-      Left = 148
-      Top = 0
-      Width = 31
-      Height = 32
-      Align = alLeft
-      Caption = '50%'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clTeal
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Layout = tlCenter
-      ExplicitHeight = 18
-    end
-    object Panel2: TPanel
-      Left = 58
-      Top = 0
-      Width = 16
-      Height = 32
-      Align = alLeft
-      BevelOuter = bvNone
-      TabOrder = 0
-    end
-    object Panel5: TPanel
-      Left = 179
-      Top = 0
-      Width = 16
-      Height = 32
-      Align = alLeft
-      BevelOuter = bvNone
-      TabOrder = 1
-    end
-    object Panel3: TPanel
-      Left = 132
-      Top = 0
-      Width = 16
-      Height = 32
-      Align = alLeft
-      BevelOuter = bvNone
-      TabOrder = 2
-    end
-  end
-  object ToolBar1: TToolBar
+  object LabelTotalTime: TLabel
     Left = 0
     Top = 0
-    Width = 30
+    Width = 58
+    Height = 31
     Align = alLeft
+    Caption = '00:00:00'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    ExplicitLeft = 8
+    ExplicitHeight = 18
+  end
+  object LabelCurrentTime: TLabel
+    Left = 160
+    Top = 0
+    Width = 58
+    Height = 31
+    Align = alLeft
+    Caption = '00:00:00'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clTeal
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    ExplicitLeft = 24
+    ExplicitHeight = 18
+  end
+  object LabelProgress: TLabel
+    Left = 74
+    Top = 0
+    Width = 31
+    Height = 31
+    Align = alLeft
+    Caption = '50%'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clTeal
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    ExplicitLeft = 27
+    ExplicitHeight = 32
+  end
+  object LabelWhat: TLabel
+    Left = 121
+    Top = 0
+    Width = 23
+    Height = 31
+    Align = alLeft
+    Caption = '?dd'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    ExplicitLeft = 98
+    ExplicitHeight = 32
+  end
+  object ToolBar1: TToolBar
+    Left = 465
+    Top = 0
+    Width = 30
+    Height = 31
+    Align = alRight
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'ToolBarCancel'
     EdgeInner = esNone
     EdgeOuter = esNone
     Images = ImageList4
-    TabOrder = 1
+    TabOrder = 0
+    ExplicitLeft = 0
+    ExplicitHeight = 32
     object ToolButtonStop: TToolButton
       Left = 0
       Top = 0
@@ -138,30 +108,52 @@ object FormDelay: TFormDelay
       OnClick = ToolButton1Click
     end
   end
-  object Panel4: TPanel
-    Left = 30
+  object Panel5: TPanel
+    Left = 58
     Top = 0
-    Width = 363
-    Height = 32
+    Width = 16
+    Height = 31
+    Align = alLeft
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitLeft = 179
+    ExplicitHeight = 32
+  end
+  object Panel3: TPanel
+    Left = 105
+    Top = 0
+    Width = 16
+    Height = 31
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 2
-    DesignSize = (
-      363
-      32)
-    object ProgressBar1: TProgressBar
-      Left = 6
-      Top = 8
-      Width = 351
-      Height = 17
-      Anchors = [akLeft, akTop, akRight, akBottom]
-      TabOrder = 0
-    end
+    ExplicitHeight = 32
+  end
+  object Panel2: TPanel
+    Left = 144
+    Top = 0
+    Width = 16
+    Height = 31
+    Align = alLeft
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitTop = 8
+    ExplicitHeight = 32
+  end
+  object ProgressBar1: TProgressBar
+    Left = 218
+    Top = 0
+    Width = 247
+    Height = 31
+    Align = alClient
+    TabOrder = 4
+    ExplicitLeft = 8
+    ExplicitWidth = 363
+    ExplicitHeight = 32
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer
-    Left = 328
-    Top = 8
+    Left = 224
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit
@@ -170,10 +162,10 @@ object FormDelay: TFormDelay
     DrawingStyle = dsTransparent
     Height = 20
     Width = 20
-    Left = 576
+    Left = 744
     Top = 3
     Bitmap = {
-      494C010101004003500314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101004003540314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -30,8 +30,7 @@ uses
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
   UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
   UnitFormSelectWorkDialog in 'UnitFormSelectWorkDialog.pas' {FormSelectWorkDialog},
-  UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
-  UnitFormDelay in 'UnitFormDelay.pas' {FormDelay};
+  UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog};
 
 {$R *.res}
 
@@ -47,6 +46,5 @@ begin
   Application.CreateForm(TFormEditText, FormEditText);
   Application.CreateForm(TFormSelectWorkDialog, FormSelectWorkDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
-  Application.CreateForm(TFormDelay, FormDelay);
   Application.Run;
 end.

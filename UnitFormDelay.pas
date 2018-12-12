@@ -11,20 +11,18 @@ uses
 type
 
     TFormDelay = class(TForm)
-        Panel1: TPanel;
         Timer1: TTimer;
-        LabelCurrentTime: TLabel;
-        LabelTotalTime: TLabel;
-        LabelWhat: TLabel;
-        LabelProgress: TLabel;
-        Panel2: TPanel;
-        Panel5: TPanel;
         ToolBar1: TToolBar;
         ToolButtonStop: TToolButton;
         ImageList4: TImageList;
-        Panel3: TPanel;
-        Panel4: TPanel;
-        ProgressBar1: TProgressBar;
+    LabelTotalTime: TLabel;
+    LabelCurrentTime: TLabel;
+    LabelProgress: TLabel;
+    LabelWhat: TLabel;
+    Panel5: TPanel;
+    Panel3: TPanel;
+    Panel2: TPanel;
+    ProgressBar1: TProgressBar;
         procedure Timer1Timer(Sender: TObject);
         procedure ToolButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
