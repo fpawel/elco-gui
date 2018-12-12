@@ -161,6 +161,14 @@ type
         
     end;
  
+    TDelayInfo = class 
+    public 
+        FRun : Boolean;
+        FTimeSeconds : Integer;
+        FWhat : string;
+        
+    end;
+ 
 implementation 
     uses Rest.Json;   
       
@@ -301,6 +309,6 @@ begin
         FMax.Free;
     
 end;
-   
+    
 
 end.

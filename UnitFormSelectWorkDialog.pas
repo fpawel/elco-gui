@@ -45,7 +45,10 @@ end;
 
 procedure TFormSelectWorkDialog.ToolButton2Click(Sender: TObject);
 begin
-    
+    hide;
+    with CheckListBox1 do
+        TRunnerSvc.RunMainWork(Checked[0], Checked[1], Checked[2],
+          Checked[3], Checked[4]);
     hide;
 end;
 

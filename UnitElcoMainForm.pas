@@ -32,7 +32,7 @@ type
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
-        PanelWorkTools: TPanel;
+    PanelStatusBottom: TPanel;
         TabSheetStend: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
@@ -48,8 +48,6 @@ type
         Image1: TImage;
         ImageList90: TImageList;
         MemolMessageBoxText: TMemo;
-        PanelStatus: TPanel;
-        Panel4: TPanel;
         ToolBar3: TToolBar;
         ToolButton1: TToolButton;
         ToolButton4: TToolButton;
@@ -59,6 +57,7 @@ type
         ToolBar5: TToolBar;
         ToolButton5: TToolButton;
         MemoPanelDialogText: TMemo;
+    LabelStatusTop: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -72,6 +71,7 @@ type
         procedure ToolButton1Click(Sender: TObject);
         procedure FormClose(Sender: TObject; var Action: TCloseAction);
         procedure ToolButton4Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -102,7 +102,8 @@ implementation
 uses stringgridutils, stringutils,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     server_data_types, services, UnitFormParty, PropertiesFormUnit,
-    notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils;
+    notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
+  UnitFormDelay, UnitFormSelectWorkDialog;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
@@ -123,6 +124,11 @@ begin
             FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
               Checked[i]);
 
+    with FormSelectWorkDialog.CheckListBox1 do
+        for i := 0 to 4 do
+            FIni.WriteBool('FormSelectWorkDialog', inttostr(i),
+              Checked[i]);
+
 end;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
@@ -130,6 +136,7 @@ begin
     FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
     Application.OnException := AppException;
+    LabelStatusTop.Caption := '';
     SetOnHardwareError(
         procedure(s: string)
         begin
@@ -156,7 +163,7 @@ begin
         begin
             PanelMessageBox.Hide;
             ToolBarStop.Show;
-            PanelStatus.Caption := s;
+            LabelStatusTop.Caption := s;
 
         end);
     SetOnHardwareStopped(
@@ -164,14 +171,14 @@ begin
         begin
             PanelDialog.Hide;
             ToolBarStop.Visible := false;
-            PanelStatus.Caption := s;
+            LabelStatusTop.Caption := s;
 
         end);
 
     SetOnStatus(
         procedure(s: string)
         begin
-            PanelStatus.Caption := s;
+            PanelStatusBottom.Caption := s;
         end);
 
     SetOnWarning(
@@ -185,6 +192,11 @@ begin
             if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
                 TRunnerSvc.StopHardware;
         end);
+    SetOnDelay(procedure (x:TDelayInfo)
+    begin
+        FormDelay.Setup(x);
+        x.Free;
+    end);
 
 end;
 
@@ -229,6 +241,11 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectStendPlacesDialog',
               inttostr(i), false);
 
+    with FormSelectWorkDialog.CheckListBox1 do
+        for i := 0 to 4 do
+            Checked[i] := FIni.ReadBool('FormSelectWorkDialog',
+              inttostr(i), false);
+
     with FormParties do
     begin
         Font.Assign(self.Font);
@@ -254,6 +271,15 @@ begin
         BorderStyle := bsNone;
         Align := alClient;
         Show;
+    end;
+
+    with FormDelay do
+    begin
+        FormDelay.Parent := PanelStatusBottom;
+        //FormDelay.Parent := Panel3;
+        BorderStyle := bsNone;
+        Visible := false;
+        Align := alClient;
     end;
 
 end;
@@ -367,6 +393,18 @@ begin
             FormSelectStendPlacesDialog.Left := x + 5;
             FormSelectStendPlacesDialog.Top := Y + 5;
             FormSelectStendPlacesDialog.Show;
+        end;
+end;
+
+procedure TElcoMainForm.N4Click(Sender: TObject);
+begin
+     with ToolButtonMainMenu do
+        with ClientToScreen(Point(0, Height)) do
+        begin
+            ToolButtonMainMenu.PopupMenu.CloseMenu;
+            FormSelectWorkDialog.Left := x + 5;
+            FormSelectWorkDialog.Top := Y + 5;
+            FormSelectWorkDialog.Show;
         end;
 end;
 

@@ -4,6 +4,7 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     
@@ -16,14 +17,15 @@ procedure SetOnHardwareStarted( AHandler : TStringHandler);
 procedure SetOnHardwareStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
+procedure SetOnDelay( AHandler : TDelayInfoHandler);
 
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, 
-    CmdWarning);
+    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, 
+    CmdDelay);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -32,6 +34,7 @@ var
     _OnHardwareStopped : TStringHandler;
     _OnStatus : TStringHandler;
     _OnWarning : TStringHandler;
+    _OnDelay : TDelayInfoHandler;
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -81,6 +84,12 @@ begin
                 raise Exception.Create('_OnWarning must be set');
             _OnWarning(str);
         end;
+        CmdDelay:
+        begin
+            if not Assigned(_OnDelay) then
+                raise Exception.Create('_OnDelay must be set');
+            _OnDelay(TJson.JsonToObject<TDelayInfo>(str));
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -122,6 +131,12 @@ begin
     if Assigned(_OnWarning) then
         raise Exception.Create('_OnWarning already set');
     _OnWarning := AHandler;
+end;
+procedure SetOnDelay( AHandler : TDelayInfoHandler);
+begin
+    if Assigned(_OnDelay) then
+        raise Exception.Create('_OnDelay already set');
+    _OnDelay := AHandler;
 end;
 
 
