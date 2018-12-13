@@ -437,7 +437,7 @@ var
     i: Integer;
 begin
     for i := 0 to 7 do
-        StringGrid1.Cells[3, 1 + place * 8 + i] := floattostr(v[i]);
+        StringGrid1.Cells[integer(pcStend), 1 + place * 8 + i] := floattostr(v[i]);
 
 
 end;

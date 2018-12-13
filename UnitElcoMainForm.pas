@@ -52,12 +52,6 @@ type
         ToolBar3: TToolBar;
         ToolButton1: TToolButton;
         ToolButton4: TToolButton;
-        PanelDialog: TPanel;
-        Image2: TImage;
-        PanelDialogStatus: TPanel;
-        ToolBar5: TToolBar;
-        ToolButton5: TToolButton;
-        MemoPanelDialogText: TMemo;
         LabelStatusTop: TLabel;
         PanelDelay: TPanel;
         LabelDelayElepsedTime: TLabel;
@@ -150,6 +144,7 @@ begin
     FInitialized := false;
     Application.OnException := AppException;
     LabelStatusTop.Caption := '';
+
     SetOnHardwareError(
         procedure(s: string)
         begin
@@ -166,24 +161,25 @@ begin
             PanelMessageBox.Visible := true;
             FormResize(self);
         end);
+
     SetOnReadCurrent(
         procedure(v: TReadCurrent)
         begin
             FormLastParty.SetCurrents(v.FPlace, v.FValues);
             v.Free;
         end);
+
     SetOnHardwareStarted(
         procedure(s: string)
         begin
             PanelMessageBox.Hide;
             ToolBarStop.Show;
             LabelStatusTop.Caption := s;
-
         end);
+
     SetOnHardwareStopped(
         procedure(s: string)
         begin
-            PanelDialog.Hide;
             ToolBarStop.Visible := false;
             LabelStatusTop.Caption := s;
 
@@ -192,7 +188,7 @@ begin
     SetOnStatus(
         procedure(s: string)
         begin
-            PanelStatusBottom.Caption := s;
+            LabelStatusTop.Caption := s;
         end);
 
     SetOnWarning(
@@ -222,12 +218,6 @@ begin
         PanelMessageBox.Left := ClientWidth div 2 - PanelMessageBox.Width div 2;
         PanelMessageBox.Top := ClientHeight div 2 -
           PanelMessageBox.Height div 2;
-    end;
-
-    if PanelDialog.Visible then
-    begin
-        PanelDialog.Left := ClientWidth div 2 - PanelDialog.Width div 2;
-        PanelDialog.Top := ClientHeight div 2 - PanelDialog.Height div 2;
     end;
 end;
 
