@@ -1,4 +1,4 @@
-unit product_column;
+п»їunit product_column;
 
 interface
 
@@ -27,11 +27,11 @@ type
     TProductColumnsSet = set of TProductColumn;
 
 const
-    product_column_name: array [TProductColumn] of string = ('№', 'Зав.№',
-        'показания', 'прошивка',
-       'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50', 'Ч.50',
-      'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2', 'ПГС1', 'неизм.',
-      'исполнение', 'примичание');
+    product_column_name: array [TProductColumn] of string = ('в„–', 'Р—Р°РІ.в„–',
+        'РїРѕРєР°Р·Р°РЅРёСЏ', 'РїСЂРѕС€РёРІРєР°',
+       'Р¤РћРќ.20', 'Р¤РћРќ.20.2', 'Р§.20', 'KС‡20', 'Р¤РћРќ.50', 'Р§.50',
+      'KС‡50', 'Р¤РћРќ.-20', 'Р§.-20', 'РџР“РЎ2', 'РџР“РЎ3', 'РџР“РЎ2.2', 'РџР“РЎ1', 'РЅРµРёР·Рј.',
+      'РёСЃРїРѕР»РЅРµРЅРёРµ', 'РїСЂРёРјРёС‡Р°РЅРёРµ');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;

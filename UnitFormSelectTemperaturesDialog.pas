@@ -1,4 +1,4 @@
-unit UnitFormSelectWorkDialog;
+unit UnitFormSelectTemperaturesDialog;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Vcl.ComCtrls, Vcl.ToolWin, Vcl.StdCtrls, Vcl.CheckLst, Vcl.ExtCtrls;
 
 type
-  TFormSelectWorkDialog = class(TForm)
+  TFormSelectTemperaturesDialog = class(TForm)
     ImageList3: TImageList;
     Panel14: TPanel;
     CheckListBox1: TCheckListBox;
@@ -24,7 +24,7 @@ type
   end;
 
 var
-  FormSelectWorkDialog: TFormSelectWorkDialog;
+  FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog;
 
 implementation
 
@@ -32,23 +32,22 @@ implementation
 
 uses services;
 
-procedure TFormSelectWorkDialog.FormCreate(Sender: TObject);
+procedure TFormSelectTemperaturesDialog.FormCreate(Sender: TObject);
 var i:integer;
 begin
 
 end;
 
-procedure TFormSelectWorkDialog.FormDeactivate(Sender: TObject);
+procedure TFormSelectTemperaturesDialog.FormDeactivate(Sender: TObject);
 begin
     hide;
 end;
 
-procedure TFormSelectWorkDialog.ToolButton2Click(Sender: TObject);
+procedure TFormSelectTemperaturesDialog.ToolButton2Click(Sender: TObject);
 begin
     hide;
     with CheckListBox1 do
-        TRunnerSvc.RunMainWork(Checked[0], Checked[1], Checked[2],
-          Checked[3], Checked[4]);
+        TRunnerSvc.RunTemperature(Checked[0], Checked[1], Checked[2]);
     hide;
 end;
 

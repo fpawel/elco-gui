@@ -1,10 +1,10 @@
-object FormSelectWorkDialog: TFormSelectWorkDialog
+object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
   Left = 0
   Top = 0
   BorderStyle = bsDialog
-  Caption = #1042#1099#1073#1086#1088' '#1090#1077#1093#1087#1088#1086#1094#1077#1089#1089#1072
-  ClientHeight = 163
-  ClientWidth = 202
+  Caption = #1042#1099#1073#1086#1088' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088
+  ClientHeight = 108
+  ClientWidth = 160
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,36 +19,38 @@ object FormSelectWorkDialog: TFormSelectWorkDialog
   object Panel14: TPanel
     Left = 0
     Top = 0
-    Width = 202
-    Height = 163
+    Width = 160
+    Height = 108
     Align = alClient
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 202
+    ExplicitHeight = 163
     object CheckListBox1: TCheckListBox
       Left = 0
       Top = 0
-      Width = 166
-      Height = 159
+      Width = 124
+      Height = 104
       Align = alClient
       BevelOuter = bvNone
       BorderStyle = bsNone
       Columns = 1
       ItemHeight = 30
       Items.Strings = (
-        '+20 "C'
-        '-20 "C'
-        '+50 "C'
-        '"'#1055#1088#1086#1096#1080#1074#1082#1072'"'
-        #1055#1088#1086#1074#1077#1088#1082#1072)
+        '+20 '#8304'C'
+        '-20 '#8304'C'
+        '+50 '#8304'C')
       Style = lbOwnerDrawFixed
       TabOrder = 0
+      ExplicitWidth = 166
+      ExplicitHeight = 159
     end
     object ToolBarStop: TToolBar
-      Left = 166
+      Left = 124
       Top = 0
       Width = 32
-      Height = 159
+      Height = 104
       Align = alRight
       ButtonHeight = 31
       ButtonWidth = 32
@@ -57,6 +59,8 @@ object FormSelectWorkDialog: TFormSelectWorkDialog
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 1
+      ExplicitLeft = 166
+      ExplicitHeight = 159
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
@@ -79,7 +83,7 @@ object FormSelectWorkDialog: TFormSelectWorkDialog
     Left = 536
     Top = 41
     Bitmap = {
-      494C0101010030034C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101003003500319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

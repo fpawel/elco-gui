@@ -62,6 +62,10 @@ type
         ToolButtonStop: TToolButton;
         Panel2: TPanel;
         ProgressBar1: TProgressBar;
+    N3: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N8: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -78,6 +82,7 @@ type
         procedure N4Click(Sender: TObject);
         procedure ToolButtonStopClick(Sender: TObject);
         procedure TimerDelayTimer(Sender: TObject);
+    procedure N8Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -111,7 +116,7 @@ uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     services, UnitFormParty, PropertiesFormUnit,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
-    UnitFormSelectWorkDialog, dateutils, math;
+    dateutils, math, UnitFormSelectTemperaturesDialog;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
@@ -132,9 +137,9 @@ begin
             FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
               Checked[i]);
 
-    with FormSelectWorkDialog.CheckListBox1 do
-        for i := 0 to 4 do
-            FIni.WriteBool('FormSelectWorkDialog', inttostr(i), Checked[i]);
+    with FormSelectTemperaturesDialog.CheckListBox1 do
+        for i := 0 to 2 do
+            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i), Checked[i]);
 
 end;
 
@@ -246,9 +251,9 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectStendPlacesDialog',
               inttostr(i), false);
 
-    with FormSelectWorkDialog.CheckListBox1 do
-        for i := 0 to 4 do
-            Checked[i] := FIni.ReadBool('FormSelectWorkDialog',
+    with FormSelectTemperaturesDialog.CheckListBox1 do
+        for i := 0 to 2 do
+            Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
     with FormParties do
@@ -434,10 +439,15 @@ begin
         with ClientToScreen(Point(0, Height)) do
         begin
             ToolButtonMainMenu.PopupMenu.CloseMenu;
-            FormSelectWorkDialog.Left := x + 5;
-            FormSelectWorkDialog.Top := Y + 5;
-            FormSelectWorkDialog.Show;
+            FormSelectTemperaturesDialog.Left := x + 5;
+            FormSelectTemperaturesDialog.Top := Y + 5;
+            FormSelectTemperaturesDialog.Show;
         end;
+end;
+
+procedure TElcoMainForm.N8Click(Sender: TObject);
+begin
+    TRunnerSvc.RunMainError;
 end;
 
 procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
