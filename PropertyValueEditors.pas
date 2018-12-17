@@ -289,7 +289,7 @@ begin
             //OnChange := EditOnChange;
         end;
     end
-    else if FConfigData.Prop.ValueType = VtFloat then
+    else if FConfigData.Prop.ValueType in [VtFloat, VtNullFloat] then
     begin
         FEdit := TEdit.Create(nil);
         with FEdit as TEdit do

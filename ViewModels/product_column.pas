@@ -6,7 +6,7 @@ uses dbutils, classes, server_data_types, server_data_types_helpers,
     Vcl.graphics;
 
 type
-    TProductColumn = (pcPlace, pcSerial, pcStend, pcFirmware,  pcFon20,
+    TProductColumn = (pcPlace, pcSerial, pcStend, pcFirmware, pcFon20,
       pcFon20_2, pcSens20, pcKSens20,
 
       pcFon50, pcSens50, pcKSens50,
@@ -28,10 +28,9 @@ type
 
 const
     product_column_name: array [TProductColumn] of string = ('№', 'Зав.№',
-        'показания', 'прошивка',
-       'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50', 'Ч.50',
-      'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1', 'неизм.',
-      'исполнение', 'примичание');
+      'показания', 'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
+      'Ч.50', 'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
+      'неизм.', 'исполнение', 'примичание');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;
@@ -60,7 +59,7 @@ begin
         Result := '';
 end;
 
-function Chk(v: TNullFloat64; c: TNullBool): RProductValue;
+function Chk2(v: TNullFloat64; a, b: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
@@ -68,13 +67,46 @@ begin
         exit;
     Result.Value := floattostr(v.FFloat64);
 
-    if c.FValid then
+    if v.FValid then
     begin
-        if c.FBool then
+        if a AND b then
             Result.Valid := vpvValid
         else
             Result.Valid := vpvInvalid;
     end;
+
+end;
+
+function Chk3(v: TNullFloat64; a, b, c: boolean): RProductValue;
+begin
+    Result.Value := '';
+    Result.Valid := vpvNotCheck;
+    if not v.FValid then
+        exit;
+    Result.Value := floattostr(v.FFloat64);
+
+    if v.FValid then
+    begin
+        if a AND b AND c then
+            Result.Valid := vpvValid
+        else
+            Result.Valid := vpvInvalid;
+    end;
+
+end;
+
+function Chk(v: TNullFloat64; c: boolean): RProductValue;
+begin
+    Result.Value := '';
+    Result.Valid := vpvNotCheck;
+    if not v.FValid then
+        exit;
+    Result.Value := floattostr(v.FFloat64);
+
+    if c then
+        Result.Valid := vpvValid
+    else
+        Result.Valid := vpvInvalid;
 
 end;
 
@@ -103,13 +135,13 @@ begin
                 if FProductTypeName.FValid then
                     Result.Value := FProductTypeName.FString;
             pcFon20:
-                Result := Chk(FIFPlus20, FOkFon20);
+                Result := Chk2(FIFPlus20, FOkMinFon20, FOkMaxFon20);
             pcFon20_2:
-                Result := Chk(FI13, FOkDFon20);
+                Result := Chk3(FI13, FOkDFon20, FOkMinFon20r, FOkMaxFon20r);
             pcSens20:
-                Result := Chk(FISPlus20, FOkKSens20);
+                Result := Chk2(FISPlus20, FOkMinKSens20, FOkMaxKSens20);
             pcKSens20:
-                Result := Chk(FKSens20, FOkKSens20);
+                Result := Chk2(FKSens20, FOkMinKSens20, FOkMaxKSens20);
 
             pcFonMinus20:
                 Result.Value := ff(FIFMinus20);
@@ -119,9 +151,9 @@ begin
             pcFon50:
                 Result := Chk(FIFPlus50, FOkDFon50);
             pcSens50:
-                Result := Chk(FISPlus50, FOkKSens50);
+                Result := Chk2(FISPlus50, FOkMinKSens50, FOkMaxKSens50);
             pcKSens50:
-                Result := Chk(FKSens50, FOkKSens50);
+                Result := Chk2(FKSens50, FOkMinKSens50, FOkMaxKSens50);
 
             pci24:
                 Result.Value := ff(FI24);

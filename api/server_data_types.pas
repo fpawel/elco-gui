@@ -12,13 +12,6 @@ type
         
     end;
  
-    TNullInt64 = class 
-    public 
-        FInt64 : Int64;
-        FValid : Boolean;
-        
-    end;
- 
     TNullFloat64 = class 
     public 
         FFloat64 : Double;
@@ -26,9 +19,9 @@ type
         
     end;
  
-    TNullBool = class 
+    TNullInt64 = class 
     public 
-        FBool : Boolean;
+        FInt64 : Int64;
         FValid : Boolean;
         
     end;
@@ -58,13 +51,18 @@ type
         FDFon20 : TNullFloat64;
         FDFon50 : TNullFloat64;
         FDNotMeasured : TNullFloat64;
-        FOKFon20 : TNullBool;
-        FOKDFon20 : TNullBool;
-        FOKKSens20 : TNullBool;
-        FOKDFon50 : TNullBool;
-        FOKKSens50 : TNullBool;
-        FOKDNotMeasured : TNullBool;
-        FNotOk : TNullBool;
+        FOKMinFon20 : Boolean;
+        FOKMaxFon20 : Boolean;
+        FOKMinFon20r : Boolean;
+        FOKMaxFon20r : Boolean;
+        FOKDFon20 : Boolean;
+        FOKMinKSens20 : Boolean;
+        FOKMaxKSens20 : Boolean;
+        FOKMinKSens50 : Boolean;
+        FOKMaxKSens50 : Boolean;
+        FOKDFon50 : Boolean;
+        FOKDNotMeasured : Boolean;
+        FOk : Boolean;
         FHasFirmware : Boolean;
         FProduction : Boolean;
         FAppliedProductTypeName : string;
@@ -95,6 +93,16 @@ type
         FConcentration2 : Double;
         FConcentration3 : Double;
         FNote : TNullString;
+        FMinFon : TNullFloat64;
+        FMaxFon : TNullFloat64;
+        FMaxDFon : TNullFloat64;
+        FMinKSens20 : TNullFloat64;
+        FMaxKSens20 : TNullFloat64;
+        FMinKSens50 : TNullFloat64;
+        FMaxKSens50 : TNullFloat64;
+        FMinDTemp : TNullFloat64;
+        FMaxDTemp : TNullFloat64;
+        FMaxDNotMeasured : TNullFloat64;
         FProducts : TArray<TProduct>;
         FLast : Boolean;
          
@@ -171,7 +179,7 @@ type
  
 implementation 
     uses Rest.Json;   
-      
+     
 
 { TProduct }
 
@@ -197,13 +205,6 @@ begin
     FDFon20 := TNullFloat64.Create;
     FDFon50 := TNullFloat64.Create;
     FDNotMeasured := TNullFloat64.Create;
-    FOKFon20 := TNullBool.Create;
-    FOKDFon20 := TNullBool.Create;
-    FOKKSens20 := TNullBool.Create;
-    FOKDFon50 := TNullBool.Create;
-    FOKKSens50 := TNullBool.Create;
-    FOKDNotMeasured := TNullBool.Create;
-    FNotOk := TNullBool.Create;
     FProductTypeName := TNullString.Create;
     FNote := TNullString.Create;
     
@@ -249,20 +250,6 @@ begin
         FDFon50.Free;
     if Assigned(FDNotMeasured) then 
         FDNotMeasured.Free;
-    if Assigned(FOKFon20) then 
-        FOKFon20.Free;
-    if Assigned(FOKDFon20) then 
-        FOKDFon20.Free;
-    if Assigned(FOKKSens20) then 
-        FOKKSens20.Free;
-    if Assigned(FOKDFon50) then 
-        FOKDFon50.Free;
-    if Assigned(FOKKSens50) then 
-        FOKKSens50.Free;
-    if Assigned(FOKDNotMeasured) then 
-        FOKDNotMeasured.Free;
-    if Assigned(FNotOk) then 
-        FNotOk.Free;
     if Assigned(FProductTypeName) then 
         FProductTypeName.Free;
     if Assigned(FNote) then 
@@ -278,6 +265,16 @@ constructor TParty.Create;
 begin
     FOldPartyID := TNullString.Create;
     FNote := TNullString.Create;
+    FMinFon := TNullFloat64.Create;
+    FMaxFon := TNullFloat64.Create;
+    FMaxDFon := TNullFloat64.Create;
+    FMinKSens20 := TNullFloat64.Create;
+    FMaxKSens20 := TNullFloat64.Create;
+    FMinKSens50 := TNullFloat64.Create;
+    FMaxKSens50 := TNullFloat64.Create;
+    FMinDTemp := TNullFloat64.Create;
+    FMaxDTemp := TNullFloat64.Create;
+    FMaxDNotMeasured := TNullFloat64.Create;
     
 end;
  
@@ -287,6 +284,26 @@ begin
         FOldPartyID.Free;
     if Assigned(FNote) then 
         FNote.Free;
+    if Assigned(FMinFon) then 
+        FMinFon.Free;
+    if Assigned(FMaxFon) then 
+        FMaxFon.Free;
+    if Assigned(FMaxDFon) then 
+        FMaxDFon.Free;
+    if Assigned(FMinKSens20) then 
+        FMinKSens20.Free;
+    if Assigned(FMaxKSens20) then 
+        FMaxKSens20.Free;
+    if Assigned(FMinKSens50) then 
+        FMinKSens50.Free;
+    if Assigned(FMaxKSens50) then 
+        FMaxKSens50.Free;
+    if Assigned(FMinDTemp) then 
+        FMinDTemp.Free;
+    if Assigned(FMaxDTemp) then 
+        FMaxDTemp.Free;
+    if Assigned(FMaxDNotMeasured) then 
+        FMaxDNotMeasured.Free;
     
 end;
     

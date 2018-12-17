@@ -6,7 +6,7 @@ uses server_data_types;
 
 type
     TPropertyValueType = (VtInt, VtFloat, VtString, VtComportName,
-      VtBaud, VtBool);
+      VtBaud, VtBool, VtNullFloat);
 
     TConfigSectionHelper = class helper for TConfigSection
     function HasError: boolean;
@@ -82,7 +82,10 @@ begin
     FValue := str;
     if str = '' then
     begin
-        FError := 'нет значения';
+        if ValueType = VtNullFloat then
+            FError := ''
+        else
+            FError := 'нет значения';
         Exit;
     end;
 
@@ -111,7 +114,7 @@ begin
         if not ok then
             FError := 'не правильный синтаксис целого числа';
     end
-    else if ValueType = VtFloat then
+    else if ValueType in [VtFloat, VtNullFloat] then
     begin
         ok := TryStrToFloat(str, v);
         if not ok then
