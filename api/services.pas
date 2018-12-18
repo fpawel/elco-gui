@@ -8,6 +8,7 @@ type
     public
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;
         class function Months( Year: Integer) : TArray<Integer>;
+        class function NewParty( ) : TParty;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
         class function Party( param1: Int64) : TParty;
         class function Years( ) : TArray<Integer>;
@@ -117,6 +118,24 @@ begin
                     SuperObject_Get(i, Result[Length(Result)-1]);
                 
             end;
+        
+    
+end;
+
+ 
+class function TPartiesCatalogue.NewParty( ) : TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.NewParty', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
         
     
 end;

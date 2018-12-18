@@ -62,10 +62,10 @@ type
         ToolButtonStop: TToolButton;
         Panel2: TPanel;
         ProgressBar1: TProgressBar;
-    N3: TMenuItem;
-    N5: TMenuItem;
-    N6: TMenuItem;
-    N8: TMenuItem;
+        N3: TMenuItem;
+        N5: TMenuItem;
+        N6: TMenuItem;
+        N8: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -82,7 +82,8 @@ type
         procedure N4Click(Sender: TObject);
         procedure ToolButtonStopClick(Sender: TObject);
         procedure TimerDelayTimer(Sender: TObject);
-    procedure N8Click(Sender: TObject);
+        procedure N8Click(Sender: TObject);
+        procedure N7Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -139,7 +140,8 @@ begin
 
     with FormSelectTemperaturesDialog.CheckListBox1 do
         for i := 0 to 2 do
-            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i), Checked[i]);
+            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
+              Checked[i]);
 
 end;
 
@@ -212,6 +214,12 @@ begin
         begin
             SetupDelay(x);
             x.Free;
+        end);
+
+    SetOnLastPartyChanged(
+        procedure(party: TParty)
+        begin
+            FormLastParty.SetParty(party);
         end);
 
 end;
@@ -293,15 +301,14 @@ begin
     PageControl.Repaint;
     if PageControl.ActivePage = TabSheetParties then
     begin
-        if Assigned(FormParty.Party) then
-            FormParty.Party := TPartiesCatalogue.Party
-              (FormParty.Party.FPartyID);
+        if Assigned(FormParty.party) then
+            FormParty.party := TPartiesCatalogue.party
+              (FormParty.party.FPartyID);
 
     end
     else if PageControl.ActivePage = TabSheetParty then
     begin
         FormLastParty.reload_data;
-        FormLastParty.update_view;
     end;
 
 end;
@@ -372,22 +379,21 @@ begin
 end;
 
 procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
-    var
-   stackList: TJclStackInfoList; //JclDebug.pas
-   sl: TStringList;
-   stacktrace:string;
+var
+    stackList: TJclStackInfoList; // JclDebug.pas
+    sl: TStringList;
+    stacktrace: string;
 begin
 
-
-    stackList := JclCreateStackList(False, 0, Caller(0, False));
+    stackList := JclCreateStackList(false, 0, Caller(0, false));
     sl := TStringList.Create;
-    stackList.AddToStrings(sl, True, false, true, false);
+    stackList.AddToStrings(sl, true, false, true, false);
     stacktrace := sl.Text;
     sl.Free;
-    stacklist.Free;
+    stackList.Free;
 
     OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
-    //    Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
+    // Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
     Application.ShowException(E);
 end;
 
@@ -443,6 +449,13 @@ begin
             FormSelectTemperaturesDialog.Top := Y + 5;
             FormSelectTemperaturesDialog.Show;
         end;
+end;
+
+procedure TElcoMainForm.N7Click(Sender: TObject);
+begin
+    if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
+      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
+        FormLastParty.SetParty(TPartiesCatalogue.NewParty);
 end;
 
 procedure TElcoMainForm.N8Click(Sender: TObject);

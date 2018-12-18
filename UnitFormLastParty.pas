@@ -58,8 +58,8 @@ type
 
     public
         { Public declarations }
+        procedure SetParty(party: TParty);
         procedure reload_data;
-        procedure Update_View;
         procedure SetCurrents(place: Integer; v: TArray<double>);
 
     end;
@@ -78,7 +78,6 @@ procedure TFormLastParty.FormCreate(Sender: TObject);
 begin
     SetLength(FProducts, 96);
     reload_data;
-    Update_View;
 end;
 
 procedure TFormLastParty.FormShow(Sender: TObject);
@@ -188,7 +187,6 @@ begin
     p := FProducts[ARow - 1];
     if not Assigned(p) then
         exit;
-
 
     try
 
@@ -401,11 +399,37 @@ begin
     bmp.Free
 end;
 
-procedure TFormLastParty.Update_View;
+procedure TFormLastParty.SetCurrents(place: Integer; v: TArray<double>);
 var
-    ARow, ACol: Integer;
-
+    i: Integer;
 begin
+    for i := 0 to 7 do
+        StringGrid1.Cells[Integer(pcStend), 1 + place * 8 + i] :=
+          floattostr(v[i]);
+
+end;
+
+procedure TFormLastParty.SetParty(party: TParty);
+var
+    i: Integer;
+    ARow, ACol: Integer;
+begin
+    FParty := party;
+    for i := 0 to 95 do
+        FProducts[i] := nil;
+    for i := 0 to Length(FParty.FProducts) - 1 do
+        FProducts[FParty.FProducts[i].FPlace] := FParty.FProducts[i];
+
+    for i := 0 to 95 do
+    begin
+        if not Assigned(FProducts[i]) then
+        begin
+            FProducts[i] := TProduct.Create;
+            FProducts[i].FPlace := i;
+        end;
+    end;
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcStend, pcSerial,
+      pcProdType, pcNote]);
 
     with StringGrid1 do
     begin
@@ -432,38 +456,9 @@ begin
     end;
 end;
 
-procedure TFormLastParty.SetCurrents(place: Integer; v: TArray<double>);
-var
-    i: Integer;
-begin
-    for i := 0 to 7 do
-        StringGrid1.Cells[integer(pcStend), 1 + place * 8 + i] := floattostr(v[i]);
-
-
-end;
-
 procedure TFormLastParty.reload_data;
-var
-    i: Integer;
 begin
-    FParty := TLastParty.Party;
-    for i := 0 to 95 do
-        FProducts[i] := nil;
-    for i := 0 to Length(FParty.FProducts) - 1 do
-        FProducts[FParty.FProducts[i].FPlace] := FParty.FProducts[i];
-
-    for i := 0 to 95 do
-    begin
-        if not Assigned(FProducts[i]) then
-        begin
-            FProducts[i] := TProduct.Create;
-            FProducts[i].FPlace := i;
-        end;
-    end;
-
-    FColumns := GetProductColumns(FProducts, [pcPlace, pcStend, pcSerial,
-      pcProdType, pcNote]);
-
+    SetParty(TLastParty.party);
 end;
 
 function TFormLastParty.GetProductValue(ColumnIndex, RowIndex: Integer)

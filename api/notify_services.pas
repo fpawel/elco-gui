@@ -4,6 +4,7 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TPartyHandler = reference to procedure (x:TParty);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
@@ -18,14 +19,15 @@ procedure SetOnHardwareStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
+procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
 
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, 
-    CmdDelay);
+    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, CmdDelay, 
+    CmdLastPartyChanged);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -35,6 +37,7 @@ var
     _OnStatus : TStringHandler;
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
+    _OnLastPartyChanged : TPartyHandler;
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -90,6 +93,12 @@ begin
                 raise Exception.Create('_OnDelay must be set');
             _OnDelay(TJson.JsonToObject<TDelayInfo>(str));
         end;
+        CmdLastPartyChanged:
+        begin
+            if not Assigned(_OnLastPartyChanged) then
+                raise Exception.Create('_OnLastPartyChanged must be set');
+            _OnLastPartyChanged(TJson.JsonToObject<TParty>(str));
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -137,6 +146,12 @@ begin
     if Assigned(_OnDelay) then
         raise Exception.Create('_OnDelay already set');
     _OnDelay := AHandler;
+end;
+procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
+begin
+    if Assigned(_OnLastPartyChanged) then
+        raise Exception.Create('_OnLastPartyChanged already set');
+    _OnLastPartyChanged := AHandler;
 end;
 
 

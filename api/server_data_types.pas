@@ -103,6 +103,7 @@ type
         FMinDTemp : TNullFloat64;
         FMaxDTemp : TNullFloat64;
         FMaxDNotMeasured : TNullFloat64;
+        FPointsMethod : Int64;
         FProducts : TArray<TProduct>;
         FLast : Boolean;
          
