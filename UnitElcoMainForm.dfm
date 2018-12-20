@@ -53,144 +53,13 @@ object ElcoMainForm: TElcoMainForm
     object TabSheetParty: TTabSheet
       Caption = #1055#1072#1088#1090#1080#1103
     end
-    object TabSheetStend: TTabSheet
-      Caption = #1057#1090#1077#1085#1076
-      ImageIndex = 2
-      object SplitterConsoleHoriz: TSplitter
-        Left = 0
-        Top = 341
-        Width = 855
-        Height = 5
-        Cursor = crVSplit
-        Align = alBottom
-        Color = clBtnFace
-        ParentColor = False
-        ExplicitLeft = -2
-        ExplicitTop = 376
-        ExplicitWidth = 852
-      end
-      object PanelConsolePlaceholderBottom: TPanel
-        Left = 0
-        Top = 346
-        Width = 855
-        Height = 200
-        Align = alBottom
-        Alignment = taLeftJustify
-        BevelOuter = bvNone
-        ParentColor = True
-        TabOrder = 0
-        object PanelConsole: TPanel
-          Left = 0
-          Top = 0
-          Width = 855
-          Height = 200
-          Align = alClient
-          Alignment = taLeftJustify
-          BevelOuter = bvNone
-          ParentColor = True
-          TabOrder = 0
-          object RichEdit1: TRichEdit
-            Left = 0
-            Top = 32
-            Width = 855
-            Height = 168
-            Align = alClient
-            BorderStyle = bsNone
-            Font.Charset = RUSSIAN_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -16
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            ReadOnly = True
-            ScrollBars = ssVertical
-            TabOrder = 0
-            Zoom = 100
-          end
-          object PanelConsoleHeader: TPanel
-            Left = 0
-            Top = 0
-            Width = 855
-            Height = 32
-            Align = alTop
-            Alignment = taLeftJustify
-            BevelOuter = bvNone
-            Color = clGradientInactiveCaption
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clGray
-            Font.Height = -16
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentBackground = False
-            ParentFont = False
-            TabOrder = 1
-            object Panel6: TPanel
-              Left = 0
-              Top = 0
-              Width = 129
-              Height = 32
-              Align = alLeft
-              Alignment = taLeftJustify
-              BevelOuter = bvNone
-              Caption = '   '#1057#1086#1086#1073#1097#1077#1085#1080#1103':'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clGray
-              Font.Height = -15
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentColor = True
-              ParentFont = False
-              TabOrder = 2
-            end
-            object Panel7: TPanel
-              Left = 129
-              Top = 0
-              Width = 660
-              Height = 32
-              Align = alClient
-              Alignment = taLeftJustify
-              BevelOuter = bvNone
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clGray
-              Font.Height = -15
-              Font.Name = 'Tahoma'
-              Font.Style = []
-              ParentColor = True
-              ParentFont = False
-              TabOrder = 1
-            end
-            object ToolBar4: TToolBar
-              Left = 789
-              Top = 0
-              Width = 66
-              Align = alRight
-              ButtonHeight = 31
-              ButtonWidth = 32
-              Caption = 'ToolBar1'
-              EdgeInner = esNone
-              EdgeOuter = esNone
-              Images = ImageList3
-              TabOrder = 0
-              object ToolButtonMoveConsoleUp: TToolButton
-                Left = 0
-                Top = 0
-                Caption = 'ToolButtonMoveConsoleUp'
-                ImageIndex = 2
-              end
-              object ToolButtonConsoleHide: TToolButton
-                Left = 32
-                Top = 0
-                Caption = 'ToolButtonConsoleHide'
-                ImageIndex = 0
-              end
-            end
-          end
-        end
-      end
-    end
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object Panel3: TPanel
@@ -638,7 +507,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010500D401640319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010500D4016C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1340,7 +1209,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010105002403E40314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010105002403EC0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000002800000001002000000000000032
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000003020122251A0E6C422F1C90422F1C902319
@@ -1772,7 +1641,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 136
     Top = 434
     Bitmap = {
-      494C01010100240368035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010100240370035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

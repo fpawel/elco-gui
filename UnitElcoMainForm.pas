@@ -15,16 +15,6 @@ type
         Panel1: TPanel;
         Panel14: TPanel;
         ImageList3: TImageList;
-        SplitterConsoleHoriz: TSplitter;
-        PanelConsolePlaceholderBottom: TPanel;
-        PanelConsole: TPanel;
-        RichEdit1: TRichEdit;
-        PanelConsoleHeader: TPanel;
-        Panel6: TPanel;
-        Panel7: TPanel;
-        ToolBar4: TToolBar;
-        ToolButtonMoveConsoleUp: TToolButton;
-        ToolButtonConsoleHide: TToolButton;
         PopupMenu1: TPopupMenu;
         N4: TMenuItem;
         N7: TMenuItem;
@@ -34,7 +24,6 @@ type
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
         PanelStatusBottom: TPanel;
-        TabSheetStend: TTabSheet;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
         Panel3: TPanel;
@@ -143,6 +132,9 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
+
+    if ParamStr(1) = '-must-close-server' then
+        SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
