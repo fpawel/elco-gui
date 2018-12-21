@@ -30,7 +30,8 @@ uses
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
   UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
   UnitFormSelectTemperaturesDialog in 'UnitFormSelectTemperaturesDialog.pas' {FormSelectTemperaturesDialog},
-  UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog};
+  UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
+  richeditutils in 'utils\richeditutils.pas';
 
 {$R *.res}
 

@@ -37,7 +37,6 @@ type
         ToolButton3: TToolButton;
         Image1: TImage;
         ImageList90: TImageList;
-        MemolMessageBoxText: TMemo;
         ToolBar3: TToolBar;
         ToolButton1: TToolButton;
         ToolButton4: TToolButton;
@@ -55,6 +54,7 @@ type
         N5: TMenuItem;
         N6: TMenuItem;
         N8: TMenuItem;
+        RichEditlMessageBoxText: TRichEdit;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -73,6 +73,8 @@ type
         procedure TimerDelayTimer(Sender: TObject);
         procedure N8Click(Sender: TObject);
         procedure N7Click(Sender: TObject);
+    procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -106,7 +108,7 @@ uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
     services, UnitFormParty, PropertiesFormUnit,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
-    dateutils, math, UnitFormSelectTemperaturesDialog;
+    dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
@@ -114,6 +116,8 @@ var
     fs: TFileStream;
     i: Integer;
 begin
+
+    notify_services.Cancel;
 
     fs := TFileStream.Create(TPath.Combine(ExtractFilePath(paramstr(0)),
       'window.position'), fmOpenWrite or fmCreate);
@@ -132,9 +136,19 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
-
-    if ParamStr(1) = '-must-close-server' then
+    if paramstr(1) = '-must-close-server' then
         SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+end;
+
+function FormatFloatArray(v: TArray<double>): string;
+var
+    s: TArray<string>;
+    i: Integer;
+begin
+    SetLength(s, length(v));
+    for i := 0 to length(v) - 1 do
+        s[i] := Format('%d:%g', [i, v[i]]);
+    result := string.Join(' ', s);
 end;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
@@ -149,22 +163,25 @@ begin
         begin
 
             if PanelMessageBox.Visible then
-                MemolMessageBoxText.Text := MemolMessageBoxText.Text +
+                RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text +
                   #10#13#10#13
             else
-                MemolMessageBoxText.Text := '';
+                RichEditlMessageBoxText.Text := '';
 
             PanelMessageBoxTitle.Caption := 'Ошибка оборудования';
-            MemolMessageBoxText.Text := MemolMessageBoxText.Text + s;
-            MemolMessageBoxText.Font.Color := clRed;
+            RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
+            RichEditlMessageBoxText.Font.Color := clRed;
             PanelMessageBox.Visible := true;
             FormResize(self);
         end);
 
     SetOnReadCurrent(
         procedure(v: TReadCurrent)
+
         begin
-            FormLastParty.SetCurrents(v.FPlace, v.FValues);
+            FormLastParty.SetCurrents(v.FBlock, v.FValues);
+            PanelStatusBottom.Caption := Format('Блок %d: %s',
+              [v.FBlock, FormatFloatArray(v.FValues)]);
             v.Free;
         end);
 
@@ -309,6 +326,13 @@ procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
 TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
     PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+end;
+
+procedure TElcoMainForm.RichEditlMessageBoxTextMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+    if Button = TMouseButton.mbRight then
+        RichEdit_PopupMenu(RichEditlMessageBoxText);
 end;
 
 procedure TElcoMainForm.TimerDelayTimer(Sender: TObject);

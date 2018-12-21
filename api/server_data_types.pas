@@ -73,7 +73,6 @@ type
         FScale : Double;
         FNobleMetalContent : Double;
         FLifetimeMonths : Int64;
-        FLc64 : Boolean;
         FPointsMethod : Int64;
         FProductTypeName : TNullString;
         FNote : TNullString;
@@ -166,7 +165,7 @@ type
     TReadCurrent = class 
     public 
         FValues : TArray<Double>;
-        FPlace : Integer;
+        FBlock : Integer;
         
     end;
  

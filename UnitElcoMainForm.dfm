@@ -56,10 +56,6 @@ object ElcoMainForm: TElcoMainForm
     object TabSheetParties: TTabSheet
       Caption = #1040#1088#1093#1080#1074
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object Panel3: TPanel
@@ -313,18 +309,18 @@ object ElcoMainForm: TElcoMainForm
     BevelOuter = bvNone
     Color = clGradientInactiveCaption
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clGray
+    Font.Color = clBlack
     Font.Height = -15
     Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
+    Font.Style = []
     ParentBackground = False
     ParentFont = False
     TabOrder = 4
   end
   object PanelMessageBox: TPanel
-    Left = 277
+    Left = 133
     Top = 200
-    Width = 436
+    Width = 731
     Height = 177
     BevelKind = bkFlat
     BevelOuter = bvNone
@@ -334,7 +330,7 @@ object ElcoMainForm: TElcoMainForm
     TabOrder = 5
     Visible = False
     DesignSize = (
-      432
+      727
       173)
     object Image1: TImage
       Left = 8
@@ -445,7 +441,7 @@ object ElcoMainForm: TElcoMainForm
     object PanelMessageBoxTitle: TPanel
       Left = 0
       Top = 0
-      Width = 432
+      Width = 727
       Height = 32
       Align = alTop
       Alignment = taLeftJustify
@@ -461,7 +457,7 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 0
       object ToolBar2: TToolBar
-        Left = 399
+        Left = 694
         Top = 0
         Width = 33
         Align = alRight
@@ -481,20 +477,25 @@ object ElcoMainForm: TElcoMainForm
         end
       end
     end
-    object MemolMessageBoxText: TMemo
-      Left = 104
+    object RichEditlMessageBoxText: TRichEdit
+      Left = 112
       Top = 38
-      Width = 321
+      Width = 606
       Height = 131
       Anchors = [akLeft, akTop, akRight, akBottom]
-      BevelInner = bvNone
-      BevelOuter = bvNone
       BorderStyle = bsNone
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
       Lines.Strings = (
-        'Memo1')
+        'RichEditlMessageBoxText')
       ParentColor = True
-      ReadOnly = True
+      ParentFont = False
       TabOrder = 1
+      Zoom = 100
+      OnMouseDown = RichEditlMessageBoxTextMouseDown
     end
   end
   object ImageList3: TImageList
@@ -507,7 +508,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010500D4016C0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010500D401740319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1209,7 +1210,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010105002403EC0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010105002403F40314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000002800000001002000000000000032
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000003020122251A0E6C422F1C90422F1C902319
@@ -1641,7 +1642,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 136
     Top = 434
     Bitmap = {
-      494C01010100240370035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010100240378035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

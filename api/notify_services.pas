@@ -21,6 +21,7 @@ procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
 
+procedure Cancel;
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
@@ -38,7 +39,12 @@ var
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnLastPartyChanged : TPartyHandler;
-    
+    _cancel:boolean;
+
+procedure Cancel;
+begin
+   _cancel := true;
+end;
 
 procedure HandleCopydata(var Message: TMessage);
 var
@@ -46,6 +52,8 @@ var
     cmd: TServerAppCmd;
     str:string;
 begin
+    if _cancel then
+        exit;
     cd := PCOPYDATASTRUCT(Message.LParam);
     cmd := TServerAppCmd(Message.WParam);
     Message.result := 1;
@@ -154,5 +162,8 @@ begin
     _OnLastPartyChanged := AHandler;
 end;
 
+
+initialization
+    _cancel := false;
 
 end.
