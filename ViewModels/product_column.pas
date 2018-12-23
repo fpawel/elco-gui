@@ -13,7 +13,7 @@ type
 
       pcFonMinus20, pcSensMinus20,
 
-      pci24, pci35, pci26, pci17, pcNotMeasured, pcProdType, pcNote);
+      pci24, pci35, pci26, pci17, pcNotMeasured, pcProdType, pcPointsMethod, pcNote);
 
 type
     TValidProductValue = (vpvValid, vpvInvalid, vpvNotCheck);
@@ -30,7 +30,7 @@ const
     product_column_name: array [TProductColumn] of string = ('№', 'Зав.№',
       'показания', 'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
       'Ч.50', 'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
-      'неизм.', 'исполнение', 'примичание');
+      'неизм.', 'исполнение', 'т.расчёт', 'примичание');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;
@@ -165,6 +165,10 @@ begin
                 Result.Value := ff(FI17);
             pcNotMeasured:
                 Result := Chk(FNotMeasured, FOKDNotMeasured);
+
+            pcPointsMethod:
+                Result.Value := FPointsMethod.GetStr;
+
             pcNote:
                 Result.Value := FNote.Str;
         else

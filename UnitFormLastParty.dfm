@@ -41,6 +41,8 @@ object FormLastParty: TFormLastParty
     OnMouseDown = StringGrid1MouseDown
     OnSelectCell = StringGrid1SelectCell
     OnSetEditText = StringGrid1SetEditText
+    ExplicitLeft = 8
+    ExplicitTop = 0
     ColWidths = (
       64
       64
@@ -90,6 +92,26 @@ object FormLastParty: TFormLastParty
     Items.Strings = (
       'COM1')
   end
+  object ComboBox2: TComboBox
+    Left = 358
+    Top = 203
+    Width = 145
+    Height = 24
+    BevelInner = bvNone
+    BevelOuter = bvNone
+    Style = csOwnerDrawFixed
+    Anchors = []
+    Color = clGradientInactiveCaption
+    ItemHeight = 18
+    TabOrder = 3
+    Visible = False
+    OnCloseUp = ComboBox2CloseUp
+    OnExit = ComboBox2Exit
+    Items.Strings = (
+      ''
+      '2'
+      '3')
+  end
   object ImageList1: TImageList
     ColorDepth = cd32Bit
     BlendColor = clWindow
@@ -100,7 +122,7 @@ object FormLastParty: TFormLastParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E0025C0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002600314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

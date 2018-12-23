@@ -5,11 +5,11 @@ interface
 uses server_data_types;
 
 type
-    TPropertyValueType = (VtInt, VtFloat, VtString, VtComportName,
-      VtBaud, VtBool, VtNullFloat);
+    TPropertyValueType = (VtInt, VtFloat, VtString, VtComportName, VtBaud,
+      VtBool, VtNullFloat);
 
     TConfigSectionHelper = class helper for TConfigSection
-    function HasError: boolean;
+        function HasError: boolean;
     end;
 
     TConfigPropertyHelper = class helper for TConfigProperty
@@ -78,7 +78,11 @@ var
     ok, v_bool: boolean;
 begin
     FError := '';
-    str := str_validate_decimal_separator(str).Trim;
+    str := str.Trim;
+
+    if ValueType in[ VtFloat, VtNullFloat] then
+        str := str_validate_decimal_separator(str);
+
     FValue := str;
     if str = '' then
     begin
@@ -136,6 +140,5 @@ begin
     end;
 
 end;
-
 
 end.

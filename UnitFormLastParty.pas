@@ -15,6 +15,7 @@ type
         PanelError: TPanel;
         ImageList1: TImageList;
         ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -31,6 +32,8 @@ type
         procedure ComboBox1DropDown(Sender: TObject);
         procedure ComboBox1Exit(Sender: TObject);
         procedure StringGrid1DblClick(Sender: TObject);
+    procedure ComboBox2CloseUp(Sender: TObject);
+    procedure ComboBox2Exit(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -49,6 +52,7 @@ type
 
         procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 
+        procedure UpdatePointsMethod(ACol, ARow: Integer; Value: string);
         procedure UpdateSerial(ACol, ARow: Integer; Value: string);
         procedure UpdateNote(ACol, ARow: Integer; Value: string);
         procedure UpdateProductType(ACol, ARow: Integer; Value: string);
@@ -113,6 +117,30 @@ begin
         grd.Options := grd.Options - [goEditing];
 
     case FColumns[ACol] of
+        pcPointsMethod:
+            begin
+                r := grd.CellRect(ACol, ARow);
+                r.Left := r.Left + grd.Left;
+                r.Right := r.Right + grd.Left;
+                r.Top := r.Top + grd.Top;
+                r.Bottom := r.Bottom + grd.Top;
+
+                with ComboBox2 do
+                begin
+                    ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
+                    if (ItemIndex = -1) then
+                    begin
+                        Items.Add(grd.Cells[ACol, ARow]);
+                        ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
+                    end;
+
+                    Width := r.Width;
+                    Left := r.Left;
+                    Top := r.Top;
+                    Visible := True;
+                end;
+                ComboBox1.Visible := false;
+            end;
         pcProdType:
             begin
                 r := grd.CellRect(ACol, ARow);
@@ -134,12 +162,13 @@ begin
                     Left := r.Left;
                     Top := r.Top;
                     Visible := True;
-
                 end;
+                ComboBox2.Visible := false;
             end;
     else
         begin
             ComboBox1.Visible := false;
+            ComboBox2.Visible := false;
         end;
     end;
 
@@ -297,6 +326,7 @@ begin
             exit;
 
         ComboBox1.Hide;
+        ComboBox2.Hide;
 
         if MessageDlg
           (Format('Подтвердите необходимость удаления данных ЭХЯ %s?',
@@ -385,6 +415,24 @@ begin
     ComboBox1.Visible := false;
 end;
 
+procedure TFormLastParty.ComboBox2CloseUp(Sender: TObject);
+begin
+    with ComboBox2, StringGrid1 do
+    begin
+        if ItemIndex <> -1 then
+            Cells[col, Row] := Items[ItemIndex]
+        else
+            Cells[col, Row] := '';
+        UpdatePointsMethod(col, Row, ComboBox2.Text)
+    end;
+    StringGrid1.SetFocus;
+end;
+
+procedure TFormLastParty.ComboBox2Exit(Sender: TObject);
+begin
+    ComboBox2.Visible := false;
+end;
+
 procedure TFormLastParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 var
     bmp: TBitmap;
@@ -429,7 +477,7 @@ begin
         end;
     end;
     FColumns := GetProductColumns(FProducts, [pcPlace, pcStend, pcSerial,
-      pcProdType, pcNote]);
+      pcProdType, pcPointsMethod, pcNote]);
 
     with StringGrid1 do
     begin
@@ -527,6 +575,43 @@ begin
         begin
             OnSetEditText := nil;
             Cells[ACol, ARow] := p.FProductTypeName.str;
+            OnSetEditText := StringGrid1SetEditText;
+        end;
+    StringGrid_RedrawRow(StringGrid1, ARow);
+
+end;
+
+procedure TFormLastParty.UpdatePointsMethod(ACol, ARow: Integer; Value: string);
+var
+    p: TProduct;
+    points_meth:int64;
+    valid:boolean;
+begin
+    try
+        p := FProducts[ARow - 1];
+
+        valid := TryStrToInt64(value, points_meth);
+
+        p.FProductID := TLastParty.SetPointsMethodAtPlace(p.FPlace, points_meth, valid);
+        p.FPointsMethod.FInt64 := points_meth;
+        p.FPointsMethod.FValid := valid;
+        PanelError.Visible := false;
+    except
+        on E: ERemoteError do
+        begin
+
+            PanelError.Caption := Format('%s: %s: "%s": %s',
+              [ProductValues[0, ARow - 1].Value,
+              product_column_name[pcPointsMethod], Value, E.Message]);
+            PanelError.Visible := True;
+        end;
+    end;
+
+    if Value <> p.FPointsMethod.str then
+        with StringGrid1 do
+        begin
+            OnSetEditText := nil;
+            Cells[ACol, ARow] := p.FPointsMethod.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);

@@ -75,6 +75,8 @@ type
         procedure N7Click(Sender: TObject);
     procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -453,6 +455,17 @@ begin
             FormSelectStendPlacesDialog.Top := Y + 5;
             FormSelectStendPlacesDialog.Show;
         end;
+end;
+
+procedure TElcoMainForm.N1Click(Sender: TObject);
+begin
+    TLastParty.ExportToFile;
+end;
+
+procedure TElcoMainForm.N2Click(Sender: TObject);
+begin
+    FormLastParty.SetParty(TPartiesCatalogue.ImportFromFile);
+
 end;
 
 procedure TElcoMainForm.N4Click(Sender: TObject);

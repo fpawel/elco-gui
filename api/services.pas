@@ -7,6 +7,7 @@ type
      TPartiesCatalogue = class 
     public
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;
+        class function ImportFromFile( ) : TParty;
         class function Months( Year: Integer) : TArray<Integer>;
         class function NewParty( ) : TParty;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
@@ -16,8 +17,10 @@ type
     end; TLastParty = class 
     public
         class procedure DeleteProductAtPlace( param1: Integer) ;
+        class procedure ExportToFile( ) ;
         class function Party( ) : TParty;
         class function ProductAtPlace( param1: Integer) : TProduct;
+        class function SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;
         class function SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;
         class function SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;
@@ -95,6 +98,24 @@ begin
                     SuperObject_Get(i, Result[Length(Result)-1]);
                 
             end;
+        
+    
+end;
+
+ 
+class function TPartiesCatalogue.ImportFromFile( ) : TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.ImportFromFile', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
         
     
 end;
@@ -220,6 +241,18 @@ begin
 end;
 
  
+class procedure TLastParty.ExportToFile( ) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.ExportToFile', req);
+    
+end;
+
+ 
 class function TLastParty.Party( ) : TParty;
 var    
     req, resp: ISuperobject;
@@ -251,6 +284,27 @@ begin
         
              
                 Result := TJson.JsonToObject < TProduct > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TLastParty.SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+    SuperObject_SetField(req, 'Place', Place);
+    SuperObject_SetField(req, 'PointsMethod', PointsMethod);
+    SuperObject_SetField(req, 'Valid', Valid);
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetPointsMethodAtPlace', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
             
         
     

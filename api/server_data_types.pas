@@ -73,7 +73,8 @@ type
         FScale : Double;
         FNobleMetalContent : Double;
         FLifetimeMonths : Int64;
-        FPointsMethod : Int64;
+        FPointsMethod : TNullInt64;
+        FAppliedPointsMethod : Int64;
         FProductTypeName : TNullString;
         FNote : TNullString;
          
@@ -205,6 +206,7 @@ begin
     FDFon20 := TNullFloat64.Create;
     FDFon50 := TNullFloat64.Create;
     FDNotMeasured := TNullFloat64.Create;
+    FPointsMethod := TNullInt64.Create;
     FProductTypeName := TNullString.Create;
     FNote := TNullString.Create;
     
@@ -250,6 +252,8 @@ begin
         FDFon50.Free;
     if Assigned(FDNotMeasured) then 
         FDNotMeasured.Free;
+    if Assigned(FPointsMethod) then 
+        FPointsMethod.Free;
     if Assigned(FProductTypeName) then 
         FProductTypeName.Free;
     if Assigned(FNote) then 
