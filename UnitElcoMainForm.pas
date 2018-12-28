@@ -73,10 +73,10 @@ type
         procedure TimerDelayTimer(Sender: TObject);
         procedure N8Click(Sender: TObject);
         procedure N7Click(Sender: TObject);
-    procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure N1Click(Sender: TObject);
-    procedure N2Click(Sender: TObject);
+        procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
+          Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+        procedure N1Click(Sender: TObject);
+        procedure N2Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -138,8 +138,8 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
-    if paramstr(1) = '-must-close-server' then
-        SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+    // if paramstr(1) = '-must-close-server' then
+    SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
 
 function FormatFloatArray(v: TArray<double>): string;
@@ -221,10 +221,10 @@ begin
                 TRunnerSvc.StopHardware;
         end);
     SetOnDelay(
-        procedure(x: TDelayInfo)
+        procedure(X: TDelayInfo)
         begin
-            SetupDelay(x);
-            x.Free;
+            SetupDelay(X);
+            X.Free;
         end);
 
     SetOnLastPartyChanged(
@@ -313,8 +313,13 @@ begin
     if PageControl.ActivePage = TabSheetParties then
     begin
         if Assigned(FormParty.party) then
-            FormParty.party := TPartiesCatalogue.party
-              (FormParty.party.FPartyID);
+            try
+                FormParty.party := TPartiesCatalogue.party
+                  (FormParty.party.FPartyID);
+            except
+                FormParties.CreateYearsNodes;
+                FormParty.party := TLastParty.party;
+            end;
 
     end
     else if PageControl.ActivePage = TabSheetParty then
@@ -331,7 +336,7 @@ begin
 end;
 
 procedure TElcoMainForm.RichEditlMessageBoxTextMouseDown(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
     if Button = TMouseButton.mbRight then
         RichEdit_PopupMenu(RichEditlMessageBoxText);
@@ -377,7 +382,7 @@ begin
         with ClientToScreen(Point(0, Height)) do
         begin
             PropertiesForm.SetConfig(TSettingsSvc.Sections);
-            PropertiesForm.Left := x - 5 - PropertiesForm.Width;
+            PropertiesForm.Left := X - 5 - PropertiesForm.Width;
             PropertiesForm.Top := Y + 5;
             PropertiesForm.Show;
             ShowWindow(PropertiesForm.Handle, SW_RESTORE);
@@ -388,7 +393,7 @@ procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
 begin
     with ToolButtonMainMenu do
         with ClientToScreen(Point(0, Height)) do
-            PopupMenu1.Popup(x, Y);
+            PopupMenu1.Popup(X, Y);
 end;
 
 procedure TElcoMainForm.ToolButtonStopClick(Sender: TObject);
@@ -411,8 +416,8 @@ begin
     stackList.Free;
 
     OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
-    // Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
     Application.ShowException(E);
+    //Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
 end;
 
 procedure TElcoMainForm.ShowBalloonTip(c: TWinControl; Icon: TIconKind;
@@ -451,7 +456,7 @@ begin
         with ClientToScreen(Point(0, Height)) do
         begin
             ToolButtonMainMenu.PopupMenu.CloseMenu;
-            FormSelectStendPlacesDialog.Left := x + 5;
+            FormSelectStendPlacesDialog.Left := X + 5;
             FormSelectStendPlacesDialog.Top := Y + 5;
             FormSelectStendPlacesDialog.Show;
         end;
@@ -474,7 +479,7 @@ begin
         with ClientToScreen(Point(0, Height)) do
         begin
             ToolButtonMainMenu.PopupMenu.CloseMenu;
-            FormSelectTemperaturesDialog.Left := x + 5;
+            FormSelectTemperaturesDialog.Left := X + 5;
             FormSelectTemperaturesDialog.Top := Y + 5;
             FormSelectTemperaturesDialog.Show;
         end;

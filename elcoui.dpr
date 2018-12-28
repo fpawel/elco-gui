@@ -31,7 +31,8 @@ uses
   UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
   UnitFormSelectTemperaturesDialog in 'UnitFormSelectTemperaturesDialog.pas' {FormSelectTemperaturesDialog},
   UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
-  richeditutils in 'utils\richeditutils.pas';
+  richeditutils in 'utils\richeditutils.pas',
+  exn in 'exn.pas';
 
 {$R *.res}
 

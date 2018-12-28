@@ -36,12 +36,15 @@ type
           Node: PVirtualNode; var Allowed: Boolean);
         procedure FormShow(Sender: TObject);
         procedure TreeView1Change(Sender: TBaseVirtualTree; Node: PVirtualNode);
+        procedure TreeView1KeyDown(Sender: TObject; var Key: Word;
+          Shift: TShiftState);
     private
         { Private declarations }
         FInitialized: Boolean;
+        FNode: PVirtualNode;
 
         function GetTreeData(Node: PVirtualNode): PTreeData;
-        procedure CreateYearsNodes;
+
         procedure CreateMonthsNodes(ParentNode: PVirtualNode);
         procedure CreateDaysNodes(ParentNode: PVirtualNode);
         procedure CreatePartiesNodes(ParentNode: PVirtualNode);
@@ -51,6 +54,7 @@ type
         property TreeData[Node: PVirtualNode]: PTreeData read GetTreeData;
     public
         { Public declarations }
+        procedure CreateYearsNodes;
 
     end;
 
@@ -77,12 +81,14 @@ begin
     if FInitialized then
         exit;
     FInitialized := true;
+
     CreateYearsNodes;
 end;
 
 procedure TFormParties.TreeView1Change(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 begin
+    FNode := Node;
     if Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty) then
     begin
         FormParty.Party := services.TPartiesCatalogue.Party
@@ -185,6 +191,50 @@ begin
                 end;
             end;
     end;
+end;
+
+procedure TFormParties.TreeView1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+    s:string;
+begin
+    if Key <> VK_DELETE then
+        exit;
+
+    case TreeData[FNode].NodeKind of
+        trdYear:
+            s := format('год %d',[TreeData[FNode].Value]);
+        trdMonth:
+            s := format('год %d, месяц %s %s' ,[TreeData[FNode.Parent].Value,
+                inttostr2(TreeData[FNode].Value), month_name(TreeData[FNode].Value)]);
+        trdDay:
+            s := format('год %d, месяц %s %s, день %s' ,[TreeData[FNode.Parent.Parent].Value,
+                inttostr2(TreeData[FNode.Parent].Value),
+                month_name(TreeData[FNode.Parent].Value),
+                inttostr2(TreeData[FNode].Value) ]);
+
+        trdParty:
+            s := format('партия %d',[TreeData[FNode].Value]);
+    end;
+
+    if MessageBox(Handle, Pchar( 'Подтвердите необходимость удвления данных: '+ s),
+      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) <> mrYes then
+        exit;
+
+    case TreeData[FNode].NodeKind of
+        trdYear:
+            TPartiesCatalogue.DeleteYear(TreeData[FNode].Value);
+        trdMonth:
+            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value, TreeData[FNode].Value);
+
+        trdDay:
+            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value, TreeData[FNode.Parent].Value, TreeData[FNode].Value);
+        trdParty:
+            TPartiesCatalogue.DeletePartyID(TreeData[FNode].Value);
+    end;
+
+    CreateYearsNodes;
+
 end;
 
 procedure TFormParties.CreatePartiesNodes(ParentNode: PVirtualNode);

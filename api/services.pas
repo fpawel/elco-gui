@@ -7,6 +7,10 @@ type
      TPartiesCatalogue = class 
     public
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;
+        class procedure DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;
+        class procedure DeleteMonth( param1: Integer; param2: Integer) ;
+        class procedure DeletePartyID( param1: Int64) ;
+        class procedure DeleteYear( param1: Integer) ;
         class function ImportFromFile( ) : TParty;
         class function Months( Year: Integer) : TArray<Integer>;
         class function NewParty( ) : TParty;
@@ -99,6 +103,61 @@ begin
                 
             end;
         
+    
+end;
+
+ 
+class procedure TPartiesCatalogue.DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    req.AsArray.Add(param2) ;
+    req.AsArray.Add(param3) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteDay', req);
+    
+end;
+
+ 
+class procedure TPartiesCatalogue.DeleteMonth( param1: Integer; param2: Integer) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    req.AsArray.Add(param2) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteMonth', req);
+    
+end;
+
+ 
+class procedure TPartiesCatalogue.DeletePartyID( param1: Int64) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeletePartyID', req);
+    
+end;
+
+ 
+class procedure TPartiesCatalogue.DeleteYear( param1: Integer) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteYear', req);
     
 end;
 
