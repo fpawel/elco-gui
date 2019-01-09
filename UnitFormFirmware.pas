@@ -137,7 +137,7 @@ begin
     with StringGrid2 do
     begin
         Cells[0, RowCount - 1] := 'T⁰C';
-        Cells[1, RowCount - 1] := 'Фон, мкА';
+        Cells[1, RowCount - 1] := 'Фон, нА';
         Cells[2, RowCount - 1] := 'Кч, %';
     end;
 
