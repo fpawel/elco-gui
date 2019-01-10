@@ -55,6 +55,9 @@ type
         N6: TMenuItem;
         N8: TMenuItem;
         RichEditlMessageBoxText: TRichEdit;
+        PanelWaitPipe: TPanel;
+        Image2: TImage;
+        TimerShowPanelWaitPipe: TTimer;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -77,6 +80,7 @@ type
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure N1Click(Sender: TObject);
         procedure N2Click(Sender: TObject);
+        procedure TimerShowPanelWaitPipeTimer(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -91,6 +95,9 @@ type
         procedure WMEnterSizeMove(var Msg: TMessage); message WM_ENTERSIZEMOVE;
 
         procedure WMActivateApp(var AMessage: TMessage); message WM_ACTIVATEAPP;
+
+        procedure OnPipeBusy(var Msg: TMessage);
+          message WM_SERVER_APP_PIPE_BUSY;
     public
         { Public declarations }
         FIni: TIniFile;
@@ -138,8 +145,8 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
-    // if paramstr(1) = '-must-close-server' then
-    SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+    if paramstr(1) = '-must-close-server' then
+        SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
 
 function FormatFloatArray(v: TArray<double>): string;
@@ -243,6 +250,13 @@ begin
         PanelMessageBox.Top := ClientHeight div 2 -
           PanelMessageBox.Height div 2;
     end;
+
+    if PanelWaitPipe.Visible then
+    begin
+        PanelWaitPipe.Left := ClientWidth div 2 - PanelWaitPipe.Width div 2;
+        PanelWaitPipe.Top := ClientHeight div 2 - PanelWaitPipe.Height div 2;
+    end;
+
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -359,6 +373,14 @@ begin
 
 end;
 
+procedure TElcoMainForm.TimerShowPanelWaitPipeTimer(Sender: TObject);
+begin
+    PanelWaitPipe.Visible := true;
+    TimerShowPanelWaitPipe.Enabled := false;
+    PanelWaitPipe.BringToFront;
+    FormResize(self);
+end;
+
 procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
 begin
     FormEditText.Show;
@@ -417,7 +439,7 @@ begin
 
     OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
     Application.ShowException(E);
-    //Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
+    // Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
 end;
 
 procedure TElcoMainForm.ShowBalloonTip(c: TWinControl; Icon: TIconKind;
@@ -470,6 +492,7 @@ end;
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
     FormLastParty.SetParty(TPartiesCatalogue.ImportFromFile);
+    FormParties.CreateYearsNodes;
 
 end;
 
@@ -507,6 +530,23 @@ begin
     ProgressBar1.Max := i.FTimeSeconds * 1000;
     PanelDelay.Visible := i.FRun;
     TimerDelay.Enabled := i.FRun;
+end;
+
+procedure TElcoMainForm.OnPipeBusy(var Msg: TMessage);
+var
+    pipe_busy: Boolean;
+begin
+    pipe_busy := Msg.WParam <> 0;
+    Panel3.Enabled := not pipe_busy;
+    PageControlMain.Enabled := not pipe_busy;
+    // PanelWaitPipe.Visible :=  pipe_busy;
+    if pipe_busy then
+        TimerShowPanelWaitPipe.Enabled := true
+    else
+    begin
+        PanelWaitPipe.Visible := false;
+        TimerShowPanelWaitPipe.Enabled := false;
+    end;
 end;
 
 end.

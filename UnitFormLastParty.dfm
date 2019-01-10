@@ -3,7 +3,7 @@ object FormLastParty: TFormLastParty
   Top = 0
   Caption = 'FormLastParty'
   ClientHeight = 299
-  ClientWidth = 635
+  ClientWidth = 878
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object FormLastParty: TFormLastParty
   OnCreate = FormCreate
   OnShow = FormShow
   DesignSize = (
-    635
+    878
     299)
   PixelsPerInch = 96
   TextHeight = 13
@@ -22,7 +22,7 @@ object FormLastParty: TFormLastParty
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 629
+    Width = 730
     Height = 263
     Align = alClient
     BorderStyle = bsNone
@@ -41,8 +41,9 @@ object FormLastParty: TFormLastParty
     OnMouseDown = StringGrid1MouseDown
     OnSelectCell = StringGrid1SelectCell
     OnSetEditText = StringGrid1SetEditText
-    ExplicitLeft = 8
+    ExplicitLeft = 0
     ExplicitTop = 0
+    ExplicitWidth = 794
     ColWidths = (
       64
       64
@@ -54,7 +55,7 @@ object FormLastParty: TFormLastParty
   object PanelError: TPanel
     Left = 0
     Top = 269
-    Width = 635
+    Width = 878
     Height = 30
     Align = alBottom
     Alignment = taLeftJustify
@@ -70,9 +71,10 @@ object FormLastParty: TFormLastParty
     ParentFont = False
     TabOrder = 1
     Visible = False
+    ExplicitWidth = 635
   end
   object ComboBox1: TComboBox
-    Left = 118
+    Left = 191
     Top = 163
     Width = 145
     Height = 24
@@ -91,9 +93,10 @@ object FormLastParty: TFormLastParty
     OnExit = ComboBox1Exit
     Items.Strings = (
       'COM1')
+    ExplicitLeft = 118
   end
   object ComboBox2: TComboBox
-    Left = 358
+    Left = 523
     Top = 203
     Width = 145
     Height = 24
@@ -111,6 +114,65 @@ object FormLastParty: TFormLastParty
       ''
       '2'
       '3')
+    ExplicitLeft = 358
+  end
+  object Panel14: TPanel
+    Left = 736
+    Top = 0
+    Width = 142
+    Height = 269
+    Align = alRight
+    BevelOuter = bvNone
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    ExplicitLeft = 739
+    ExplicitTop = -6
+    object LabelPartyDate: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 34
+      Width = 136
+      Height = 19
+      Margins.Top = 5
+      Margins.Bottom = 5
+      Align = alTop
+      Caption = '12 '#1089#1077#1085#1090#1103#1073#1088#1103' 2019'
+      ExplicitLeft = 0
+      ExplicitTop = 19
+      ExplicitWidth = 130
+    end
+    object LabelPartyID: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 5
+      Width = 136
+      Height = 19
+      Margins.Top = 5
+      Margins.Bottom = 5
+      Align = alTop
+      Caption = #8470' 13456'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 68
+    end
+    object LabelPartyTime: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 63
+      Width = 136
+      Height = 19
+      Margins.Top = 5
+      Margins.Bottom = 5
+      Align = alTop
+      Caption = '16:30'
+      ExplicitTop = 88
+      ExplicitWidth = 42
+    end
   end
   object ImageList1: TImageList
     ColorDepth = cd32Bit
@@ -122,7 +184,7 @@ object FormLastParty: TFormLastParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E002600314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002640314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

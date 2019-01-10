@@ -15,7 +15,11 @@ type
         PanelError: TPanel;
         ImageList1: TImageList;
         ComboBox1: TComboBox;
-    ComboBox2: TComboBox;
+        ComboBox2: TComboBox;
+        Panel14: TPanel;
+        LabelPartyDate: TLabel;
+        LabelPartyID: TLabel;
+        LabelPartyTime: TLabel;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -32,8 +36,8 @@ type
         procedure ComboBox1DropDown(Sender: TObject);
         procedure ComboBox1Exit(Sender: TObject);
         procedure StringGrid1DblClick(Sender: TObject);
-    procedure ComboBox2CloseUp(Sender: TObject);
-    procedure ComboBox2Exit(Sender: TObject);
+        procedure ComboBox2CloseUp(Sender: TObject);
+        procedure ComboBox2Exit(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -74,7 +78,7 @@ var
 implementation
 
 uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
-    services, UnitFormFirmware;
+    services, UnitFormFirmware, dateutils;
 
 {$R *.dfm}
 
@@ -463,6 +467,14 @@ var
     ARow, ACol: Integer;
 begin
     FParty := party;
+
+    LabelPartyID.Caption := Format('№ %d', [FParty.FPartyID]);
+
+    LabelPartyDate.Caption := FormatDateTime('dd MMMM yyyy',
+      IncHour(FParty.FCreatedAt, 3));
+    LabelPartyTime.Caption := FormatDateTime('hh:nn',
+      IncHour(FParty.FCreatedAt, 3));
+
     for i := 0 to 95 do
         FProducts[i] := nil;
     for i := 0 to Length(FParty.FProducts) - 1 do
@@ -584,17 +596,18 @@ end;
 procedure TFormLastParty.UpdatePointsMethod(ACol, ARow: Integer; Value: string);
 var
     p: TProduct;
-    points_meth:int64;
-    valid:boolean;
+    points_meth: int64;
+    Valid: Boolean;
 begin
     try
         p := FProducts[ARow - 1];
 
-        valid := TryStrToInt64(value, points_meth);
+        Valid := TryStrToInt64(Value, points_meth);
 
-        p.FProductID := TLastParty.SetPointsMethodAtPlace(p.FPlace, points_meth, valid);
+        p.FProductID := TLastParty.SetPointsMethodAtPlace(p.FPlace,
+          points_meth, Valid);
         p.FPointsMethod.FInt64 := points_meth;
-        p.FPointsMethod.FValid := valid;
+        p.FPointsMethod.FValid := Valid;
         PanelError.Visible := false;
     except
         on E: ERemoteError do

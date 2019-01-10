@@ -2,9 +2,10 @@ unit pipe;
 
 interface
 
-uses System.Classes, Winapi.Windows, REST.Json, System.SyncObjs,
+uses System.Classes, Winapi.Messages, Winapi.Windows, REST.Json,
+    System.SyncObjs,
     System.Generics.Collections,
-    sysutils, superobject;
+    sysutils, Vcl.forms, superobject;
 
 type
     TPipe = class
@@ -14,6 +15,9 @@ type
         FName: string;
         FId: integer;
         FRemoteError: string;
+
+        FBusy: boolean;
+
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
 
@@ -25,6 +29,10 @@ type
     end;
 
     ERemoteError = class(Exception);
+    EPipeBusyError = class(Exception);
+
+const
+    WM_SERVER_APP_PIPE_BUSY = WM_USER + 1000;
 
 function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
 
@@ -51,7 +59,7 @@ procedure SuperObject_Get(x: ISuperObject; var v: string); overload;
 
 implementation
 
-uses System.WideStrUtils, System.dateutils, vcl.forms,
+uses System.WideStrUtils, System.dateutils,
     math, ujsonrpc, inifiles;
 
 function Pipe_GetJsonrpcParcedResponse(pipe: TPipe; const method: string;
@@ -149,6 +157,7 @@ begin
     FName := AName;
     FId := 0;
     FRemoteError := '';
+    FBusy := false;
 end;
 
 procedure TPipe._WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
@@ -191,10 +200,18 @@ var
     avail_count, read_count: DWORD;
     t: TDateTime;
 begin
+    if FBusy then
+        raise EPipeBusyError.Create('');
+
     FRemoteError := '';
     _WriteFile(request[0], length(request));
     avail_count := 0;
     t := now;
+
+    PostMessage(Application.MainForm.Handle, WM_SERVER_APP_PIPE_BUSY, 1, 0);
+    FBusy := true;
+
+
     while avail_count = 0 do
     begin
         if not PeekNamedPipe(_hPipe, // _In_      HANDLE  hNamedPipe,
@@ -208,10 +225,13 @@ begin
         // if SecondsBetween(t, now) > 5 then
         // raise Exception.Create('pipe hangs');
         Application.ProcessMessages;
-        //Sleep(50);
+        // Sleep(50);
     end;
     SetLength(result, avail_count);
     _ReadFile(result[0], avail_count);
+
+    FBusy := false;
+    PostMessage(Application.MainForm.Handle, WM_SERVER_APP_PIPE_BUSY, 0, 0);
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);
@@ -261,11 +281,12 @@ end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string;
   v: TArray<string>);
-var i:integer;
+var
+    I: integer;
 begin
     x.O[field] := SA([]);
-    for i :=0 to length(v)-1 do
-        x.A[field].S[i] := v[i];
+    for I := 0 to length(v) - 1 do
+        x.A[field].S[I] := v[I];
 end;
 
 end.
