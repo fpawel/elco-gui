@@ -55,6 +55,8 @@ type
         class procedure RunMainError( ) ;
         class procedure RunReadCurrent( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean; param5: Boolean; param6: Boolean; param7: Boolean; param8: Boolean; param9: Boolean; param10: Boolean; param11: Boolean; param12: Boolean) ;
         class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
+        class procedure RunWritePartyFirmware( ) ;
+        class procedure RunWriteProductFirmware( param1: Integer) ;
         class procedure SkipDelay( ) ;
         class procedure StopHardware( ) ;
          
@@ -707,6 +709,31 @@ begin
     req.AsArray.Add(param3) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunTemperature', req);
+    
+end;
+
+ 
+class procedure TRunnerSvc.RunWritePartyFirmware( ) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunWritePartyFirmware', req);
+    
+end;
+
+ 
+class procedure TRunnerSvc.RunWriteProductFirmware( param1: Integer) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunWriteProductFirmware', req);
     
 end;
 
