@@ -111,7 +111,7 @@ type
         destructor Destroy;
     end;
  
-    TProductFirmwareInfo = class 
+    TFirmwareInfo = class 
     public 
         FTemp : TArray<Double>;
         FFon : TArray<Double>;

@@ -33,7 +33,6 @@ type
         procedure StringGrid1KeyDown(Sender: TObject; var Key: Word;
           Shift: TShiftState);
         procedure ComboBox1CloseUp(Sender: TObject);
-        procedure ComboBox1DropDown(Sender: TObject);
         procedure ComboBox1Exit(Sender: TObject);
         procedure StringGrid1DblClick(Sender: TObject);
         procedure ComboBox2CloseUp(Sender: TObject);
@@ -78,7 +77,7 @@ var
 implementation
 
 uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
-    services, UnitFormFirmware, dateutils;
+    services, UnitFormFirmware2, dateutils;
 
 {$R *.dfm}
 
@@ -249,7 +248,7 @@ begin
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
     if (ARow < 0) or (ARow > Length(FProducts)) then
         exit;
-    FormFirmware.SetProduct(FProducts[ARow - 1]);
+    FormFirmware2.SetProduct(FProducts[ARow - 1]);
 end;
 
 procedure TFormLastParty.StringGrid1DrawCell(Sender: TObject;
@@ -400,18 +399,7 @@ begin
             Cells[col, Row] := '';
         UpdateProductType(col, Row, ComboBox1.Text)
     end;
-    StringGrid1.SetFocus;
-end;
-
-procedure TFormLastParty.ComboBox1DropDown(Sender: TObject);
-var
-    i: string;
-begin
-    ComboBox1.Items.Clear;
-    ComboBox1.Items.Add('');
-    for i in TProductTypes.Names do
-        ComboBox1.Items.Add(i);
-
+    // StringGrid1.SetFocus;
 end;
 
 procedure TFormLastParty.ComboBox1Exit(Sender: TObject);
@@ -429,7 +417,7 @@ begin
             Cells[col, Row] := '';
         UpdatePointsMethod(col, Row, ComboBox2.Text)
     end;
-    StringGrid1.SetFocus;
+    // StringGrid1.SetFocus;
 end;
 
 procedure TFormLastParty.ComboBox2Exit(Sender: TObject);
@@ -465,6 +453,7 @@ procedure TFormLastParty.SetParty(party: TParty);
 var
     i: Integer;
     ARow, ACol: Integer;
+    s: string;
 begin
     FParty := party;
 
@@ -514,6 +503,11 @@ begin
             end;
         end;
     end;
+
+    ComboBox1.Items.Clear;
+    ComboBox1.Items.Add('');
+    for s in TProductTypes.Names do
+        ComboBox1.Items.Add(s);
 end;
 
 procedure TFormLastParty.reload_data;

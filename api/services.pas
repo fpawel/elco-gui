@@ -38,9 +38,10 @@ type
          
     end; TProductFirmware = class 
     public
-        class function Calculate( param1: Int64) : TProductFirmwareInfo;
-        class function CalculateTempPoints( Values: TArray< string> ) : TTempPoints;
-        class function Stored( param1: Int64) : TProductFirmwareInfo;
+        class function CalculateFirmwareInfo( param1: Int64) : TFirmwareInfo;
+        class function StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;
+        class function TempPoints( Values: TArray< string> ) : TTempPoints;
+        class procedure Write( Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; Scale: string; Values: TArray< string> ) ;
          
     end; TSettingsSvc = class 
     public
@@ -517,7 +518,7 @@ begin
 end;
 
   
-class function TProductFirmware.Calculate( param1: Int64) : TProductFirmwareInfo;
+class function TProductFirmware.CalculateFirmwareInfo( param1: Int64) : TFirmwareInfo;
 var    
     req, resp: ISuperobject;
 begin
@@ -525,18 +526,37 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.Calculate', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.CalculateFirmwareInfo', req);
     
         
              
-                Result := TJson.JsonToObject < TProductFirmwareInfo > (resp.AsJson);
+                Result := TJson.JsonToObject < TFirmwareInfo > (resp.AsJson);
             
         
     
 end;
 
  
-class function TProductFirmware.CalculateTempPoints( Values: TArray< string> ) : TTempPoints;
+class function TProductFirmware.StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.StoredFirmwareInfo', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TFirmwareInfo > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TProductFirmware.TempPoints( Values: TArray< string> ) : TTempPoints;
 var    
     req, resp: ISuperobject;
 begin
@@ -544,7 +564,7 @@ begin
     req := SO;
     SuperObject_SetField(req, 'Values', Values);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.CalculateTempPoints', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.TempPoints', req);
     
         
              
@@ -555,21 +575,27 @@ begin
 end;
 
  
-class function TProductFirmware.Stored( param1: Int64) : TProductFirmwareInfo;
+class procedure TProductFirmware.Write( Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; Scale: string; Values: TArray< string> ) ;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
-    req := SA([]);
-    req.AsArray.Add(param1) ;
+    req := SO;
+    SuperObject_SetField(req, 'Year', Year);
+    SuperObject_SetField(req, 'Month', Month);
+    SuperObject_SetField(req, 'Day', Day);
+    SuperObject_SetField(req, 'Hour', Hour);
+    SuperObject_SetField(req, 'Minute', Minute);
+    SuperObject_SetField(req, 'Second', Second);
+    SuperObject_SetField(req, 'Sensitivity', Sensitivity);
+    SuperObject_SetField(req, 'Serial', Serial);
+    SuperObject_SetField(req, 'ProductType', ProductType);
+    SuperObject_SetField(req, 'Gas', Gas);
+    SuperObject_SetField(req, 'Units', Units);
+    SuperObject_SetField(req, 'Scale', Scale);
+    SuperObject_SetField(req, 'Values', Values);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.Stored', req);
-    
-        
-             
-                Result := TJson.JsonToObject < TProductFirmwareInfo > (resp.AsJson);
-            
-        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.Write', req);
     
 end;
 

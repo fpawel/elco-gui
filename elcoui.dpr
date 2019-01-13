@@ -32,7 +32,8 @@ uses
   UnitFormSelectTemperaturesDialog in 'UnitFormSelectTemperaturesDialog.pas' {FormSelectTemperaturesDialog},
   UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
   richeditutils in 'utils\richeditutils.pas',
-  exn in 'exn.pas';
+  exn in 'exn.pas',
+  UnitFormFirmware2 in 'UnitFormFirmware2.pas' {FormFirmware2};
 
 {$R *.res}
 
@@ -48,5 +49,6 @@ begin
   Application.CreateForm(TFormEditText, FormEditText);
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
+  Application.CreateForm(TFormFirmware2, FormFirmware2);
   Application.Run;
 end.

@@ -44,7 +44,7 @@ var
 
 implementation
 
-uses stringgridutils, services, stringutils, UnitFormFirmware, pipe;
+uses stringgridutils, services, stringutils, UnitFormFirmware2, pipe;
 
 {$R *.dfm}
 
@@ -63,7 +63,7 @@ begin
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
     if (ARow < 0) or (ARow > Length(FParty.FProducts)) then
         exit;
-    FormFirmware.SetProduct(FParty.FProducts[ARow - 1]);
+    FormFirmware2.SetProduct(FParty.FProducts[ARow - 1]);
 end;
 
 procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;

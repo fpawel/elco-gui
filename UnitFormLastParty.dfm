@@ -2,7 +2,7 @@ object FormLastParty: TFormLastParty
   Left = 0
   Top = 0
   Caption = 'FormLastParty'
-  ClientHeight = 299
+  ClientHeight = 440
   ClientWidth = 878
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -15,7 +15,7 @@ object FormLastParty: TFormLastParty
   OnShow = FormShow
   DesignSize = (
     878
-    299)
+    440)
   PixelsPerInch = 96
   TextHeight = 13
   object StringGrid1: TStringGrid
@@ -23,7 +23,7 @@ object FormLastParty: TFormLastParty
     Left = 3
     Top = 3
     Width = 730
-    Height = 263
+    Height = 404
     Align = alClient
     BorderStyle = bsNone
     ColCount = 4
@@ -41,9 +41,7 @@ object FormLastParty: TFormLastParty
     OnMouseDown = StringGrid1MouseDown
     OnSelectCell = StringGrid1SelectCell
     OnSetEditText = StringGrid1SetEditText
-    ExplicitLeft = 0
-    ExplicitTop = 0
-    ExplicitWidth = 794
+    ExplicitHeight = 263
     ColWidths = (
       64
       64
@@ -54,7 +52,7 @@ object FormLastParty: TFormLastParty
   end
   object PanelError: TPanel
     Left = 0
-    Top = 269
+    Top = 410
     Width = 878
     Height = 30
     Align = alBottom
@@ -71,11 +69,11 @@ object FormLastParty: TFormLastParty
     ParentFont = False
     TabOrder = 1
     Visible = False
-    ExplicitWidth = 635
+    ExplicitTop = 269
   end
   object ComboBox1: TComboBox
-    Left = 191
-    Top = 163
+    Left = 303
+    Top = 65
     Width = 145
     Height = 24
     BevelInner = bvNone
@@ -89,15 +87,13 @@ object FormLastParty: TFormLastParty
     Text = 'COM1'
     Visible = False
     OnCloseUp = ComboBox1CloseUp
-    OnDropDown = ComboBox1DropDown
     OnExit = ComboBox1Exit
     Items.Strings = (
       'COM1')
-    ExplicitLeft = 118
   end
   object ComboBox2: TComboBox
-    Left = 523
-    Top = 203
+    Left = 499
+    Top = 48
     Width = 145
     Height = 24
     BevelInner = bvNone
@@ -114,13 +110,13 @@ object FormLastParty: TFormLastParty
       ''
       '2'
       '3')
-    ExplicitLeft = 358
+    ExplicitTop = 29
   end
   object Panel14: TPanel
     Left = 736
     Top = 0
     Width = 142
-    Height = 269
+    Height = 410
     Align = alRight
     BevelOuter = bvNone
     Font.Charset = DEFAULT_CHARSET
@@ -130,8 +126,7 @@ object FormLastParty: TFormLastParty
     Font.Style = []
     ParentFont = False
     TabOrder = 4
-    ExplicitLeft = 739
-    ExplicitTop = -6
+    ExplicitHeight = 269
     object LabelPartyDate: TLabel
       AlignWithMargins = True
       Left = 3
@@ -142,8 +137,6 @@ object FormLastParty: TFormLastParty
       Margins.Bottom = 5
       Align = alTop
       Caption = '12 '#1089#1077#1085#1090#1103#1073#1088#1103' 2019'
-      ExplicitLeft = 0
-      ExplicitTop = 19
       ExplicitWidth = 130
     end
     object LabelPartyID: TLabel
@@ -156,8 +149,6 @@ object FormLastParty: TFormLastParty
       Margins.Bottom = 5
       Align = alTop
       Caption = #8470' 13456'
-      ExplicitLeft = 0
-      ExplicitTop = 0
       ExplicitWidth = 68
     end
     object LabelPartyTime: TLabel
@@ -170,7 +161,6 @@ object FormLastParty: TFormLastParty
       Margins.Bottom = 5
       Align = alTop
       Caption = '16:30'
-      ExplicitTop = 88
       ExplicitWidth = 42
     end
   end
@@ -184,7 +174,7 @@ object FormLastParty: TFormLastParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E002640314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002680314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

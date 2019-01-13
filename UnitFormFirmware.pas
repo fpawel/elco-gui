@@ -39,6 +39,8 @@ type
         Chart1: TChart;
         Series1: TFastLineSeries;
         Series2: TFastLineSeries;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
         procedure FormDeactivate(Sender: TObject);
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
@@ -52,6 +54,7 @@ type
           var CanSelect: Boolean);
         procedure StringGrid2SetEditText(Sender: TObject; ACol, ARow: Integer;
           const Value: string);
+    procedure ToolButton1Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -67,7 +70,7 @@ type
 
     public
         { Public declarations }
-        procedure SetProduct(p: TProduct);
+        procedure SetProduct(f: TFirmwareInfo);
     end;
 
 var
@@ -210,7 +213,7 @@ begin
             Last_Edited_Col := -1; // Indicate no cell is edited
             Last_Edited_Row := -1; // Indicate no cell is edited
             // Do whatever wanted after user has finish editing a cell
-            with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+            with TProductFirmware.TempPoints(GetTemperatureValues) do
                 SetTemperaturePointsChart(FTemp, FFon, FSens);
 
         end
@@ -219,6 +222,19 @@ begin
             Last_Edited_Col := ACol; // Remember column of cell being edited
             Last_Edited_Row := ARow; // Remember row of cell being edited
         end;
+end;
+
+procedure TFormFirmware.ToolButton1Click(Sender: TObject);
+var t :TDateTime;
+begin
+    t := DateTimePicker1.DateTime;
+
+    //Year, Month, Day, Hour, Minute, Second
+
+    TProductFirmware.Write( YearOf(t), MonthOf(t), DayOf(t),
+    HourOf(t), MinuteOf(t), SecondOf(t), EditSens.Text, EditSerial.Text,
+         ComboBoxProductType.Text, ComboBoxGas.Text, ComboBoxUnits.Text,
+         EditScale.Text, GetTemperatureValues);
 end;
 
 procedure TFormFirmware.ToolButton2Click(Sender: TObject);
@@ -238,7 +254,7 @@ begin
             Row := Row + 1;
         end;
     end;
-    with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+    with TProductFirmware.TempPoints(GetTemperatureValues) do
         SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
@@ -257,7 +273,7 @@ begin
         RowCount := RowCount - 1;
     end;
 
-    with TProductFirmware.CalculateTempPoints(GetTemperatureValues) do
+    with TProductFirmware.TempPoints(GetTemperatureValues) do
         SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
@@ -381,19 +397,12 @@ begin
     ax.SetMinMax(min_v - d_ax, max_v + d_ax);
 end;
 
-procedure TFormFirmware.SetProduct(p: TProduct);
+procedure TFormFirmware.SetProduct(f: TFirmwareInfo);
 var
-    f: TProductFirmwareInfo;
     i: Integer;
     has_null: Boolean;
 
 begin
-
-    if p.FHasFirmware then
-        f := TProductFirmware.Stored(p.FProductID)
-    else
-        f := TProductFirmware.Calculate(p.FProductID);
-
     DateTimePicker1.DateTime := f.FTime;
     EditSerial.text := f.FSerial;
     EditSens.text := f.FSensitivity;
@@ -403,8 +412,6 @@ begin
     SetComboBoxText(ComboBoxGas, f.FGas);
     SetTemperaturePointsChart(f.FTemp, f.FFon, f.FSens);
     SetTemperaturePointsGrid(f.FTemp, f.FFon, f.FSens);
-    f.Free;
-    Show;
 end;
 
 function TFormFirmware.GetTemperatureValues: TArray<string>;
