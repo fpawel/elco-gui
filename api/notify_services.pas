@@ -4,10 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
+    TComportEntryHandler = reference to procedure (x:TComportEntry);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -20,6 +23,10 @@ procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
+procedure SetOnComportEntry( AHandler : TComportEntryHandler);
+procedure SetOnStartServerApplication( AHandler : TStringHandler);
+procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
+procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
 
 procedure Cancel;
 
@@ -27,8 +34,8 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, CmdDelay, 
-    CmdLastPartyChanged);
+    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, 
+    CmdNewJournalEntry);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -39,6 +46,10 @@ var
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnLastPartyChanged : TPartyHandler;
+    _OnComportEntry : TComportEntryHandler;
+    _OnStartServerApplication : TStringHandler;
+    _OnReadFirmware : TFirmwareInfoHandler;
+    _OnNewJournalEntry : TJournalEntryHandler;
     _cancel:boolean;
 
 procedure Cancel;
@@ -107,6 +118,30 @@ begin
                 raise Exception.Create('_OnLastPartyChanged must be set');
             _OnLastPartyChanged(TJson.JsonToObject<TParty>(str));
         end;
+        CmdComportEntry:
+        begin
+            if not Assigned(_OnComportEntry) then
+                raise Exception.Create('_OnComportEntry must be set');
+            _OnComportEntry(TJson.JsonToObject<TComportEntry>(str));
+        end;
+        CmdStartServerApplication:
+        begin
+            if not Assigned(_OnStartServerApplication) then
+                raise Exception.Create('_OnStartServerApplication must be set');
+            _OnStartServerApplication(str);
+        end;
+        CmdReadFirmware:
+        begin
+            if not Assigned(_OnReadFirmware) then
+                raise Exception.Create('_OnReadFirmware must be set');
+            _OnReadFirmware(TJson.JsonToObject<TFirmwareInfo>(str));
+        end;
+        CmdNewJournalEntry:
+        begin
+            if not Assigned(_OnNewJournalEntry) then
+                raise Exception.Create('_OnNewJournalEntry must be set');
+            _OnNewJournalEntry(TJson.JsonToObject<TJournalEntry>(str));
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -160,6 +195,30 @@ begin
     if Assigned(_OnLastPartyChanged) then
         raise Exception.Create('_OnLastPartyChanged already set');
     _OnLastPartyChanged := AHandler;
+end;
+procedure SetOnComportEntry( AHandler : TComportEntryHandler);
+begin
+    if Assigned(_OnComportEntry) then
+        raise Exception.Create('_OnComportEntry already set');
+    _OnComportEntry := AHandler;
+end;
+procedure SetOnStartServerApplication( AHandler : TStringHandler);
+begin
+    if Assigned(_OnStartServerApplication) then
+        raise Exception.Create('_OnStartServerApplication already set');
+    _OnStartServerApplication := AHandler;
+end;
+procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
+begin
+    if Assigned(_OnReadFirmware) then
+        raise Exception.Create('_OnReadFirmware already set');
+    _OnReadFirmware := AHandler;
+end;
+procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
+begin
+    if Assigned(_OnNewJournalEntry) then
+        raise Exception.Create('_OnNewJournalEntry already set');
+    _OnNewJournalEntry := AHandler;
 end;
 
 

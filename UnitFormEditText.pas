@@ -45,7 +45,7 @@ end;
 
 procedure TFormEditText.FormShow(Sender: TObject);
 begin
-    RichEdit1.Text :=  TSettingsSvc.Predefined;
+    RichEdit1.Text :=  TSettingsSvc.PredefinedConfig;
     Colorize;
 end;
 
@@ -56,20 +56,20 @@ end;
 
 procedure TFormEditText.ToolButton1Click(Sender: TObject);
 begin
-    RichEdit1.Text := TSettingsSvc.SetDefaultPredefined;
+    RichEdit1.Text := TSettingsSvc.SetDefaultPredefinedConfig;
     Colorize;
 
 end;
 
 procedure TFormEditText.ToolButton2Click(Sender: TObject);
 begin
-    RichEdit1.Text := TSettingsSvc.ChangePredefined(RichEdit1.Text);
+    RichEdit1.Text := TSettingsSvc.ChangePredefinedConfig(RichEdit1.Text);
     Colorize;
 end;
 
 procedure TFormEditText.ToolButton3Click(Sender: TObject);
 begin
-    RichEdit1.Text :=  TSettingsSvc.Predefined;
+    RichEdit1.Text :=  TSettingsSvc.PredefinedConfig;
     ToolButton2.Enabled := false;
     Colorize;
 end;

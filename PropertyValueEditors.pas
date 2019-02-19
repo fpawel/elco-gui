@@ -312,6 +312,7 @@ begin
 
             Visible := False;
             Parent := Tree;
+            Checked := FConfigData.Prop.Bool;
             // Checked := not FConfigData.Prop.Bool;
             // CheckBoxOnChange(FEdit);
             Caption := '---';

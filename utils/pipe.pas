@@ -30,6 +30,7 @@ type
 
     ERemoteError = class(Exception);
     EPipeBusyError = class(Exception);
+    EPipeNotFound = class(Exception);
 
 const
     WM_SERVER_APP_PIPE_BUSY = WM_USER + 1000;
@@ -169,8 +170,9 @@ begin
     begin
         _hPipe := CreateFileW(PWideChar(FName), GENERIC_READ or GENERIC_WRITE,
           FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING, 0, 0);
-        assert(_hPipe <> INVALID_HANDLE_VALUE, 'can not connect "' + FName +
-          '": ' + _LastError);
+        if _hPipe = INVALID_HANDLE_VALUE then
+            raise EPipeNotFound.Create('can not connect pipe: ' + FName + ': ' +
+              _LastError);
 
         assert(WriteFile(_hPipe, Buffer, numberOfbytesToWrite, writen_count,
           nil), FName + ': WriteFile: ' + _LastError);
@@ -210,7 +212,6 @@ begin
 
     PostMessage(Application.MainForm.Handle, WM_SERVER_APP_PIPE_BUSY, 1, 0);
     FBusy := true;
-
 
     while avail_count = 0 do
     begin

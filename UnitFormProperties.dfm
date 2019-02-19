@@ -1,9 +1,9 @@
-object PropertiesForm: TPropertiesForm
+object FormProperties: TFormProperties
   Left = 397
   Top = 294
   BorderStyle = bsSizeToolWin
-  ClientHeight = 324
-  ClientWidth = 677
+  ClientHeight = 638
+  ClientWidth = 1034
   Color = clBtnFace
   ParentFont = True
   Icon.Data = {
@@ -3125,14 +3125,13 @@ object PropertiesForm: TPropertiesForm
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
-  OnHide = FormHide
   PixelsPerInch = 96
   TextHeight = 13
   object VST3: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 677
-    Height = 324
+    Width = 1034
+    Height = 638
     Align = alClient
     BorderStyle = bsNone
     Colors.BorderColor = clWindowText
@@ -3174,7 +3173,7 @@ object PropertiesForm: TPropertiesForm
     OnIncrementalSearch = VST3IncrementalSearch
     OnInitChildren = VST3InitChildren
     OnInitNode = VST3InitNode
-    ExplicitHeight = 320
+    ExplicitHeight = 331
     Columns = <
       item
         Color = clWindow
@@ -3190,7 +3189,7 @@ object PropertiesForm: TPropertiesForm
         MinWidth = 200
         Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus, coEditable]
         Position = 1
-        Width = 200
+        Width = 231
         WideText = #1047#1085#1072#1095#1077#1085#1080#1077
       end
       item
@@ -3198,7 +3197,7 @@ object PropertiesForm: TPropertiesForm
         MinWidth = 200
         Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus]
         Position = 2
-        Width = 200
+        Width = 487
         WideText = #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
       end>
   end
@@ -3206,7 +3205,7 @@ object PropertiesForm: TPropertiesForm
     Left = 422
     Top = 224
     Bitmap = {
-      494C010107001300840010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010107001300900010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

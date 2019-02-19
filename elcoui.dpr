@@ -2,9 +2,9 @@ program elcoui;
 
 uses
   Vcl.Forms,
+  winapi.windows,
   UnitElcoMainForm in 'UnitElcoMainForm.pas' {ElcoMainForm},
   dbutils in 'utils\dbutils.pas',
-  stringgridutils in 'utils\stringgridutils.pas',
   stringutils in 'utils\stringutils.pas',
   product_column in 'ViewModels\product_column.pas',
   UnitFormParties in 'UnitFormParties.pas' {FormParties},
@@ -25,7 +25,7 @@ uses
   config_helpers in 'api\config_helpers.pas',
   PropertyValueEditors in 'PropertyValueEditors.pas',
   listports in 'utils\listports.pas',
-  PropertiesFormUnit in 'PropertiesFormUnit.pas' {PropertiesForm},
+  UnitFormProperties in 'UnitFormProperties.pas' {FormProperties},
   notify_services in 'api\notify_services.pas',
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
   UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
@@ -33,22 +33,44 @@ uses
   UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
   richeditutils in 'utils\richeditutils.pas',
   exn in 'exn.pas',
-  UnitFormFirmware2 in 'UnitFormFirmware2.pas' {FormFirmware2};
+  stringgridutils in 'utils\stringgridutils.pas',
+  parproc in 'utils\parproc.pas',
+  UnitFormConsole in 'UnitFormConsole.pas' {FormConsole},
+  UnitFormComportCon in 'UnitFormComportCon.pas' {FormComportCon},
+  UnitFormJournal in 'UnitFormJournal.pas' {FormJournal},
+  UnitFormSelectBlock in 'UnitFormSelectBlock.pas' {FormSelectBlock},
+  UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts};
 
 {$R *.res}
 
+var
+    hWnd: THandle;
+
 begin
-  Application.Initialize;
-  Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TElcoMainForm, ElcoMainForm);
+    hWnd := FindWindow('TElcoMainForm', nil);
+    if hWnd <> 0 then // prevent application from running twice
+    begin
+        ShowWindow(hWnd, SW_RESTORE);
+        SetForegroundWindow(hWnd);
+        exit;
+    end;
+    Application.Initialize;
+    Application.MainFormOnTaskbar := True;
+    Application.CreateForm(TElcoMainForm, ElcoMainForm);
   Application.CreateForm(TFormParties, FormParties);
   Application.CreateForm(TFormLastParty, FormLastParty);
   Application.CreateForm(TFormParty, FormParty);
   Application.CreateForm(TFormFirmware, FormFirmware);
-  Application.CreateForm(TPropertiesForm, PropertiesForm);
+  Application.CreateForm(TFormProperties, FormProperties);
   Application.CreateForm(TFormEditText, FormEditText);
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
-  Application.CreateForm(TFormFirmware2, FormFirmware2);
+  Application.CreateForm(TFormConsole, FormConsole);
+  Application.CreateForm(TFormComportCon, FormComportCon);
+  Application.CreateForm(TFormJournal, FormJournal);
+  Application.CreateForm(TFormSelectBlock, FormSelectBlock);
+  Application.CreateForm(TFormSelectBlock, FormSelectBlock);
+  Application.CreateForm(TFormSelectProducts, FormSelectProducts);
   Application.Run;
+
 end.

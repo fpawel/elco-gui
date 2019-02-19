@@ -42,6 +42,7 @@ type
         { Private declarations }
         FInitialized: Boolean;
         FNode: PVirtualNode;
+        FHasYears:boolean;
 
         function GetTreeData(Node: PVirtualNode): PTreeData;
 
@@ -52,9 +53,11 @@ type
         function IsActivePartyNode(Node: PVirtualNode): Boolean;
 
         property TreeData[Node: PVirtualNode]: PTreeData read GetTreeData;
+
     public
         { Public declarations }
         procedure CreateYearsNodes;
+        property HasYears: boolean read FHasYears;
 
     end;
 
@@ -73,6 +76,7 @@ procedure TFormParties.FormCreate(Sender: TObject);
 begin
     TreeView1.NodeDataSize := SizeOf(RTreeData);
     FInitialized := false;
+    FHasYears := false;
 
 end;
 
@@ -212,7 +216,6 @@ begin
                 inttostr2(TreeData[FNode.Parent].Value),
                 month_name(TreeData[FNode.Parent].Value),
                 inttostr2(TreeData[FNode].Value) ]);
-
         trdParty:
             s := format('партия %d',[TreeData[FNode].Value]);
     end;
@@ -299,6 +302,7 @@ var
     Node: PVirtualNode;
     year: integer;
 begin
+    FHasYears := false;
     TreeView1.Clear;
     for year in TPartiesCatalogue.Years do
     begin
@@ -310,6 +314,7 @@ begin
         begin
             TreeView1.Expanded[Node] := true;
         end;
+        FHasYears := true;
     end;
 end;
 
@@ -321,6 +326,10 @@ var
 begin
     p := TreeData[Node];
     v := p.Value;
+
+    if not Assigned(FormParty.party) then
+        FormParty.party := TLastParty.party;
+
     dt := FormParty.Party.FCreatedAt;
     case p.NodeKind of
         trdYear:

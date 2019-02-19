@@ -116,13 +116,18 @@ type
         FTemp : TArray<Double>;
         FFon : TArray<Double>;
         FSens : TArray<Double>;
+        FPlace : Integer;
         FTime : TDateTime;
         FSensitivity : string;
         FSerial : string;
         FProductType : string;
         FGas : string;
         FUnits : string;
-        FScale : string;
+        FScaleBeg : string;
+        FScaleEnd : string;
+        FISMinus20 : string;
+        FISPlus20 : string;
+        FISPlus50 : string;
         
     end;
  
@@ -163,6 +168,26 @@ type
         
     end;
  
+    TJournalEntry = class 
+    public 
+        FEntryID : Int64;
+        FCreatedAt : TDateTime;
+        FMessage : string;
+        FLevel : string;
+        FWorkID : Int64;
+        FWorkName : string;
+        
+    end;
+ 
+    TJournalWork = class 
+    public 
+        FWorkID : Int64;
+        FCreatedAt : TDateTime;
+        FName : string;
+        FErrorOccurred : Boolean;
+        
+    end;
+ 
     TReadCurrent = class 
     public 
         FValues : TArray<Double>;
@@ -175,6 +200,14 @@ type
         FRun : Boolean;
         FTimeSeconds : Integer;
         FWhat : string;
+        
+    end;
+ 
+    TComportEntry = class 
+    public 
+        FPort : string;
+        FError : Boolean;
+        FMsg : string;
         
     end;
  
@@ -330,6 +363,6 @@ begin
         FMax.Free;
     
 end;
-    
+       
 
 end.

@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
     Vcl.Imaging.pngimage, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
-    server_data_types, product_column;
+    server_data_types, product_column, Vcl.Menus;
 
 type
     TFormLastParty = class(TForm)
@@ -16,10 +16,6 @@ type
         ImageList1: TImageList;
         ComboBox1: TComboBox;
         ComboBox2: TComboBox;
-        Panel14: TPanel;
-        LabelPartyDate: TLabel;
-        LabelPartyID: TLabel;
-        LabelPartyTime: TLabel;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -65,9 +61,13 @@ type
 
     public
         { Public declarations }
+        procedure SetProductionAll(production: Boolean);
+        procedure SetProductionBlock(block: Integer; production: Boolean);
         procedure SetParty(party: TParty);
         procedure reload_data;
         procedure SetCurrents(place: Integer; v: TArray<double>);
+
+        property party: TParty read FParty;
 
     end;
 
@@ -77,7 +77,7 @@ var
 implementation
 
 uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
-    services, UnitFormFirmware2, dateutils;
+    services, UnitFormFirmware, dateutils, UnitFormSelectProducts;
 
 {$R *.dfm}
 
@@ -214,7 +214,7 @@ begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
-    if ACol > 0 then
+    if (ACol > 0) or (ARow = 0) then
         exit;
     p := FProducts[ARow - 1];
     if not Assigned(p) then
@@ -240,15 +240,47 @@ end;
 
 procedure TFormLastParty.StringGrid1DblClick(Sender: TObject);
 var
-    ACol, ARow: Integer;
+    ACol, ARow, i: Integer;
     pt: TPoint;
+    p: TProduct;
+    f: Boolean;
 begin
     GetCursorPos(pt);
     pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-    if (ARow < 0) or (ARow > Length(FProducts)) then
+    if (ARow = 0) and (ACol = 0) then
+    begin
+        pt := StringGrid1.ClientToScreen(pt);
+        FormSelectProducts.Left := pt.X + 5;
+        FormSelectProducts.Top := pt.Y + 5;
+        FormSelectProducts.Show;
         exit;
-    FormFirmware2.SetProduct(FProducts[ARow - 1]);
+    end;
+
+    if ARow = 0 then
+    begin
+        for p in FProducts do
+            if p.FProduction then
+            begin
+                f := True;
+                break;
+            end;
+
+        for p in FProducts do
+            p.FProduction := not f;
+
+    end;
+
+    if (ARow < 1) or (ARow > Length(FProducts)) then
+        exit;
+    if ACol > 0 then
+    begin
+        StringGrid1.EditorMode := false;
+        p := FProducts[ARow - 1];
+        FormFirmware.Product := p;
+        FormFirmware.Show;
+    end;
+
 end;
 
 procedure TFormLastParty.StringGrid1DrawCell(Sender: TObject;
@@ -457,12 +489,12 @@ var
 begin
     FParty := party;
 
-    LabelPartyID.Caption := Format('№ %d', [FParty.FPartyID]);
-
-    LabelPartyDate.Caption := FormatDateTime('dd MMMM yyyy',
-      IncHour(FParty.FCreatedAt, 3));
-    LabelPartyTime.Caption := FormatDateTime('hh:nn',
-      IncHour(FParty.FCreatedAt, 3));
+    with Application.MainForm do
+    begin
+        Caption := Format('Партия ЭХЯ № %d, создана %s',
+          [FParty.FPartyID, FormatDateTime('dd MMMM yyyy hh:nn',
+          IncHour(FParty.FCreatedAt, 3))])
+    end;
 
     for i := 0 to 95 do
         FProducts[i] := nil;
@@ -655,6 +687,34 @@ begin
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
+end;
+
+procedure TFormLastParty.SetProductionAll(production: Boolean);
+var
+    p: TProduct;
+begin
+    TLastParty.SelectAll(production);
+    for p in FProducts do
+    begin
+        p.FProduction := production;
+        StringGrid_RedrawCell(StringGrid1, 0, p.FPlace + 1);
+    end;
+
+end;
+
+procedure TFormLastParty.SetProductionBlock(block: Integer;
+  production: Boolean);
+var
+    p: TProduct;
+begin
+    TLastParty.SelectBlock(production, Block);
+    for p in FProducts do
+        if (p.FPlace div 8) = block then
+        begin
+            p.FProduction := production;
+            StringGrid_RedrawCell(StringGrid1, 0, p.FPlace + 1);
+        end;
+
 end;
 
 end.

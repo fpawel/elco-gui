@@ -80,6 +80,10 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <Icon_MainIcon>elcoui_Icon1.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>F:\DELPHIPATH\icons8-обслуживание-96.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>F:\DELPHIPATH\icons8-обслуживание-96.png</UWP_DelphiLogo150>
+        <DCC_DcuOutput>$(Temp)\.elco-dcu\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>$(HOMEDRIVE)$(HOMEPATH)\.elco</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -103,23 +107,18 @@
         </DelphiCompile>
         <DCCReference Include="UnitElcoMainForm.pas">
             <Form>ElcoMainForm</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="utils\dbutils.pas"/>
-        <DCCReference Include="utils\stringgridutils.pas"/>
         <DCCReference Include="utils\stringutils.pas"/>
         <DCCReference Include="ViewModels\product_column.pas"/>
         <DCCReference Include="UnitFormParties.pas">
             <Form>FormParties</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFormLastParty.pas">
             <Form>FormLastParty</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFormParty.pas">
             <Form>FormParty</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="utils\vclutils.pas"/>
         <DCCReference Include="utils\jsonrpc\ujsonrpc.pas"/>
@@ -134,33 +133,46 @@
         <DCCReference Include="api\services.pas"/>
         <DCCReference Include="UnitFormFirmware.pas">
             <Form>FormFirmware</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="api\config_helpers.pas"/>
         <DCCReference Include="PropertyValueEditors.pas"/>
         <DCCReference Include="utils\listports.pas"/>
-        <DCCReference Include="PropertiesFormUnit.pas">
-            <Form>PropertiesForm</Form>
-            <FormType>dfm</FormType>
+        <DCCReference Include="UnitFormProperties.pas">
+            <Form>FormProperties</Form>
         </DCCReference>
         <DCCReference Include="api\notify_services.pas"/>
         <DCCReference Include="utils\ComponentBaloonHintU.pas"/>
         <DCCReference Include="UnitFormEditText.pas">
             <Form>FormEditText</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFormSelectTemperaturesDialog.pas">
             <Form>FormSelectTemperaturesDialog</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFormSelectStendPlacesDialog.pas">
             <Form>FormSelectStendPlacesDialog</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="utils\richeditutils.pas"/>
         <DCCReference Include="exn.pas"/>
-        <DCCReference Include="UnitFormFirmware2.pas">
-            <Form>FormFirmware2</Form>
+        <DCCReference Include="utils\stringgridutils.pas"/>
+        <DCCReference Include="utils\parproc.pas"/>
+        <DCCReference Include="UnitFormConsole.pas">
+            <Form>FormConsole</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnitFormComportCon.pas">
+            <Form>FormComportCon</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnitFormJournal.pas">
+            <Form>FormJournal</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnitFormSelectBlock.pas">
+            <Form>FormSelectBlock</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnitFormSelectProducts.pas">
+            <Form>FormSelectProducts</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
@@ -208,6 +220,13 @@
                 <DeployFile LocalName="C:\Users\binf1\.elco\elcoui.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>elcoui.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="F:\DELPHIPATH\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets\</RemoteDir>
+                        <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

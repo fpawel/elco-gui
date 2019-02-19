@@ -24,6 +24,8 @@ procedure StringGrid_DrawCellBounds(cnv: TCanvas; acol, arow: integer;
 procedure StringGrid_DrawCellBmp(grd: TStringGrid; Rect: TRect;
   bmp: vcl.graphics.TBitmap);
 
+procedure StringGrid_RedrawCol(grd: TStringGrid; aCol: integer);
+
 implementation
 
 uses winapi.windows, system.math, winapi.uxtheme;
@@ -77,6 +79,17 @@ begin
             for I := 0 to colcount - 1 do
 
                 Cells[I, arow] := Cells[I, arow];
+end;
+
+procedure StringGrid_RedrawCol(grd: TStringGrid; aCol: integer);
+var
+    I: integer;
+begin
+    with grd do
+        if (aCol >= 0) AND (aCol < rowcount) then
+            for I := 0 to colcount - 1 do
+
+                Cells[aCol, 1] := Cells[aCol, i];
 end;
 
 procedure StringGrid_Clear(grd: TStringGrid);

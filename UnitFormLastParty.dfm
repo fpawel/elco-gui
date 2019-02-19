@@ -22,7 +22,7 @@ object FormLastParty: TFormLastParty
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 730
+    Width = 872
     Height = 404
     Align = alClient
     BorderStyle = bsNone
@@ -41,7 +41,6 @@ object FormLastParty: TFormLastParty
     OnMouseDown = StringGrid1MouseDown
     OnSelectCell = StringGrid1SelectCell
     OnSetEditText = StringGrid1SetEditText
-    ExplicitHeight = 263
     ColWidths = (
       64
       64
@@ -69,7 +68,6 @@ object FormLastParty: TFormLastParty
     ParentFont = False
     TabOrder = 1
     Visible = False
-    ExplicitTop = 269
   end
   object ComboBox1: TComboBox
     Left = 303
@@ -110,59 +108,6 @@ object FormLastParty: TFormLastParty
       ''
       '2'
       '3')
-    ExplicitTop = 29
-  end
-  object Panel14: TPanel
-    Left = 736
-    Top = 0
-    Width = 142
-    Height = 410
-    Align = alRight
-    BevelOuter = bvNone
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clNavy
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 4
-    ExplicitHeight = 269
-    object LabelPartyDate: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 34
-      Width = 136
-      Height = 19
-      Margins.Top = 5
-      Margins.Bottom = 5
-      Align = alTop
-      Caption = '12 '#1089#1077#1085#1090#1103#1073#1088#1103' 2019'
-      ExplicitWidth = 130
-    end
-    object LabelPartyID: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 5
-      Width = 136
-      Height = 19
-      Margins.Top = 5
-      Margins.Bottom = 5
-      Align = alTop
-      Caption = #8470' 13456'
-      ExplicitWidth = 68
-    end
-    object LabelPartyTime: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 63
-      Width = 136
-      Height = 19
-      Margins.Top = 5
-      Margins.Bottom = 5
-      Align = alTop
-      Caption = '16:30'
-      ExplicitWidth = 42
-    end
   end
   object ImageList1: TImageList
     ColorDepth = cd32Bit
@@ -174,7 +119,7 @@ object FormLastParty: TFormLastParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E002680314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002840314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

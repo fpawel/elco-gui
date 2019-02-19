@@ -12,14 +12,9 @@ uses
 
 type
     TFormFirmware = class(TForm)
-        Panel3: TPanel;
         Panel8: TPanel;
         StringGrid2: TStringGrid;
-        PanelConsoleHeader: TPanel;
         ImageList3: TImageList;
-        ToolBar1: TToolBar;
-        ToolButton2: TToolButton;
-        ToolButton3: TToolButton;
         Panel10: TPanel;
         FlowPanel1: TFlowPanel;
         Label2: TLabel;
@@ -30,8 +25,6 @@ type
         ComboBoxUnits: TComboBox;
         Label4: TLabel;
         ComboBoxGas: TComboBox;
-        Label6: TLabel;
-        EditScale: TEdit;
         Label7: TLabel;
         EditSens: TEdit;
         Label1: TLabel;
@@ -39,9 +32,25 @@ type
         Chart1: TChart;
         Series1: TFastLineSeries;
         Series2: TFastLineSeries;
-    ToolBar2: TToolBar;
-    ToolButton1: TToolButton;
-        procedure FormDeactivate(Sender: TObject);
+        Panel1: TPanel;
+        RadioButton1: TRadioButton;
+        RadioButton2: TRadioButton;
+        Label6: TLabel;
+        EditScaleBegin: TEdit;
+        Label8: TLabel;
+        EditScaleEnd: TEdit;
+        Label9: TLabel;
+        ComboBoxPlace: TComboBox;
+        Panel2: TPanel;
+        ToolBar2: TToolBar;
+        ToolButton3: TToolButton;
+        ToolButton4: TToolButton;
+        ToolBar3: TToolBar;
+        ToolButton14: TToolButton;
+        ToolButton15: TToolButton;
+        ToolBar5: TToolBar;
+        ToolButton18: TToolButton;
+        ToolButton19: TToolButton;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -54,10 +63,19 @@ type
           var CanSelect: Boolean);
         procedure StringGrid2SetEditText(Sender: TObject; ACol, ARow: Integer;
           const Value: string);
-    procedure ToolButton1Click(Sender: TObject);
+        procedure ToolButton1Click(Sender: TObject);
+        procedure RadioButton1Click(Sender: TObject);
+        procedure RadioButton2Click(Sender: TObject);
+        procedure ToolButton8Click(Sender: TObject);
+        procedure ToolButton6Click(Sender: TObject);
+        procedure ToolButton4Click(Sender: TObject);
+        procedure FormShow(Sender: TObject);
+        procedure FormHide(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
+
+        FProduct: TProduct;
 
         procedure DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
           ta: TAlignment);
@@ -68,9 +86,17 @@ type
 
         function GetTemperatureValues: TArray<string>;
 
+        procedure SetFirmwareInfo(f: TFirmwareInfo);
+        procedure ClearFirmwareInfo;
+
+        procedure SetProduct(p: TProduct);
+        procedure applyProduct;
+
     public
         { Public declarations }
-        procedure SetProduct(f: TFirmwareInfo);
+        procedure SetReadFirmwareInfo(f: TFirmwareInfo);
+        property Product: TProduct read FProduct write SetProduct;
+
     end;
 
 var
@@ -80,7 +106,8 @@ implementation
 
 {$R *.dfm}
 
-uses System.Types, stringgridutils, stringutils, services, dateutils, math;
+uses System.Types, stringgridutils, stringutils, services, dateutils, math,
+    UnitElcoMainForm;
 
 const
     main_temperatures: array [0 .. 7] of Double = (-40, -20, 0, 20, 30,
@@ -104,6 +131,7 @@ end;
 procedure TFormFirmware.FormCreate(Sender: TObject);
 var
     s: string;
+    i: Integer;
 begin
     with Chart1.BottomAxis.Grid do
     begin
@@ -130,25 +158,32 @@ begin
     ComboBoxUnits.Items.Clear;
     ComboBoxGas.Items.Clear;
 
-    for s in TProductTypes.Names do
-        ComboBoxProductType.Items.Add(s);
-    for s in TProductTypes.Gases do
-        ComboBoxGas.Items.Add(s);
-    for s in TProductTypes.Units do
-        ComboBoxUnits.Items.Add(s);
-
     with StringGrid2 do
     begin
         Cells[0, RowCount - 1] := 'T⁰C';
         Cells[1, RowCount - 1] := 'Фон, нА';
         Cells[2, RowCount - 1] := 'Кч, %';
+        Cells[3, RowCount - 1] := 'Ч, нА';
     end;
+
+    for i := 0 to 95 do
+        ComboBoxPlace.Items.Add(inttostr(i div 8 + 1) + '.' +
+          inttostr(i mod 8 + 1));
 
 end;
 
-procedure TFormFirmware.FormDeactivate(Sender: TObject);
+procedure TFormFirmware.FormHide(Sender: TObject);
 begin
-    Hide;
+    ElcoMainForm.PanelPlaceholderMain.Align := alClient;
+    ElcoMainForm.ToolBar4.Hide;
+end;
+
+procedure TFormFirmware.FormShow(Sender: TObject);
+begin
+    ElcoMainForm.PanelPlaceholderMain.Align := alLeft;
+    ElcoMainForm.PanelPlaceholderMain.Width := 800;
+    ElcoMainForm.ToolBar4.Show;
+    ElcoMainForm.ToolBar4.Left := 100500;
 end;
 
 procedure TFormFirmware.StringGrid2DrawCell(Sender: TObject;
@@ -225,16 +260,18 @@ begin
 end;
 
 procedure TFormFirmware.ToolButton1Click(Sender: TObject);
-var t :TDateTime;
+var
+    t: TDateTime;
 begin
     t := DateTimePicker1.DateTime;
 
-    //Year, Month, Day, Hour, Minute, Second
+    // Year, Month, Day, Hour, Minute, Second
 
-    TProductFirmware.Write( YearOf(t), MonthOf(t), DayOf(t),
-    HourOf(t), MinuteOf(t), SecondOf(t), EditSens.Text, EditSerial.Text,
-         ComboBoxProductType.Text, ComboBoxGas.Text, ComboBoxUnits.Text,
-         EditScale.Text, GetTemperatureValues);
+    TProductFirmware.RunWriteFirmware(ComboBoxPlace.ItemIndex, YearOf(t),
+      MonthOf(t), DayOf(t), HourOf(t), MinuteOf(t), SecondOf(t), EditSens.text,
+      EditSerial.text, ComboBoxProductType.text, ComboBoxGas.text,
+      ComboBoxUnits.text, EditScaleBegin.text, EditScaleEnd.text,
+      GetTemperatureValues);
 end;
 
 procedure TFormFirmware.ToolButton2Click(Sender: TObject);
@@ -277,6 +314,121 @@ begin
         SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
+procedure TFormFirmware.ToolButton4Click(Sender: TObject);
+begin
+    TProductFirmware.RunReadFirmware(ComboBoxPlace.ItemIndex);
+
+end;
+
+procedure TFormFirmware.ToolButton6Click(Sender: TObject);
+var
+    n, i: Integer;
+    temp, Ifon20, Isens20, KSens, Ifon, Isens, Ksens_percent, scale_end,
+      scale_begin, scale: Double;
+    f: Boolean;
+begin
+    if not try_str_to_float(EditScaleEnd.text, scale_end) then
+        raise Exception.Create('Не задан конец шкалы');
+
+    if not try_str_to_float(EditScaleBegin.text, scale_begin) then
+        raise Exception.Create('Не задано начало шкалы');
+
+    scale := scale_end - scale_begin;
+
+    if scale = 0 then
+        raise Exception.Create('Шкала не должна быть нулевой');
+
+    with StringGrid2 do
+    begin
+        f := false;
+        for i := 1 to RowCount - 1 do
+        begin
+            if (try_str_to_float(Cells[0, i], temp)) and (temp = 20) and
+              (try_str_to_float(Cells[1, i], Ifon20)) then
+            begin
+                f := true;
+                break;
+            end;
+        end;
+        if not f then
+            raise Exception.Create('Не заданы токи при 20"С');
+
+        if not try_str_to_float(EditSens.text, KSens) then
+            raise Exception.Create('Не задан коэффициент чувствительности');
+
+        Isens20 := Ifon20 + scale * KSens;
+
+        if Isens20 = Ifon20 then
+            raise Exception.Create
+              ('Фоновый ток при 20"С не должен быть равен току чувствительности при 20"С');
+
+        for i := 1 to RowCount - 1 do
+        begin
+            if try_str_to_float(Cells[1, i], Ifon) and
+              try_str_to_float(Cells[2, i], Ksens_percent) then
+            begin
+                Cells[3, i] := FloatToStr(Ksens_percent * (Isens20 - Ifon20) /
+                  100.0 + Ifon);
+
+            end;
+        end;
+    end;
+
+end;
+
+procedure TFormFirmware.ToolButton8Click(Sender: TObject);
+var
+    n, i: Integer;
+    temp, Ifon20, Isens20, Ifon, Isens, scale_end, scale_begin, scale: Double;
+    f: Boolean;
+begin
+    if not try_str_to_float(EditScaleEnd.text, scale_end) then
+        raise Exception.Create('Не задан конец шкалы');
+
+    if not try_str_to_float(EditScaleBegin.text, scale_begin) then
+        raise Exception.Create('Не задано начало шкалы');
+
+    scale := scale_end - scale_begin;
+
+    if scale = 0 then
+        raise Exception.Create('Шкала не должна быть нулевой');
+
+    with StringGrid2 do
+    begin
+        f := false;
+        for i := 1 to RowCount - 1 do
+        begin
+            if (try_str_to_float(Cells[0, i], temp)) and (temp = 20) and
+              (try_str_to_float(Cells[1, i], Ifon20)) and
+              (try_str_to_float(Cells[3, i], Isens20)) then
+            begin
+                f := true;
+                break;
+            end;
+        end;
+        if not f then
+            raise Exception.Create('Не заданы токи при 20"С');
+
+        if Isens20 = Ifon20 then
+            raise Exception.Create
+              ('Фоновый ток при 20"С не должен быть равен току чувствительности при 20"С');
+
+        EditSens.text := FloatToStr((Isens20 - Ifon20) / scale);
+
+        for i := 1 to RowCount - 1 do
+        begin
+            if try_str_to_float(Cells[1, i], Ifon) and
+              try_str_to_float(Cells[2, i], Isens) then
+            begin
+                Cells[2, i] :=
+                  FloatToStr(100 * abs((Isens - Ifon) / (Isens20 - Ifon20)));
+
+            end;
+        end;
+    end;
+
+end;
+
 procedure TFormFirmware.Chart1AfterDraw(Sender: TObject);
 var
     i, xPos, yPos, a, b: Integer;
@@ -305,7 +457,7 @@ begin
 
         for i := ser.FirstValueIndex to ser.LastValueIndex do
         begin
-            if not is_main_temperature(ser.XValues[i]) then
+            if (i = -1) OR (not is_main_temperature(ser.XValues[i])) then
                 continue;
 
             xPos := ser.CalcXPos(i);
@@ -397,21 +549,66 @@ begin
     ax.SetMinMax(min_v - d_ax, max_v + d_ax);
 end;
 
-procedure TFormFirmware.SetProduct(f: TFirmwareInfo);
+procedure TFormFirmware.ClearFirmwareInfo;
+begin
+    DateTimePicker1.DateTime := now;
+    EditSerial.text := '';
+    EditSens.text := '';
+    EditScaleBegin.text := '';
+    EditScaleEnd.text := '';
+    SetComboBoxText(ComboBoxProductType, '');
+    SetComboBoxText(ComboBoxUnits, '');
+    SetComboBoxText(ComboBoxGas, '');
+    Series1.Clear;
+    Series2.Clear;
+    StringGrid_Clear(StringGrid2);
+end;
+
+procedure TFormFirmware.SetFirmwareInfo(f: TFirmwareInfo);
 var
     i: Integer;
     has_null: Boolean;
-
+    temp: Double;
+    s: string;
 begin
+    ComboBoxProductType.Items.Clear;
+    ComboBoxUnits.Items.Clear;
+    ComboBoxGas.Items.Clear;
+    for s in TProductTypes.Names do
+        ComboBoxProductType.Items.Add(s);
+    for s in TProductTypes.Gases do
+        ComboBoxGas.Items.Add(s);
+    for s in TProductTypes.Units do
+        ComboBoxUnits.Items.Add(s);
+
+    ComboBoxPlace.ItemIndex := f.FPlace;
     DateTimePicker1.DateTime := f.FTime;
     EditSerial.text := f.FSerial;
     EditSens.text := f.FSensitivity;
-    EditScale.text := f.FScale;
+    EditScaleBegin.text := f.FScaleBeg;
+    EditScaleEnd.text := f.FScaleEnd;
     SetComboBoxText(ComboBoxProductType, f.FProductType);
     SetComboBoxText(ComboBoxUnits, f.FUnits);
     SetComboBoxText(ComboBoxGas, f.FGas);
     SetTemperaturePointsChart(f.FTemp, f.FFon, f.FSens);
     SetTemperaturePointsGrid(f.FTemp, f.FFon, f.FSens);
+
+    with StringGrid2 do
+    begin
+        for i := 1 to RowCount - 1 do
+        begin
+            if not try_str_to_float(Cells[0, i], temp) then
+                continue;
+            if (temp = 20) then
+                Cells[3, i] := f.FISPlus20
+            else if (temp = -20) then
+                Cells[3, i] := f.FISMinus20
+            else if (temp = 50) then
+                Cells[3, i] := f.FISPlus50;
+
+        end;
+    end;
+    f.Free;
 end;
 
 function TFormFirmware.GetTemperatureValues: TArray<string>;
@@ -430,6 +627,20 @@ begin
         end;
     end;
 
+end;
+
+procedure TFormFirmware.RadioButton1Click(Sender: TObject);
+begin
+    RadioButton2.OnClick := nil;
+    applyProduct;
+    RadioButton2.OnClick := RadioButton2Click;
+end;
+
+procedure TFormFirmware.RadioButton2Click(Sender: TObject);
+begin
+    RadioButton1.OnClick := nil;
+    applyProduct;
+    RadioButton1.OnClick := RadioButton1Click;
 end;
 
 procedure TFormFirmware.SetTemperaturePointsChart(ATemp: TArray<Double>;
@@ -475,8 +686,52 @@ begin
                 Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
                 Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
                 Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
+                Cells[3, RowCount - 1] := '';
             end;
     end;
+end;
+
+procedure TFormFirmware.SetReadFirmwareInfo(f: TFirmwareInfo);
+var
+    n: Integer;
+begin
+    RadioButton1.OnClick := nil;
+    RadioButton2.OnClick := nil;
+    SetFirmwareInfo(f);
+    RadioButton1.Checked := true;
+    RadioButton1.OnClick := RadioButton1Click;
+    RadioButton2.OnClick := RadioButton2Click;
+end;
+
+procedure TFormFirmware.applyProduct;
+begin
+    if FProduct.FProductID <> 0 then
+    begin
+        if RadioButton1.Checked then
+        begin
+            if FProduct.FHasFirmware then
+                SetFirmwareInfo(TProductFirmware.StoredFirmwareInfo
+                  (FProduct.FProductID))
+            else
+            begin
+                ClearFirmwareInfo;
+            end;
+        end
+        else
+            SetFirmwareInfo(TProductFirmware.CalculateFirmwareInfo
+              (FProduct.FProductID));
+    end
+    else
+    begin
+        ClearFirmwareInfo;
+    end;
+    ComboBoxPlace.ItemIndex := FProduct.FPlace;
+end;
+
+procedure TFormFirmware.SetProduct(p: TProduct);
+begin
+    FProduct := p;
+    applyProduct;
 end;
 
 end.

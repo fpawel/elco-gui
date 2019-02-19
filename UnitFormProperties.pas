@@ -1,4 +1,4 @@
-unit PropertiesFormUnit;
+п»їunit UnitFormProperties;
 
 // Virtual Treeview sample form demonstrating following features:
 // - Property page like string tree with individual node editors.
@@ -19,7 +19,7 @@ const
 
 type
 
-    TPropertiesForm = class(TForm)
+    TFormProperties = class(TForm)
         VST3: TVirtualStringTree;
         TreeImages: TImageList;
         procedure FormCreate(Sender: TObject);
@@ -54,26 +54,25 @@ type
           TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
           CellPaintMode: TVTCellPaintMode; CellRect: TRect;
           var ContentRect: TRect);
-        procedure FormHide(Sender: TObject);
-    procedure FormDeactivate(Sender: TObject);
+        procedure FormDeactivate(Sender: TObject);
 
     private
         FConfig: TConfigSections;
         procedure WMStartEditing(var Message: TMessage);
           message WM_STARTEDITING;
 
-        function GetProp(node:PVirtualNode):TConfigProperty;
-        function GetNodeData(node:PVirtualNode):PConfigData;
+        function GetProp(Node: PVirtualNode): TConfigProperty;
+        function GetNodeData(Node: PVirtualNode): PConfigData;
     public
 
         procedure SetConfig(AConfig: TConfigSections);
-        
-        property Prop[node:PVirtualNode] : TConfigProperty read  GetProp;
-        property TreeData[node:PVirtualNode] : PConfigData read  GetNodeData;
+
+        property Prop[Node: PVirtualNode]: TConfigProperty read GetProp;
+        property TreeData[Node: PVirtualNode]: PConfigData read GetNodeData;
     end;
 
 var
-    PropertiesForm: TPropertiesForm;
+    FormProperties: TFormProperties;
 
     // ----------------------------------------------------------------------------------------------------------------------
 
@@ -83,9 +82,9 @@ uses
     Math, stringgridutils, vclutils, pipe;
 
 {$R *.DFM}
-// ----------------- TPropertiesForm ------------------------------------------------------------------------------------
+// ----------------- TFormProperties ------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.FormCreate(Sender: TObject);
+procedure TFormProperties.FormCreate(Sender: TObject);
 begin
     // We assign these handlers manually to keep the demo source code compatible
     // with older Delphi versions after using UnicodeString instead of WideString.
@@ -102,7 +101,7 @@ begin
 
 end;
 
-procedure TPropertiesForm.SetConfig(AConfig: TConfigSections);
+procedure TFormProperties.SetConfig(AConfig: TConfigSections);
 begin
     VST3.Clear;
     VST3.RootNodeCount := 0;
@@ -112,7 +111,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3InitChildren(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3InitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 begin
     if Node.Parent = Sender.RootNode then
@@ -123,7 +122,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3InitNode(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3InitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 
 var
@@ -131,7 +130,7 @@ var
     p: PConfigData;
 
 begin
-    p := Sender.GetNodeData(node);
+    p := Sender.GetNodeData(Node);
     if ParentNode = nil then
     begin
         InitialStates := InitialStates + [ivsHasChildren, ivsExpanded];
@@ -148,7 +147,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3GetText(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3GetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 
@@ -171,11 +170,11 @@ begin
             end;
         1:
             begin
-                CellText := Prop[node].FValue;
+                CellText := Prop[Node].FValue;
             end;
         2:
             begin
-                CellText := Prop[node].FError;
+                CellText := Prop[Node].FError;
             end;
     end;
 
@@ -183,22 +182,24 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3GetHint(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3GetHint(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex;
   var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: string);
 
 begin
     if Node.Parent = Sender.RootNode then
         exit;
-    with Prop[node] do
+    with Prop[Node] do
     begin
         HintText := FHint;
 
         if FMin.FValid then
-            HintText := HintText + #13 + 'минимум: ' + floattostr(FMin.FFloat64);
+            HintText := HintText + #13 + 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' +
+              floattostr(FMin.FFloat64);
 
         if FMax.FValid then
-            HintText := HintText + #13 + 'максимум: ' + floattostr(FMax.FFloat64);
+            HintText := HintText + #13 + 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' +
+              floattostr(FMax.FFloat64);
 
         if FError <> '' then
             HintText := HintText + #13#13 + '"' + FValue + '": ' + FError;
@@ -208,7 +209,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3GetImageIndex(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3GetImageIndex(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
   var Ghosted: Boolean; var Index: TImageIndex);
 
@@ -230,7 +231,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3Editing(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3Editing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
     with Sender do
@@ -241,13 +242,13 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3BeforeCellPaint(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3BeforeCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 begin
     with TargetCanvas do
     begin
-        if TReeData[node].HasError then
+        if TreeData[Node].HasError then
         begin
             Brush.Color := cl3dlight;
         end;
@@ -257,7 +258,7 @@ begin
     end;
 end;
 
-procedure TPropertiesForm.VST3Change(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3Change(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 
 begin
@@ -279,7 +280,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3CreateEditor(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3CreateEditor(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
 
 // This is the callback of the tree control to ask for an application defined edit link. Providing one here allows
@@ -293,18 +294,18 @@ begin
     EditLink := x;
 end;
 
-procedure TPropertiesForm.VST3DrawText(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3DrawText(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   const Text: string; const CellRect: TRect; var DefaultDraw: Boolean);
 var
     R: TRect;
 begin
-    if (Column = 1) and (Prop[node].ValueType = VtBool) then
+    if (Column = 1) and (Prop[Node].ValueType = VtBool) then
     begin
         R := CellRect;
         R.Left := R.Left - 9;
         R.Right := R.Right - 9;
-        DrawCheckbox(Sender, TargetCanvas, R, Prop[node].Bool, '');
+        DrawCheckbox(Sender, TargetCanvas, R, Prop[Node].Bool, '');
         DefaultDraw := false;
     end;
 
@@ -312,7 +313,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3PaintText(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3PaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 
@@ -329,7 +330,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3IncrementalSearch(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3IncrementalSearch(Sender: TBaseVirtualTree;
   Node: PVirtualNode; const SearchText: string; var Result: Integer);
 
 var
@@ -355,19 +356,13 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.FormDeactivate(Sender: TObject);
+procedure TFormProperties.FormDeactivate(Sender: TObject);
 begin
     Hide;
 end;
-
-procedure TPropertiesForm.FormHide(Sender: TObject);
-begin
-
-end;
-
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.WMStartEditing(var Message: TMessage);
+procedure TFormProperties.WMStartEditing(var Message: TMessage);
 
 // This message was posted by ourselves from the node change handler above to decouple that change event and our
 // intention to start editing a node. This is necessary to avoid interferences between nodes editors potentially created
@@ -384,7 +379,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
-procedure TPropertiesForm.VST3FreeNode(Sender: TBaseVirtualTree;
+procedure TFormProperties.VST3FreeNode(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 var
     Data: PConfigData;
@@ -395,16 +390,16 @@ begin
     Finalize(Data.Sect);
 end;
 
-function TPropertiesForm.GetProp(node:PVirtualNode):TConfigProperty;
+function TFormProperties.GetProp(Node: PVirtualNode): TConfigProperty;
 begin
-    if not Assigned(TreeData[node].Prop) then
+    if not Assigned(TreeData[Node].Prop) then
         raise Exception.Create('not a prop');
-    Result := TreeData[node].Prop;
+    Result := TreeData[Node].Prop;
 end;
 
-function TPropertiesForm.GetNodeData(node:PVirtualNode):PConfigData;
+function TFormProperties.GetNodeData(Node: PVirtualNode): PConfigData;
 begin
-    exit( VST3.GetNodeData(Node));
+    exit(VST3.GetNodeData(Node));
 end;
 
 end.

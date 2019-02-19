@@ -1,4 +1,4 @@
-unit UnitElcoMainForm;
+п»їunit UnitElcoMainForm;
 
 interface
 
@@ -58,6 +58,14 @@ type
         PanelWaitPipe: TPanel;
         Image2: TImage;
         TimerShowPanelWaitPipe: TTimer;
+        TabSheetComportConsole: TTabSheet;
+    TabSheetJournal: TTabSheet;
+    TimerPerforming: TTimer;
+    ProgressBar2: TProgressBar;
+    LabelStatusBottom: TLabel;
+    PanelPlaceholderMain: TPanel;
+    ToolBar4: TToolBar;
+    ToolButton5: TToolButton;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -81,6 +89,9 @@ type
         procedure N1Click(Sender: TObject);
         procedure N2Click(Sender: TObject);
         procedure TimerShowPanelWaitPipeTimer(Sender: TObject);
+    procedure TimerPerformingTimer(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -109,63 +120,36 @@ var
 
     ElcoMainForm: TElcoMainForm;
 
+function FormatFloatArray(v: TArray<double>): string;
+
 implementation
 
 {$R *.dfm}
 
 uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    services, UnitFormParty, PropertiesFormUnit,
+    services, UnitFormParty, UnitFormProperties,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
-    dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils;
-
-procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
-var
-    wp: WINDOWPLACEMENT;
-    fs: TFileStream;
-    i: Integer;
-begin
-
-    notify_services.Cancel;
-
-    fs := TFileStream.Create(TPath.Combine(ExtractFilePath(paramstr(0)),
-      'window.position'), fmOpenWrite or fmCreate);
-    if not GetWindowPlacement(Handle, wp) then
-        raise Exception.Create('GetWindowPlacement: false');
-    fs.Write(wp, SizeOf(wp));
-    fs.Free;
-
-    with FormSelectStendPlacesDialog.CheckListBox1 do
-        for i := 0 to 11 do
-            FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
-              Checked[i]);
-
-    with FormSelectTemperaturesDialog.CheckListBox1 do
-        for i := 0 to 2 do
-            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
-              Checked[i]);
-
-    if paramstr(1) = '-must-close-server' then
-        SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
-end;
-
-function FormatFloatArray(v: TArray<double>): string;
-var
-    s: TArray<string>;
-    i: Integer;
-begin
-    SetLength(s, length(v));
-    for i := 0 to length(v) - 1 do
-        s[i] := Format('%d:%g', [i, v[i]]);
-    result := string.Join(' ', s);
-end;
+    dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
+    UnitFormComportCon, UnitFormConsole, uitypes, types, UnitFormFirmware,
+  UnitFormJournal;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 begin
+    if GetParentProcessName = 'cmd.exe' then
+        Writeln('we are cmd.exe');
+
+    PanelMessageBox.Width := 700;
+    PanelMessageBox.Height := 350;
+    PanelWaitPipe.Width := 500;
+    PanelWaitPipe.Height := 115;
+
     FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
     Application.OnException := AppException;
     LabelStatusTop.Caption := '';
+    TabSheetComportConsole.TabVisible := false;
+    LabelStatusBottom.Caption := '';
 
     SetOnHardwareError(
         procedure(s: string)
@@ -177,10 +161,11 @@ begin
             else
                 RichEditlMessageBoxText.Text := '';
 
-            PanelMessageBoxTitle.Caption := 'Ошибка оборудования';
+            PanelMessageBoxTitle.Caption := 'РћС€РёР±РєР° РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ';
             RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
             RichEditlMessageBoxText.Font.Color := clRed;
-            PanelMessageBox.Visible := true;
+            PanelMessageBox.Show;
+            PanelMessageBox.BringToFront;
             FormResize(self);
         end);
 
@@ -189,7 +174,7 @@ begin
 
         begin
             FormLastParty.SetCurrents(v.FBlock, v.FValues);
-            PanelStatusBottom.Caption := Format('Блок %d: %s',
+            LabelStatusBottom.Caption := Format('Р‘Р»РѕРє %d: %s',
               [v.FBlock, FormatFloatArray(v.FValues)]);
             v.Free;
         end);
@@ -200,6 +185,8 @@ begin
             PanelMessageBox.Hide;
             ToolBarStop.Show;
             LabelStatusTop.Caption := s;
+            TimerPerforming.Enabled := true;
+            LabelStatusBottom.Caption := '';
         end);
 
     SetOnHardwareStopped(
@@ -207,6 +194,10 @@ begin
         begin
             ToolBarStop.Visible := false;
             LabelStatusTop.Caption := s;
+            TimerPerforming.Enabled := false;
+            LabelStatusTop.font.Color := clBlack;
+            ProgressBar2.Visible := false;
+            LabelStatusBottom.Caption := '';
 
         end);
 
@@ -222,8 +213,8 @@ begin
             s: string;
         begin
             s := content + #10#13#10#13;
-            s := s + 'Нажмите OK чтобы игнорировать ошибку и продолжить технологический процесс.'#10#13#10#13;
-            s := s + 'Нажмите ОТМЕНА чтобы прервать технологический процесс.';
+            s := s + 'РќР°Р¶РјРёС‚Рµ OK С‡С‚РѕР±С‹ РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ РѕС€РёР±РєСѓ Рё РїСЂРѕРґРѕР»Р¶РёС‚СЊ С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёР№ РїСЂРѕС†РµСЃСЃ.'#10#13#10#13;
+            s := s + 'РќР°Р¶РјРёС‚Рµ РћРўРњР•РќРђ С‡С‚РѕР±С‹ РїСЂРµСЂРІР°С‚СЊ С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёР№ РїСЂРѕС†РµСЃСЃ.';
             if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
                 TRunnerSvc.StopHardware;
         end);
@@ -240,23 +231,26 @@ begin
             FormLastParty.SetParty(party);
         end);
 
-end;
-
-procedure TElcoMainForm.FormResize(Sender: TObject);
-begin
-    if PanelMessageBox.Visible then
+    SetOnStartServerApplication(procedure(n:string)
     begin
-        PanelMessageBox.Left := ClientWidth div 2 - PanelMessageBox.Width div 2;
-        PanelMessageBox.Top := ClientHeight div 2 -
-          PanelMessageBox.Height div 2;
-    end;
+        FormLastParty.reload_data;
+        FormParties.CreateYearsNodes;
+        FormParty.party := FormLastParty.Party;
+        PanelMessageBox.Hide;
+    end);
 
-    if PanelWaitPipe.Visible then
-    begin
-        PanelWaitPipe.Left := ClientWidth div 2 - PanelWaitPipe.Width div 2;
-        PanelWaitPipe.Top := ClientHeight div 2 - PanelWaitPipe.Height div 2;
-    end;
-
+    SetOnComportEntry(
+        procedure(entry: TComportEntry)
+        begin
+            if not TabSheetComportConsole.TabVisible then
+            begin
+                TabSheetComportConsole.TabVisible := true;
+                PageControlMain.Repaint;
+            end;
+            FormComportCon.OnComportEntry(entry);
+        end);
+    SetOnNewJournalEntry(FormJournal.OnNewEntry);
+    SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -316,29 +310,109 @@ begin
         Show;
     end;
 
+    with FormComportCon do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetComportConsole;
+        BorderStyle := bsNone;
+        Align := alClient;
+        Show;
+    end;
+
+    with FormJournal do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetJournal;
+        BorderStyle := bsNone;
+        Align := alClient;
+        Show;
+    end;
+
+    with FormFirmware do
+    begin
+        Font.Assign(self.Font);
+        Parent := Self;
+        BorderStyle := bsNone;
+        Align := alClient;
+    end;
 end;
+
+procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+    wp: WINDOWPLACEMENT;
+    fs: TFileStream;
+    i: Integer;
+begin
+
+    notify_services.Cancel;
+
+    fs := TFileStream.Create(TPath.Combine(ExtractFilePath(paramstr(0)),
+      'window.position'), fmOpenWrite or fmCreate);
+    if not GetWindowPlacement(Handle, wp) then
+        raise Exception.Create('GetWindowPlacement: false');
+    fs.Write(wp, SizeOf(wp));
+    fs.Free;
+
+    with FormSelectStendPlacesDialog.CheckListBox1 do
+        for i := 0 to 11 do
+            FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
+              Checked[i]);
+
+    with FormSelectTemperaturesDialog.CheckListBox1 do
+        for i := 0 to 2 do
+            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
+              Checked[i]);
+
+    // SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+end;
+
+procedure TElcoMainForm.FormResize(Sender: TObject);
+begin
+    if PanelMessageBox.Visible then
+    begin
+        PanelMessageBox.Left := ClientWidth div 2 - PanelMessageBox.Width div 2;
+        PanelMessageBox.Top := ClientHeight div 2 -
+          PanelMessageBox.Height div 2;
+    end;
+
+    if PanelWaitPipe.Visible then
+    begin
+        PanelWaitPipe.Left := ClientWidth div 2 - PanelWaitPipe.Width div 2;
+        PanelWaitPipe.Top := ClientHeight div 2 - PanelWaitPipe.Height div 2;
+    end;
+
+end;
+
+
 
 procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
 var
     PageControl: TPageControl;
 begin
+    FormFirmware.Hide;
     PageControl := Sender as TPageControl;
     PageControl.Repaint;
+    PanelMessageBox.Hide;
     if PageControl.ActivePage = TabSheetParties then
     begin
         if Assigned(FormParty.party) then
-            try
-                FormParty.party := TPartiesCatalogue.party
-                  (FormParty.party.FPartyID);
-            except
-                FormParties.CreateYearsNodes;
-                FormParty.party := TLastParty.party;
-            end;
+            FormParty.party := TPartiesCatalogue.party(FormParty.party.FPartyID)
+        else
+            FormParty.party := TLastParty.party;
 
+        if not FormParties.HasYears then
+        begin
+            FormParties.CreateYearsNodes;
+            FormParty.party := TLastParty.party;
+            exit;
+        end;
     end
     else if PageControl.ActivePage = TabSheetParty then
     begin
         FormLastParty.reload_data;
+    end else if PageControl.ActivePage = TabSheetJournal then
+    begin
+        FormJournal.EnsureNodes;
     end;
 
 end;
@@ -373,6 +447,23 @@ begin
 
 end;
 
+procedure TElcoMainForm.TimerPerformingTimer(Sender: TObject);
+var v  : integer;
+begin
+    with LabelStatusTop.Font do
+    if Color = clRed then
+        Color := clblue else Color := clRed;
+    if not ProgressBar2.Visible then
+    begin
+        ProgressBar2.Show;
+        ProgressBar2.Top := 100500;
+    end;
+    v := ProgressBar2.Position + TimerPerforming.Interval;
+    if v > ProgressBar2.Max then
+        v := 0;
+    ProgressBar2.Position := v;
+end;
+
 procedure TElcoMainForm.TimerShowPanelWaitPipeTimer(Sender: TObject);
 begin
     PanelWaitPipe.Visible := true;
@@ -384,7 +475,7 @@ end;
 procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
 begin
     FormEditText.Show;
-    ShowWindow(FormEditText.Handle, SW_RESTORE);
+    //ShowWindow(FormEditText.Handle, SW_SHOW);
 
 end;
 
@@ -403,12 +494,17 @@ begin
     with ToolBar3 do
         with ClientToScreen(Point(0, Height)) do
         begin
-            PropertiesForm.SetConfig(TSettingsSvc.Sections);
-            PropertiesForm.Left := X - 5 - PropertiesForm.Width;
-            PropertiesForm.Top := Y + 5;
-            PropertiesForm.Show;
-            ShowWindow(PropertiesForm.Handle, SW_RESTORE);
+            FormProperties.SetConfig(TSettingsSvc.Sections);
+            FormProperties.Left := X - 5 - FormProperties.Width;
+            FormProperties.Top := Y + 5;
+            FormProperties.Show;
+            //ShowWindow(FormProperties.Handle, SW_SHOW);
         end;
+end;
+
+procedure TElcoMainForm.ToolButton5Click(Sender: TObject);
+begin
+    FormFirmware.Hide;
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
@@ -428,7 +524,26 @@ var
     stackList: TJclStackInfoList; // JclDebug.pas
     sl: TStringList;
     stacktrace: string;
+
+    FErrorLog: TextFile;
+    ErrorLogFileName: string;
 begin
+
+    if E is pipe.EPipeNotFound then
+    begin
+        //PanelMessageBoxTitle.Caption := E.ClassName;
+        //RichEditlMessageBoxText.Text := E.Message;
+        //RichEditlMessageBoxText.Font.Color := clRed;
+        //PanelMessageBox.Visible := true;
+        //FormResize(self);
+
+        PanelWaitPipe.Caption := 'РџРѕРґРєР»СЋС‡РµРЅРёРµ...';
+        PanelWaitPipe.Visible := true;
+        PanelWaitPipe.BringToFront;
+        FormResize(self);
+
+        exit;
+    end;
 
     stackList := JclCreateStackList(false, 0, Caller(0, false));
     sl := TStringList.Create;
@@ -436,10 +551,32 @@ begin
     stacktrace := sl.Text;
     sl.Free;
     stackList.Free;
-
     OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
-    Application.ShowException(E);
-    // Application.MessageBox(PWideChar(E.Message + #10#13#10#13 + stacktrace), 'Ошибка', MB_ICONERROR or MB_OK  );
+
+    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elcoui.errors.log';
+    AssignFile(FErrorLog, ErrorLogFileName, CP_UTF8);
+    if FileExists(ErrorLogFileName) then
+        Append(FErrorLog)
+    else
+        Rewrite(FErrorLog);
+
+    Writeln(FErrorLog, FormatDateTime('hh:nn:ss', now), ' ', E.ClassName, ' ',
+      stringreplace(Trim(E.Message), #13, ' ', [rfReplaceAll, rfIgnoreCase]));
+
+    Writeln(FErrorLog, StringOfChar('-', 120));
+
+    Writeln(FErrorLog, stringreplace(Trim(stacktrace), #13, ' ',
+      [rfReplaceAll, rfIgnoreCase]));
+
+    Writeln(FErrorLog, StringOfChar('-', 120));
+
+    CloseFile(FErrorLog);
+
+    if MessageDlg(E.Message, mtError, [mbAbort, mbIgnore], 0) = mrAbort then
+    begin
+        Application.OnException := nil;
+        Application.Terminate;
+    end;
 end;
 
 procedure TElcoMainForm.ShowBalloonTip(c: TWinControl; Icon: TIconKind;
@@ -486,14 +623,19 @@ end;
 
 procedure TElcoMainForm.N1Click(Sender: TObject);
 begin
-    TLastParty.ExportToFile;
+    TLastParty.Export;
 end;
 
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
-    FormLastParty.SetParty(TPartiesCatalogue.ImportFromFile);
+    FormLastParty.SetParty(TPartiesCatalogue.Import);
     FormParties.CreateYearsNodes;
 
+end;
+
+procedure TElcoMainForm.N3Click(Sender: TObject);
+begin
+    TRunnerSvc.RunWritePartyFirmware;
 end;
 
 procedure TElcoMainForm.N4Click(Sender: TObject);
@@ -510,8 +652,8 @@ end;
 
 procedure TElcoMainForm.N7Click(Sender: TObject);
 begin
-    if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
-      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
+    if MessageBox(Handle, 'РџРѕРґС‚РІРµСЂРґРёС‚Рµ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚СЊ СЃРѕР·РґР°РЅРёСЏ РЅРѕРІРѕР№ РїР°СЂС‚РёРё.',
+      'Р—Р°РїСЂРѕСЃ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ', mb_IconQuestion or mb_YesNo) = mrYes then
         FormLastParty.SetParty(TPartiesCatalogue.NewParty);
 end;
 
@@ -541,12 +683,27 @@ begin
     PageControlMain.Enabled := not pipe_busy;
     // PanelWaitPipe.Visible :=  pipe_busy;
     if pipe_busy then
-        TimerShowPanelWaitPipe.Enabled := true
+    begin
+        PanelWaitPipe.Caption := 'Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ Р·Р°РїСЂРѕСЃ...';
+        TimerShowPanelWaitPipe.Enabled := true;
+
+    end
     else
     begin
         PanelWaitPipe.Visible := false;
         TimerShowPanelWaitPipe.Enabled := false;
     end;
+end;
+
+function FormatFloatArray(v: TArray<double>): string;
+var
+    s: TArray<string>;
+    i: Integer;
+begin
+    SetLength(s, length(v));
+    for i := 0 to length(v) - 1 do
+        s[i] := Format('%d:%g', [i, v[i]]);
+    result := string.Join(' ', s);
 end;
 
 end.
