@@ -11,6 +11,8 @@ uses
     Vcl.Imaging.pngimage, inifiles;
 
 type
+    EHostApplicationPanic = class(Exception);
+
     TElcoMainForm = class(TForm)
         Panel1: TPanel;
         Panel14: TPanel;
@@ -274,6 +276,11 @@ begin
         end);
     SetOnNewJournalEntry(FormJournal.OnNewEntry);
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
+    SetOnHostApplicationPanic(procedure (pnicStr:String)
+    begin
+        raise EHostApplicationPanic.Create(pnicStr);
+
+    end);
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -552,6 +559,33 @@ var
     ErrorLogFileName: string;
 begin
 
+    stackList := JclCreateStackList(false, 0, Caller(0, false));
+    sl := TStringList.Create;
+    stackList.AddToStrings(sl, true, false, true, false);
+    stacktrace := sl.Text;
+    sl.Free;
+    stackList.Free;
+    OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
+
+    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elcoui.errors.log';
+    AssignFile(FErrorLog, ErrorLogFileName, CP_UTF8);
+    if FileExists(ErrorLogFileName) then
+        Append(FErrorLog)
+    else
+        Rewrite(FErrorLog);
+
+    Writeln(FErrorLog, FormatDateTime('YYYY-MM-dd hh:nn:ss', now), ' ', E.ClassName, ' ',
+      stringreplace(Trim(E.Message), #13, ' ', [rfReplaceAll, rfIgnoreCase]));
+
+    Writeln(FErrorLog, StringOfChar('-', 120));
+
+    Writeln(FErrorLog, stringreplace(Trim(stacktrace), #13, ' ',
+      [rfReplaceAll, rfIgnoreCase]));
+
+    Writeln(FErrorLog, StringOfChar('-', 120));
+
+    CloseFile(FErrorLog);
+
     if E is pipe.EPipeNotFound then
     begin
         //PanelMessageBoxTitle.Caption := E.ClassName;
@@ -568,37 +602,19 @@ begin
         exit;
     end;
 
-    stackList := JclCreateStackList(false, 0, Caller(0, false));
-    sl := TStringList.Create;
-    stackList.AddToStrings(sl, true, false, true, false);
-    stacktrace := sl.Text;
-    sl.Free;
-    stackList.Free;
-    OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
+    if e is EHostApplicationPanic then
+    begin
+        Application.ShowException(e);
+        Application.Terminate;
+        exit;
+    end;
 
-    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elcoui.errors.log';
-    AssignFile(FErrorLog, ErrorLogFileName, CP_UTF8);
-    if FileExists(ErrorLogFileName) then
-        Append(FErrorLog)
-    else
-        Rewrite(FErrorLog);
-
-    Writeln(FErrorLog, FormatDateTime('hh:nn:ss', now), ' ', E.ClassName, ' ',
-      stringreplace(Trim(E.Message), #13, ' ', [rfReplaceAll, rfIgnoreCase]));
-
-    Writeln(FErrorLog, StringOfChar('-', 120));
-
-    Writeln(FErrorLog, stringreplace(Trim(stacktrace), #13, ' ',
-      [rfReplaceAll, rfIgnoreCase]));
-
-    Writeln(FErrorLog, StringOfChar('-', 120));
-
-    CloseFile(FErrorLog);
 
     if MessageDlg(E.Message, mtError, [mbAbort, mbIgnore], 0) = mrAbort then
     begin
         Application.OnException := nil;
         Application.Terminate;
+        exit;
     end;
 end;
 

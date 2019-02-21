@@ -4,13 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
     TComportEntryHandler = reference to procedure (x:TComportEntry);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -28,6 +28,7 @@ procedure SetOnComportEntry( AHandler : TComportEntryHandler);
 procedure SetOnStartServerApplication( AHandler : TStringHandler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
+procedure SetOnHostApplicationPanic( AHandler : TStringHandler);
 
 procedure Cancel;
 
@@ -35,8 +36,8 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, 
-    CmdNewJournalEntry);
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, CmdNewJournalEntry, 
+    CmdHostApplicationPanic);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -52,6 +53,7 @@ var
     _OnStartServerApplication : TStringHandler;
     _OnReadFirmware : TFirmwareInfoHandler;
     _OnNewJournalEntry : TJournalEntryHandler;
+    _OnHostApplicationPanic : TStringHandler;
     _cancel:boolean;
 
 procedure Cancel;
@@ -150,6 +152,12 @@ begin
                 raise Exception.Create('_OnNewJournalEntry must be set');
             _OnNewJournalEntry(TJson.JsonToObject<TJournalEntry>(str));
         end;
+        CmdHostApplicationPanic:
+        begin
+            if not Assigned(_OnHostApplicationPanic) then
+                raise Exception.Create('_OnHostApplicationPanic must be set');
+            _OnHostApplicationPanic(str);
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -233,6 +241,12 @@ begin
     if Assigned(_OnNewJournalEntry) then
         raise Exception.Create('_OnNewJournalEntry already set');
     _OnNewJournalEntry := AHandler;
+end;
+procedure SetOnHostApplicationPanic( AHandler : TStringHandler);
+begin
+    if Assigned(_OnHostApplicationPanic) then
+        raise Exception.Create('_OnHostApplicationPanic already set');
+    _OnHostApplicationPanic := AHandler;
 end;
 
 

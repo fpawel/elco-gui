@@ -248,7 +248,7 @@ begin
             Last_Edited_Col := -1; // Indicate no cell is edited
             Last_Edited_Row := -1; // Indicate no cell is edited
             // Do whatever wanted after user has finish editing a cell
-            with TProductFirmware.TempPoints(GetTemperatureValues) do
+            with TPlaceFirmware.TempPoints(GetTemperatureValues) do
                 SetTemperaturePointsChart(FTemp, FFon, FSens);
 
         end
@@ -267,7 +267,7 @@ begin
 
     // Year, Month, Day, Hour, Minute, Second
 
-    TProductFirmware.RunWriteFirmware(ComboBoxPlace.ItemIndex, YearOf(t),
+    TPlaceFirmware.RunWritePlaceFirmware(ComboBoxPlace.ItemIndex, YearOf(t),
       MonthOf(t), DayOf(t), HourOf(t), MinuteOf(t), SecondOf(t), EditSens.text,
       EditSerial.text, ComboBoxProductType.text, ComboBoxGas.text,
       ComboBoxUnits.text, EditScaleBegin.text, EditScaleEnd.text,
@@ -291,7 +291,7 @@ begin
             Row := Row + 1;
         end;
     end;
-    with TProductFirmware.TempPoints(GetTemperatureValues) do
+    with TPlaceFirmware.TempPoints(GetTemperatureValues) do
         SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
@@ -310,13 +310,13 @@ begin
         RowCount := RowCount - 1;
     end;
 
-    with TProductFirmware.TempPoints(GetTemperatureValues) do
+    with TPlaceFirmware.TempPoints(GetTemperatureValues) do
         SetTemperaturePointsChart(FTemp, FFon, FSens);
 end;
 
 procedure TFormFirmware.ToolButton4Click(Sender: TObject);
 begin
-    TProductFirmware.RunReadFirmware(ComboBoxPlace.ItemIndex);
+    TPlaceFirmware.RunReadPlaceFirmware(ComboBoxPlace.ItemIndex);
 
 end;
 
@@ -710,7 +710,7 @@ begin
         if RadioButton1.Checked then
         begin
             if FProduct.FHasFirmware then
-                SetFirmwareInfo(TProductFirmware.StoredFirmwareInfo
+                SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo
                   (FProduct.FProductID))
             else
             begin
@@ -718,7 +718,7 @@ begin
             end;
         end
         else
-            SetFirmwareInfo(TProductFirmware.CalculateFirmwareInfo
+            SetFirmwareInfo(TPlaceFirmware.CalculateFirmwareInfo
               (FProduct.FProductID));
     end
     else

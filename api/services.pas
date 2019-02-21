@@ -38,11 +38,11 @@ type
         class function Names( ) : TArray<string>;
         class function Units( ) : TArray<string>;
          
-    end; TProductFirmware = class 
+    end; TPlaceFirmware = class 
     public
         class function CalculateFirmwareInfo( param1: Int64) : TFirmwareInfo;
-        class procedure RunReadFirmware( param1: Integer) ;
-        class procedure RunWriteFirmware( Place: Integer; Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; ScaleBegin: string; ScaleEnd: string; Values: TArray< string> ) ;
+        class procedure RunReadPlaceFirmware( param1: Integer) ;
+        class procedure RunWritePlaceFirmware( Place: Integer; Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; ScaleBegin: string; ScaleEnd: string; Values: TArray< string> ) ;
         class function StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;
         class function TempPoints( Values: TArray< string> ) : TTempPoints;
          
@@ -60,7 +60,6 @@ type
         class procedure RunReadCurrent( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean; param5: Boolean; param6: Boolean; param7: Boolean; param8: Boolean; param9: Boolean; param10: Boolean; param11: Boolean; param12: Boolean) ;
         class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
         class procedure RunWritePartyFirmware( ) ;
-        class procedure RunWriteProductFirmware( param1: Integer) ;
         class procedure SkipDelay( ) ;
         class procedure StopHardware( ) ;
          
@@ -557,7 +556,7 @@ begin
 end;
 
   
-class function TProductFirmware.CalculateFirmwareInfo( param1: Int64) : TFirmwareInfo;
+class function TPlaceFirmware.CalculateFirmwareInfo( param1: Int64) : TFirmwareInfo;
 var    
     req, resp: ISuperobject;
 begin
@@ -565,7 +564,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.CalculateFirmwareInfo', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PlaceFirmware.CalculateFirmwareInfo', req);
     
         
              
@@ -576,7 +575,7 @@ begin
 end;
 
  
-class procedure TProductFirmware.RunReadFirmware( param1: Integer) ;
+class procedure TPlaceFirmware.RunReadPlaceFirmware( param1: Integer) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -584,12 +583,12 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.RunReadFirmware', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PlaceFirmware.RunReadPlaceFirmware', req);
     
 end;
 
  
-class procedure TProductFirmware.RunWriteFirmware( Place: Integer; Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; ScaleBegin: string; ScaleEnd: string; Values: TArray< string> ) ;
+class procedure TPlaceFirmware.RunWritePlaceFirmware( Place: Integer; Year: Integer; Month: Integer; Day: Integer; Hour: Integer; Minute: Integer; Second: Integer; Sensitivity: string; Serial: string; ProductType: string; Gas: string; Units: string; ScaleBegin: string; ScaleEnd: string; Values: TArray< string> ) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -611,12 +610,12 @@ begin
     SuperObject_SetField(req, 'ScaleEnd', ScaleEnd);
     SuperObject_SetField(req, 'Values', Values);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.RunWriteFirmware', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PlaceFirmware.RunWritePlaceFirmware', req);
     
 end;
 
  
-class function TProductFirmware.StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;
+class function TPlaceFirmware.StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;
 var    
     req, resp: ISuperobject;
 begin
@@ -624,7 +623,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.StoredFirmwareInfo', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PlaceFirmware.StoredFirmwareInfo', req);
     
         
              
@@ -635,7 +634,7 @@ begin
 end;
 
  
-class function TProductFirmware.TempPoints( Values: TArray< string> ) : TTempPoints;
+class function TPlaceFirmware.TempPoints( Values: TArray< string> ) : TTempPoints;
 var    
     req, resp: ISuperobject;
 begin
@@ -643,7 +642,7 @@ begin
     req := SO;
     SuperObject_SetField(req, 'Values', Values);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductFirmware.TempPoints', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PlaceFirmware.TempPoints', req);
     
         
              
@@ -801,19 +800,6 @@ begin
     req := SO;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunWritePartyFirmware', req);
-    
-end;
-
- 
-class procedure TRunnerSvc.RunWriteProductFirmware( param1: Integer) ;
-var    
-    req, resp: ISuperobject;
-begin
-    ensure_pipe_connected;
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-        
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunWriteProductFirmware', req);
     
 end;
 

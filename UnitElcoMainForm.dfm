@@ -5422,7 +5422,6 @@ object ElcoMainForm: TElcoMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 1067
   end
   object Panel14: TPanel
     Left = 0
@@ -5432,7 +5431,6 @@ object ElcoMainForm: TElcoMainForm
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 616
   end
   object Panel3: TPanel
     Left = 0
@@ -5451,7 +5449,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 2
-    ExplicitWidth = 1067
     object LabelStatusTop: TLabel
       AlignWithMargins = True
       Left = 68
@@ -5501,7 +5498,6 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 1
-      ExplicitLeft = 969
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -5538,7 +5534,6 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 2
       Visible = False
-      ExplicitWidth = 798
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5575,7 +5570,6 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitLeft = 726
         ExplicitHeight = 18
       end
       object LabelWhat: TLabel
@@ -5610,7 +5604,6 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
-        ExplicitLeft = 762
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5641,7 +5634,6 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 620
         DesignSize = (
           425
           31)
@@ -5652,7 +5644,6 @@ object ElcoMainForm: TElcoMainForm
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
-          ExplicitWidth = 614
         end
       end
     end
@@ -5695,7 +5686,6 @@ object ElcoMainForm: TElcoMainForm
       Images = ImageList4
       TabOrder = 4
       Visible = False
-      ExplicitLeft = 1032
       object ToolButton5: TToolButton
         Left = 0
         Top = 0
@@ -5725,8 +5715,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
-    ExplicitTop = 652
-    ExplicitWidth = 1067
     object LabelStatusBottom: TLabel
       Left = 0
       Top = 0
@@ -5745,7 +5733,6 @@ object ElcoMainForm: TElcoMainForm
       Max = 1000
       TabOrder = 0
       Visible = False
-      ExplicitWidth = 945
     end
   end
   object PanelPlaceholderMain: TPanel
@@ -5758,8 +5745,6 @@ object ElcoMainForm: TElcoMainForm
     Constraints.MinWidth = 400
     ParentColor = True
     TabOrder = 4
-    ExplicitWidth = 1062
-    ExplicitHeight = 616
     object PageControlMain: TPageControl
       Left = 0
       Top = 0
@@ -5775,28 +5760,30 @@ object ElcoMainForm: TElcoMainForm
       TabWidth = 60
       OnChange = PageControlMainChange
       OnDrawTab = PageControlMainDrawTab
-      ExplicitWidth = 1062
-      ExplicitHeight = 616
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
-        ExplicitWidth = 954
-        ExplicitHeight = 608
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
         ExplicitWidth = 954
         ExplicitHeight = 608
       end
       object TabSheetJournal: TTabSheet
         Caption = #1046#1091#1088#1085#1072#1083
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
         ExplicitWidth = 954
         ExplicitHeight = 608
       end
       object TabSheetComportConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100' COM'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
         ExplicitWidth = 954
         ExplicitHeight = 608
       end
@@ -6232,7 +6219,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010500D401CC0319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010500D401D40319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6937,7 +6924,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010106002403580414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010106002403600414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000002800000001002000000000000032
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000003020122251A0E6C422F1C90422F1C902319
@@ -7369,7 +7356,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 152
     Top = 130
     Bitmap = {
-      494C010101002403D0035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101002403D8035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
