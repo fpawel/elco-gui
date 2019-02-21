@@ -16,7 +16,7 @@ object FormJournal: TFormJournal
   PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
-    Left = 497
+    Left = 689
     Top = 0
     Width = 5
     Height = 594
@@ -27,7 +27,7 @@ object FormJournal: TFormJournal
   object TreeView1: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 497
+    Width = 689
     Height = 594
     Align = alLeft
     DefaultNodeHeight = 25
@@ -54,20 +54,26 @@ object FormJournal: TFormJournal
         Position = 0
         Width = 487
         WideText = #1050#1072#1090#1072#1083#1086#1075
+      end
+      item
+        Position = 1
+        WideText = #8470
       end>
   end
   object Panel1: TPanel
-    Left = 502
+    Left = 694
     Top = 0
-    Width = 699
+    Width = 507
     Height = 594
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitLeft = 502
+    ExplicitWidth = 699
     object RichEdit1: TRichEdit
       Left = 0
       Top = 0
-      Width = 699
+      Width = 507
       Height = 594
       Align = alClient
       Font.Charset = RUSSIAN_CHARSET
@@ -79,6 +85,7 @@ object FormJournal: TFormJournal
       ScrollBars = ssVertical
       TabOrder = 0
       Zoom = 100
+      ExplicitWidth = 699
     end
   end
   object ImageList1: TImageList
@@ -89,7 +96,7 @@ object FormJournal: TFormJournal
     Left = 120
     Top = 40
     Bitmap = {
-      494C010107009C001C0210001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010107009C00200210001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000335291B80493928950101
       0016000000000000000000000000000000000000000000000000000000000000
@@ -370,7 +377,7 @@ object FormJournal: TFormJournal
     Left = 160
     Top = 144
     Bitmap = {
-      494C01010100F00114021A001A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010100F00118021A001A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680000001A0000000100200000000000402A
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

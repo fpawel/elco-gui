@@ -4,21 +4,22 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
     TComportEntryHandler = reference to procedure (x:TComportEntry);
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
 
 procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
-procedure SetOnHardwareError( AHandler : TStringHandler);
-procedure SetOnHardwareStarted( AHandler : TStringHandler);
-procedure SetOnHardwareStopped( AHandler : TStringHandler);
+procedure SetOnErrorOccurred( AHandler : TStringHandler);
+procedure SetOnWorkComplete( AHandler : TStringHandler);
+procedure SetOnWorkStarted( AHandler : TStringHandler);
+procedure SetOnWorkStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
@@ -34,14 +35,15 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdHardwareError, CmdHardwareStarted, CmdHardwareStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, 
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, 
     CmdNewJournalEntry);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
-    _OnHardwareError : TStringHandler;
-    _OnHardwareStarted : TStringHandler;
-    _OnHardwareStopped : TStringHandler;
+    _OnErrorOccurred : TStringHandler;
+    _OnWorkComplete : TStringHandler;
+    _OnWorkStarted : TStringHandler;
+    _OnWorkStopped : TStringHandler;
     _OnStatus : TStringHandler;
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
@@ -76,23 +78,29 @@ begin
                 raise Exception.Create('_OnReadCurrent must be set');
             _OnReadCurrent(TJson.JsonToObject<TReadCurrent>(str));
         end;
-        CmdHardwareError:
+        CmdErrorOccurred:
         begin
-            if not Assigned(_OnHardwareError) then
-                raise Exception.Create('_OnHardwareError must be set');
-            _OnHardwareError(str);
+            if not Assigned(_OnErrorOccurred) then
+                raise Exception.Create('_OnErrorOccurred must be set');
+            _OnErrorOccurred(str);
         end;
-        CmdHardwareStarted:
+        CmdWorkComplete:
         begin
-            if not Assigned(_OnHardwareStarted) then
-                raise Exception.Create('_OnHardwareStarted must be set');
-            _OnHardwareStarted(str);
+            if not Assigned(_OnWorkComplete) then
+                raise Exception.Create('_OnWorkComplete must be set');
+            _OnWorkComplete(str);
         end;
-        CmdHardwareStopped:
+        CmdWorkStarted:
         begin
-            if not Assigned(_OnHardwareStopped) then
-                raise Exception.Create('_OnHardwareStopped must be set');
-            _OnHardwareStopped(str);
+            if not Assigned(_OnWorkStarted) then
+                raise Exception.Create('_OnWorkStarted must be set');
+            _OnWorkStarted(str);
+        end;
+        CmdWorkStopped:
+        begin
+            if not Assigned(_OnWorkStopped) then
+                raise Exception.Create('_OnWorkStopped must be set');
+            _OnWorkStopped(str);
         end;
         CmdStatus:
         begin
@@ -154,23 +162,29 @@ begin
         raise Exception.Create('_OnReadCurrent already set');
     _OnReadCurrent := AHandler;
 end;
-procedure SetOnHardwareError( AHandler : TStringHandler);
+procedure SetOnErrorOccurred( AHandler : TStringHandler);
 begin
-    if Assigned(_OnHardwareError) then
-        raise Exception.Create('_OnHardwareError already set');
-    _OnHardwareError := AHandler;
+    if Assigned(_OnErrorOccurred) then
+        raise Exception.Create('_OnErrorOccurred already set');
+    _OnErrorOccurred := AHandler;
 end;
-procedure SetOnHardwareStarted( AHandler : TStringHandler);
+procedure SetOnWorkComplete( AHandler : TStringHandler);
 begin
-    if Assigned(_OnHardwareStarted) then
-        raise Exception.Create('_OnHardwareStarted already set');
-    _OnHardwareStarted := AHandler;
+    if Assigned(_OnWorkComplete) then
+        raise Exception.Create('_OnWorkComplete already set');
+    _OnWorkComplete := AHandler;
 end;
-procedure SetOnHardwareStopped( AHandler : TStringHandler);
+procedure SetOnWorkStarted( AHandler : TStringHandler);
 begin
-    if Assigned(_OnHardwareStopped) then
-        raise Exception.Create('_OnHardwareStopped already set');
-    _OnHardwareStopped := AHandler;
+    if Assigned(_OnWorkStarted) then
+        raise Exception.Create('_OnWorkStarted already set');
+    _OnWorkStarted := AHandler;
+end;
+procedure SetOnWorkStopped( AHandler : TStringHandler);
+begin
+    if Assigned(_OnWorkStopped) then
+        raise Exception.Create('_OnWorkStopped already set');
+    _OnWorkStopped := AHandler;
 end;
 procedure SetOnStatus( AHandler : TStringHandler);
 begin

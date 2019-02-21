@@ -239,6 +239,14 @@ begin
 
                 end;
             end;
+        1:
+            begin
+                case p.NodeKind of
+                    trdWork:
+                        CellText := IntToStr(p.Work.FWorkID);
+
+                end;
+            end;
     end;
 end;
 
@@ -356,6 +364,11 @@ begin
     RichEdit1.SelAttributes.Color := clGreen;
     RichEdit1.SelText := TimeToStr(rec.FCreatedAt) + '  ';
 
+    RichEdit1.SelAttributes.Color := clWebLightSalmon;
+    RichEdit1.SelText := rec.FFile + ' ' + inttostr(rec.FLine) + ' ';
+
+
+
     if include_work then
     begin
         RichEdit1.SelAttributes.Style := [fsBold];
@@ -378,7 +391,14 @@ begin
         RichEdit1.SelAttributes.Color := clGray
     else
         RichEdit1.SelAttributes.Color := clBlack;
+
     RichEdit1.SelText := rec.FMessage + #13;
+
+    if rec.FStack <> '' then
+    begin
+        RichEdit1.SelAttributes.Color := clGrayText;
+        RichEdit1.SelText := rec.FStack + #13;
+    end;
 end;
 
 function TFormJournal.IsErrorNode(Node: PVirtualNode): Boolean;
@@ -402,7 +422,6 @@ begin
     RichEdit1.Lines.Clear;
     for rec in FEntries do
         PrintEntry(rec, FIncludeWork);
-
     if ElcoMainForm.PageControlMain.ActivePage = ElcoMainForm.TabSheetJournal then
     begin
         RichEdit1.Show;

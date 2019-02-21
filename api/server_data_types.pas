@@ -171,10 +171,13 @@ type
     TJournalEntry = class 
     public 
         FEntryID : Int64;
-        FCreatedAt : TDateTime;
-        FMessage : string;
-        FLevel : string;
         FWorkID : Int64;
+        FCreatedAt : TDateTime;
+        FLevel : string;
+        FMessage : string;
+        FFile : string;
+        FLine : Int64;
+        FStack : string;
         FWorkName : string;
         
     end;

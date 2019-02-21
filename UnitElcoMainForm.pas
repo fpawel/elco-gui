@@ -31,11 +31,6 @@ type
         ToolButtonMainMenu: TToolButton;
         N1: TMenuItem;
         N2: TMenuItem;
-        PanelMessageBox: TPanel;
-        PanelMessageBoxTitle: TPanel;
-        ToolBar2: TToolBar;
-        ToolButton3: TToolButton;
-        Image1: TImage;
         ImageList90: TImageList;
         ToolBar3: TToolBar;
         ToolButton1: TToolButton;
@@ -54,9 +49,6 @@ type
         N5: TMenuItem;
         N6: TMenuItem;
         N8: TMenuItem;
-        RichEditlMessageBoxText: TRichEdit;
-        PanelWaitPipe: TPanel;
-        Image2: TImage;
         TimerShowPanelWaitPipe: TTimer;
         TabSheetComportConsole: TTabSheet;
     TabSheetJournal: TTabSheet;
@@ -66,6 +58,15 @@ type
     PanelPlaceholderMain: TPanel;
     ToolBar4: TToolBar;
     ToolButton5: TToolButton;
+    PanelMessageBox: TPanel;
+    ImageError: TImage;
+    PanelMessageBoxTitle: TPanel;
+    ToolBar2: TToolBar;
+    ToolButton3: TToolButton;
+    RichEditlMessageBoxText: TRichEdit;
+    PanelWaitPipe: TPanel;
+    Image2: TImage;
+    ImageInfo: TImage;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -151,9 +152,11 @@ begin
     TabSheetComportConsole.TabVisible := false;
     LabelStatusBottom.Caption := '';
 
-    SetOnHardwareError(
+    SetOnErrorOccurred(
         procedure(s: string)
         begin
+            ImageInfo.Hide;
+            ImageError.Show;
 
             if PanelMessageBox.Visible then
                 RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text +
@@ -169,6 +172,26 @@ begin
             FormResize(self);
         end);
 
+    SetOnWorkComplete(
+        procedure(s: string)
+        begin
+            ImageInfo.Show;
+            ImageError.hide;
+
+            if PanelMessageBox.Visible then
+                RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text +
+                  #10#13#10#13
+            else
+                RichEditlMessageBoxText.Text := '';
+
+            PanelMessageBoxTitle.Caption := 'Выполнение окончено';
+            RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
+            RichEditlMessageBoxText.Font.Color := clNavy;
+            PanelMessageBox.Show;
+            PanelMessageBox.BringToFront;
+            FormResize(self);
+        end);
+
     SetOnReadCurrent(
         procedure(v: TReadCurrent)
 
@@ -179,7 +202,7 @@ begin
             v.Free;
         end);
 
-    SetOnHardwareStarted(
+    SetOnWorkStarted(
         procedure(s: string)
         begin
             PanelMessageBox.Hide;
@@ -189,7 +212,7 @@ begin
             LabelStatusBottom.Caption := '';
         end);
 
-    SetOnHardwareStopped(
+    SetOnWorkStopped(
         procedure(s: string)
         begin
             ToolBarStop.Visible := false;
