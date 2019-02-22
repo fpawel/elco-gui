@@ -6,7 +6,7 @@ uses
   UnitElcoMainForm in 'UnitElcoMainForm.pas' {ElcoMainForm},
   dbutils in 'utils\dbutils.pas',
   stringutils in 'utils\stringutils.pas',
-  product_column in 'ViewModels\product_column.pas',
+  product_column in 'product_column.pas',
   UnitFormParties in 'UnitFormParties.pas' {FormParties},
   UnitFormLastParty in 'UnitFormLastParty.pas' {FormLastParty},
   UnitFormParty in 'UnitFormParty.pas' {FormParty},

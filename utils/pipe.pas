@@ -203,7 +203,7 @@ var
     t: TDateTime;
 begin
     if FBusy then
-        raise EPipeBusyError.Create('');
+        raise EPipeBusyError.Create('Канал передачи данных занят');
 
     FRemoteError := '';
     _WriteFile(request[0], length(request));

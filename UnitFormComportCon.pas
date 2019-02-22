@@ -65,7 +65,7 @@ begin
       length(RichEdit1.Text));
 
     RichEdit1.SelAttributes.Color := clGreen;
-    RichEdit1.SelText := TimeToStr(now) + ' : ';
+    RichEdit1.SelText := formatDatetime('hh:mm:ss.zzz',now) + ' : ';
 
     RichEdit1.SelAttributes.Style := [fsBold];
     RichEdit1.SelAttributes.Color := clGray;

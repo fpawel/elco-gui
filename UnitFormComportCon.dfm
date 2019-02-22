@@ -246,7 +246,6 @@ object FormComportCon: TFormComportCon
       ParentBackground = False
       ParentFont = False
       TabOrder = 2
-      ExplicitLeft = 129
     end
     object Panel5: TPanel
       Left = 976
@@ -284,7 +283,6 @@ object FormComportCon: TFormComportCon
       ParentBackground = False
       ParentFont = False
       TabOrder = 4
-      ExplicitLeft = 359
       object SpinEdit1: TSpinEdit
         Left = 1
         Top = 2
@@ -307,7 +305,7 @@ object FormComportCon: TFormComportCon
     Left = 632
     Top = 106
     Bitmap = {
-      494C0101010024033C0414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101002403400414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000805

@@ -190,11 +190,16 @@ begin
             Last_Edited_Col := -1; // Indicate no cell is edited
             Last_Edited_Row := -1; // Indicate no cell is edited
             // Do whatever wanted after user has finish editing a cell
-            case TProductColumn(FColumns[ACol]) of
-                pcSerial:
-                    UpdateSerial(ACol, ARow, Value);
-                pcNote:
-                    UpdateNote(ACol, ARow, Value);
+            StringGrid1.OnSetEditText := nil;
+            try
+                case TProductColumn(FColumns[ACol]) of
+                    pcSerial:
+                        UpdateSerial(ACol, ARow, Value);
+                    pcNote:
+                        UpdateNote(ACol, ARow, Value);
+                end;
+            finally
+                StringGrid1.OnSetEditText := StringGrid1SetEditText;
             end;
         end
         else
