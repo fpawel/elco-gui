@@ -11,11 +11,12 @@ uses
 type
 
     TFormSelectBlock = class(TForm)
-        RadioButton1: TRadioButton;
         Panel14: TPanel;
-        RadioButton2: TRadioButton;
-    procedure RadioButton1Click(Sender: TObject);
-    procedure RadioButton2Click(Sender: TObject);
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     private
         { Private declarations }
         procedure update_data(v:boolean);
@@ -34,19 +35,14 @@ implementation
 
 uses UnitFormLastParty, services;
 
-procedure TFormSelectBlock.RadioButton1Click(Sender: TObject);
+procedure TFormSelectBlock.Button1Click(Sender: TObject);
 begin
-    RadioButton2.OnClick := nil;
     update_data(true);
-    RadioButton2.OnClick := RadioButton2Click;
-
 end;
 
-procedure TFormSelectBlock.RadioButton2Click(Sender: TObject);
+procedure TFormSelectBlock.Button2Click(Sender: TObject);
 begin
-    RadioButton1.OnClick := nil;
     update_data(false);
-    RadioButton1.OnClick := RadioButton1Click;
 end;
 
 procedure TFormSelectBlock.update_data(v:boolean);

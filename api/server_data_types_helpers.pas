@@ -22,10 +22,10 @@ type
         property Str: string read GetStr;
     end;
 
+
 implementation
 
-uses sysutils;
-
+uses sysutils, dateutils;
 
 function TNullFloat64Helper.GetStr: string;
 begin

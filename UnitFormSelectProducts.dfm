@@ -14,7 +14,6 @@ object FormSelectProducts: TFormSelectProducts
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 18
   object Panel1: TPanel
@@ -26,7 +25,5 @@ object FormSelectProducts: TFormSelectProducts
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 350
-    ExplicitHeight = 424
   end
 end

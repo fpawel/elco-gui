@@ -1,9 +1,10 @@
 object FormSelectBlock: TFormSelectBlock
   Left = 0
   Top = 0
+  BorderStyle = bsNone
   Caption = 'FormSelectBlock'
-  ClientHeight = 21
-  ClientWidth = 387
+  ClientHeight = 31
+  ClientWidth = 248
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,37 +14,51 @@ object FormSelectBlock: TFormSelectBlock
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 18
-  object RadioButton1: TRadioButton
-    Left = 147
-    Top = 0
-    Width = 120
-    Height = 21
-    Align = alRight
-    Caption = #1042#1099#1073#1088#1072#1090#1100
-    TabOrder = 0
-    OnClick = RadioButton1Click
-    ExplicitLeft = 277
-  end
   object Panel14: TPanel
     Left = 0
     Top = 0
-    Width = 147
-    Height = 21
+    Width = 248
+    Height = 31
     Align = alClient
+    BevelKind = bkFlat
     BevelOuter = bvNone
-    Caption = #1055#1072#1088#1090#1080#1103
-    TabOrder = 1
-    ExplicitWidth = 231
-  end
-  object RadioButton2: TRadioButton
-    Left = 267
-    Top = 0
-    Width = 120
-    Height = 21
-    Align = alRight
-    Caption = #1057#1085#1103#1090#1100' '#1074#1099#1073#1086#1088
-    TabOrder = 2
-    OnClick = RadioButton2Click
-    ExplicitLeft = 377
+    TabOrder = 0
+    ExplicitWidth = 598
+    ExplicitHeight = 108
+    object Panel1: TPanel
+      Left = 0
+      Top = 0
+      Width = 89
+      Height = 27
+      Align = alLeft
+      BevelOuter = bvNone
+      Caption = #1055#1072#1088#1090#1080#1103
+      TabOrder = 0
+      ExplicitHeight = 22
+    end
+    object Button1: TButton
+      Left = 89
+      Top = 0
+      Width = 75
+      Height = 27
+      Align = alLeft
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      TabOrder = 1
+      OnClick = Button1Click
+      ExplicitLeft = 121
+      ExplicitHeight = 31
+    end
+    object Button2: TButton
+      Left = 164
+      Top = 0
+      Width = 75
+      Height = 27
+      Align = alLeft
+      Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+      TabOrder = 2
+      OnClick = Button2Click
+      ExplicitLeft = 196
+      ExplicitHeight = 31
+    end
   end
 end

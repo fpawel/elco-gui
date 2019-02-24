@@ -290,4 +290,10 @@ begin
         x.A[field].S[I] := v[I];
 end;
 
+procedure SuperObject_SetField(x: ISuperObject; field: string;
+  v: TObject);overload;
+begin
+    x[field] := SO(TJson.ObjectToJsonString(v));
+end;
+
 end.
