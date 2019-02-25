@@ -96,59 +96,8 @@ begin
 end;
 
 procedure TFormJournal.OnNewEntry(x: TJournalEntry);
-var
-    work_node, day_node: Boolean;
-    year, month, day: word;
-    Work: TJournalWork;
-    Node_year, node_month, node_day, node_work, Iter_node: PVirtualNode;
-label
-    repeat_search;
 begin
-
-    Node_year := nil;
-    node_month := nil;
-    node_day := nil;
-    node_work := nil;
-    DecodeDate(x.FCreatedAt, year, month, day);
-
-repeat_search:
-    Iter_node := TreeView1.GetFirst;
-    while Assigned(Iter_node) do
-    begin
-        if (TreeData[Iter_node].NodeKind = trdYear) and
-          (TreeData[Iter_node].Value = year) then
-            Node_year := Iter_node;
-
-        if (TreeData[Iter_node].NodeKind = trdMonth) and
-          (TreeData[Iter_node].Value = month) and
-          (TreeData[Iter_node.Parent].Value = year) then
-            node_month := Iter_node;
-
-        if (TreeData[Iter_node].NodeKind = trdDay) and
-          (TreeData[Iter_node].Value = day) and
-          (TreeData[Iter_node.Parent].Value = month) and
-          (TreeData[Iter_node.Parent.Parent].Value = year) then
-            node_day := Iter_node;
-
-        if (TreeData[Iter_node].NodeKind = trdWork) then
-        begin
-            Work := TreeData[Iter_node].Work;
-            if Work.FWorkID = x.FWorkID then
-                node_work := Iter_node;
-        end;
-
-        Iter_node := TreeView1.GetNext(Iter_node);
-    end;
-
-    if not(Assigned(Node_year) and Assigned(node_month) and Assigned(node_day)
-      and Assigned(node_work)) then
-    begin
-        CreateYearsNodes;
-        goto repeat_search;
-    end;
-    //TreeView1.FocusedNode := node_work;
-    //TreeView1.Selected[node_work] := true;
-    TreeView1Change(TreeView1, node_work);
+    PrintEntry(x, true);
 end;
 
 procedure TFormJournal.TreeView1Change(Sender: TBaseVirtualTree;
