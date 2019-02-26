@@ -6,7 +6,7 @@ uses
     Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, System.ImageList,
-    Vcl.ImgList, Vcl.ExtCtrls, server_data_types;
+    Vcl.ImgList, Vcl.ExtCtrls, server_data_types, Vcl.Menus;
 
 type
 
@@ -24,6 +24,9 @@ type
         TreeView1: TVirtualStringTree;
         ImageList1: TImageList;
         Splitter1: TSplitter;
+        PopupMenu1: TPopupMenu;
+        MenuDeleteItem: TMenuItem;
+        MenuCopyItem: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure TreeView1Collapsed(Sender: TBaseVirtualTree;
           Node: PVirtualNode);
@@ -38,11 +41,14 @@ type
         procedure TreeView1Change(Sender: TBaseVirtualTree; Node: PVirtualNode);
         procedure TreeView1KeyDown(Sender: TObject; var Key: Word;
           Shift: TShiftState);
+        procedure MenuDeleteItemClick(Sender: TObject);
+        procedure PopupMenu1Popup(Sender: TObject);
+        procedure MenuCopyItemClick(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
         FNode: PVirtualNode;
-        FHasYears:boolean;
+        FHasYears: Boolean;
 
         function GetTreeData(Node: PVirtualNode): PTreeData;
 
@@ -57,7 +63,7 @@ type
     public
         { Public declarations }
         procedure CreateYearsNodes;
-        property HasYears: boolean read FHasYears;
+        property HasYears: Boolean read FHasYears;
 
     end;
 
@@ -70,7 +76,7 @@ implementation
 
 uses stringutils, superobject,
     dateutils, services,
-    UnitFormParty;
+    UnitFormParty, UnitFormLastParty;
 
 procedure TFormParties.FormCreate(Sender: TObject);
 begin
@@ -93,20 +99,17 @@ procedure TFormParties.TreeView1Change(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 begin
     FNode := Node;
-    if Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty) then
+    if not(Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty))
+    then
+        exit;
+    FormParty.Party := services.TPartiesCatalogue.Party(TreeData[Node].Value);
+    Node := TreeView1.GetFirst;
+    while Assigned(Node) do
     begin
-        FormParty.Party := services.TPartiesCatalogue.Party
-          (TreeData[Node].Value);
-        Node := TreeView1.GetFirst;
-        while Assigned(Node) do
-        begin
-            if TreeView1.IsVisible[Node] then
-                TreeView1.RepaintNode(Node);
-            Node := TreeView1.GetNext(Node);
-        end;
-
+        if TreeView1.IsVisible[Node] then
+            TreeView1.RepaintNode(Node);
+        Node := TreeView1.GetNext(Node);
     end;
-
 end;
 
 procedure TFormParties.TreeView1Collapsed(Sender: TBaseVirtualTree;
@@ -200,38 +203,42 @@ end;
 procedure TFormParties.TreeView1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-    s:string;
+    s: string;
 begin
     if Key <> VK_DELETE then
         exit;
 
     case TreeData[FNode].NodeKind of
         trdYear:
-            s := format('год %d',[TreeData[FNode].Value]);
+            s := format('год %d', [TreeData[FNode].Value]);
         trdMonth:
-            s := format('год %d, месяц %s %s' ,[TreeData[FNode.Parent].Value,
-                inttostr2(TreeData[FNode].Value), month_name(TreeData[FNode].Value)]);
+            s := format('год %d, месяц %s %s', [TreeData[FNode.Parent].Value,
+              inttostr2(TreeData[FNode].Value),
+              month_name(TreeData[FNode].Value)]);
         trdDay:
-            s := format('год %d, месяц %s %s, день %s' ,[TreeData[FNode.Parent.Parent].Value,
-                inttostr2(TreeData[FNode.Parent].Value),
-                month_name(TreeData[FNode.Parent].Value),
-                inttostr2(TreeData[FNode].Value) ]);
+            s := format('год %d, месяц %s %s, день %s',
+              [TreeData[FNode.Parent.Parent].Value,
+              inttostr2(TreeData[FNode.Parent].Value),
+              month_name(TreeData[FNode.Parent].Value),
+              inttostr2(TreeData[FNode].Value)]);
         trdParty:
-            s := format('партия %d',[TreeData[FNode].Value]);
+            s := format('партия %d', [TreeData[FNode].Value]);
     end;
 
-    if MessageBox(Handle, Pchar( 'Подтвердите необходимость удвления данных: '+ s),
-      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) <> mrYes then
+    if MessageBox(Handle, Pchar('Подтвердите необходимость удвления данных: ' +
+      s), 'Запрос подтверждения', mb_IconQuestion or mb_YesNo) <> mrYes then
         exit;
 
     case TreeData[FNode].NodeKind of
         trdYear:
             TPartiesCatalogue.DeleteYear(TreeData[FNode].Value);
         trdMonth:
-            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value, TreeData[FNode].Value);
+            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value,
+              TreeData[FNode].Value);
 
         trdDay:
-            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value, TreeData[FNode.Parent].Value, TreeData[FNode].Value);
+            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value,
+              TreeData[FNode.Parent].Value, TreeData[FNode].Value);
         trdParty:
             TPartiesCatalogue.DeletePartyID(TreeData[FNode].Value);
     end;
@@ -327,8 +334,8 @@ begin
     p := TreeData[Node];
     v := p.Value;
 
-    if not Assigned(FormParty.party) then
-        FormParty.party := TLastParty.party;
+    if not Assigned(FormParty.Party) then
+        FormParty.Party := TLastParty.Party;
 
     dt := FormParty.Party.FCreatedAt;
     case p.NodeKind of
@@ -348,6 +355,74 @@ begin
             exit(p.Value = FormParty.Party.FPartyID)
     end;
     exit(false);
+end;
+
+procedure TFormParties.MenuCopyItemClick(Sender: TObject);
+begin
+    FormLastParty.SetParty(TPartiesCatalogue.CopyParty(TreeData[FNode]
+      .Party.FPartyID));
+end;
+
+procedure TFormParties.MenuDeleteItemClick(Sender: TObject);
+begin
+    if not Assigned(TreeData[FNode]) then
+        exit;
+
+    case TreeData[FNode].NodeKind of
+        trdYear:
+            TPartiesCatalogue.DeleteYear(TreeData[FNode].Value);
+        trdMonth:
+            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value,
+              TreeData[FNode].Value);
+
+        trdDay:
+            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value,
+              TreeData[FNode.Parent].Value, TreeData[FNode].Value);
+        trdParty:
+            TPartiesCatalogue.DeletePartyID(TreeData[FNode].Value);
+    end;
+
+end;
+
+procedure TFormParties.PopupMenu1Popup(Sender: TObject);
+var
+    s: string;
+begin
+    MenuCopyItem.Visible := TreeData[FNode].NodeKind = trdParty;
+    case TreeData[FNode].NodeKind of
+        trdParty:
+            begin
+                FormParty.Party := services.TPartiesCatalogue.Party
+                  (TreeData[FNode].Value);
+                s := format('%d %s %s', [TreeData[FNode].Value,
+                  TreeData[FNode].Party.FProductTypeName,
+                  FormatDatetime('YYYY MMMM dd',
+                  TreeData[FNode].Party.FCreatedAt)]);
+                MenuDeleteItem.Caption := 'Удалить партию ' + s;
+                MenuCopyItem.Caption := 'Копировать партию ' + s;
+            end;
+
+        trdYear:
+            MenuDeleteItem.Caption := format('Удалить  год %d',
+              [TreeData[FNode].Value]);
+
+        trdMonth:
+
+            MenuDeleteItem.Caption := format('Удалить год %d, месяц %s %s',
+              [TreeData[FNode.Parent].Value, inttostr2(TreeData[FNode].Value),
+              month_name(TreeData[FNode].Value)]);
+
+        trdDay:
+
+            MenuDeleteItem.Caption :=
+              format('Удалить год %d, месяц %s %s, день %s',
+              [TreeData[FNode.Parent.Parent].Value,
+              inttostr2(TreeData[FNode.Parent].Value),
+              month_name(TreeData[FNode.Parent].Value),
+              inttostr2(TreeData[FNode].Value)]);
+
+    end;
+
 end;
 
 function TFormParties.GetTreeData(Node: PVirtualNode): PTreeData;

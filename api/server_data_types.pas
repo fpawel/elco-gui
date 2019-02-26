@@ -139,6 +139,12 @@ type
         
     end;
  
+    TGetCheckBlocksArg = class 
+    public 
+        FCheck : TArray<Boolean>;
+        
+    end;
+ 
     TConfigProperty = class 
     public 
         FHint : string;
@@ -346,7 +352,7 @@ begin
         FMaxDNotMeasured.Free;
     
 end;
-    
+     
 
 { TConfigProperty }
 

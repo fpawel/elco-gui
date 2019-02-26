@@ -39,7 +39,8 @@ uses
   UnitFormComportCon in 'UnitFormComportCon.pas' {FormComportCon},
   UnitFormJournal in 'UnitFormJournal.pas' {FormJournal},
   UnitFormSelectBlock in 'UnitFormSelectBlock.pas' {FormSelectBlock},
-  UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts};
+  UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts},
+  UnitFormStend in 'UnitFormStend.pas' {FormStend};
 
 {$R *.res}
 
@@ -71,6 +72,7 @@ begin
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectProducts, FormSelectProducts);
+  Application.CreateForm(TFormStend, FormStend);
   Application.Run;
 
 end.

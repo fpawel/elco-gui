@@ -15,7 +15,6 @@ type
         FName: string;
         FId: integer;
         FRemoteError: string;
-
         FBusy: boolean;
 
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
@@ -34,6 +33,9 @@ type
 
 const
     WM_SERVER_APP_PIPE_BUSY = WM_USER + 1000;
+
+
+procedure Pipe_SetNotifyHWnd( NotifyHWnd : THandle);
 
 function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
 
@@ -62,6 +64,13 @@ implementation
 
 uses System.WideStrUtils, System.dateutils,
     math, ujsonrpc, inifiles;
+
+var FNotifyHWnd : THandle;
+
+procedure Pipe_SetNotifyHWnd( NotifyHWnd : THandle);
+begin
+    FNotifyHWnd := NotifyHWnd;
+end;
 
 function Pipe_GetJsonrpcParcedResponse(pipe: TPipe; const method: string;
   params: ISuperObject): IJsonRpcParsed;
@@ -210,7 +219,9 @@ begin
     avail_count := 0;
     t := now;
 
-    PostMessage(Application.MainForm.Handle, WM_SERVER_APP_PIPE_BUSY, 1, 0);
+    if IsWindow( FNotifyHWnd) then
+        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 1, 0);
+
     FBusy := true;
 
     while avail_count = 0 do
@@ -232,7 +243,8 @@ begin
     _ReadFile(result[0], avail_count);
 
     FBusy := false;
-    PostMessage(Application.MainForm.Handle, WM_SERVER_APP_PIPE_BUSY, 0, 0);
+    if IsWindow( FNotifyHWnd) then
+        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 0, 0);
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);

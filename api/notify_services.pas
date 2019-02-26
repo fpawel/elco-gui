@@ -4,13 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TComportEntryHandler = reference to procedure (x:TComportEntry);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TJournalEntryHandler = reference to procedure (x:TJournalEntry);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
+    TComportEntryHandler = reference to procedure (x:TComportEntry);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -30,7 +30,7 @@ procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
 procedure SetOnHostApplicationPanic( AHandler : TStringHandler);
 
-procedure Cancel;
+procedure NotifyServices_SetEnabled(enabled:boolean);
 
 implementation 
 uses Rest.Json, stringutils, sysutils;
@@ -54,11 +54,11 @@ var
     _OnReadFirmware : TFirmwareInfoHandler;
     _OnNewJournalEntry : TJournalEntryHandler;
     _OnHostApplicationPanic : TStringHandler;
-    _cancel:boolean;
+    _enabled:boolean;
 
-procedure Cancel;
+procedure NotifyServices_SetEnabled(enabled:boolean);
 begin
-   _cancel := true;
+   _enabled := enabled;
 end;
 
 procedure HandleCopydata(var Message: TMessage);
@@ -67,7 +67,7 @@ var
     cmd: TServerAppCmd;
     str:string;
 begin
-    if _cancel then
+    if not _enabled then
         exit;
     cd := PCOPYDATASTRUCT(Message.LParam);
     cmd := TServerAppCmd(Message.WParam);
@@ -251,6 +251,6 @@ end;
 
 
 initialization
-    _cancel := false;
+    _enabled := false;
 
 end.

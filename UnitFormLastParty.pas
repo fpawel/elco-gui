@@ -65,7 +65,6 @@ type
         procedure SetProductionBlock(block: Integer; production: Boolean);
         procedure SetParty(party: TParty);
         procedure reload_data;
-        procedure SetCurrents(place: Integer; v: TArray<double>);
 
         property party: TParty read FParty;
 
@@ -332,8 +331,7 @@ begin
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
-        pcStend:
-            DrawCellText(ACol, ARow, Rect, ProdColumnAlignment(pcStend));
+
     else
         case ProductValues[ACol, ARow - 1].Valid of
             vpvInvalid:
@@ -476,15 +474,6 @@ begin
     bmp.Free
 end;
 
-procedure TFormLastParty.SetCurrents(place: Integer; v: TArray<double>);
-var
-    i: Integer;
-begin
-    for i := 0 to 7 do
-        StringGrid1.Cells[Integer(pcStend), 1 + place * 8 + i] :=
-          floattostr(v[i]);
-
-end;
 
 procedure TFormLastParty.SetParty(party: TParty);
 var
@@ -514,7 +503,7 @@ begin
             FProducts[i].FPlace := i;
         end;
     end;
-    FColumns := GetProductColumns(FProducts, [pcPlace, pcStend, pcSerial,
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcSerial,
       pcProdType, pcPointsMethod, pcNote]);
 
     with StringGrid1 do

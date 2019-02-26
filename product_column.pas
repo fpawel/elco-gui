@@ -6,7 +6,7 @@ uses dbutils, classes, server_data_types, server_data_types_helpers,
     Vcl.graphics;
 
 type
-    TProductColumn = (pcPlace, pcSerial, pcStend, pcFirmware, pcFon20,
+    TProductColumn = (pcPlace, pcSerial, pcFirmware, pcFon20,
       pcFon20_2, pcSens20, pcKSens20,
 
       pcFon50, pcSens50, pcKSens50,
@@ -28,7 +28,7 @@ type
 
 const
     product_column_name: array [TProductColumn] of string = ('№', 'Зав.№',
-      'показания', 'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
+      'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
       'Ч.50', 'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
       'неизм.', 'исполнение', 'т.расчёт', 'примичание');
 
@@ -127,9 +127,6 @@ begin
             pcSerial:
                 if FSerial.FValid then
                     Result.Value := inttostr(FSerial.FInt64);
-
-            pcStend:
-                ;
 
             pcProdType:
                 if FProductTypeName.FValid then

@@ -42,6 +42,7 @@ object FormParties: TFormParties
     Header.ParentFont = True
     Images = ImageList1
     ParentFont = False
+    PopupMenu = PopupMenu1
     TabOrder = 0
     OnChange = TreeView1Change
     OnCollapsed = TreeView1Collapsed
@@ -73,7 +74,7 @@ object FormParties: TFormParties
     Left = 120
     Top = 40
     Bitmap = {
-      494C010105009C00BC0110001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010105009C00C40110001000FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -343,5 +344,18 @@ object FormParties: TFormParties
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
+    Left = 248
+    Top = 144
+    object MenuDeleteItem: TMenuItem
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      OnClick = MenuDeleteItemClick
+    end
+    object MenuCopyItem: TMenuItem
+      Caption = #1050#1086#1087#1080#1088#1086#1074#1072#1090#1100
+      OnClick = MenuCopyItemClick
+    end
   end
 end
