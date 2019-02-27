@@ -33,8 +33,9 @@ object FormStend: TFormStend
     TabOrder = 0
     OnDrawCell = StringGrid1DrawCell
     OnMouseDown = StringGrid1MouseDown
-    ExplicitLeft = -2
-    ExplicitTop = -2
+    ExplicitLeft = 8
+    ExplicitTop = 46
+    ExplicitHeight = 254
     ColWidths = (
       64
       64

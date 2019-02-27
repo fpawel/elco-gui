@@ -40,13 +40,13 @@ procedure TFormStend.FormCreate(Sender: TObject);
 var
     cl, ro: Integer;
 begin
+    SetLength(FCheckBlock, 8);
     with StringGrid1 do
     begin
         DefaultColWidth := 85;
         DefaultRowHeight := 30;
         RowCount := 13;
         ColCount := 9;
-        Cells[0, 0] := '/';
         for cl := 1 to 9 do
             Cells[cl, 0] := 'Место ' + inttostr(cl);
         for ro := 1 to 13 do
@@ -111,7 +111,18 @@ begin
     TSettingsSvc.SetCheckBlock(ARow - 1, integer(not FCheckBlock[ARow - 1]) );
 
     FCheckBlock[ARow - 1] := not FCheckBlock[ARow - 1];
-    StringGrid_RedrawRow(StringGrid1, ARow);
+    if FCheckBlock[ARow - 1] then
+        StringGrid_RedrawRow(StringGrid1, ARow)
+    else
+        begin
+            StringGrid1.Cells[0, aRow] := StringGrid1.Cells[0, aRow];
+            for aCol := 1 to StringGrid1.ColCount - 1 do
+                StringGrid1.Cells[aCol, aRow] := '';
+        end;
+
+
+
+
 end;
 
 procedure TFormStend.DrawCellText(ACol, ARow: Integer; Rect: TRect;

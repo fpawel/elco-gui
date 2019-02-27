@@ -5500,7 +5500,6 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 1
-      ExplicitLeft = 774
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -5609,7 +5608,6 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
-        ExplicitLeft = 567
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5694,7 +5692,6 @@ object ElcoMainForm: TElcoMainForm
       Images = ImageList4
       TabOrder = 4
       Visible = False
-      ExplicitLeft = 837
       object ToolButton5: TToolButton
         Left = 0
         Top = 0

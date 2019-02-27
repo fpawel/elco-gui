@@ -3,8 +3,8 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
   Top = 0
   BorderStyle = bsDialog
   Caption = #1042#1099#1073#1086#1088' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088
-  ClientHeight = 108
-  ClientWidth = 160
+  ClientHeight = 192
+  ClientWidth = 188
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,19 +19,19 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
   object Panel14: TPanel
     Left = 0
     Top = 0
-    Width = 160
-    Height = 108
+    Width = 188
+    Height = 192
     Align = alClient
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 202
-    ExplicitHeight = 163
+    ExplicitWidth = 160
+    ExplicitHeight = 108
     object CheckListBox1: TCheckListBox
       Left = 0
       Top = 0
-      Width = 124
-      Height = 104
+      Width = 152
+      Height = 188
       Align = alClient
       BevelOuter = bvNone
       BorderStyle = bsNone
@@ -40,17 +40,18 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
       Items.Strings = (
         '+20 '#8304'C'
         '-20 '#8304'C'
-        '+50 '#8304'C')
+        '+50 '#8304'C'
+        '+20 '#8304'C ('#1074#1086#1079#1074#1088#1072#1090')')
       Style = lbOwnerDrawFixed
       TabOrder = 0
-      ExplicitWidth = 166
-      ExplicitHeight = 159
+      ExplicitWidth = 124
+      ExplicitHeight = 104
     end
     object ToolBarStop: TToolBar
-      Left = 124
+      Left = 152
       Top = 0
       Width = 32
-      Height = 104
+      Height = 188
       Align = alRight
       ButtonHeight = 31
       ButtonWidth = 32
@@ -59,16 +60,15 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 1
-      ExplicitLeft = 166
-      ExplicitHeight = 159
+      ExplicitLeft = 124
+      ExplicitHeight = 104
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
-        Hint = #1055#1088#1077#1088#1074#1072#1090#1100' '#1074#1099#1087#1086#1083#1085#1077#1085#1080#1077
         Caption = 'ToolButtonStop'
         ImageIndex = 0
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         OnClick = ToolButton2Click
       end
     end
@@ -83,7 +83,7 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
     Left = 536
     Top = 41
     Bitmap = {
-      494C010101003003500319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101003003540319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

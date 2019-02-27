@@ -756,8 +756,10 @@ var
     i: Integer;
 begin
     for i := 0 to 7 do
-        FormStend.StringGrid1.Cells[1 + i, 1 + v.FBlock] :=
-          floattostr(v.FValues[i]);
+        with FormStend do
+            if FCheckBlock[i] then
+                StringGrid1.Cells[1 + i, 1 + v.FBlock] :=
+                  floattostr(v.FValues[i]);
 
     LabelStatusBottom.Caption := Format('Блок %d: %s',
       [v.FBlock, FormatFloatArray(v.FValues)]);

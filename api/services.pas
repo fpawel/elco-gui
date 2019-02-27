@@ -61,7 +61,7 @@ type
     public
         class procedure RunMainError;
         class procedure RunReadCurrent;
-        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
+        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
         class procedure RunWritePartyFirmware;
         class procedure SkipDelay;
         class procedure StopHardware;
@@ -820,7 +820,7 @@ begin
 end;
 
  
-class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
+class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -829,6 +829,7 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
     req.AsArray.Add(param3) ;
+    req.AsArray.Add(param4) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunTemperature', req);
     
