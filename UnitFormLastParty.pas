@@ -701,7 +701,7 @@ procedure TFormLastParty.SetProductionBlock(block: Integer;
 var
     p: TProduct;
 begin
-    TLastParty.SelectBlock(production, Block);
+    TLastParty.SetBlockChecked(Block, integer(production) );
     for p in FProducts do
         if (p.FPlace div 8) = block then
         begin

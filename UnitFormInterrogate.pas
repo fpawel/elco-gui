@@ -1,4 +1,4 @@
-unit UnitFormStend;
+unit UnitFormInterrogate;
 
 interface
 
@@ -8,14 +8,14 @@ uses
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
-    TFormStend = class(TForm)
+    TFormInterrogate = class(TForm)
         StringGrid1: TStringGrid;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
-    procedure FormShow(Sender: TObject);
+        procedure FormShow(Sender: TObject);
     private
         { Private declarations }
 
@@ -23,12 +23,13 @@ type
           ta: TAlignment);
 
     public
-        FCheckBlock: TArray< boolean>;
+        FCheckBlock: TArray<boolean>;
+        procedure UpdateCheckBlocks;
         { Public declarations }
     end;
 
 var
-    FormStend: TFormStend;
+    FormInterrogate: TFormInterrogate;
 
 implementation
 
@@ -36,11 +37,11 @@ implementation
 
 uses stringgridutils, stringutils, services, server_data_types;
 
-procedure TFormStend.FormCreate(Sender: TObject);
+procedure TFormInterrogate.FormCreate(Sender: TObject);
 var
     cl, ro: Integer;
 begin
-    SetLength(FCheckBlock, 8);
+    SetLength(FCheckBlock, 12);
     with StringGrid1 do
     begin
         DefaultColWidth := 85;
@@ -55,16 +56,17 @@ begin
     end;
 end;
 
-procedure TFormStend.FormShow(Sender: TObject);
-var r:TGetCheckBlocksArg;
+procedure TFormInterrogate.FormShow(Sender: TObject);
+var
+    r: TGetCheckBlocksArg;
 begin
-    r := TSettingsSvc.GetCheckBlocks;
-    FCheckBlock :=r.FCheck;
+    r := TLastParty.GetCheckBlocks;
+    FCheckBlock := r.FCheck;
     r.Free;
 end;
 
-procedure TFormStend.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
+procedure TFormInterrogate.StringGrid1DrawCell(Sender: TObject;
+  ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
     grd: TStringGrid;
     cnv: TCanvas;
@@ -98,8 +100,8 @@ begin
     StringGrid_DrawCellBounds(cnv, ACol, ARow, Rect);
 end;
 
-procedure TFormStend.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TFormInterrogate.StringGrid1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
     ACol, ARow: Integer;
 begin
@@ -108,24 +110,20 @@ begin
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
     if (ACol > 0) or (ARow = 0) then
         exit;
-    TSettingsSvc.SetCheckBlock(ARow - 1, integer(not FCheckBlock[ARow - 1]) );
-
-    FCheckBlock[ARow - 1] := not FCheckBlock[ARow - 1];
+    FCheckBlock[ARow - 1] := boolean(TLastParty.SetBlockChecked(ARow - 1,
+      Integer(not FCheckBlock[ARow - 1])));
     if FCheckBlock[ARow - 1] then
         StringGrid_RedrawRow(StringGrid1, ARow)
     else
-        begin
-            StringGrid1.Cells[0, aRow] := StringGrid1.Cells[0, aRow];
-            for aCol := 1 to StringGrid1.ColCount - 1 do
-                StringGrid1.Cells[aCol, aRow] := '';
-        end;
-
-
-
+    begin
+        StringGrid1.Cells[0, ARow] := StringGrid1.Cells[0, ARow];
+        for ACol := 1 to StringGrid1.ColCount - 1 do
+            StringGrid1.Cells[ACol, ARow] := '';
+    end;
 
 end;
 
-procedure TFormStend.DrawCellText(ACol, ARow: Integer; Rect: TRect;
+procedure TFormInterrogate.DrawCellText(ACol, ARow: Integer; Rect: TRect;
   ta: TAlignment);
 var
     s: string;
@@ -147,6 +145,18 @@ begin
         Y := Rect.Top + round((Rect.Height - txt_height) / 2.0);
         TextRect(Rect, X, Y, s);
     end;
+end;
+
+procedure TFormInterrogate.UpdateCheckBlocks;
+var
+    r: TGetCheckBlocksArg;
+    ARow: Integer;
+begin
+    r := TLastParty.GetCheckBlocks;
+    FCheckBlock := r.FCheck;
+    r.Free;
+    for ARow := 1 to 12 do
+        StringGrid1.Cells[0, ARow] := StringGrid1.Cells[0, ARow];
 end;
 
 end.

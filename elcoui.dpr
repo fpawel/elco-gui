@@ -40,7 +40,7 @@ uses
   UnitFormJournal in 'UnitFormJournal.pas' {FormJournal},
   UnitFormSelectBlock in 'UnitFormSelectBlock.pas' {FormSelectBlock},
   UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts},
-  UnitFormStend in 'UnitFormStend.pas' {FormStend};
+  UnitFormInterrogate in 'UnitFormInterrogate.pas' {FormInterrogate};
 
 {$R *.res}
 
@@ -72,7 +72,7 @@ begin
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectProducts, FormSelectProducts);
-  Application.CreateForm(TFormStend, FormStend);
+  Application.CreateForm(TFormInterrogate, FormInterrogate);
   Application.Run;
 
 end.

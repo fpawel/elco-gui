@@ -1,7 +1,7 @@
-object FormStend: TFormStend
+object FormInterrogate: TFormInterrogate
   Left = 0
   Top = 0
-  Caption = 'FormStend'
+  Caption = 'FormInterrogate'
   ClientHeight = 300
   ClientWidth = 871
   Color = clWindow
@@ -33,9 +33,6 @@ object FormStend: TFormStend
     TabOrder = 0
     OnDrawCell = StringGrid1DrawCell
     OnMouseDown = StringGrid1MouseDown
-    ExplicitLeft = 8
-    ExplicitTop = 46
-    ExplicitHeight = 254
     ColWidths = (
       64
       64

@@ -69,7 +69,11 @@ type
         PanelWaitPipe: TPanel;
         Image2: TImage;
         ImageInfo: TImage;
-        TabSheetStend: TTabSheet;
+        TabSheetInterrogate: TTabSheet;
+        N9: TMenuItem;
+        N10: TMenuItem;
+        N12: TMenuItem;
+        N13: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -138,7 +142,7 @@ uses stringgridutils, stringutils, JclDebug,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     UnitFormComportCon, UnitFormConsole, uitypes, types, UnitFormFirmware,
-    UnitFormJournal, UnitFormStend;
+    UnitFormJournal, UnitFormInterrogate;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 var
@@ -244,10 +248,10 @@ begin
         Align := alClient;
     end;
 
-    with FormStend do
+    with FormInterrogate do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetStend;
+        Parent := TabSheetInterrogate;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -460,6 +464,10 @@ begin
     else if PageControl.ActivePage = TabSheetJournal then
     begin
         FormJournal.EnsureNodes;
+    end
+    else if PageControl.ActivePage = TabSheetInterrogate then
+    begin
+        FormInterrogate.UpdateCheckBlocks;
     end;
 
 end;
@@ -755,9 +763,11 @@ procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);
 var
     i: Integer;
 begin
-    for i := 0 to 7 do
-        with FormStend do
-            if FCheckBlock[i] then
+
+    with FormInterrogate do
+        if FCheckBlock[v.FBlock] then
+        for i := 0 to 7 do
+
                 StringGrid1.Cells[1 + i, 1 + v.FBlock] :=
                   floattostr(v.FValues[i]);
 

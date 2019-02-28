@@ -56,10 +56,11 @@ begin
 end;
 
 procedure TFormComportCon.OnComportEntry(entry:TComportEntry);
+var  i :integer;
 begin
-
-    while RichEdit1.Lines.Count > SpinEdit1.Value do
-        RichEdit1.Lines.Delete(0);
+    if RichEdit1.Lines.Count > SpinEdit1.Value then
+        for I := 0 to SpinEdit1.Value div 3 do
+            RichEdit1.Lines.Delete(0);
 
     SendMessage(RichEdit1.handle, EM_SETSEL, length(RichEdit1.Text),
       length(RichEdit1.Text));

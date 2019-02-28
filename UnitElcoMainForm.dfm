@@ -5422,7 +5422,6 @@ object ElcoMainForm: TElcoMainForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 872
   end
   object Panel14: TPanel
     Left = 0
@@ -5450,7 +5449,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 2
-    ExplicitWidth = 872
     object LabelStatusTop: TLabel
       AlignWithMargins = True
       Left = 68
@@ -5536,7 +5534,6 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 2
       Visible = False
-      ExplicitWidth = 603
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5573,7 +5570,6 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitLeft = 531
         ExplicitHeight = 18
       end
       object LabelWhat: TLabel
@@ -5638,7 +5634,6 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 425
         DesignSize = (
           631
           31)
@@ -5649,7 +5644,6 @@ object ElcoMainForm: TElcoMainForm
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
-          ExplicitWidth = 419
         end
       end
     end
@@ -5721,7 +5715,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
-    ExplicitWidth = 872
     object LabelStatusBottom: TLabel
       Left = 0
       Top = 0
@@ -5740,7 +5733,6 @@ object ElcoMainForm: TElcoMainForm
       Max = 1000
       TabOrder = 0
       Visible = False
-      ExplicitWidth = 750
     end
   end
   object PanelPlaceholderMain: TPanel
@@ -5753,7 +5745,6 @@ object ElcoMainForm: TElcoMainForm
     Constraints.MinWidth = 400
     ParentColor = True
     TabOrder = 4
-    ExplicitWidth = 867
     object PageControlMain: TPageControl
       Left = 0
       Top = 0
@@ -5769,30 +5760,40 @@ object ElcoMainForm: TElcoMainForm
       TabWidth = 60
       OnChange = PageControlMainChange
       OnDrawTab = PageControlMainDrawTab
-      ExplicitWidth = 867
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
-        ExplicitWidth = 759
       end
-      object TabSheetStend: TTabSheet
+      object TabSheetInterrogate: TTabSheet
         Caption = #1057#1090#1077#1085#1076
         ImageIndex = 4
-        ExplicitWidth = 759
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
-        ExplicitWidth = 759
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetJournal: TTabSheet
         Caption = #1046#1091#1088#1085#1072#1083
         ImageIndex = 3
-        ExplicitWidth = 759
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetComportConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100' COM'
         ImageIndex = 2
-        ExplicitWidth = 759
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
@@ -6226,7 +6227,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010500D401D80319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010500D401E00319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6920,6 +6921,18 @@ object ElcoMainForm: TElcoMainForm
       Caption = #1048#1084#1087#1086#1088#1090
       OnClick = N2Click
     end
+    object N9: TMenuItem
+      Caption = '-'
+    end
+    object N10: TMenuItem
+      Caption = #1057#1074#1086#1076#1085#1072#1103' '#1090#1072#1073#1083#1080#1094#1072
+    end
+    object N12: TMenuItem
+      Caption = #1055#1072#1089#1087#1086#1088#1090#1072' '#1044#1040#1061
+    end
+    object N13: TMenuItem
+      Caption = #1055#1072#1089#1087#1086#1088#1090#1072' '#1057#1054#1059'/'#1057#1058#1043
+    end
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit
@@ -6931,7 +6944,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010106002403640414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C0101060024036C0414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000002800000001002000000000000032
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000003020122251A0E6C422F1C90422F1C902319
@@ -7363,7 +7376,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 152
     Top = 130
     Bitmap = {
-      494C010101002403DC035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101002403E4035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

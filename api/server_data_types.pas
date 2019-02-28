@@ -111,6 +111,12 @@ type
         destructor Destroy;
     end;
  
+    TGetCheckBlocksArg = class 
+    public 
+        FCheck : TArray<Boolean>;
+        
+    end;
+ 
     TFirmwareInfo = class 
     public 
         FTemp : TArray<Double>;
@@ -136,12 +142,6 @@ type
         FTemp : TArray<Double>;
         FFon : TArray<Double>;
         FSens : TArray<Double>;
-        
-    end;
- 
-    TGetCheckBlocksArg = class 
-    public 
-        FCheck : TArray<Boolean>;
         
     end;
  

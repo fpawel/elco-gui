@@ -23,10 +23,11 @@ type
     public
         class procedure DeleteProductAtPlace( param1: Integer) ;
         class procedure Export;
+        class function GetCheckBlocks: TGetCheckBlocksArg;
         class function Party: TParty;
         class function ProductAtPlace( param1: Integer) : TProduct;
         class procedure SelectAll( param1: Boolean) ;
-        class procedure SelectBlock( Checked: Boolean; Block: Integer) ;
+        class function SetBlockChecked( param1: Integer; param2: Integer) : Int64;
         class function SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;
         class function SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;
@@ -50,10 +51,8 @@ type
     end; TSettingsSvc = class 
     public
         class function ChangePredefinedConfig( param1: string) : string;
-        class function GetCheckBlocks: TGetCheckBlocksArg;
         class function PredefinedConfig: string;
         class function Sections: TConfigSections;
-        class procedure SetCheckBlock( param1: Integer; param2: Integer) ;
         class function SetDefaultPredefinedConfig: string;
         class procedure SetValue( param1: string; param2: string; param3: string) ;
          
@@ -349,6 +348,24 @@ begin
 end;
 
  
+class function TLastParty.GetCheckBlocks: TGetCheckBlocksArg;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.GetCheckBlocks', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TGetCheckBlocksArg > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
 class function TLastParty.Party: TParty;
 var    
     req, resp: ISuperobject;
@@ -399,16 +416,22 @@ begin
 end;
 
  
-class procedure TLastParty.SelectBlock( Checked: Boolean; Block: Integer) ;
+class function TLastParty.SetBlockChecked( param1: Integer; param2: Integer) : Int64;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
-    req := SO;
-    SuperObject_SetField(req, 'Checked', Checked);
-    SuperObject_SetField(req, 'Block', Block);
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    req.AsArray.Add(param2) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SelectBlock', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetBlockChecked', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
+            
+        
     
 end;
 
@@ -695,24 +718,6 @@ begin
 end;
 
  
-class function TSettingsSvc.GetCheckBlocks: TGetCheckBlocksArg;
-var    
-    req, resp: ISuperobject;
-begin
-    ensure_pipe_connected;
-    req := SO;
-        
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.GetCheckBlocks', req);
-    
-        
-             
-                Result := TJson.JsonToObject < TGetCheckBlocksArg > (resp.AsJson);
-            
-        
-    
-end;
-
- 
 class function TSettingsSvc.PredefinedConfig: string;
 var    
     req, resp: ISuperobject;
@@ -745,20 +750,6 @@ begin
                 Result := TJson.JsonToObject < TConfigSections > (resp.AsJson);
             
         
-    
-end;
-
- 
-class procedure TSettingsSvc.SetCheckBlock( param1: Integer; param2: Integer) ;
-var    
-    req, resp: ISuperobject;
-begin
-    ensure_pipe_connected;
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    req.AsArray.Add(param2) ;
-        
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'SettingsSvc.SetCheckBlock', req);
     
 end;
 
