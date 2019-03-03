@@ -10,12 +10,17 @@ uses
 type
     TFormInterrogate = class(TForm)
         StringGrid1: TStringGrid;
+    Panel1: TPanel;
+    Button1: TButton;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
         procedure FormShow(Sender: TObject);
+    procedure LinkLabel1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Button1Click(Sender: TObject);
     private
         { Private declarations }
 
@@ -63,6 +68,12 @@ begin
     r := TLastParty.GetCheckBlocks;
     FCheckBlock := r.FCheck;
     r.Free;
+end;
+
+procedure TFormInterrogate.LinkLabel1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+      (Sender as TLinkLabel).Color := clBlue;
 end;
 
 procedure TFormInterrogate.StringGrid1DrawCell(Sender: TObject;
@@ -121,6 +132,11 @@ begin
             StringGrid1.Cells[ACol, ARow] := '';
     end;
 
+end;
+
+procedure TFormInterrogate.Button1Click(Sender: TObject);
+begin
+    TRunnerSvc.RunReadCurrent;
 end;
 
 procedure TFormInterrogate.DrawCellText(ACol, ARow: Integer; Rect: TRect;

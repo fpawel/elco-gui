@@ -25,8 +25,6 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 160
-    ExplicitHeight = 108
     object CheckListBox1: TCheckListBox
       Left = 0
       Top = 0
@@ -40,12 +38,9 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
       Items.Strings = (
         '+20 '#8304'C'
         '-20 '#8304'C'
-        '+50 '#8304'C'
-        '+20 '#8304'C ('#1074#1086#1079#1074#1088#1072#1090')')
+        '+50 '#8304'C')
       Style = lbOwnerDrawFixed
       TabOrder = 0
-      ExplicitWidth = 124
-      ExplicitHeight = 104
     end
     object ToolBarStop: TToolBar
       Left = 152
@@ -60,8 +55,6 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 1
-      ExplicitLeft = 124
-      ExplicitHeight = 104
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
@@ -83,7 +76,7 @@ object FormSelectTemperaturesDialog: TFormSelectTemperaturesDialog
     Left = 536
     Top = 41
     Bitmap = {
-      494C010101003003540319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101003003580319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000640000001900000001002000000000001027
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

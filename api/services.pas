@@ -12,7 +12,6 @@ type
         class procedure DeleteMonth( param1: Integer; param2: Integer) ;
         class procedure DeletePartyID( param1: Int64) ;
         class procedure DeleteYear( param1: Integer) ;
-        class function Import: TParty;
         class function Months( Year: Integer) : TArray<Integer>;
         class function NewParty: TParty;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
@@ -24,7 +23,9 @@ type
         class procedure DeleteProductAtPlace( param1: Integer) ;
         class procedure Export;
         class function GetCheckBlocks: TGetCheckBlocksArg;
+        class function Import: TParty;
         class function Party: TParty;
+        class procedure Pdf;
         class function ProductAtPlace( param1: Integer) : TProduct;
         class procedure SelectAll( param1: Boolean) ;
         class function SetBlockChecked( param1: Integer; param2: Integer) : Int64;
@@ -59,8 +60,9 @@ type
     end; TRunnerSvc = class 
     public
         class procedure RunMainError;
+        class procedure RunReadAndSaveProductCurrents( param1: string) ;
         class procedure RunReadCurrent;
-        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
+        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
         class procedure RunWritePartyFirmware;
         class procedure SkipDelay;
         class procedure StopHardware;
@@ -194,24 +196,6 @@ begin
     req.AsArray.Add(param1) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteYear', req);
-    
-end;
-
- 
-class function TPartiesCatalogue.Import: TParty;
-var    
-    req, resp: ISuperobject;
-begin
-    ensure_pipe_connected;
-    req := SO;
-        
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Import', req);
-    
-        
-             
-                Result := TJson.JsonToObject < TParty > (resp.AsJson);
-            
-        
     
 end;
 
@@ -366,6 +350,24 @@ begin
 end;
 
  
+class function TLastParty.Import: TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Import', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
 class function TLastParty.Party: TParty;
 var    
     req, resp: ISuperobject;
@@ -380,6 +382,18 @@ begin
                 Result := TJson.JsonToObject < TParty > (resp.AsJson);
             
         
+    
+end;
+
+ 
+class procedure TLastParty.Pdf;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Pdf', req);
     
 end;
 
@@ -799,6 +813,19 @@ begin
 end;
 
  
+class procedure TRunnerSvc.RunReadAndSaveProductCurrents( param1: string) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunReadAndSaveProductCurrents', req);
+    
+end;
+
+ 
 class procedure TRunnerSvc.RunReadCurrent;
 var    
     req, resp: ISuperobject;
@@ -811,7 +838,7 @@ begin
 end;
 
  
-class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
+class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -820,7 +847,6 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
     req.AsArray.Add(param3) ;
-    req.AsArray.Add(param4) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.RunTemperature', req);
     

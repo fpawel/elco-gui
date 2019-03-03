@@ -193,7 +193,15 @@ begin
             try
                 case TProductColumn(FColumns[ACol]) of
                     pcSerial:
+                    begin
                         UpdateSerial(ACol, ARow, Value);
+                        //StringGrid1.col := ACol;
+                        //StringGrid1.Row := ARow;
+                        //SetForegroundWindow(StringGrid1.Handle);
+                        //if StringGrid1.CanFocus then
+                        //    StringGrid1.SetFocus;
+                    end;
+
                     pcNote:
                         UpdateNote(ACol, ARow, Value);
                 end;

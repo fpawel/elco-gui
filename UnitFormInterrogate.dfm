@@ -18,9 +18,9 @@ object FormInterrogate: TFormInterrogate
   object StringGrid1: TStringGrid
     AlignWithMargins = True
     Left = 3
-    Top = 3
+    Top = 41
     Width = 865
-    Height = 294
+    Height = 256
     Align = alClient
     BorderStyle = bsNone
     ColCount = 4
@@ -33,6 +33,9 @@ object FormInterrogate: TFormInterrogate
     TabOrder = 0
     OnDrawCell = StringGrid1DrawCell
     OnMouseDown = StringGrid1MouseDown
+    ExplicitLeft = -2
+    ExplicitTop = -2
+    ExplicitHeight = 294
     ColWidths = (
       64
       64
@@ -40,5 +43,25 @@ object FormInterrogate: TFormInterrogate
       64)
     RowHeights = (
       24)
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 871
+    Height = 38
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+    object Button1: TButton
+      Left = 0
+      Top = 0
+      Width = 169
+      Height = 38
+      Align = alLeft
+      Caption = #1047#1072#1087#1091#1089#1090#1080#1090#1100' '#1086#1087#1088#1086#1089
+      TabOrder = 0
+      OnClick = Button1Click
+      ExplicitHeight = 41
+    end
   end
 end

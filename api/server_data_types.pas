@@ -48,6 +48,7 @@ type
         FKSensMinus20 : TNullFloat64;
         FKSens20 : TNullFloat64;
         FKSens50 : TNullFloat64;
+        FVariation : TNullFloat64;
         FDFon20 : TNullFloat64;
         FDFon50 : TNullFloat64;
         FDNotMeasured : TNullFloat64;
@@ -245,6 +246,7 @@ begin
     FKSensMinus20 := TNullFloat64.Create;
     FKSens20 := TNullFloat64.Create;
     FKSens50 := TNullFloat64.Create;
+    FVariation := TNullFloat64.Create;
     FDFon20 := TNullFloat64.Create;
     FDFon50 := TNullFloat64.Create;
     FDNotMeasured := TNullFloat64.Create;
@@ -288,6 +290,8 @@ begin
         FKSens20.Free;
     if Assigned(FKSens50) then 
         FKSens50.Free;
+    if Assigned(FVariation) then 
+        FVariation.Free;
     if Assigned(FDFon20) then 
         FDFon20.Free;
     if Assigned(FDFon50) then 

@@ -15,7 +15,6 @@ type
         FName: string;
         FId: integer;
         FRemoteError: string;
-        FBusy: boolean;
 
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
@@ -28,14 +27,9 @@ type
     end;
 
     ERemoteError = class(Exception);
-    EPipeBusyError = class(Exception);
     EPipeNotFound = class(Exception);
 
-const
-    WM_SERVER_APP_PIPE_BUSY = WM_USER + 1000;
-
-
-procedure Pipe_SetNotifyHWnd( NotifyHWnd : THandle);
+procedure Pipe_SetNotifyHWnd(NotifyHWnd: THANDLE);
 
 function Pipe_GetUTF8Response(pipe: TPipe; request: string): String;
 
@@ -60,14 +54,18 @@ procedure SuperObject_Get(x: ISuperObject; var v: double); overload;
 procedure SuperObject_Get(x: ISuperObject; var v: boolean); overload;
 procedure SuperObject_Get(x: ISuperObject; var v: string); overload;
 
+const
+    WM_SERVER_APP_PIPE_BUSY = WM_USER + 1000;
+
 implementation
 
 uses System.WideStrUtils, System.dateutils,
     math, ujsonrpc, inifiles;
 
-var FNotifyHWnd : THandle;
+var
+    FNotifyHWnd: THANDLE;
 
-procedure Pipe_SetNotifyHWnd( NotifyHWnd : THandle);
+procedure Pipe_SetNotifyHWnd(NotifyHWnd: THANDLE);
 begin
     FNotifyHWnd := NotifyHWnd;
 end;
@@ -167,7 +165,6 @@ begin
     FName := AName;
     FId := 0;
     FRemoteError := '';
-    FBusy := false;
 end;
 
 procedure TPipe._WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
@@ -211,18 +208,14 @@ var
     avail_count, read_count: DWORD;
     t: TDateTime;
 begin
-    if FBusy then
-        raise EPipeBusyError.Create('Канал передачи данных занят');
+
+    if IsWindow( FNotifyHWnd) then
+        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 1, 0);
 
     FRemoteError := '';
     _WriteFile(request[0], length(request));
     avail_count := 0;
     t := now;
-
-    if IsWindow( FNotifyHWnd) then
-        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 1, 0);
-
-    FBusy := true;
 
     while avail_count = 0 do
     begin
@@ -234,17 +227,14 @@ begin
           nil // _Out_opt_ LPDWORD lpBytesLeftThisMessage
           ) then
             raise Exception.Create('pipe error: ' + _LastError);
-        // if SecondsBetween(t, now) > 5 then
-        // raise Exception.Create('pipe hangs');
         Application.ProcessMessages;
-        // Sleep(50);
     end;
     SetLength(result, avail_count);
     _ReadFile(result[0], avail_count);
 
-    FBusy := false;
     if IsWindow( FNotifyHWnd) then
         PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 0, 0);
+
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);
@@ -303,7 +293,7 @@ begin
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string;
-  v: TObject);overload;
+  v: TObject); overload;
 begin
     x[field] := SO(TJson.ObjectToJsonString(v));
 end;

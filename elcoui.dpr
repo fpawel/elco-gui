@@ -36,7 +36,6 @@ uses
   stringgridutils in 'utils\stringgridutils.pas',
   parproc in 'utils\parproc.pas',
   UnitFormConsole in 'UnitFormConsole.pas' {FormConsole},
-  UnitFormComportCon in 'UnitFormComportCon.pas' {FormComportCon},
   UnitFormJournal in 'UnitFormJournal.pas' {FormJournal},
   UnitFormSelectBlock in 'UnitFormSelectBlock.pas' {FormSelectBlock},
   UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts},
@@ -67,7 +66,6 @@ begin
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
   Application.CreateForm(TFormConsole, FormConsole);
-  Application.CreateForm(TFormComportCon, FormComportCon);
   Application.CreateForm(TFormJournal, FormJournal);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);

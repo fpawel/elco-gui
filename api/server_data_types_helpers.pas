@@ -22,10 +22,20 @@ type
         property Str: string read GetStr;
     end;
 
+    TJournalEntryHelper = class helper for TJournalEntry
+        function GetIsErrorLevel: Boolean;
+        property IsErrorLevel: Boolean read GetIsErrorLevel;
+    end;
+
 
 implementation
 
 uses sysutils, dateutils;
+
+function TJournalEntryHelper.GetIsErrorLevel: Boolean;
+begin
+    result := (flevel = 'error') or (flevel = 'fatal') or (flevel = 'panic');
+end;
 
 function TNullFloat64Helper.GetStr: string;
 begin

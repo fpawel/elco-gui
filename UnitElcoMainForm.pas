@@ -19,8 +19,6 @@ type
         ImageList3: TImageList;
         PopupMenu1: TPopupMenu;
         N4: TMenuItem;
-        N7: TMenuItem;
-        N11: TMenuItem;
         PageControlMain: TPageControl;
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
@@ -30,9 +28,7 @@ type
         ToolButton2: TToolButton;
         Panel3: TPanel;
         ToolBar1: TToolBar;
-        ToolButtonMainMenu: TToolButton;
-        N1: TMenuItem;
-        N2: TMenuItem;
+        ToolButtonRun: TToolButton;
         ImageList90: TImageList;
         ToolBar3: TToolBar;
         ToolButton1: TToolButton;
@@ -48,14 +44,10 @@ type
         Panel2: TPanel;
         ProgressBar1: TProgressBar;
         N3: TMenuItem;
-        N5: TMenuItem;
-        N6: TMenuItem;
         N8: TMenuItem;
-        TimerShowPanelWaitPipe: TTimer;
-        TabSheetComportConsole: TTabSheet;
+        TabSheetConsole: TTabSheet;
         TabSheetJournal: TTabSheet;
         TimerPerforming: TTimer;
-        ProgressBar2: TProgressBar;
         LabelStatusBottom: TLabel;
         PanelPlaceholderMain: TPanel;
         ToolBar4: TToolBar;
@@ -66,14 +58,19 @@ type
         ToolBar2: TToolBar;
         ToolButton3: TToolButton;
         RichEditlMessageBoxText: TRichEdit;
-        PanelWaitPipe: TPanel;
+        PanelWairResponseMsg: TPanel;
         Image2: TImage;
         ImageInfo: TImage;
         TabSheetInterrogate: TTabSheet;
-        N9: TMenuItem;
-        N10: TMenuItem;
-        N12: TMenuItem;
-        N13: TMenuItem;
+        PopupMenu2: TPopupMenu;
+        MenuItem6: TMenuItem;
+        MenuItem7: TMenuItem;
+        ToolBar5: TToolBar;
+        ToolButton9: TToolButton;
+        ToolButton10: TToolButton;
+        MenuNewParty: TMenuItem;
+        N2: TMenuItem;
+        N1: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -81,7 +78,6 @@ type
         procedure PageControlMainDrawTab(Control: TCustomTabControl;
           TabIndex: Integer; const Rect: TRect; Active: Boolean);
         procedure FormResize(Sender: TObject);
-        procedure N11Click(Sender: TObject);
         procedure ToolButton3Click(Sender: TObject);
         procedure ToolButton2Click(Sender: TObject);
         procedure ToolButton1Click(Sender: TObject);
@@ -91,20 +87,24 @@ type
         procedure ToolButtonStopClick(Sender: TObject);
         procedure TimerDelayTimer(Sender: TObject);
         procedure N8Click(Sender: TObject);
-        procedure N7Click(Sender: TObject);
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-        procedure N1Click(Sender: TObject);
         procedure N2Click(Sender: TObject);
-        procedure TimerShowPanelWaitPipeTimer(Sender: TObject);
         procedure TimerPerformingTimer(Sender: TObject);
         procedure N3Click(Sender: TObject);
         procedure ToolButton5Click(Sender: TObject);
+        procedure ToolButton6Click(Sender: TObject);
+        procedure MenuItem8Click(Sender: TObject);
+        procedure ToolButton10Click(Sender: TObject);
+        procedure MenuItem6Click(Sender: TObject);
+        procedure MenuNewPartyClick(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
         FhWndTip: THandle;
         procedure AppException(Sender: TObject; E: Exception);
+
+        procedure RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
 
         procedure SetupDelay(i: TDelayInfo);
 
@@ -115,10 +115,10 @@ type
 
         procedure WMActivateApp(var AMessage: TMessage); message WM_ACTIVATEAPP;
 
+        procedure OnReadCurrent(v: TReadCurrent);
+
         procedure OnPipeBusy(var Msg: TMessage);
           message WM_SERVER_APP_PIPE_BUSY;
-
-        procedure OnReadCurrent(v: TReadCurrent);
     public
         { Public declarations }
         FIni: TIniFile;
@@ -132,6 +132,8 @@ var
 
 function FormatFloatArray(v: TArray<double>): string;
 
+Function GetTextSize(const Text: String; Font: TFont): TSize;
+
 implementation
 
 {$R *.dfm}
@@ -141,27 +143,44 @@ uses stringgridutils, stringutils, JclDebug,
     services, UnitFormParty, UnitFormProperties,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
-    UnitFormComportCon, UnitFormConsole, uitypes, types, UnitFormFirmware,
+    UnitFormConsole, uitypes, types, UnitFormFirmware,
     UnitFormJournal, UnitFormInterrogate;
+
+const
+    WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
+      ('20"C ПГС3', 'i_s_plus20'), ('20"C ПГС1(2)', 'i13'),
+      ('-20"C ПГС1', 'i_f_minus20'), ('-20"C ПГС3', 'i_s_minus20'),
+      ('50"C ПГС1', 'i_f_plus50'), ('50"C ПГС3', 'i_s_plus50'), ('ПГС2', 'i24'),
+      ('ПГС3', 'i35'), ('ПГС2', 'i26'), ('ПГС1', 'i17'),
+      ('неизмеряемый', 'not_measured'));
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 var
-    i: byte;
+    i: Integer;
+    menu: TMenuItem;
 begin
     if GetParentProcessName = 'cmd.exe' then
         Writeln('we are cmd.exe');
 
     PanelMessageBox.Width := 700;
     PanelMessageBox.Height := 350;
-    PanelWaitPipe.Width := 500;
-    PanelWaitPipe.Height := 115;
+    PanelWairResponseMsg.Width := 500;
+    PanelWairResponseMsg.Height := 115;
 
     FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
     Application.OnException := AppException;
     LabelStatusTop.Caption := '';
-    TabSheetComportConsole.TabVisible := false;
     LabelStatusBottom.Caption := '';
+
+    for i := 0 to length(WorkItems) - 1 do
+    begin
+        menu := TMenuItem.Create(self);
+        PopupMenu1.Items.Add(menu);
+        menu.Caption := WorkItems[i, 0];
+        menu.Tag := i;
+        menu.OnClick := RunReadAndSaveProductCurrentsMenuClick;
+    end;
 
 end;
 
@@ -222,10 +241,10 @@ begin
         Show;
     end;
 
-    with FormComportCon do
+    with FormConsole do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetComportConsole;
+        Parent := TabSheetConsole;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -259,6 +278,7 @@ begin
 
     SetOnErrorOccurred(
         procedure(s: string)
+        var sz:TSize;
         begin
             ImageInfo.Hide;
             ImageError.Show;
@@ -269,9 +289,12 @@ begin
             else
                 RichEditlMessageBoxText.Text := '';
 
-            PanelMessageBoxTitle.Caption := 'Ошибка оборудования';
+            PanelMessageBoxTitle.Caption := 'Произошла ошибка';
             RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
             RichEditlMessageBoxText.Font.Color := clRed;
+
+            sz := GetTextSize(RichEditlMessageBoxText.Text, RichEditlMessageBoxText.Font );
+
             PanelMessageBox.Show;
             PanelMessageBox.BringToFront;
             FormResize(self);
@@ -316,7 +339,6 @@ begin
             LabelStatusTop.Caption := s;
             TimerPerforming.Enabled := false;
             LabelStatusTop.Font.Color := clBlack;
-            ProgressBar2.Visible := false;
             LabelStatusBottom.Caption := '';
 
         end);
@@ -358,19 +380,15 @@ begin
             FormParties.CreateYearsNodes;
             FormParty.party := FormLastParty.party;
             PanelMessageBox.Hide;
+            PanelWairResponseMsg.Hide;
         end);
 
     SetOnComportEntry(
         procedure(entry: TComportEntry)
         begin
-            if not TabSheetComportConsole.TabVisible then
-            begin
-                TabSheetComportConsole.TabVisible := true;
-                PageControlMain.Repaint;
-            end;
-            FormComportCon.OnComportEntry(entry);
+            FormConsole.OnComportEntry(entry);
         end);
-    SetOnNewJournalEntry(FormJournal.OnNewEntry);
+    SetOnNewJournalEntry(FormConsole.OnJournalEntry);
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
     SetOnHostApplicationPanic(
         procedure(pnicStr: String)
@@ -427,10 +445,12 @@ begin
           PanelMessageBox.Height div 2;
     end;
 
-    if PanelWaitPipe.Visible then
+    if PanelWairResponseMsg.Visible then
     begin
-        PanelWaitPipe.Left := ClientWidth div 2 - PanelWaitPipe.Width div 2;
-        PanelWaitPipe.Top := ClientHeight div 2 - PanelWaitPipe.Height div 2;
+        PanelWairResponseMsg.Left := ClientWidth div 2 -
+          PanelWairResponseMsg.Width div 2;
+        PanelWairResponseMsg.Top := ClientHeight div 2 -
+          PanelWairResponseMsg.Height div 2;
     end;
 
 end;
@@ -511,30 +531,18 @@ begin
             Color := clblue
         else
             Color := clRed;
-    if not ProgressBar2.Visible then
-    begin
-        ProgressBar2.Show;
-        ProgressBar2.Top := 100500;
-    end;
-    v := ProgressBar2.Position + TimerPerforming.Interval;
-    if v > ProgressBar2.Max then
-        v := 0;
-    ProgressBar2.Position := v;
 end;
 
-procedure TElcoMainForm.TimerShowPanelWaitPipeTimer(Sender: TObject);
+procedure TElcoMainForm.ToolButton10Click(Sender: TObject);
 begin
-    PanelWaitPipe.Visible := true;
-    TimerShowPanelWaitPipe.Enabled := false;
-    PanelWaitPipe.BringToFront;
-    FormResize(self);
+    with ToolButton10 do
+        with ClientToScreen(Point(0, Height)) do
+            PopupMenu2.Popup(X, Y);
 end;
 
 procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
 begin
     FormEditText.Show;
-    // ShowWindow(FormEditText.Handle, SW_SHOW);
-
 end;
 
 procedure TElcoMainForm.ToolButton2Click(Sender: TObject);
@@ -565,9 +573,14 @@ begin
     FormFirmware.Hide;
 end;
 
+procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
+begin
+    TLastParty.Pdf;
+end;
+
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
 begin
-    with ToolButtonMainMenu do
+    with ToolButtonRun do
         with ClientToScreen(Point(0, Height)) do
             PopupMenu1.Popup(X, Y);
 end;
@@ -622,12 +635,10 @@ begin
         // RichEditlMessageBoxText.Font.Color := clRed;
         // PanelMessageBox.Visible := true;
         // FormResize(self);
-
-        PanelWaitPipe.Caption := 'Подключение...';
-        PanelWaitPipe.Visible := true;
-        PanelWaitPipe.BringToFront;
+        PanelWairResponseMsg.Caption := 'Подключение...';
+        PanelWairResponseMsg.Visible := true;
+        PanelWairResponseMsg.BringToFront;
         FormResize(self);
-
         exit;
     end;
 
@@ -676,19 +687,26 @@ begin
     notify_services.HandleCopydata(Message);
 end;
 
-procedure TElcoMainForm.N11Click(Sender: TObject);
-begin
-    TRunnerSvc.RunReadCurrent();
-end;
-
-procedure TElcoMainForm.N1Click(Sender: TObject);
+procedure TElcoMainForm.MenuItem6Click(Sender: TObject);
 begin
     TLastParty.Export;
 end;
 
+procedure TElcoMainForm.MenuItem8Click(Sender: TObject);
+begin
+    FormEditText.Show;
+end;
+
+procedure TElcoMainForm.MenuNewPartyClick(Sender: TObject);
+begin
+    if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
+      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
+        FormLastParty.SetParty(TPartiesCatalogue.NewParty);
+end;
+
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
-    FormLastParty.SetParty(TPartiesCatalogue.Import);
+    FormLastParty.SetParty(TLastParty.Import);
     FormParties.CreateYearsNodes;
 
 end;
@@ -700,21 +718,14 @@ end;
 
 procedure TElcoMainForm.N4Click(Sender: TObject);
 begin
-    with ToolButtonMainMenu do
+    with ToolButtonRun do
         with ClientToScreen(Point(0, Height)) do
         begin
-            ToolButtonMainMenu.PopupMenu.CloseMenu;
+            ToolButtonRun.PopupMenu.CloseMenu;
             FormSelectTemperaturesDialog.Left := X + 5;
             FormSelectTemperaturesDialog.Top := Y + 5;
             FormSelectTemperaturesDialog.Show;
         end;
-end;
-
-procedure TElcoMainForm.N7Click(Sender: TObject);
-begin
-    if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
-      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
-        FormLastParty.SetParty(TPartiesCatalogue.NewParty);
 end;
 
 procedure TElcoMainForm.N8Click(Sender: TObject);
@@ -734,31 +745,6 @@ begin
     TimerDelay.Enabled := i.FRun;
 end;
 
-procedure TElcoMainForm.OnPipeBusy(var Msg: TMessage);
-var
-    pipe_busy: Boolean;
-begin
-    pipe_busy := Msg.WParam <> 0;
-    Panel3.Enabled := not pipe_busy;
-    PageControlMain.Enabled := not pipe_busy;
-    // PanelWaitPipe.Visible :=  pipe_busy;
-    if pipe_busy then
-    begin
-        PanelWaitPipe.Caption := 'Выполняется запрос...';
-        // TimerShowPanelWaitPipe.Enabled := true;
-        PanelWaitPipe.Visible := true;
-        TimerShowPanelWaitPipe.Enabled := false;
-        PanelWaitPipe.BringToFront;
-        FormResize(self);
-
-    end
-    else
-    begin
-        PanelWaitPipe.Visible := false;
-        // TimerShowPanelWaitPipe.Enabled := false;
-    end;
-end;
-
 procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);
 var
     i: Integer;
@@ -766,7 +752,7 @@ begin
 
     with FormInterrogate do
         if FCheckBlock[v.FBlock] then
-        for i := 0 to 7 do
+            for i := 0 to 7 do
 
                 StringGrid1.Cells[1 + i, 1 + v.FBlock] :=
                   floattostr(v.FValues[i]);
@@ -775,6 +761,30 @@ begin
       [v.FBlock, FormatFloatArray(v.FValues)]);
     v.Free
 
+end;
+
+procedure TElcoMainForm.OnPipeBusy(var Msg: TMessage);
+var
+    pipe_busy: Boolean;
+begin
+    pipe_busy := Msg.WParam <> 0;
+    if pipe_busy then
+    begin
+        PanelWairResponseMsg.Show;
+        PanelWairResponseMsg.BringToFront;
+    end
+    else
+    begin
+        PanelWairResponseMsg.Hide;
+
+    end;
+
+end;
+
+procedure TElcoMainForm.RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
+begin
+    TRunnerSvc.RunReadAndSaveProductCurrents
+      (WorkItems[(Sender as TMenuItem).Tag][1]);
 end;
 
 function FormatFloatArray(v: TArray<double>): string;
@@ -786,6 +796,19 @@ begin
     for i := 0 to length(v) - 1 do
         s[i] := Format('%d:%g', [i, v[i]]);
     result := string.Join(' ', s);
+end;
+
+Function GetTextSize(const Text: String; Font: TFont): TSize;
+var
+    LBmp: TBitmap;
+begin
+    LBmp := TBitmap.Create;
+    try
+        LBmp.Canvas.Font := Font;
+        result := LBmp.Canvas.TextExtent(Text);
+    finally
+        LBmp.Free;
+    end;
 end;
 
 end.
