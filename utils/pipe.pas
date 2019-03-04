@@ -15,9 +15,12 @@ type
         FName: string;
         FId: integer;
         FRemoteError: string;
+        FBusy: boolean;
 
         procedure _ReadFile(var Buffer; numberOfbytesToRead: DWORD);
         procedure _WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
+
+        function DoGetResponse(request: TBytes): TBytes;
 
     public
 
@@ -28,6 +31,7 @@ type
 
     ERemoteError = class(Exception);
     EPipeNotFound = class(Exception);
+    EPipeBusyError = class(Exception);
 
 procedure Pipe_SetNotifyHWnd(NotifyHWnd: THANDLE);
 
@@ -64,6 +68,14 @@ uses System.WideStrUtils, System.dateutils,
 
 var
     FNotifyHWnd: THANDLE;
+
+Constructor TPipe.Create(AName: string);
+begin
+    FName := AName;
+    FId := 0;
+    FRemoteError := '';
+    FBusy := false;
+end;
 
 procedure Pipe_SetNotifyHWnd(NotifyHWnd: THANDLE);
 begin
@@ -160,13 +172,6 @@ begin
     exit(Trim(string(Buffer)));
 end;
 
-Constructor TPipe.Create(AName: string);
-begin
-    FName := AName;
-    FId := 0;
-    FRemoteError := '';
-end;
-
 procedure TPipe._WriteFile(var Buffer; numberOfbytesToWrite: DWORD);
 var
     writen_count: DWORD;
@@ -203,14 +208,11 @@ begin
       numberOfbytesToRead]));
 end;
 
-function TPipe.GetResponse(request: TBytes): TBytes;
+function TPipe.DoGetResponse(request: TBytes): TBytes;
 var
     avail_count, read_count: DWORD;
     t: TDateTime;
 begin
-
-    if IsWindow( FNotifyHWnd) then
-        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 1, 0);
 
     FRemoteError := '';
     _WriteFile(request[0], length(request));
@@ -231,10 +233,22 @@ begin
     end;
     SetLength(result, avail_count);
     _ReadFile(result[0], avail_count);
+end;
 
+function TPipe.GetResponse(request: TBytes): TBytes;
+begin
+    if FBusy then
+        raise EPipeBusyError.Create('Канал передачи данных занят');
+    FBusy := true;
     if IsWindow( FNotifyHWnd) then
-        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 0, 0);
-
+        PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 1, 0);
+    try
+        result := DoGetResponse(request);
+    finally
+        FBusy := false;
+        if IsWindow( FNotifyHWnd) then
+            PostMessage(FNotifyHWnd, WM_SERVER_APP_PIPE_BUSY, 0, 0);
+    end;
 end;
 
 procedure SuperObject_SetField(x: ISuperObject; field: string; v: int64);

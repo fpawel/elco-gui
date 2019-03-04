@@ -58,7 +58,7 @@ type
         ToolBar2: TToolBar;
         ToolButton3: TToolButton;
         RichEditlMessageBoxText: TRichEdit;
-        PanelWairResponseMsg: TPanel;
+        PanelWaitResponseMsg: TPanel;
         Image2: TImage;
         ImageInfo: TImage;
         TabSheetInterrogate: TTabSheet;
@@ -71,6 +71,10 @@ type
         MenuNewParty: TMenuItem;
         N2: TMenuItem;
         N1: TMenuItem;
+    N5: TMenuItem;
+    N201: TMenuItem;
+    N202: TMenuItem;
+    N203: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -98,10 +102,14 @@ type
         procedure ToolButton10Click(Sender: TObject);
         procedure MenuItem6Click(Sender: TObject);
         procedure MenuNewPartyClick(Sender: TObject);
+    procedure N201Click(Sender: TObject);
+    procedure N202Click(Sender: TObject);
+    procedure N203Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
         FhWndTip: THandle;
+        FOnPipeBusyActiveControl: TWinControl;
         procedure AppException(Sender: TObject; E: Exception);
 
         procedure RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
@@ -164,8 +172,8 @@ begin
 
     PanelMessageBox.Width := 700;
     PanelMessageBox.Height := 350;
-    PanelWairResponseMsg.Width := 500;
-    PanelWairResponseMsg.Height := 115;
+    PanelWaitResponseMsg.Width := 500;
+    PanelWaitResponseMsg.Height := 115;
 
     FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
@@ -278,7 +286,8 @@ begin
 
     SetOnErrorOccurred(
         procedure(s: string)
-        var sz:TSize;
+        var
+            sz: TSize;
         begin
             ImageInfo.Hide;
             ImageError.Show;
@@ -293,7 +302,8 @@ begin
             RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
             RichEditlMessageBoxText.Font.Color := clRed;
 
-            sz := GetTextSize(RichEditlMessageBoxText.Text, RichEditlMessageBoxText.Font );
+            sz := GetTextSize(RichEditlMessageBoxText.Text,
+              RichEditlMessageBoxText.Font);
 
             PanelMessageBox.Show;
             PanelMessageBox.BringToFront;
@@ -327,7 +337,7 @@ begin
         begin
             PanelMessageBox.Hide;
             ToolBarStop.Show;
-            LabelStatusTop.Caption := s;
+            LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
             TimerPerforming.Enabled := true;
             LabelStatusBottom.Caption := '';
         end);
@@ -336,7 +346,7 @@ begin
         procedure(s: string)
         begin
             ToolBarStop.Visible := false;
-            LabelStatusTop.Caption := s;
+            LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
             TimerPerforming.Enabled := false;
             LabelStatusTop.Font.Color := clBlack;
             LabelStatusBottom.Caption := '';
@@ -380,7 +390,7 @@ begin
             FormParties.CreateYearsNodes;
             FormParty.party := FormLastParty.party;
             PanelMessageBox.Hide;
-            PanelWairResponseMsg.Hide;
+            PanelWaitResponseMsg.Hide;
         end);
 
     SetOnComportEntry(
@@ -445,12 +455,12 @@ begin
           PanelMessageBox.Height div 2;
     end;
 
-    if PanelWairResponseMsg.Visible then
+    if PanelWaitResponseMsg.Visible then
     begin
-        PanelWairResponseMsg.Left := ClientWidth div 2 -
-          PanelWairResponseMsg.Width div 2;
-        PanelWairResponseMsg.Top := ClientHeight div 2 -
-          PanelWairResponseMsg.Height div 2;
+        PanelWaitResponseMsg.Left := ClientWidth div 2 -
+          PanelWaitResponseMsg.Width div 2;
+        PanelWaitResponseMsg.Top := ClientHeight div 2 -
+          PanelWaitResponseMsg.Height div 2;
     end;
 
 end;
@@ -635,9 +645,9 @@ begin
         // RichEditlMessageBoxText.Font.Color := clRed;
         // PanelMessageBox.Visible := true;
         // FormResize(self);
-        PanelWairResponseMsg.Caption := 'Подключение...';
-        PanelWairResponseMsg.Visible := true;
-        PanelWairResponseMsg.BringToFront;
+        PanelWaitResponseMsg.Caption := 'Подключение...';
+        PanelWaitResponseMsg.Visible := true;
+        PanelWaitResponseMsg.BringToFront;
         FormResize(self);
         exit;
     end;
@@ -704,6 +714,41 @@ begin
         FormLastParty.SetParty(TPartiesCatalogue.NewParty);
 end;
 
+procedure TElcoMainForm.N201Click(Sender: TObject);
+begin
+    FormLastParty.SetParty(TLastParty.CalculateFonMinus20);
+end;
+
+procedure TElcoMainForm.N202Click(Sender: TObject);
+var s : string;
+    v:double;
+    label l;
+begin
+    s := '1';
+    l:
+    if not InputQuery('Пересчёт Iч -20"С', 'Укажите коэффициент пересчёта', s) then
+        exit;
+    s := s.Trim;
+    if not try_str_to_float(s,v) then
+        goto l;
+    FormLastParty.SetParty(TLastParty.CalculateSensMinus20(v));
+end;
+
+procedure TElcoMainForm.N203Click(Sender: TObject);
+var s : string;
+    v:double;
+    label l;
+begin
+    s := '1';
+    l:
+    if not InputQuery('Пересчёт Iч 50"С', 'Укажите коэффициент пересчёта', s) then
+        exit;
+    s := s.Trim;
+    if not try_str_to_float(s,v) then
+        goto l;
+    FormLastParty.SetParty(TLastParty.CalculateSensPlus50(v));
+end;
+
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
     FormLastParty.SetParty(TLastParty.Import);
@@ -766,16 +811,29 @@ end;
 procedure TElcoMainForm.OnPipeBusy(var Msg: TMessage);
 var
     pipe_busy: Boolean;
+    active_ctrl: TWinControl;
 begin
     pipe_busy := Msg.WParam <> 0;
     if pipe_busy then
     begin
-        PanelWairResponseMsg.Show;
-        PanelWairResponseMsg.BringToFront;
+        FOnPipeBusyActiveControl := ActiveControl;
+        Enabled := false;
+        PanelWaitResponseMsg.Show;
+        FormResize(self);
+        PanelWaitResponseMsg.BringToFront;
     end
     else
     begin
-        PanelWairResponseMsg.Hide;
+        PanelWaitResponseMsg.Hide;
+        Enabled := true;
+        if (Screen.ActiveForm = self) and Assigned(FOnPipeBusyActiveControl) then
+            try
+                FOnPipeBusyActiveControl.SetFocus;
+            except
+
+            end
+        else
+            FOnPipeBusyActiveControl := nil;
 
     end;
 

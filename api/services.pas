@@ -20,6 +20,9 @@ type
          
     end; TLastParty = class 
     public
+        class function CalculateFonMinus20: TParty;
+        class function CalculateSensMinus20( param1: Double) : TParty;
+        class function CalculateSensPlus50( param1: Double) : TParty;
         class procedure DeleteProductAtPlace( param1: Integer) ;
         class procedure Export;
         class function GetCheckBlocks: TGetCheckBlocksArg;
@@ -307,6 +310,62 @@ begin
 end;
 
   
+class function TLastParty.CalculateFonMinus20: TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateFonMinus20', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TLastParty.CalculateSensMinus20( param1: Double) : TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateSensMinus20', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TLastParty.CalculateSensPlus50( param1: Double) : TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateSensPlus50', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
 class procedure TLastParty.DeleteProductAtPlace( param1: Integer) ;
 var    
     req, resp: ISuperobject;
