@@ -194,11 +194,11 @@ begin
         HintText := FHint;
 
         if FMin.FValid then
-            HintText := HintText + #13 + '�������: ' +
+            HintText := HintText + #13 + 'минимум: ' +
               floattostr(FMin.FFloat64);
 
         if FMax.FValid then
-            HintText := HintText + #13 + '��������: ' +
+            HintText := HintText + #13 + 'максимум: ' +
               floattostr(FMax.FFloat64);
 
         if FError <> '' then
