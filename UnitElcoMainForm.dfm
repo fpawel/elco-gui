@@ -5746,8 +5746,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
-    ExplicitLeft = -8
-    ExplicitTop = 640
     object LabelStatusBottom: TLabel
       Left = 0
       Top = 0
@@ -5785,25 +5783,38 @@ object ElcoMainForm: TElcoMainForm
       OnDrawTab = PageControlMainDrawTab
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
-        ExplicitLeft = 103
-        ExplicitTop = 3
-        ExplicitHeight = 452
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetJournal: TTabSheet
         Caption = #1046#1091#1088#1085#1072#1083
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
@@ -6237,7 +6248,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010500D401E80319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010500D401F00319001900FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000064000000320000000100200000000000204E
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6923,7 +6934,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 632
     Top = 106
     Bitmap = {
-      494C010109002403C80414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010109002403D00414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000003C0000000100200000000000004B
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -7562,7 +7573,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 152
     Top = 130
     Bitmap = {
-      494C010101002403EC035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101002403F4035A005A00FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000680100005A000000010020000000000040FA
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

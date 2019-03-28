@@ -443,7 +443,7 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
-    // SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+    //SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
 
 procedure TElcoMainForm.FormResize(Sender: TObject);
