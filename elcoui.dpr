@@ -35,11 +35,11 @@ uses
   exn in 'exn.pas',
   stringgridutils in 'utils\stringgridutils.pas',
   parproc in 'utils\parproc.pas',
-  UnitFormConsole in 'UnitFormConsole.pas' {FormConsole},
-  UnitFormJournal in 'UnitFormJournal.pas' {FormJournal},
   UnitFormSelectBlock in 'UnitFormSelectBlock.pas' {FormSelectBlock},
   UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts},
-  UnitFormInterrogate in 'UnitFormInterrogate.pas' {FormInterrogate};
+  UnitFormInterrogate in 'UnitFormInterrogate.pas' {FormInterrogate},
+  UnitFormConsole in 'UnitFormConsole.pas' {FormConsole},
+  UnitFormPopup in 'UnitFormPopup.pas' {FormPopup};
 
 {$R *.res}
 
@@ -65,12 +65,12 @@ begin
   Application.CreateForm(TFormEditText, FormEditText);
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
-  Application.CreateForm(TFormConsole, FormConsole);
-  Application.CreateForm(TFormJournal, FormJournal);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
   Application.CreateForm(TFormSelectProducts, FormSelectProducts);
   Application.CreateForm(TFormInterrogate, FormInterrogate);
+  Application.CreateForm(TFormConsole, FormConsole);
+  Application.CreateForm(TFormPopup, FormPopup);
   Application.Run;
 
 end.

@@ -175,29 +175,6 @@ type
         
     end;
  
-    TJournalEntry = class 
-    public 
-        FEntryID : Int64;
-        FWorkID : Int64;
-        FCreatedAt : TDateTime;
-        FLevel : string;
-        FMessage : string;
-        FFile : string;
-        FLine : Int64;
-        FStack : string;
-        FWorkName : string;
-        
-    end;
- 
-    TJournalWork = class 
-    public 
-        FWorkID : Int64;
-        FCreatedAt : TDateTime;
-        FName : string;
-        FErrorOccurred : Boolean;
-        
-    end;
- 
     TReadCurrent = class 
     public 
         FValues : TArray<Double>;
@@ -210,14 +187,6 @@ type
         FRun : Boolean;
         FTimeSeconds : Integer;
         FWhat : string;
-        
-    end;
- 
-    TComportEntry = class 
-    public 
-        FPort : string;
-        FError : Boolean;
-        FMsg : string;
         
     end;
  
@@ -376,6 +345,6 @@ begin
         FMax.Free;
     
 end;
-       
+    
 
 end.

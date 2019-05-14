@@ -46,7 +46,6 @@ type
         N3: TMenuItem;
         N8: TMenuItem;
         TabSheetConsole: TTabSheet;
-        TabSheetJournal: TTabSheet;
         TimerPerforming: TTimer;
         LabelStatusBottom: TLabel;
         PanelPlaceholderMain: TPanel;
@@ -71,10 +70,10 @@ type
         MenuNewParty: TMenuItem;
         N2: TMenuItem;
         N1: TMenuItem;
-    N5: TMenuItem;
-    N201: TMenuItem;
-    N202: TMenuItem;
-    N203: TMenuItem;
+        N5: TMenuItem;
+        N201: TMenuItem;
+        N202: TMenuItem;
+        N203: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -102,9 +101,9 @@ type
         procedure ToolButton10Click(Sender: TObject);
         procedure MenuItem6Click(Sender: TObject);
         procedure MenuNewPartyClick(Sender: TObject);
-    procedure N201Click(Sender: TObject);
-    procedure N202Click(Sender: TObject);
-    procedure N203Click(Sender: TObject);
+        procedure N201Click(Sender: TObject);
+        procedure N202Click(Sender: TObject);
+        procedure N203Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -151,8 +150,8 @@ uses stringgridutils, stringutils, JclDebug,
     services, UnitFormParty, UnitFormProperties,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
-    UnitFormConsole, uitypes, types, UnitFormFirmware,
-    UnitFormJournal, UnitFormInterrogate;
+    uitypes, types, UnitFormFirmware,
+    UnitFormInterrogate, UnitFormConsole;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -253,15 +252,6 @@ begin
     begin
         Font.Assign(self.Font);
         Parent := TabSheetConsole;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
-    with FormJournal do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetJournal;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -393,18 +383,21 @@ begin
             PanelWaitResponseMsg.Hide;
         end);
 
-    SetOnComportEntry(
-        procedure(entry: TComportEntry)
-        begin
-            FormConsole.OnComportEntry(entry);
-        end);
-    SetOnNewJournalEntry(FormConsole.OnJournalEntry);
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
-    SetOnHostApplicationPanic(
+    SetOnPanic(
         procedure(pnicStr: String)
         begin
             raise EHostApplicationPanic.Create(pnicStr);
+        end);
 
+    TabSheetConsole.TabVisible := false;
+    SetOnWriteConsole(
+        procedure(s: String)
+        begin
+            FormConsole.NewLine(s);
+            if not TabSheetConsole.TabVisible then
+                TabSheetConsole.TabVisible := true;
+            Application.ProcessMessages;
         end);
 
     NotifyServices_SetEnabled(true);
@@ -443,7 +436,7 @@ begin
             FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
               Checked[i]);
 
-    //SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
+    // SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
 
 procedure TElcoMainForm.FormResize(Sender: TObject);
@@ -490,10 +483,6 @@ begin
     else if PageControl.ActivePage = TabSheetParty then
     begin
         FormLastParty.reload_data;
-    end
-    else if PageControl.ActivePage = TabSheetJournal then
-    begin
-        FormJournal.EnsureNodes;
     end
     else if PageControl.ActivePage = TabSheetInterrogate then
     begin
@@ -720,31 +709,35 @@ begin
 end;
 
 procedure TElcoMainForm.N202Click(Sender: TObject);
-var s : string;
-    v:double;
-    label l;
+var
+    s: string;
+    v: double;
+label l;
 begin
     s := '1';
-    l:
-    if not InputQuery('Пересчёт Iч -20"С', 'Укажите коэффициент пересчёта', s) then
+l:
+    if not InputQuery('Пересчёт Iч -20"С', 'Укажите коэффициент пересчёта', s)
+    then
         exit;
     s := s.Trim;
-    if not try_str_to_float(s,v) then
+    if not try_str_to_float(s, v) then
         goto l;
     FormLastParty.SetParty(TLastParty.CalculateSensMinus20(v));
 end;
 
 procedure TElcoMainForm.N203Click(Sender: TObject);
-var s : string;
-    v:double;
-    label l;
+var
+    s: string;
+    v: double;
+label l;
 begin
     s := '1';
-    l:
-    if not InputQuery('Пересчёт Iч 50"С', 'Укажите коэффициент пересчёта', s) then
+l:
+    if not InputQuery('Пересчёт Iч 50"С', 'Укажите коэффициент пересчёта', s)
+    then
         exit;
     s := s.Trim;
-    if not try_str_to_float(s,v) then
+    if not try_str_to_float(s, v) then
         goto l;
     FormLastParty.SetParty(TLastParty.CalculateSensPlus50(v));
 end;
@@ -826,7 +819,8 @@ begin
     begin
         PanelWaitResponseMsg.Hide;
         Enabled := true;
-        if (Screen.ActiveForm = self) and Assigned(FOnPipeBusyActiveControl) then
+        if (Screen.ActiveForm = self) and Assigned(FOnPipeBusyActiveControl)
+        then
             try
                 FOnPipeBusyActiveControl.SetFocus;
             except

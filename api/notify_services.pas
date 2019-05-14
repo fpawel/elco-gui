@@ -4,13 +4,11 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
-    TComportEntryHandler = reference to procedure (x:TComportEntry);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TJournalEntryHandler = reference to procedure (x:TJournalEntry);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -24,11 +22,10 @@ procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
-procedure SetOnComportEntry( AHandler : TComportEntryHandler);
 procedure SetOnStartServerApplication( AHandler : TStringHandler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
-procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
-procedure SetOnHostApplicationPanic( AHandler : TStringHandler);
+procedure SetOnPanic( AHandler : TStringHandler);
+procedure SetOnWriteConsole( AHandler : TStringHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
@@ -36,8 +33,8 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdComportEntry, CmdStartServerApplication, CmdReadFirmware, CmdNewJournalEntry, 
-    CmdHostApplicationPanic);
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
+    CmdWriteConsole);
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -49,11 +46,10 @@ var
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnLastPartyChanged : TPartyHandler;
-    _OnComportEntry : TComportEntryHandler;
     _OnStartServerApplication : TStringHandler;
     _OnReadFirmware : TFirmwareInfoHandler;
-    _OnNewJournalEntry : TJournalEntryHandler;
-    _OnHostApplicationPanic : TStringHandler;
+    _OnPanic : TStringHandler;
+    _OnWriteConsole : TStringHandler;
     _enabled:boolean;
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
@@ -128,12 +124,6 @@ begin
                 raise Exception.Create('_OnLastPartyChanged must be set');
             _OnLastPartyChanged(TJson.JsonToObject<TParty>(str));
         end;
-        CmdComportEntry:
-        begin
-            if not Assigned(_OnComportEntry) then
-                raise Exception.Create('_OnComportEntry must be set');
-            _OnComportEntry(TJson.JsonToObject<TComportEntry>(str));
-        end;
         CmdStartServerApplication:
         begin
             if not Assigned(_OnStartServerApplication) then
@@ -146,17 +136,17 @@ begin
                 raise Exception.Create('_OnReadFirmware must be set');
             _OnReadFirmware(TJson.JsonToObject<TFirmwareInfo>(str));
         end;
-        CmdNewJournalEntry:
+        CmdPanic:
         begin
-            if not Assigned(_OnNewJournalEntry) then
-                raise Exception.Create('_OnNewJournalEntry must be set');
-            _OnNewJournalEntry(TJson.JsonToObject<TJournalEntry>(str));
+            if not Assigned(_OnPanic) then
+                raise Exception.Create('_OnPanic must be set');
+            _OnPanic(str);
         end;
-        CmdHostApplicationPanic:
+        CmdWriteConsole:
         begin
-            if not Assigned(_OnHostApplicationPanic) then
-                raise Exception.Create('_OnHostApplicationPanic must be set');
-            _OnHostApplicationPanic(str);
+            if not Assigned(_OnWriteConsole) then
+                raise Exception.Create('_OnWriteConsole must be set');
+            _OnWriteConsole(str);
         end;
         
     else
@@ -218,12 +208,6 @@ begin
         raise Exception.Create('_OnLastPartyChanged already set');
     _OnLastPartyChanged := AHandler;
 end;
-procedure SetOnComportEntry( AHandler : TComportEntryHandler);
-begin
-    if Assigned(_OnComportEntry) then
-        raise Exception.Create('_OnComportEntry already set');
-    _OnComportEntry := AHandler;
-end;
 procedure SetOnStartServerApplication( AHandler : TStringHandler);
 begin
     if Assigned(_OnStartServerApplication) then
@@ -236,17 +220,17 @@ begin
         raise Exception.Create('_OnReadFirmware already set');
     _OnReadFirmware := AHandler;
 end;
-procedure SetOnNewJournalEntry( AHandler : TJournalEntryHandler);
+procedure SetOnPanic( AHandler : TStringHandler);
 begin
-    if Assigned(_OnNewJournalEntry) then
-        raise Exception.Create('_OnNewJournalEntry already set');
-    _OnNewJournalEntry := AHandler;
+    if Assigned(_OnPanic) then
+        raise Exception.Create('_OnPanic already set');
+    _OnPanic := AHandler;
 end;
-procedure SetOnHostApplicationPanic( AHandler : TStringHandler);
+procedure SetOnWriteConsole( AHandler : TStringHandler);
 begin
-    if Assigned(_OnHostApplicationPanic) then
-        raise Exception.Create('_OnHostApplicationPanic already set');
-    _OnHostApplicationPanic := AHandler;
+    if Assigned(_OnWriteConsole) then
+        raise Exception.Create('_OnWriteConsole already set');
+    _OnWriteConsole := AHandler;
 end;
 
 

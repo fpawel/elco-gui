@@ -4,10 +4,10 @@ object FormConsole: TFormConsole
   Caption = #1050#1086#1085#1089#1086#1083#1100' '#1057#1054#1052' '#1087#1086#1088#1090#1072
   ClientHeight = 264
   ClientWidth = 1063
-  Color = clBtnFace
+  Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -12
   Font.Name = 'Tahoma'
   Font.Style = []
   Icon.Data = {
@@ -146,125 +146,41 @@ object FormConsole: TFormConsole
     00070000000700000007000000070000000784000003FF000001FFC00000FFF0
     0000FFFC0380FFFF8FF0FFFFFFFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   OldCreateOrder = False
-  OnClose = FormClose
   OnCreate = FormCreate
+  OnResize = FormResize
   PixelsPerInch = 96
-  TextHeight = 13
-  object RichEdit1: TRichEdit
-    Left = 0
-    Top = 31
-    Width = 1063
-    Height = 233
+  TextHeight = 14
+  object StringGrid1: TStringGrid
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 1057
+    Height = 258
     Align = alClient
     BorderStyle = bsNone
-    Font.Charset = RUSSIAN_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    ReadOnly = True
-    ScrollBars = ssVertical
-    TabOrder = 0
-    Zoom = 100
-    OnMouseDown = RichEdit1MouseDown
-  end
-  object Panel3: TPanel
-    Left = 0
-    Top = 0
-    Width = 1063
-    Height = 31
-    Align = alTop
-    Alignment = taLeftJustify
-    BevelOuter = bvNone
-    Color = clGradientInactiveCaption
+    ColCount = 2
+    DefaultRowHeight = 20
+    DefaultDrawing = False
+    FixedColor = clBackground
+    FixedCols = 0
+    RowCount = 1
+    FixedRows = 0
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Color = clWindowText
     Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
-    ParentBackground = False
+    GradientEndColor = clBlack
     ParentFont = False
-    TabOrder = 1
-    object ToolBar1: TToolBar
-      Left = 1032
-      Top = 0
-      Width = 31
-      Height = 31
-      Align = alRight
-      ButtonHeight = 30
-      ButtonWidth = 30
-      Caption = 'ToolBarStop'
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Images = ImageList4
-      TabOrder = 0
-      object ToolButton1: TToolButton
-        Left = 0
-        Top = 0
-        Hint = #1055#1088#1077#1088#1074#1072#1090#1100' '#1074#1099#1087#1086#1083#1085#1077#1085#1080#1077
-        Caption = 'ToolButtonStop'
-        ImageIndex = 0
-        ParentShowHint = False
-        ShowHint = True
-        OnClick = ToolButton1Click
-      end
-    end
-    object Panel1: TPanel
-      Left = 0
-      Top = 0
-      Width = 5
-      Height = 31
-      Align = alLeft
-      Alignment = taLeftJustify
-      BevelOuter = bvNone
-      Color = clGradientInactiveCaption
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clGray
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentBackground = False
-      ParentFont = False
-      TabOrder = 1
-    end
-    object Panel5: TPanel
-      Left = 976
-      Top = 0
-      Width = 56
-      Height = 31
-      Align = alRight
-      Alignment = taLeftJustify
-      BevelOuter = bvNone
-      Caption = '0'
-      Color = clGradientInactiveCaption
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentBackground = False
-      ParentFont = False
-      TabOrder = 2
-    end
-    object Panel6: TPanel
-      Left = 5
-      Top = 0
-      Width = 90
-      Height = 31
-      Align = alLeft
-      Alignment = taLeftJustify
-      BevelOuter = bvNone
-      Color = clGradientInactiveCaption
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentBackground = False
-      ParentFont = False
-      TabOrder = 3
-    end
+    PopupMenu = PopupMenu1
+    TabOrder = 0
+    OnDblClick = StringGrid1DblClick
+    OnDrawCell = StringGrid1DrawCell
+    ColWidths = (
+      64
+      64)
+    RowHeights = (
+      20)
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit
@@ -273,10 +189,10 @@ object FormConsole: TFormConsole
     DrawingStyle = dsTransparent
     Height = 20
     Width = 20
-    Left = 632
-    Top = 106
+    Left = 192
+    Top = 98
     Bitmap = {
-      494C010101002403540414001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C010101002403040014001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000805
@@ -489,5 +405,14 @@ object FormConsole: TFormConsole
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 472
+    Top = 64
+    object N1: TMenuItem
+      Caption = #1050#1086#1087#1080#1088#1086#1074#1072#1090#1100
+      ShortCut = 16451
+      OnClick = N1Click
+    end
   end
 end

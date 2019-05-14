@@ -7,32 +7,32 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
     Vcl.Samples.Spin, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.ExtCtrls,
-    server_data_types;
+    Vcl.Grids, Vcl.Menus;
 
 type
 
+    TLogLevel = (loglevDebug, loglevInfo, loglevWarn, loglevError);
+
     TFormConsole = class(TForm)
-        RichEdit1: TRichEdit;
-        Panel3: TPanel;
         ImageList4: TImageList;
-        ToolBar1: TToolBar;
-        ToolButton1: TToolButton;
-        Panel1: TPanel;
-        Panel5: TPanel;
-        Panel6: TPanel;
+        StringGrid1: TStringGrid;
+        PopupMenu1: TPopupMenu;
+        N1: TMenuItem;
         procedure FormCreate(Sender: TObject);
-        procedure RichEdit1MouseDown(Sender: TObject; Button: TMouseButton;
-          Shift: TShiftState; X, Y: Integer);
-        procedure ToolButton1Click(Sender: TObject);
-        procedure FormClose(Sender: TObject; var Action: TCloseAction);
+        procedure FormResize(Sender: TObject);
+        procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+          Rect: TRect; State: TGridDrawState);
+        procedure StringGrid1DblClick(Sender: TObject);
+        procedure N1Click(Sender: TObject);
 
     private
         { Private declarations }
+        FEntriessLevels: TArray<TLogLevel>;
 
     public
         { Public declarations }
-        procedure OnComportEntry(entry: TComportEntry);
-        procedure OnJournalEntry(entry: TJournalEntry);
+        procedure NewLine(AText: string);
+        procedure Clear;
     end;
 
 var
@@ -40,109 +40,133 @@ var
 
 implementation
 
-uses Rest.Json, dateutils, richeditutils, server_data_types_helpers;
+uses FireDAC.Comp.Client, Rest.Json, dateutils, richeditutils, stringutils,
+    stringgridutils, strutils, types,
+    UnitFormPopup;
 
 {$R *.dfm}
 
 procedure TFormConsole.FormCreate(Sender: TObject);
 begin
-    //
+    SetLength(FEntriessLevels, 0);
 end;
 
-procedure TFormConsole.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TFormConsole.FormResize(Sender: TObject);
 begin
-    //
-end;
-
-procedure TFormConsole.OnJournalEntry(entry: TJournalEntry);
-begin
-    RichEdit1.SelAttributes.Color := clGreen;
-    RichEdit1.SelText := TimeToStr(entry.FCreatedAt) + '  ';
-
-    RichEdit1.SelAttributes.Color := clWebLightSalmon;
-    RichEdit1.SelText := entry.FFile + ' ' + inttostr(entry.FLine) + ' ';
-
-    RichEdit1.SelAttributes.Style := [fsBold];
-    RichEdit1.SelAttributes.Color := clGray;
-    RichEdit1.SelText := entry.FWorkName + ' ';
-
-    RichEdit1.SelAttributes.Style := [];
-
-    if entry.IsErrorLevel then
+    with StringGrid1 do
     begin
-        RichEdit1.SelAttributes.Color := clRed;
-        // RichEdit_setBackcolor(RichEdit1, cl3DLight);
-    end
-    else if (entry.FLevel = 'warn') or (entry.FLevel = 'warning') then
-        RichEdit1.SelAttributes.Color := clMaroon
-    else if entry.FLevel = 'info' then
-        RichEdit1.SelAttributes.Color := clNavy
-    else if entry.FLevel = 'debug' then
-        RichEdit1.SelAttributes.Color := clGray
-    else
-        RichEdit1.SelAttributes.Color := clBlack;
-
-    RichEdit1.SelText := entry.FMessage + #13;
-
-    if entry.FStack <> '' then
-    begin
-        RichEdit1.SelAttributes.Color := clGrayText;
-        RichEdit1.SelText := entry.FStack + #13;
+        ColWidths[0] := 70;
+        ColWidths[1] := self.Width - ColWidths[0] - 30;
     end;
-
-    SendMessage(RichEdit1.handle, WM_VSCROLL, SB_BOTTOM, 0);
 end;
 
-procedure TFormConsole.OnComportEntry(entry: TComportEntry);
+procedure TFormConsole.StringGrid1DblClick(Sender: TObject);
 var
-    i: Integer;
+    r: TRect;
+    pt: TPoint;
 begin
-    if RichEdit1.Lines.Count > 300 then
+    with StringGrid1 do
     begin
-        RichEdit1.Hide;
-        for i := 0 to 1000 div 3 do
-            RichEdit1.Lines.Delete(0);
-        RichEdit1.Show;
+        FormPopup.RichEdit1.Text := Cells[1, Row];
+        r := CellRect(Col, Row);
+        pt := StringGrid1.ClientToScreen(r.TopLeft);
+        FormPopup.Left := pt.X + 5;
+        FormPopup.Top := pt.Y + 5;
+        FormPopup.Show;
+    end;
+end;
+
+procedure TFormConsole.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var
+    grd: TStringGrid;
+    cnv: TCanvas;
+    ta: TAlignment;
+
+begin
+    grd := StringGrid1;
+    cnv := grd.Canvas;
+    cnv.Font.Assign(grd.Font);
+    cnv.Brush.Color := clWhite;
+
+    if gdSelected in State then
+        cnv.Brush.Color := clGradientInactiveCaption;
+
+    case ACol of
+        0:
+            begin
+                ta := taCenter;
+                cnv.Font.Color := clGreen;
+            end;
+        1:
+            begin
+                ta := taLeftJustify;
+                cnv.Font.Color := clBlack;
+                if ARow < length(FEntriessLevels) then
+                    case FEntriessLevels[ARow] of
+                        loglevDebug:
+                            cnv.Font.Color := clGray;
+                        loglevInfo:
+                            cnv.Font.Color := clBlack;
+                        loglevWarn:
+                            cnv.Font.Color := clMaroon;
+                        loglevError:
+                            cnv.Font.Color := clRed;
+
+                    end;
+            end;
+
     end;
 
-    SendMessage(RichEdit1.handle, EM_SETSEL, length(RichEdit1.Text),
-      length(RichEdit1.Text));
+    DrawCellText(StringGrid1, ACol, ARow, Rect, ta,
+      StringGrid1.Cells[ACol, ARow]);
+    // StringGrid_DrawCellBounds(StringGrid1.Canvas, ACol, ARow, Rect);
+end;
 
-    RichEdit1.SelAttributes.Color := clGreen;
-    RichEdit1.SelText := formatDatetime('hh:mm:ss.zzz', now) + ' : ';
-
-    RichEdit1.SelAttributes.Style := [fsBold];
-    RichEdit1.SelAttributes.Color := clGray;
-    RichEdit1.SelText := entry.FPort + ' : ';
-
-    RichEdit1.SelAttributes.Style := [];
-    if entry.FError then
+procedure TFormConsole.Clear;
+begin
+    with StringGrid1 do
     begin
-        RichEdit1.SelAttributes.Color := clRed;
-    end
-    else
-        RichEdit1.SelAttributes.Color := clNavy;
-
-    RichEdit1.SelText := entry.FMsg + #13;
-
-    SendMessage(RichEdit1.handle, WM_VSCROLL, SB_BOTTOM, 0);
-
-    entry.Free;
-    Panel5.Caption := inttostr(RichEdit1.Lines.Count);
-
-
+        Rowcount := 1;
+        Cells[0, 0] := '';
+        Cells[1, 0] := '';
+    end;
 end;
 
-procedure TFormConsole.RichEdit1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TFormConsole.N1Click(Sender: TObject);
 begin
-    if Button = TMouseButton.mbRight then
-        RichEdit_PopupMenu(RichEdit1);
+    StringGrid_CopytoClipboard(StringGrid1);
 end;
 
-procedure TFormConsole.ToolButton1Click(Sender: TObject);
+function parseLogLevel(s:String): TLogLevel;
+var xs:TStringDynArray;
 begin
-    RichEdit1.Clear;
+    xs := SplitString(s, ' ');
+    result :=  loglevDebug;
+    if (length(xs) > 1) then
+        begin
+            s := LowerCase(xs[1] );
+            if s = 'inf' then
+                result := loglevInfo
+            else if s = 'wrn' then
+                result := loglevWarn
+            else if s = 'err' then
+                result := loglevError
+        end;
+end;
+
+procedure TFormConsole.NewLine(AText: string);
+begin
+    SetLength(FEntriessLevels, length(FEntriessLevels) + 1);
+    FEntriessLevels[length(FEntriessLevels) - 1] :=  parseLogLevel(AText);
+    with StringGrid1 do
+    begin
+        if length(FEntriessLevels) > 1 then
+            Rowcount := Rowcount + 1;
+        Cells[0, Rowcount - 1] := formatDatetime('hh:mm:ss', now);
+        Cells[1, Rowcount - 1] := AText;
+        Row := Rowcount - 1;
+    end;
 end;
 
 end.
