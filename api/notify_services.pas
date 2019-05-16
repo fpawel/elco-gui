@@ -4,11 +4,11 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TPartyHandler = reference to procedure (x:TParty);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
-    TPartyHandler = reference to procedure (x:TParty);
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -19,6 +19,8 @@ procedure SetOnWorkComplete( AHandler : TStringHandler);
 procedure SetOnWorkStarted( AHandler : TStringHandler);
 procedure SetOnWorkStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
+procedure SetOnTraceTemperatureInfo( AHandler : TStringHandler);
+procedure SetOnTraceTemperatureError( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
@@ -33,7 +35,7 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdTraceTemperatureInfo, CmdTraceTemperatureError, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
     CmdWriteConsole);
 
 var
@@ -43,6 +45,8 @@ var
     _OnWorkStarted : TStringHandler;
     _OnWorkStopped : TStringHandler;
     _OnStatus : TStringHandler;
+    _OnTraceTemperatureInfo : TStringHandler;
+    _OnTraceTemperatureError : TStringHandler;
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnLastPartyChanged : TPartyHandler;
@@ -105,6 +109,18 @@ begin
             if not Assigned(_OnStatus) then
                 raise Exception.Create('_OnStatus must be set');
             _OnStatus(str);
+        end;
+        CmdTraceTemperatureInfo:
+        begin
+            if not Assigned(_OnTraceTemperatureInfo) then
+                raise Exception.Create('_OnTraceTemperatureInfo must be set');
+            _OnTraceTemperatureInfo(str);
+        end;
+        CmdTraceTemperatureError:
+        begin
+            if not Assigned(_OnTraceTemperatureError) then
+                raise Exception.Create('_OnTraceTemperatureError must be set');
+            _OnTraceTemperatureError(str);
         end;
         CmdWarning:
         begin
@@ -189,6 +205,18 @@ begin
     if Assigned(_OnStatus) then
         raise Exception.Create('_OnStatus already set');
     _OnStatus := AHandler;
+end;
+procedure SetOnTraceTemperatureInfo( AHandler : TStringHandler);
+begin
+    if Assigned(_OnTraceTemperatureInfo) then
+        raise Exception.Create('_OnTraceTemperatureInfo already set');
+    _OnTraceTemperatureInfo := AHandler;
+end;
+procedure SetOnTraceTemperatureError( AHandler : TStringHandler);
+begin
+    if Assigned(_OnTraceTemperatureError) then
+        raise Exception.Create('_OnTraceTemperatureError already set');
+    _OnTraceTemperatureError := AHandler;
 end;
 procedure SetOnWarning( AHandler : TStringHandler);
 begin

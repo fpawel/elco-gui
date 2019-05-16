@@ -23,7 +23,6 @@ type
         TabSheetParty: TTabSheet;
         TabSheetParties: TTabSheet;
         ImageList4: TImageList;
-        PanelStatusBottom: TPanel;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
         Panel3: TPanel;
@@ -47,7 +46,6 @@ type
         N8: TMenuItem;
         TabSheetConsole: TTabSheet;
         TimerPerforming: TTimer;
-        LabelStatusBottom: TLabel;
         PanelPlaceholderMain: TPanel;
         ToolBar4: TToolBar;
         ToolButton5: TToolButton;
@@ -74,6 +72,9 @@ type
         N201: TMenuItem;
         N202: TMenuItem;
         N203: TMenuItem;
+        GridPanelBottom: TGridPanel;
+        LabelStatusBottom: TLabel;
+    LabelStatusTemperature: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -346,7 +347,7 @@ begin
     SetOnStatus(
         procedure(s: string)
         begin
-            LabelStatusTop.Caption := s;
+            LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
         end);
 
     SetOnWarning(
@@ -387,7 +388,10 @@ begin
     SetOnPanic(
         procedure(pnicStr: String)
         begin
-            raise EHostApplicationPanic.Create(pnicStr);
+            NotifyServices_SetEnabled(false);
+            Application.ShowException(EHostApplicationPanic.Create(pnicStr));
+            Application.Terminate;
+
         end);
 
     TabSheetConsole.TabVisible := false;
@@ -398,6 +402,21 @@ begin
             if not TabSheetConsole.TabVisible then
                 TabSheetConsole.TabVisible := true;
             Application.ProcessMessages;
+        end);
+
+    SetOnTraceTemperatureInfo(
+        procedure(s: string)
+        begin
+            LabelStatusTemperature.Font.Color := clInfoBk;
+            LabelStatusTemperature.Caption := TimeToStr(now) + ' термокамера: ' + s;
+
+        end);
+
+    SetOnTraceTemperatureError(
+        procedure(s: string)
+        begin
+            LabelStatusTemperature.Font.Color := clRed;
+            LabelStatusTemperature.Caption := TimeToStr(now) + ' термокамера: ' + s;
         end);
 
     NotifyServices_SetEnabled(true);

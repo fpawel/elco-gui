@@ -2,8 +2,8 @@ object ElcoMainForm: TElcoMainForm
   Left = 0
   Top = 0
   Caption = #1069#1061#1071'. '#1051#1072#1073#1086#1088#1072#1090#1086#1088#1080#1103' 73.'
-  ClientHeight = 646
-  ClientWidth = 1126
+  ClientHeight = 603
+  ClientWidth = 918
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -5417,25 +5417,27 @@ object ElcoMainForm: TElcoMainForm
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 1126
+    Width = 918
     Height = 5
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 1126
   end
   object Panel14: TPanel
     Left = 0
     Top = 36
     Width = 5
-    Height = 590
+    Height = 547
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 590
   end
   object Panel3: TPanel
     Left = 0
     Top = 5
-    Width = 1126
+    Width = 918
     Height = 31
     Align = alTop
     Alignment = taLeftJustify
@@ -5449,6 +5451,7 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 2
+    ExplicitWidth = 1126
     object LabelStatusTop: TLabel
       AlignWithMargins = True
       Left = 128
@@ -5486,7 +5489,7 @@ object ElcoMainForm: TElcoMainForm
       end
     end
     object ToolBar3: TToolBar
-      Left = 1028
+      Left = 820
       Top = 0
       Width = 63
       Height = 31
@@ -5498,6 +5501,7 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 1
+      ExplicitLeft = 1028
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -5519,7 +5523,7 @@ object ElcoMainForm: TElcoMainForm
     object PanelDelay: TPanel
       Left = 231
       Top = 0
-      Width = 797
+      Width = 589
       Height = 31
       Align = alClient
       Alignment = taLeftJustify
@@ -5534,6 +5538,7 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 2
       Visible = False
+      ExplicitWidth = 797
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5555,7 +5560,7 @@ object ElcoMainForm: TElcoMainForm
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
-        Left = 725
+        Left = 517
         Top = 3
         Width = 31
         Height = 25
@@ -5570,6 +5575,7 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitLeft = 725
         ExplicitHeight = 18
       end
       object LabelWhat: TLabel
@@ -5592,7 +5598,7 @@ object ElcoMainForm: TElcoMainForm
         ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
-        Left = 761
+        Left = 553
         Top = 0
         Width = 36
         Height = 31
@@ -5604,6 +5610,7 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
+        ExplicitLeft = 761
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5620,7 +5627,7 @@ object ElcoMainForm: TElcoMainForm
       object Panel2: TPanel
         Left = 101
         Top = 0
-        Width = 619
+        Width = 411
         Height = 31
         Align = alClient
         Alignment = taLeftJustify
@@ -5634,16 +5641,18 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 619
         DesignSize = (
-          619
+          411
           31)
         object ProgressBar1: TProgressBar
           Left = 3
           Top = 8
-          Width = 613
+          Width = 405
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
+          ExplicitWidth = 613
         end
       end
     end
@@ -5673,7 +5682,7 @@ object ElcoMainForm: TElcoMainForm
       end
     end
     object ToolBar4: TToolBar
-      Left = 1091
+      Left = 883
       Top = 0
       Width = 35
       Height = 31
@@ -5686,6 +5695,7 @@ object ElcoMainForm: TElcoMainForm
       Images = ImageList4
       TabOrder = 4
       Visible = False
+      ExplicitLeft = 1091
       object ToolButton5: TToolButton
         Left = 0
         Top = 0
@@ -5729,48 +5739,23 @@ object ElcoMainForm: TElcoMainForm
       end
     end
   end
-  object PanelStatusBottom: TPanel
-    Left = 0
-    Top = 626
-    Width = 1126
-    Height = 20
-    Align = alBottom
-    Alignment = taLeftJustify
-    BevelOuter = bvNone
-    Color = clGradientInactiveCaption
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentBackground = False
-    ParentFont = False
-    TabOrder = 3
-    object LabelStatusBottom: TLabel
-      Left = 0
-      Top = 0
-      Width = 122
-      Height = 20
-      Align = alLeft
-      Caption = 'LabelStatusBottom'
-      ExplicitHeight = 18
-    end
-  end
   object PanelPlaceholderMain: TPanel
     Left = 5
     Top = 36
-    Width = 1121
-    Height = 590
+    Width = 913
+    Height = 547
     Align = alClient
     BevelOuter = bvNone
     Constraints.MinWidth = 400
     ParentColor = True
-    TabOrder = 4
+    TabOrder = 3
+    ExplicitWidth = 1121
+    ExplicitHeight = 590
     object PageControlMain: TPageControl
       Left = 0
       Top = 0
-      Width = 1121
-      Height = 590
+      Width = 913
+      Height = 547
       ActivePage = TabSheetParty
       Align = alClient
       MultiLine = True
@@ -5781,20 +5766,30 @@ object ElcoMainForm: TElcoMainForm
       TabWidth = 40
       OnChange = PageControlMainChange
       OnDrawTab = PageControlMainDrawTab
+      ExplicitWidth = 1121
+      ExplicitHeight = 590
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
+        ExplicitLeft = 103
+        ExplicitTop = 3
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
+        ExplicitWidth = 1013
+        ExplicitHeight = 582
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
+        ExplicitWidth = 1013
+        ExplicitHeight = 582
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
+        ExplicitWidth = 1013
+        ExplicitHeight = 582
       end
     end
   end
@@ -5808,7 +5803,7 @@ object ElcoMainForm: TElcoMainForm
     Color = clInfoBk
     Constraints.MinHeight = 150
     ParentBackground = False
-    TabOrder = 5
+    TabOrder = 4
     Visible = False
     DesignSize = (
       577
@@ -6106,7 +6101,7 @@ object ElcoMainForm: TElcoMainForm
     Font.Style = []
     ParentBackground = False
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
     Visible = False
     object Image2: TImage
       Left = 9
@@ -6216,6 +6211,61 @@ object ElcoMainForm: TElcoMainForm
         88A42E04C60DD8F5A238E3E1371A4919C1EC5846837F235EAFE65C388F83C2B9
         08AD54EA5EE8A304D46AF2CE18DC21D04FFC1F91D8A19C9B3B02200000000049
         454E44AE426082}
+    end
+  end
+  object GridPanelBottom: TGridPanel
+    Left = 0
+    Top = 583
+    Width = 918
+    Height = 20
+    Align = alBottom
+    BevelOuter = bvNone
+    Color = clGradientInactiveCaption
+    ColumnCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = LabelStatusBottom
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = LabelStatusTemperature
+        Row = 0
+      end>
+    ParentBackground = False
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end>
+    TabOrder = 6
+    ExplicitTop = 0
+    ExplicitWidth = 920
+    object LabelStatusBottom: TLabel
+      Left = 0
+      Top = 0
+      Width = 74
+      Height = 20
+      Align = alLeft
+      Caption = 'LabelStatus'
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitHeight = 18
+    end
+    object LabelStatusTemperature: TLabel
+      Left = 459
+      Top = 0
+      Width = 160
+      Height = 20
+      Align = alLeft
+      Caption = 'LabelStatusTemperature'
+      ExplicitHeight = 18
     end
   end
   object ImageList3: TImageList
