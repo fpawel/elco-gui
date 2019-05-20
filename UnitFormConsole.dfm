@@ -147,6 +147,7 @@ object FormConsole: TFormConsole
     0000FFFC0380FFFF8FF0FFFFFFFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 14
@@ -171,11 +172,15 @@ object FormConsole: TFormConsole
     Font.Name = 'Tahoma'
     Font.Style = []
     GradientEndColor = clBlack
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing]
     ParentFont = False
     PopupMenu = PopupMenu1
     TabOrder = 0
     OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
+    OnKeyDown = StringGrid1KeyDown
+    ExplicitLeft = -2
+    ExplicitTop = -2
     ColWidths = (
       64
       64)

@@ -3,7 +3,7 @@ object FormPopup: TFormPopup
   Top = 0
   BorderStyle = bsSizeToolWin
   ClientHeight = 163
-  ClientWidth = 546
+  ClientWidth = 532
   Color = clInfoBk
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object FormPopup: TFormPopup
   object RichEdit1: TRichEdit
     Left = 0
     Top = 0
-    Width = 546
+    Width = 532
     Height = 163
     Align = alClient
     Font.Charset = RUSSIAN_CHARSET
@@ -30,7 +30,7 @@ object FormPopup: TFormPopup
     ParentColor = True
     ParentFont = False
     ReadOnly = True
-    ScrollBars = ssBoth
+    ScrollBars = ssVertical
     TabOrder = 0
     Zoom = 100
   end

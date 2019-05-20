@@ -4,11 +4,12 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TPartyHandler = reference to procedure (x:TParty);
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TPartyHandler = reference to procedure (x:TParty);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -19,8 +20,8 @@ procedure SetOnWorkComplete( AHandler : TStringHandler);
 procedure SetOnWorkStarted( AHandler : TStringHandler);
 procedure SetOnWorkStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
-procedure SetOnTraceTemperatureInfo( AHandler : TStringHandler);
-procedure SetOnTraceTemperatureError( AHandler : TStringHandler);
+procedure SetOnKtx500Info( AHandler : TKtx500InfoHandler);
+procedure SetOnKtx500Error( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
@@ -35,7 +36,7 @@ implementation
 uses Rest.Json, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdTraceTemperatureInfo, CmdTraceTemperatureError, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
     CmdWriteConsole);
 
 var
@@ -45,8 +46,8 @@ var
     _OnWorkStarted : TStringHandler;
     _OnWorkStopped : TStringHandler;
     _OnStatus : TStringHandler;
-    _OnTraceTemperatureInfo : TStringHandler;
-    _OnTraceTemperatureError : TStringHandler;
+    _OnKtx500Info : TKtx500InfoHandler;
+    _OnKtx500Error : TStringHandler;
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnLastPartyChanged : TPartyHandler;
@@ -110,17 +111,17 @@ begin
                 raise Exception.Create('_OnStatus must be set');
             _OnStatus(str);
         end;
-        CmdTraceTemperatureInfo:
+        CmdKtx500Info:
         begin
-            if not Assigned(_OnTraceTemperatureInfo) then
-                raise Exception.Create('_OnTraceTemperatureInfo must be set');
-            _OnTraceTemperatureInfo(str);
+            if not Assigned(_OnKtx500Info) then
+                raise Exception.Create('_OnKtx500Info must be set');
+            _OnKtx500Info(TJson.JsonToObject<TKtx500Info>(str));
         end;
-        CmdTraceTemperatureError:
+        CmdKtx500Error:
         begin
-            if not Assigned(_OnTraceTemperatureError) then
-                raise Exception.Create('_OnTraceTemperatureError must be set');
-            _OnTraceTemperatureError(str);
+            if not Assigned(_OnKtx500Error) then
+                raise Exception.Create('_OnKtx500Error must be set');
+            _OnKtx500Error(str);
         end;
         CmdWarning:
         begin
@@ -206,17 +207,17 @@ begin
         raise Exception.Create('_OnStatus already set');
     _OnStatus := AHandler;
 end;
-procedure SetOnTraceTemperatureInfo( AHandler : TStringHandler);
+procedure SetOnKtx500Info( AHandler : TKtx500InfoHandler);
 begin
-    if Assigned(_OnTraceTemperatureInfo) then
-        raise Exception.Create('_OnTraceTemperatureInfo already set');
-    _OnTraceTemperatureInfo := AHandler;
+    if Assigned(_OnKtx500Info) then
+        raise Exception.Create('_OnKtx500Info already set');
+    _OnKtx500Info := AHandler;
 end;
-procedure SetOnTraceTemperatureError( AHandler : TStringHandler);
+procedure SetOnKtx500Error( AHandler : TStringHandler);
 begin
-    if Assigned(_OnTraceTemperatureError) then
-        raise Exception.Create('_OnTraceTemperatureError already set');
-    _OnTraceTemperatureError := AHandler;
+    if Assigned(_OnKtx500Error) then
+        raise Exception.Create('_OnKtx500Error already set');
+    _OnKtx500Error := AHandler;
 end;
 procedure SetOnWarning( AHandler : TStringHandler);
 begin

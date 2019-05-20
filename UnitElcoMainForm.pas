@@ -73,8 +73,9 @@ type
         N202: TMenuItem;
         N203: TMenuItem;
         GridPanelBottom: TGridPanel;
+        TabSheetKtx500: TTabSheet;
         LabelStatusBottom: TLabel;
-    LabelStatusTemperature: TLabel;
+        LabelStatusKtx500: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -152,7 +153,7 @@ uses stringgridutils, stringutils, JclDebug,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
-    UnitFormInterrogate, UnitFormConsole;
+    UnitFormInterrogate, UnitFormConsole, UnitFormKtx500;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -255,6 +256,7 @@ begin
         Parent := TabSheetConsole;
         BorderStyle := bsNone;
         Align := alClient;
+        FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
         Show;
     end;
 
@@ -270,6 +272,15 @@ begin
     begin
         Font.Assign(self.Font);
         Parent := TabSheetInterrogate;
+        BorderStyle := bsNone;
+        Align := alClient;
+        Show;
+    end;
+
+    with FormKtx500 do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetKtx500;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -404,19 +415,37 @@ begin
             Application.ProcessMessages;
         end);
 
-    SetOnTraceTemperatureInfo(
+    SetOnKtx500Error(
         procedure(s: string)
         begin
-            LabelStatusTemperature.Font.Color := clInfoBk;
-            LabelStatusTemperature.Caption := TimeToStr(now) + ' термокамера: ' + s;
+            LabelStatusKtx500.Font.Color := clRed;
+            LabelStatusKtx500.Caption := TimeToStr(now) + ' ' +s;
+        end);;
 
-        end);
-
-    SetOnTraceTemperatureError(
-        procedure(s: string)
+    SetOnKtx500Info(
+        procedure(X: TKtx500Info)
+        var
+            strOn, strCool: string;
         begin
-            LabelStatusTemperature.Font.Color := clRed;
-            LabelStatusTemperature.Caption := TimeToStr(now) + ' термокамера: ' + s;
+            FormKtx500.AddEntry(X);
+            LabelStatusKtx500.Font.Color := clRed;
+            if X.FOn then
+                strOn := 'вкл.'
+            else
+                strOn := 'выкл.';
+            if X.FCoolOn then
+                strCool := ' компрессор'
+            else
+                strCool := '';
+            LabelStatusKtx500.Font.Color := clNavy;
+            LabelStatusKtx500.Caption :=
+
+              Format('%s %s %s"C-->%s"C%s', [TimeToStr(now),
+              strOn, floattostr(X.FTemperature),
+              floattostr(X.FDestination), strCool
+
+              ])
+
         end);
 
     NotifyServices_SetEnabled(true);
@@ -626,16 +655,16 @@ begin
     stackList.Free;
     OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
 
-    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elcoui.errors.log';
+    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
     AssignFile(FErrorLog, ErrorLogFileName, CP_UTF8);
     if FileExists(ErrorLogFileName) then
         Append(FErrorLog)
     else
         Rewrite(FErrorLog);
 
-    Writeln(FErrorLog, FormatDateTime('YYYY-MM-dd hh:nn:ss', now), ' ',
-      E.ClassName, ' ', stringreplace(Trim(E.Message), #13, ' ',
-      [rfReplaceAll, rfIgnoreCase]));
+    Writeln(FErrorLog, FormatDateTime('dd/MM/yy hh:nn:ss', now), ' ',
+      'DELPHI_EXCEPTION', ' ', E.ClassName, ' ', stringreplace(Trim(E.Message),
+      #13, ' ', [rfReplaceAll, rfIgnoreCase]));
 
     Writeln(FErrorLog, StringOfChar('-', 120));
 

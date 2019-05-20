@@ -182,6 +182,15 @@ type
         
     end;
  
+    TKtx500Info = class 
+    public 
+        FTemperature : Double;
+        FDestination : Double;
+        FOn : Boolean;
+        FCoolOn : Boolean;
+        
+    end;
+ 
     TDelayInfo = class 
     public 
         FRun : Boolean;
@@ -345,6 +354,6 @@ begin
         FMax.Free;
     
 end;
-    
+     
 
 end.

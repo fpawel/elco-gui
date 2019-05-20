@@ -39,7 +39,8 @@ uses
   UnitFormSelectProducts in 'UnitFormSelectProducts.pas' {FormSelectProducts},
   UnitFormInterrogate in 'UnitFormInterrogate.pas' {FormInterrogate},
   UnitFormConsole in 'UnitFormConsole.pas' {FormConsole},
-  UnitFormPopup in 'UnitFormPopup.pas' {FormPopup};
+  UnitFormPopup in 'UnitFormPopup.pas' {FormPopup},
+  UnitFormKtx500 in 'UnitFormKtx500.pas' {FormKtx500};
 
 {$R *.res}
 
@@ -71,6 +72,7 @@ begin
   Application.CreateForm(TFormInterrogate, FormInterrogate);
   Application.CreateForm(TFormConsole, FormConsole);
   Application.CreateForm(TFormPopup, FormPopup);
+  Application.CreateForm(TFormKtx500, FormKtx500);
   Application.Run;
 
 end.
