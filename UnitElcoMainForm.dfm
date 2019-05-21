@@ -5756,8 +5756,6 @@ object ElcoMainForm: TElcoMainForm
       OnDrawTab = PageControlMainDrawTab
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
-        ExplicitLeft = 103
-        ExplicitTop = 3
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
@@ -6207,10 +6205,10 @@ object ElcoMainForm: TElcoMainForm
     Color = clGradientInactiveCaption
     ColumnCollection = <
       item
-        Value = 49.180327868852460000
+        Value = 49.180327868852450000
       end
       item
-        Value = 50.819672131147550000
+        Value = 50.819672131147560000
       end>
     ControlCollection = <
       item
@@ -11809,6 +11807,10 @@ object ElcoMainForm: TElcoMainForm
     object N203: TMenuItem
       Caption = #1056#1072#1089#1095#1080#1090#1072#1090#1100' I'#1095' 50"'#1057
       OnClick = N203Click
+    end
+    object N6: TMenuItem
+      Caption = #1042#1099#1073#1088#1072#1090#1100' '#1075#1086#1076#1085#1099#1077' '#1069#1061#1071
+      OnClick = N6Click
     end
     object N5: TMenuItem
       Caption = '-'

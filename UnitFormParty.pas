@@ -50,7 +50,7 @@ uses stringgridutils, services, stringutils, UnitFormFirmware, pipe;
 
 procedure TFormParty.FormCreate(Sender: TObject);
 begin
-    Party := services.TLastParty.Party;
+    Party := services.TLastPartySvc.Party;
 end;
 
 procedure TFormParty.StringGrid1DblClick(Sender: TObject);

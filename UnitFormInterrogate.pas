@@ -65,7 +65,7 @@ procedure TFormInterrogate.FormShow(Sender: TObject);
 var
     r: TGetCheckBlocksArg;
 begin
-    r := TLastParty.GetCheckBlocks;
+    r := TLastPartySvc.GetCheckBlocks;
     FCheckBlock := r.FCheck;
     r.Free;
 end;
@@ -121,7 +121,7 @@ begin
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
     if (ACol > 0) or (ARow = 0) then
         exit;
-    FCheckBlock[ARow - 1] := boolean(TLastParty.SetBlockChecked(ARow - 1,
+    FCheckBlock[ARow - 1] := boolean(TLastPartySvc.SetBlockChecked(ARow - 1,
       Integer(not FCheckBlock[ARow - 1])));
     if FCheckBlock[ARow - 1] then
         StringGrid_RedrawRow(StringGrid1, ARow)
@@ -168,7 +168,7 @@ var
     r: TGetCheckBlocksArg;
     ARow: Integer;
 begin
-    r := TLastParty.GetCheckBlocks;
+    r := TLastPartySvc.GetCheckBlocks;
     FCheckBlock := r.FCheck;
     r.Free;
     for ARow := 1 to 12 do

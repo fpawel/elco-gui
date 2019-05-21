@@ -4,7 +4,7 @@ unit services;
 interface
     uses server_data_types, pipe, superobject;
 type 
-     TPartiesCatalogue = class 
+     TPartiesCatalogueSvc = class 
     public
         class function CopyParty( param1: Int64) : TParty;
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;
@@ -18,7 +18,7 @@ type
         class function Party( param1: Int64) : TParty;
         class function Years: TArray<Integer>;
          
-    end; TLastParty = class 
+    end; TLastPartySvc = class 
     public
         class function CalculateFonMinus20: TParty;
         class function CalculateSensMinus20( param1: Double) : TParty;
@@ -28,9 +28,9 @@ type
         class function GetCheckBlocks: TGetCheckBlocksArg;
         class function Import: TParty;
         class function Party: TParty;
-        class procedure Pdf;
         class function ProductAtPlace( param1: Integer) : TProduct;
         class procedure SelectAll( param1: Boolean) ;
+        class function SelectOnlyOkProductsProduction: TParty;
         class function SetBlockChecked( param1: Integer; param2: Integer) : Int64;
         class function SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;
@@ -38,7 +38,7 @@ type
         class function SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;
         class function ToggleProductProductionAtPlace( param1: Integer) : Int64;
          
-    end; TProductTypes = class 
+    end; TProductTypesSvc = class 
     public
         class function Gases: TArray<string>;
         class function Names: TArray<string>;
@@ -70,6 +70,10 @@ type
         class procedure SkipDelay;
         class procedure StopHardware;
          
+    end; TPdfSvc = class 
+    public
+        class procedure Run;
+         
     end;
 
 
@@ -96,7 +100,7 @@ begin
 end;
 
   
-class function TPartiesCatalogue.CopyParty( param1: Int64) : TParty;
+class function TPartiesCatalogueSvc.CopyParty( param1: Int64) : TParty;
 var    
     req, resp: ISuperobject;
 begin
@@ -104,7 +108,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.CopyParty', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.CopyParty', req);
     
         
              
@@ -115,7 +119,7 @@ begin
 end;
 
  
-class function TPartiesCatalogue.Days( Year: Integer; Month: Integer) : TArray<Integer>;
+class function TPartiesCatalogueSvc.Days( Year: Integer; Month: Integer) : TArray<Integer>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
@@ -124,7 +128,7 @@ begin
     SuperObject_SetField(req, 'Year', Year);
     SuperObject_SetField(req, 'Month', Month);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Days', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.Days', req);
     
          
             for i in resp do
@@ -139,7 +143,7 @@ begin
 end;
 
  
-class procedure TPartiesCatalogue.DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;
+class procedure TPartiesCatalogueSvc.DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -149,12 +153,12 @@ begin
     req.AsArray.Add(param2) ;
     req.AsArray.Add(param3) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteDay', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.DeleteDay', req);
     
 end;
 
  
-class procedure TPartiesCatalogue.DeleteMonth( param1: Integer; param2: Integer) ;
+class procedure TPartiesCatalogueSvc.DeleteMonth( param1: Integer; param2: Integer) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -163,12 +167,12 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteMonth', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.DeleteMonth', req);
     
 end;
 
  
-class procedure TPartiesCatalogue.DeletePartyID( param1: Int64) ;
+class procedure TPartiesCatalogueSvc.DeletePartyID( param1: Int64) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -176,12 +180,12 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeletePartyID', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.DeletePartyID', req);
     
 end;
 
  
-class procedure TPartiesCatalogue.DeleteYear( param1: Integer) ;
+class procedure TPartiesCatalogueSvc.DeleteYear( param1: Integer) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -189,12 +193,12 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.DeleteYear', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.DeleteYear', req);
     
 end;
 
  
-class function TPartiesCatalogue.Months( Year: Integer) : TArray<Integer>;
+class function TPartiesCatalogueSvc.Months( Year: Integer) : TArray<Integer>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
@@ -202,7 +206,7 @@ begin
     req := SO;
     SuperObject_SetField(req, 'Year', Year);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Months', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.Months', req);
     
          
             for i in resp do
@@ -217,14 +221,14 @@ begin
 end;
 
  
-class function TPartiesCatalogue.NewParty: TParty;
+class function TPartiesCatalogueSvc.NewParty: TParty;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.NewParty', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.NewParty', req);
     
         
              
@@ -235,7 +239,7 @@ begin
 end;
 
  
-class function TPartiesCatalogue.Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
+class function TPartiesCatalogueSvc.Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
@@ -245,7 +249,7 @@ begin
     SuperObject_SetField(req, 'Month', Month);
     SuperObject_SetField(req, 'Day', Day);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Parties', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.Parties', req);
     
          
             for i in resp do
@@ -260,7 +264,7 @@ begin
 end;
 
  
-class function TPartiesCatalogue.Party( param1: Int64) : TParty;
+class function TPartiesCatalogueSvc.Party( param1: Int64) : TParty;
 var    
     req, resp: ISuperobject;
 begin
@@ -268,7 +272,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Party', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.Party', req);
     
         
              
@@ -279,14 +283,14 @@ begin
 end;
 
  
-class function TPartiesCatalogue.Years: TArray<Integer>;
+class function TPartiesCatalogueSvc.Years: TArray<Integer>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogue.Years', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.Years', req);
     
          
             for i in resp do
@@ -301,14 +305,14 @@ begin
 end;
 
   
-class function TLastParty.CalculateFonMinus20: TParty;
+class function TLastPartySvc.CalculateFonMinus20: TParty;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateFonMinus20', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.CalculateFonMinus20', req);
     
         
              
@@ -319,7 +323,7 @@ begin
 end;
 
  
-class function TLastParty.CalculateSensMinus20( param1: Double) : TParty;
+class function TLastPartySvc.CalculateSensMinus20( param1: Double) : TParty;
 var    
     req, resp: ISuperobject;
 begin
@@ -327,7 +331,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateSensMinus20', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.CalculateSensMinus20', req);
     
         
              
@@ -338,7 +342,7 @@ begin
 end;
 
  
-class function TLastParty.CalculateSensPlus50( param1: Double) : TParty;
+class function TLastPartySvc.CalculateSensPlus50( param1: Double) : TParty;
 var    
     req, resp: ISuperobject;
 begin
@@ -346,7 +350,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.CalculateSensPlus50', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.CalculateSensPlus50', req);
     
         
              
@@ -357,7 +361,7 @@ begin
 end;
 
  
-class procedure TLastParty.DeleteProductAtPlace( param1: Integer) ;
+class procedure TLastPartySvc.DeleteProductAtPlace( param1: Integer) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -365,31 +369,31 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.DeleteProductAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.DeleteProductAtPlace', req);
     
 end;
 
  
-class procedure TLastParty.Export;
+class procedure TLastPartySvc.Export;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Export', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.Export', req);
     
 end;
 
  
-class function TLastParty.GetCheckBlocks: TGetCheckBlocksArg;
+class function TLastPartySvc.GetCheckBlocks: TGetCheckBlocksArg;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.GetCheckBlocks', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.GetCheckBlocks', req);
     
         
              
@@ -400,14 +404,14 @@ begin
 end;
 
  
-class function TLastParty.Import: TParty;
+class function TLastPartySvc.Import: TParty;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Import', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.Import', req);
     
         
              
@@ -418,14 +422,14 @@ begin
 end;
 
  
-class function TLastParty.Party: TParty;
+class function TLastPartySvc.Party: TParty;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Party', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.Party', req);
     
         
              
@@ -436,19 +440,7 @@ begin
 end;
 
  
-class procedure TLastParty.Pdf;
-var    
-    req, resp: ISuperobject;
-begin
-    ensure_pipe_connected;
-    req := SO;
-        
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.Pdf', req);
-    
-end;
-
- 
-class function TLastParty.ProductAtPlace( param1: Integer) : TProduct;
+class function TLastPartySvc.ProductAtPlace( param1: Integer) : TProduct;
 var    
     req, resp: ISuperobject;
 begin
@@ -456,7 +448,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.ProductAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.ProductAtPlace', req);
     
         
              
@@ -467,7 +459,7 @@ begin
 end;
 
  
-class procedure TLastParty.SelectAll( param1: Boolean) ;
+class procedure TLastPartySvc.SelectAll( param1: Boolean) ;
 var    
     req, resp: ISuperobject;
 begin
@@ -475,12 +467,30 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SelectAll', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SelectAll', req);
     
 end;
 
  
-class function TLastParty.SetBlockChecked( param1: Integer; param2: Integer) : Int64;
+class function TLastPartySvc.SelectOnlyOkProductsProduction: TParty;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SelectOnlyOkProductsProduction', req);
+    
+        
+             
+                Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TLastPartySvc.SetBlockChecked( param1: Integer; param2: Integer) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -489,7 +499,7 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetBlockChecked', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SetBlockChecked', req);
     
         
             
@@ -500,7 +510,7 @@ begin
 end;
 
  
-class function TLastParty.SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
+class function TLastPartySvc.SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -510,7 +520,7 @@ begin
     SuperObject_SetField(req, 'PointsMethod', PointsMethod);
     SuperObject_SetField(req, 'Valid', Valid);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetPointsMethodAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SetPointsMethodAtPlace', req);
     
         
             
@@ -521,7 +531,7 @@ begin
 end;
 
  
-class function TLastParty.SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;
+class function TLastPartySvc.SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -530,7 +540,7 @@ begin
     SuperObject_SetField(req, 'Place', Place);
     SuperObject_SetField(req, 'Note', Note);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetProductNoteAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SetProductNoteAtPlace', req);
     
         
             
@@ -541,7 +551,7 @@ begin
 end;
 
  
-class function TLastParty.SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;
+class function TLastPartySvc.SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -550,7 +560,7 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetProductSerialAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SetProductSerialAtPlace', req);
     
         
             
@@ -561,7 +571,7 @@ begin
 end;
 
  
-class function TLastParty.SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;
+class function TLastPartySvc.SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -570,7 +580,7 @@ begin
     SuperObject_SetField(req, 'Place', Place);
     SuperObject_SetField(req, 'ProductType', ProductType);
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.SetProductTypeAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.SetProductTypeAtPlace', req);
     
         
             
@@ -581,7 +591,7 @@ begin
 end;
 
  
-class function TLastParty.ToggleProductProductionAtPlace( param1: Integer) : Int64;
+class function TLastPartySvc.ToggleProductProductionAtPlace( param1: Integer) : Int64;
 var    
     req, resp: ISuperobject;
 begin
@@ -589,7 +599,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastParty.ToggleProductProductionAtPlace', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.ToggleProductProductionAtPlace', req);
     
         
             
@@ -600,14 +610,14 @@ begin
 end;
 
   
-class function TProductTypes.Gases: TArray<string>;
+class function TProductTypesSvc.Gases: TArray<string>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypes.Gases', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypesSvc.Gases', req);
     
          
             for i in resp do
@@ -622,14 +632,14 @@ begin
 end;
 
  
-class function TProductTypes.Names: TArray<string>;
+class function TProductTypesSvc.Names: TArray<string>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypes.Names', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypesSvc.Names', req);
     
          
             for i in resp do
@@ -644,14 +654,14 @@ begin
 end;
 
  
-class function TProductTypes.Units: TArray<string>;
+class function TProductTypesSvc.Units: TArray<string>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
 begin
     ensure_pipe_connected;
     req := SO;
         
-    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypes.Units', req);
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'ProductTypesSvc.Units', req);
     
          
             for i in resp do
@@ -935,6 +945,18 @@ begin
     req := SO;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'RunnerSvc.StopHardware', req);
+    
+end;
+
+  
+class procedure TPdfSvc.Run;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PdfSvc.Run', req);
     
 end;
 

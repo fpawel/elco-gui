@@ -234,7 +234,7 @@ begin
 
     try
 
-        p.FProductID := TLastParty.ToggleProductProductionAtPlace(p.FPlace);
+        p.FProductID := TLastPartySvc.ToggleProductProductionAtPlace(p.FPlace);
         p.FProduction := not p.FProduction;
         PanelError.Visible := false;
     except
@@ -381,7 +381,7 @@ begin
             exit;
 
         try
-            TLastParty.DeleteProductAtPlace(Row - 1);
+            TLastPartySvc.DeleteProductAtPlace(Row - 1);
             p.Free;
             p := TProduct.Create;
             p.FPlace := Row - 1;
@@ -540,13 +540,13 @@ begin
 
     ComboBox1.Items.Clear;
     ComboBox1.Items.Add('');
-    for s in TProductTypes.Names do
+    for s in TProductTypesSvc.Names do
         ComboBox1.Items.Add(s);
 end;
 
 procedure TFormLastParty.reload_data;
 begin
-    SetParty(TLastParty.party);
+    SetParty(TLastPartySvc.party);
 end;
 
 function TFormLastParty.GetProductValue(ColumnIndex, RowIndex: Integer)
@@ -563,7 +563,7 @@ var
 begin
     try
         p := FProducts[ARow - 1];
-        p.FProductID := TLastParty.SetProductNoteAtPlace(p.FPlace, Value);
+        p.FProductID := TLastPartySvc.SetProductNoteAtPlace(p.FPlace, Value);
         p.FNote.FString := Value;
         p.FNote.FValid := True;
         PanelError.Visible := false;
@@ -595,7 +595,7 @@ var
 begin
     try
         p := FProducts[ARow - 1];
-        p.FProductID := TLastParty.SetProductTypeAtPlace(p.FPlace, Value);
+        p.FProductID := TLastPartySvc.SetProductTypeAtPlace(p.FPlace, Value);
         p.FProductTypeName.FString := Value;
         p.FProductTypeName.FValid := Trim(Value) <> '';
         PanelError.Visible := false;
@@ -632,7 +632,7 @@ begin
 
         Valid := TryStrToInt64(Value, points_meth);
 
-        p.FProductID := TLastParty.SetPointsMethodAtPlace(p.FPlace,
+        p.FProductID := TLastPartySvc.SetPointsMethodAtPlace(p.FPlace,
           points_meth, Valid);
         p.FPointsMethod.FInt64 := points_meth;
         p.FPointsMethod.FValid := Valid;
@@ -665,7 +665,7 @@ var
 begin
     try
         p := FProducts[ARow - 1];
-        p.FProductID := TLastParty.SetProductSerialAtPlace(p.FPlace,
+        p.FProductID := TLastPartySvc.SetProductSerialAtPlace(p.FPlace,
           strtoint(Value));
         p.FSerial.FInt64 := strtoint(Value);
         p.FSerial.FValid := True;
@@ -695,7 +695,7 @@ procedure TFormLastParty.SetProductionAll(production: Boolean);
 var
     p: TProduct;
 begin
-    TLastParty.SelectAll(production);
+    TLastPartySvc.SelectAll(production);
     for p in FProducts do
     begin
         p.FProduction := production;
@@ -709,7 +709,7 @@ procedure TFormLastParty.SetProductionBlock(block: Integer;
 var
     p: TProduct;
 begin
-    TLastParty.SetBlockChecked(Block, integer(production) );
+    TLastPartySvc.SetBlockChecked(Block, integer(production) );
     for p in FProducts do
         if (p.FPlace div 8) = block then
         begin

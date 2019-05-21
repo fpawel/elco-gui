@@ -102,7 +102,7 @@ begin
     if not(Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty))
     then
         exit;
-    FormParty.Party := services.TPartiesCatalogue.Party(TreeData[Node].Value);
+    FormParty.Party := services.TPartiesCatalogueSvc.Party(TreeData[Node].Value);
     Node := TreeView1.GetFirst;
     while Assigned(Node) do
     begin
@@ -231,16 +231,16 @@ begin
 
     case TreeData[FNode].NodeKind of
         trdYear:
-            TPartiesCatalogue.DeleteYear(TreeData[FNode].Value);
+            TPartiesCatalogueSvc.DeleteYear(TreeData[FNode].Value);
         trdMonth:
-            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value,
+            TPartiesCatalogueSvc.DeleteMonth(TreeData[FNode.Parent].Value,
               TreeData[FNode].Value);
 
         trdDay:
-            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value,
+            TPartiesCatalogueSvc.DeleteDay(TreeData[FNode.Parent.Parent].Value,
               TreeData[FNode.Parent].Value, TreeData[FNode].Value);
         trdParty:
-            TPartiesCatalogue.DeletePartyID(TreeData[FNode].Value);
+            TPartiesCatalogueSvc.DeletePartyID(TreeData[FNode].Value);
     end;
 
     CreateYearsNodes;
@@ -254,7 +254,7 @@ var
     Party: TParty;
 begin
 
-    for Party in TPartiesCatalogue.Parties(TreeData[ParentNode.Parent.Parent]
+    for Party in TPartiesCatalogueSvc.Parties(TreeData[ParentNode.Parent.Parent]
       .Value, TreeData[ParentNode.Parent].Value, TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
@@ -270,7 +270,7 @@ var
     Node: PVirtualNode;
     day: integer;
 begin
-    for day in TPartiesCatalogue.Days(TreeData[ParentNode.Parent].Value,
+    for day in TPartiesCatalogueSvc.Days(TreeData[ParentNode.Parent].Value,
       TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
@@ -290,7 +290,7 @@ var
     month: integer;
 begin
 
-    for month in TPartiesCatalogue.Months(TreeData[ParentNode].Value) do
+    for month in TPartiesCatalogueSvc.Months(TreeData[ParentNode].Value) do
     begin
         Node := TreeView1.AddChild(ParentNode);
         TreeView1.HasChildren[Node] := true;
@@ -311,7 +311,7 @@ var
 begin
     FHasYears := false;
     TreeView1.Clear;
-    for year in TPartiesCatalogue.Years do
+    for year in TPartiesCatalogueSvc.Years do
     begin
         Node := TreeView1.AddChild(nil);
         TreeData[Node].Value := year;
@@ -335,7 +335,7 @@ begin
     v := p.Value;
 
     if not Assigned(FormParty.Party) then
-        FormParty.Party := TLastParty.Party;
+        FormParty.Party := TLastPartySvc.Party;
 
     dt := FormParty.Party.FCreatedAt;
     case p.NodeKind of
@@ -359,7 +359,7 @@ end;
 
 procedure TFormParties.MenuCopyItemClick(Sender: TObject);
 begin
-    FormLastParty.SetParty(TPartiesCatalogue.CopyParty(TreeData[FNode]
+    FormLastParty.SetParty(TPartiesCatalogueSvc.CopyParty(TreeData[FNode]
       .Party.FPartyID));
 end;
 
@@ -370,16 +370,16 @@ begin
 
     case TreeData[FNode].NodeKind of
         trdYear:
-            TPartiesCatalogue.DeleteYear(TreeData[FNode].Value);
+            TPartiesCatalogueSvc.DeleteYear(TreeData[FNode].Value);
         trdMonth:
-            TPartiesCatalogue.DeleteMonth(TreeData[FNode.Parent].Value,
+            TPartiesCatalogueSvc.DeleteMonth(TreeData[FNode.Parent].Value,
               TreeData[FNode].Value);
 
         trdDay:
-            TPartiesCatalogue.DeleteDay(TreeData[FNode.Parent.Parent].Value,
+            TPartiesCatalogueSvc.DeleteDay(TreeData[FNode.Parent.Parent].Value,
               TreeData[FNode.Parent].Value, TreeData[FNode].Value);
         trdParty:
-            TPartiesCatalogue.DeletePartyID(TreeData[FNode].Value);
+            TPartiesCatalogueSvc.DeletePartyID(TreeData[FNode].Value);
     end;
 
 end;
@@ -392,7 +392,7 @@ begin
     case TreeData[FNode].NodeKind of
         trdParty:
             begin
-                FormParty.Party := services.TPartiesCatalogue.Party
+                FormParty.Party := services.TPartiesCatalogueSvc.Party
                   (TreeData[FNode].Value);
                 s := format('%d %s %s', [TreeData[FNode].Value,
                   TreeData[FNode].Party.FProductTypeName,

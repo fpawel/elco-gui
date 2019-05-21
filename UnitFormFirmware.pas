@@ -574,11 +574,11 @@ begin
     ComboBoxProductType.Items.Clear;
     ComboBoxUnits.Items.Clear;
     ComboBoxGas.Items.Clear;
-    for s in TProductTypes.Names do
+    for s in TProductTypesSvc.Names do
         ComboBoxProductType.Items.Add(s);
-    for s in TProductTypes.Gases do
+    for s in TProductTypesSvc.Gases do
         ComboBoxGas.Items.Add(s);
-    for s in TProductTypes.Units do
+    for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
 
     ComboBoxPlace.ItemIndex := f.FPlace;

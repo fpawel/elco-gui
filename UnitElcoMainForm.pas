@@ -76,6 +76,7 @@ type
         TabSheetKtx500: TTabSheet;
         LabelStatusBottom: TLabel;
         LabelStatusKtx500: TLabel;
+    N6: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -106,6 +107,7 @@ type
         procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
         procedure N203Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -517,14 +519,14 @@ begin
     if PageControl.ActivePage = TabSheetParties then
     begin
         if Assigned(FormParty.party) then
-            FormParty.party := TPartiesCatalogue.party(FormParty.party.FPartyID)
+            FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.FPartyID)
         else
-            FormParty.party := TLastParty.party;
+            FormParty.party := TLastPartySvc.party;
 
         if not FormParties.HasYears then
         begin
             FormParties.CreateYearsNodes;
-            FormParty.party := TLastParty.party;
+            FormParty.party := TLastPartySvc.party;
             exit;
         end;
     end
@@ -622,7 +624,7 @@ end;
 
 procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
 begin
-    TLastParty.Pdf;
+    TPDfSvc.Run;
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
@@ -736,7 +738,7 @@ end;
 
 procedure TElcoMainForm.MenuItem6Click(Sender: TObject);
 begin
-    TLastParty.Export;
+    TLastPartySvc.Export;
 end;
 
 procedure TElcoMainForm.MenuItem8Click(Sender: TObject);
@@ -748,12 +750,12 @@ procedure TElcoMainForm.MenuNewPartyClick(Sender: TObject);
 begin
     if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
       'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
-        FormLastParty.SetParty(TPartiesCatalogue.NewParty);
+        FormLastParty.SetParty(TPartiesCatalogueSvc.NewParty);
 end;
 
 procedure TElcoMainForm.N201Click(Sender: TObject);
 begin
-    FormLastParty.SetParty(TLastParty.CalculateFonMinus20);
+    FormLastParty.SetParty(TLastPartySvc.CalculateFonMinus20);
 end;
 
 procedure TElcoMainForm.N202Click(Sender: TObject);
@@ -770,7 +772,7 @@ l:
     s := s.Trim;
     if not try_str_to_float(s, v) then
         goto l;
-    FormLastParty.SetParty(TLastParty.CalculateSensMinus20(v));
+    FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
 end;
 
 procedure TElcoMainForm.N203Click(Sender: TObject);
@@ -787,12 +789,12 @@ l:
     s := s.Trim;
     if not try_str_to_float(s, v) then
         goto l;
-    FormLastParty.SetParty(TLastParty.CalculateSensPlus50(v));
+    FormLastParty.SetParty(TLastPartySvc.CalculateSensPlus50(v));
 end;
 
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
-    FormLastParty.SetParty(TLastParty.Import);
+    FormLastParty.SetParty(TLastPartySvc.Import);
     FormParties.CreateYearsNodes;
 
 end;
@@ -812,6 +814,11 @@ begin
             FormSelectTemperaturesDialog.Top := Y + 5;
             FormSelectTemperaturesDialog.Show;
         end;
+end;
+
+procedure TElcoMainForm.N6Click(Sender: TObject);
+begin
+    FormLastParty.SetParty(TLastPartySvc.SelectOnlyOkProductsProduction);
 end;
 
 procedure TElcoMainForm.N8Click(Sender: TObject);
