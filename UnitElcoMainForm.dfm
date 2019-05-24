@@ -6205,7 +6205,7 @@ object ElcoMainForm: TElcoMainForm
     Color = clGradientInactiveCaption
     ColumnCollection = <
       item
-        Value = 49.180327868852450000
+        Value = 49.180327868852440000
       end
       item
         Value = 50.819672131147560000

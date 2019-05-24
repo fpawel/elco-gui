@@ -16,6 +16,8 @@ type
         class function NewParty: TParty;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
         class function Party( param1: Int64) : TParty;
+        class procedure SetProductProduction( ProductID: Int64; Production: Boolean) ;
+        class procedure ToggleProductProduction( param1: Int64) ;
         class function Years: TArray<Integer>;
          
     end; TLastPartySvc = class 
@@ -28,6 +30,7 @@ type
         class function GetCheckBlocks: TGetCheckBlocksArg;
         class function Import: TParty;
         class function Party: TParty;
+        class function PartyID: Int64;
         class function ProductAtPlace( param1: Integer) : TProduct;
         class procedure SelectAll( param1: Boolean) ;
         class function SelectOnlyOkProductsProduction: TParty;
@@ -72,7 +75,7 @@ type
          
     end; TPdfSvc = class 
     public
-        class procedure Run;
+        class procedure Run( param1: Int64) ;
          
     end;
 
@@ -283,6 +286,33 @@ begin
 end;
 
  
+class procedure TPartiesCatalogueSvc.SetProductProduction( ProductID: Int64; Production: Boolean) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+    SuperObject_SetField(req, 'ProductID', ProductID);
+    SuperObject_SetField(req, 'Production', Production);
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.SetProductProduction', req);
+    
+end;
+
+ 
+class procedure TPartiesCatalogueSvc.ToggleProductProduction( param1: Int64) ;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'PartiesCatalogueSvc.ToggleProductProduction', req);
+    
+end;
+
+ 
 class function TPartiesCatalogueSvc.Years: TArray<Integer>;
 var    
     req, resp: ISuperobject; i:ISuperobject;
@@ -434,6 +464,24 @@ begin
         
              
                 Result := TJson.JsonToObject < TParty > (resp.AsJson);
+            
+        
+    
+end;
+
+ 
+class function TLastPartySvc.PartyID: Int64;
+var    
+    req, resp: ISuperobject;
+begin
+    ensure_pipe_connected;
+    req := SO;
+        
+    resp := Pipe_GetJsonrpcResult(pipe_conn, 'LastPartySvc.PartyID', req);
+    
+        
+            
+                SuperObject_Get(resp, Result);
             
         
     
@@ -949,12 +997,13 @@ begin
 end;
 
   
-class procedure TPdfSvc.Run;
+class procedure TPdfSvc.Run( param1: Int64) ;
 var    
     req, resp: ISuperobject;
 begin
     ensure_pipe_connected;
-    req := SO;
+    req := SA([]);
+    req.AsArray.Add(param1) ;
         
     resp := Pipe_GetJsonrpcResult(pipe_conn, 'PdfSvc.Run', req);
     

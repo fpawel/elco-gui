@@ -258,7 +258,8 @@ begin
         Parent := TabSheetConsole;
         BorderStyle := bsNone;
         Align := alClient;
-        FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
+        //FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
+        FFileName := '';
         Show;
     end;
 
@@ -624,7 +625,7 @@ end;
 
 procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
 begin
-    TPDfSvc.Run;
+    TPDfSvc.Run(TLastPartySvc.PartyID);
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);

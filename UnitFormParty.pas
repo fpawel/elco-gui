@@ -7,16 +7,22 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
     Vcl.Imaging.pngimage, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
-    server_data_types, Product_Column;
+    server_data_types, Product_Column, Vcl.Menus;
 
 type
     TFormParty = class(TForm)
         StringGrid1: TStringGrid;
         ImageList1: TImageList;
+        PopupMenu1: TPopupMenu;
+    MenuCheck: TMenuItem;
+    MenuUncheck: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1DblClick(Sender: TObject);
+        procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
+          Shift: TShiftState; X, Y: Integer);
+        procedure MenuCheckClick(Sender: TObject);
     private
         { Private declarations }
         FParty: TParty;
@@ -57,15 +63,15 @@ procedure TFormParty.StringGrid1DblClick(Sender: TObject);
 var
     ACol, ARow: Integer;
     pt: TPoint;
-    product : TProduct;
+    product: TProduct;
     f: TFirmwareInfo;
 begin
     GetCursorPos(pt);
-    pt :=  StringGrid1.ScreenToClient(pt);
+    pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-    if (ARow < 0) or (ARow > Length(FParty.FProducts)) then
+    if (ARow < 1) or (ARow >= Length(FParty.FProducts)) then
         exit;
-    FormFirmware.Product := FParty.FProducts[ARow - 1];
+    FormFirmware.product := FParty.FProducts[ARow - 1];
     FormFirmware.Show;
 end;
 
@@ -119,7 +125,7 @@ begin
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
               p.FProduction);
         pcFirmware:
-            if p.FHasFirmware then
+            if p.FHAsFirmware then
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
@@ -137,6 +143,34 @@ begin
     end;
 
     StringGrid_DrawCellBounds(cnv, ACol, ARow, Rect);
+end;
+
+procedure TFormParty.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+    ACol, ARow: Integer;
+    p: TProduct;
+begin
+    if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
+        exit;
+    StringGrid1.MouseToCell(X, Y, ACol, ARow);
+    if (ACol > 0) or (ARow = 0) then
+        exit;
+    p := FParty.FProducts[ARow - 1];
+
+    try
+        TPartiesCatalogueSvc.ToggleProductProduction(p.FProductID);
+    except
+        on e: Exception do
+        begin
+            Application.ShowException(e);
+            exit;
+        end;
+    end;
+
+    p.FProduction := not p.FProduction;
+    StringGrid_RedrawRow(StringGrid1, ARow);
+
 end;
 
 procedure TFormParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
@@ -230,6 +264,30 @@ begin
     result := GetProductColumnValue(FParty.FProducts[RowIndex],
       FColumns[ColumnIndex]);
 
+end;
+
+procedure TFormParty.MenuCheckClick(Sender: TObject);
+var
+    ARow: Integer;
+    p : TProduct;
+begin
+    with StringGrid1 do
+        for ARow := Selection.Top to Selection.Bottom do
+        begin
+            p := FParty.FProducts[ARow - 1];
+            p.FProduction := Sender = MenuCheck;
+            Cells[0,ARow] := GetProductColumnValue(p, pcPlace).Value;
+            try
+                TPartiesCatalogueSvc.SetProductProduction(p.FProductID, p.FProduction);
+            except
+                on e: Exception do
+                begin
+                    Application.ShowException(e);
+                    exit;
+                end;
+            end;
+        end;
+    //StringGrid_Redraw(StringGrid1);
 end;
 
 end.

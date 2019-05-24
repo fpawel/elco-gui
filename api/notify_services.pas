@@ -4,12 +4,12 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TPartyHandler = reference to procedure (x:TParty);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TPartyHandler = reference to procedure (x:TParty);
     
 
 procedure HandleCopydata(var Message: TMessage);

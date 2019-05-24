@@ -27,6 +27,7 @@ type
         PopupMenu1: TPopupMenu;
         MenuDeleteItem: TMenuItem;
         MenuCopyItem: TMenuItem;
+        MenuPDF: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure TreeView1Collapsed(Sender: TBaseVirtualTree;
           Node: PVirtualNode);
@@ -44,6 +45,7 @@ type
         procedure MenuDeleteItemClick(Sender: TObject);
         procedure PopupMenu1Popup(Sender: TObject);
         procedure MenuCopyItemClick(Sender: TObject);
+        procedure MenuPDFClick(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -102,7 +104,8 @@ begin
     if not(Assigned(TreeData[Node]) AND (TreeData[Node].NodeKind = trdParty))
     then
         exit;
-    FormParty.Party := services.TPartiesCatalogueSvc.Party(TreeData[Node].Value);
+    FormParty.Party := services.TPartiesCatalogueSvc.Party
+      (TreeData[Node].Value);
     Node := TreeView1.GetFirst;
     while Assigned(Node) do
     begin
@@ -384,11 +387,17 @@ begin
 
 end;
 
+procedure TFormParties.MenuPDFClick(Sender: TObject);
+begin
+    TPdfSvc.Run(TreeData[FNode].Party.FPartyID);
+end;
+
 procedure TFormParties.PopupMenu1Popup(Sender: TObject);
 var
     s: string;
 begin
     MenuCopyItem.Visible := TreeData[FNode].NodeKind = trdParty;
+    MenuPDF.Visible := TreeData[FNode].NodeKind = trdParty;
     case TreeData[FNode].NodeKind of
         trdParty:
             begin
@@ -400,6 +409,7 @@ begin
                   TreeData[FNode].Party.FCreatedAt)]);
                 MenuDeleteItem.Caption := 'Удалить партию ' + s;
                 MenuCopyItem.Caption := 'Копировать партию ' + s;
+                MenuPDF.Caption := 'Отчёт ' + s;
             end;
 
         trdYear:

@@ -29,11 +29,11 @@ object FormParty: TFormParty
     RowCount = 1
     FixedRows = 0
     GradientEndColor = clBlack
+    PopupMenu = PopupMenu1
     TabOrder = 0
     OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
-    ExplicitLeft = -2
-    ExplicitTop = 8
+    OnMouseDown = StringGrid1MouseDown
     ColWidths = (
       64
       64
@@ -52,7 +52,7 @@ object FormParty: TFormParty
     Left = 536
     Top = 98
     Bitmap = {
-      494C01010300E0025C0314001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
+      494C01010300E002040014001400FFFFFF002110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000500000001400000001002000000000000019
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -265,5 +265,17 @@ object FormParty: TFormParty
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 216
+    Top = 96
+    object MenuCheck: TMenuItem
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      OnClick = MenuCheckClick
+    end
+    object MenuUncheck: TMenuItem
+      Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+      OnClick = MenuCheckClick
+    end
   end
 end
