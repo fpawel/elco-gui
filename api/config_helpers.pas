@@ -1,4 +1,4 @@
-unit config_helpers;
+п»їunit config_helpers;
 
 interface
 
@@ -8,18 +8,18 @@ type
     TPropertyValueType = (VtInt, VtFloat, VtString, VtComportName, VtBaud,
       VtBool, VtNullFloat);
 
-    TConfigSectionHelper = class helper for TConfigSection
+    TConfigSectionHelper = record helper for TConfigSection
         function HasError: boolean;
     end;
 
-    TConfigPropertyHelper = class helper for TConfigProperty
+    TConfigPropertyHelper = record helper for TConfigProperty
         function GetBool: boolean;
         procedure SetBool(v: boolean);
         function GetHasError: boolean;
         function GetPropertyValueType: TPropertyValueType;
         procedure SetStr(str: string);
 
-        property ValueType: TPropertyValueType read GetPropertyValueType;
+        property ValueTypeProp: TPropertyValueType read GetPropertyValueType;
         property HasError: boolean read GetHasError;
         property Bool: boolean read GetBool write SetBool;
 
@@ -33,42 +33,42 @@ function TConfigSectionHelper.HasError: boolean;
 var
     i: integer;
 begin
-    for i := 0 to length(self.FProperties) - 1 do
-        if FProperties[i].HasError then
+    for i := 0 to length(self.Properties) - 1 do
+        if Properties[i].HasError then
             Exit(true);
     Exit(false);
 end;
 
 function TConfigPropertyHelper.GetPropertyValueType: TPropertyValueType;
 begin
-    Exit(TPropertyValueType(FValueType));
+    Exit(TPropertyValueType(ValueType));
 end;
 
 function TConfigPropertyHelper.GetBool: boolean;
 begin
-    if FValueType <> integer(VtBool) then
-        raise Exception.Create('not bool: ' + IntToStr(FValueType));
-    if LowerCase(FValue) = 'true' then
+    if ValueTypeProp <> VtBool then
+        raise Exception.Create('not bool: ' + IntToStr(integer(ValueType)));
+    if LowerCase(Value) = 'true' then
         Exit(true);
-    if LowerCase(FValue) = 'false' then
+    if LowerCase(Value) = 'false' then
         Exit(false);
-    raise Exception.Create('not bool string: ' + FValue);
+    raise Exception.Create('not bool string: ' + Value);
 end;
 
 procedure TConfigPropertyHelper.SetBool(v: boolean);
 begin
-    if self.FValueType <> integer(VtBool) then
-        raise Exception.Create('not bool: ' + IntToStr(FValueType));
+    if self.ValueTypeProp <> VtBool then
+        raise Exception.Create('not bool: ' + IntToStr(integer(ValueType)));
     if v then
-        FValue := 'true'
+        Value := 'true'
     else
-        FValue := 'false';
-    FError := '';
+        Value := 'false';
+    Error := '';
 end;
 
 function TConfigPropertyHelper.GetHasError: boolean;
 begin
-    result := FError <> '';
+    result := Error <> '';
 end;
 
 procedure TConfigPropertyHelper.SetStr(str: string);
@@ -77,66 +77,66 @@ var
     i, vInt: integer;
     ok, v_bool: boolean;
 begin
-    FError := '';
+    Error := '';
     str := str.Trim;
 
-    if ValueType in[ VtFloat, VtNullFloat] then
+    if ValueTypeProp in[ VtFloat, VtNullFloat] then
         str := str_validate_decimal_separator(str);
 
-    FValue := str;
+    Value := str;
     if str = '' then
     begin
-        if ValueType = VtNullFloat then
-            FError := ''
+        if ValueTypeProp = VtNullFloat then
+            Error := ''
         else
-            FError := 'нет значения';
+            Error := 'РЅРµС‚ Р·РЅР°С‡РµРЅРёСЏ';
         Exit;
     end;
 
-    if length(FList) > 0 then
+    if length(List) > 0 then
     begin
         ok := false;
-        for i := 0 to length(FList) - 1 do
+        for i := 0 to length(List) - 1 do
         begin
-            if FList[i] = str then
+            if List[i] = str then
                 ok := true;
         end;
         if not ok then
         begin
-            FError := 'значение должно быть из списка: ' + FList[0];
-            for i := 1 to length(FList) - 1 do
-                FError := FError + '; ' + FList[i];
+            Error := 'Р·РЅР°С‡РµРЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РёР· СЃРїРёСЃРєР°: ' + List[0];
+            for i := 1 to length(List) - 1 do
+                Error := Error + '; ' + List[i];
             Exit;
         end;
     end;
 
     ok := true;
-    if (ValueType = VtInt) or (ValueType = VtBaud) then
+    if (ValueTypeProp = VtInt) or (ValueTypeProp = VtBaud) then
     begin
         ok := TryStrToInt(str, vInt);
         v := vInt;
         if not ok then
-            FError := 'не правильный синтаксис целого числа';
+            Error := 'РЅРµ РїСЂР°РІРёР»СЊРЅС‹Р№ СЃРёРЅС‚Р°РєСЃРёСЃ С†РµР»РѕРіРѕ С‡РёСЃР»Р°';
     end
-    else if ValueType in [VtFloat, VtNullFloat] then
+    else if ValueTypeProp in [VtFloat, VtNullFloat] then
     begin
         ok := TryStrToFloat(str, v);
         if not ok then
-            FError := 'не правильный синтаксис числа c плавающей точкой';
+            Error := 'РЅРµ РїСЂР°РІРёР»СЊРЅС‹Р№ СЃРёРЅС‚Р°РєСЃРёСЃ С‡РёСЃР»Р° c РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№';
     end
-    else if ValueType = VtBool then
+    else if ValueTypeProp = VtBool then
     begin
         ok := TryStrToBool(str, v_bool);
         if not ok then
-            FError := 'не правильный синтаксис логического значения';
+            Error := 'РЅРµ РїСЂР°РІРёР»СЊРЅС‹Р№ СЃРёРЅС‚Р°РєСЃРёСЃ Р»РѕРіРёС‡РµСЃРєРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ';
     end;
 
     if ok then
     begin
-        if FMin.FValid and (v < FMin.FFloat64) then
-            FError := 'меньше ' + floattostr(FMin.FFloat64)
-        else if FMax.FValid and (v > FMax.FFloat64) then
-            FError := 'больше ' + floattostr(FMax.FFloat64);
+        if Min.Valid and (v < Min.Float64) then
+            Error := 'РјРµРЅСЊС€Рµ ' + floattostr(Min.Float64)
+        else if Max.Valid and (v > Max.Float64) then
+            Error := 'Р±РѕР»СЊС€Рµ ' + floattostr(Max.Float64);
     end;
 
 end;

@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    server_data_types, Vcl.Menus, pipe, ComponentBaloonHintU,
+    server_data_types, Vcl.Menus,  ComponentBaloonHintU,
     Vcl.Imaging.pngimage, inifiles;
 
 type
@@ -128,8 +128,6 @@ type
 
         procedure OnReadCurrent(v: TReadCurrent);
 
-        procedure OnPipeBusy(var Msg: TMessage);
-          message WM_SERVER_APP_PIPE_BUSY;
     public
         { Public declarations }
         FIni: TIniFile;
@@ -155,7 +153,7 @@ uses stringgridutils, stringutils, JclDebug,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
-    UnitFormInterrogate, UnitFormConsole, UnitFormKtx500;
+    UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -379,7 +377,6 @@ begin
         procedure(X: TDelayInfo)
         begin
             SetupDelay(X);
-            X.Free;
         end);
 
     SetOnLastPartyChanged(
@@ -432,11 +429,11 @@ begin
         begin
             FormKtx500.AddEntry(X);
             LabelStatusKtx500.Font.Color := clRed;
-            if X.FOn then
+            if X.On then
                 strOn := 'вкл.'
             else
                 strOn := 'выкл.';
-            if X.FCoolOn then
+            if X.CoolOn then
                 strCool := ' компрессор'
             else
                 strCool := '';
@@ -444,15 +441,14 @@ begin
             LabelStatusKtx500.Caption :=
 
               Format('%s %s %s"C-->%s"C%s', [TimeToStr(now),
-              strOn, floattostr(X.FTemperature),
-              floattostr(X.FDestination), strCool
+              strOn, floattostr(X.Temperature),
+              floattostr(X.Destination), strCool
 
               ])
 
         end);
 
     NotifyServices_SetEnabled(true);
-    pipe.Pipe_SetNotifyHWnd(self.Handle);
     TRunnerSvc.StopHardware;
 end;
 
@@ -519,8 +515,8 @@ begin
     PanelMessageBox.Hide;
     if PageControl.ActivePage = TabSheetParties then
     begin
-        if Assigned(FormParty.party) then
-            FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.FPartyID)
+        if FormParty.party.PartyID = 0 then
+            FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.PartyID)
         else
             FormParty.party := TLastPartySvc.party;
 
@@ -678,7 +674,7 @@ begin
 
     CloseFile(FErrorLog);
 
-    if E is pipe.EPipeNotFound then
+    if E is ERpcNoResponseException then
     begin
         // PanelMessageBoxTitle.Caption := E.ClassName;
         // RichEditlMessageBoxText.Text := E.Message;
@@ -831,12 +827,12 @@ procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
 begin
 
     LabelDelayElepsedTime.Caption := '00:00:00';
-    LabelWhat.Caption := i.FWhat;
+    LabelWhat.Caption := i.What;
     LabelProgress.Caption := '';
     ProgressBar1.Position := 0;
-    ProgressBar1.Max := i.FTimeSeconds * 1000;
-    PanelDelay.Visible := i.FRun;
-    TimerDelay.Enabled := i.FRun;
+    ProgressBar1.Max := i.TimeSeconds * 1000;
+    PanelDelay.Visible := i.Run;
+    TimerDelay.Enabled := i.Run;
 end;
 
 procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);
@@ -845,47 +841,14 @@ var
 begin
 
     with FormInterrogate do
-        if FCheckBlock[v.FBlock] then
+        if FCheckBlock[v.Block] then
             for i := 0 to 7 do
 
-                StringGrid1.Cells[1 + i, 1 + v.FBlock] :=
-                  floattostr(v.FValues[i]);
+                StringGrid1.Cells[1 + i, 1 + v.Block] :=
+                  floattostr(v.Values[i]);
 
     LabelStatusBottom.Caption := Format('Блок %d: %s',
-      [v.FBlock, FormatFloatArray(v.FValues)]);
-    v.Free
-
-end;
-
-procedure TElcoMainForm.OnPipeBusy(var Msg: TMessage);
-var
-    pipe_busy: Boolean;
-    active_ctrl: TWinControl;
-begin
-    pipe_busy := Msg.WParam <> 0;
-    if pipe_busy then
-    begin
-        FOnPipeBusyActiveControl := ActiveControl;
-        Enabled := false;
-        PanelWaitResponseMsg.Show;
-        FormResize(self);
-        PanelWaitResponseMsg.BringToFront;
-    end
-    else
-    begin
-        PanelWaitResponseMsg.Hide;
-        Enabled := true;
-        if (Screen.ActiveForm = self) and Assigned(FOnPipeBusyActiveControl)
-        then
-            try
-                FOnPipeBusyActiveControl.SetFocus;
-            except
-
-            end
-        else
-            FOnPipeBusyActiveControl := nil;
-
-    end;
+      [v.Block, FormatFloatArray(v.Values)]);
 
 end;
 

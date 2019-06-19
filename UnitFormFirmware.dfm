@@ -26,7 +26,6 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitHeight = 688
     object FlowPanel1: TFlowPanel
       Left = 0
       Top = 35
@@ -296,7 +295,6 @@ object FormFirmware: TFormFirmware
       OnMouseDown = StringGrid2MouseDown
       OnSelectCell = StringGrid2SelectCell
       OnSetEditText = StringGrid2SetEditText
-      ExplicitHeight = 355
       ColWidths = (
         80
         80
@@ -314,7 +312,6 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 688
   end
   object Chart1: TChart
     Left = 370
@@ -353,9 +350,6 @@ object FormFirmware: TFormFirmware
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 2
-    ExplicitLeft = 337
-    ExplicitWidth = 660
-    ExplicitHeight = 688
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object Series1: TFastLineSeries
@@ -386,7 +380,6 @@ object FormFirmware: TFormFirmware
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitHeight = 688
     object ToolBar2: TToolBar
       Left = 0
       Top = 0
@@ -399,7 +392,6 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 0
-      ExplicitWidth = 40
       object ToolButton3: TToolButton
         Left = 0
         Top = 0
@@ -435,8 +427,6 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 1
-      ExplicitTop = 83
-      ExplicitWidth = 40
       object ToolButton14: TToolButton
         Left = 0
         Top = 0
@@ -471,7 +461,6 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 2
-      ExplicitWidth = 40
       object ToolButton18: TToolButton
         Left = 0
         Top = 0

@@ -38,9 +38,9 @@ var
     b: double;
     strOn, strCool: string;
 begin
-    SeriesDestinationTemperature.AddXY(now, X.FDestination);
-    SeriesCurrentTemperature.AddXY(now, X.FTemperature);
-    if X.FOn then
+    SeriesDestinationTemperature.AddXY(now, X.Destination);
+    SeriesCurrentTemperature.AddXY(now, X.Temperature);
+    if X.On then
     begin
         b := 1;
         strOn := 'вкл.'
@@ -51,7 +51,7 @@ begin
         strOn := 'выкл.'
     end;
     SeriesOnOff.AddXY(now, b);
-    if X.FCoolOn then
+    if X.CoolOn then
     begin
         b := 1;
         strCool := ' компрессор'

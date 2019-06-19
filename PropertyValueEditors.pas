@@ -75,18 +75,18 @@ type
 implementation
 
 uses
-    listports, vclutils, stringutils, services, RTTI, pipe;
+    listports, vclutils, stringutils, services, RTTI, HttpRpcClient;
 
 constructor TChangedPropertyValue.Create(p: PConfigData);
 begin
-    FValue := p.Prop.FValue;
-    FName := p.Prop.FName;
-    FSection := p.Sect.FName;
+    FValue := p.Prop.Value;
+    FName := p.Prop.Name;
+    FSection := p.Sect.Name;
 end;
 
 function RConfigData.GetHasError: boolean;
 begin
-    if not Assigned(Prop) then
+    if Prop.Name = '' then
         Exit(Sect.HasError);
     Exit(Prop.HasError);
 end;
@@ -233,8 +233,8 @@ begin
     FEdit.Free;
     FEdit := nil;
 
-    if (length(FConfigData.Prop.FList) > 0) or
-      (FConfigData.Prop.ValueType in [VtComportName, VtBaud]) then
+    if (length(FConfigData.Prop.List) > 0) or
+      ( TPropertyValueType(FConfigData.Prop.ValueType) in [VtComportName, VtBaud]) then
     begin
         FEdit := TComboBox.Create(nil);
         with FEdit as TComboBox do
@@ -242,24 +242,24 @@ begin
 
             Visible := False;
             Parent := Tree;
-            Text := FConfigData.Prop.FValue;
-            if FConfigData.Prop.ValueType = VtComportName then
+            Text := FConfigData.Prop.Value;
+            if FConfigData.Prop.ValueTypeProp = VtComportName then
                 EnumComPorts(Items)
-            else if FConfigData.Prop.ValueType = VtBaud then
+            else if FConfigData.Prop.ValueTypeProp = VtBaud then
                 EnumBaudRates(Items)
             else
-                for i := 0 to length(FConfigData.Prop.FList) - 1 do
-                    Items.Add(FConfigData.Prop.FList[i]);
+                for i := 0 to length(FConfigData.Prop.List) - 1 do
+                    Items.Add(FConfigData.Prop.List[i]);
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
             style := csDropDown;
             ItemHeight := 22;
-            ItemIndex := Items.IndexOf(FConfigData.Prop.FValue);
+            ItemIndex := Items.IndexOf(FConfigData.Prop.Value);
             //OnChange := ComboBoxOnChange;
         end;
     end
 
-    else if FConfigData.Prop.ValueType = VtString then
+    else if FConfigData.Prop.ValueTypeProp = VtString then
     begin
         FEdit := TEdit.Create(nil);
         with FEdit as TEdit do
@@ -267,7 +267,7 @@ begin
 
             Visible := False;
             Parent := Tree;
-            Text := FConfigData.Prop.FValue;
+            Text := FConfigData.Prop.Value;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
             //OnChange := EditOnChange;
@@ -275,7 +275,7 @@ begin
         end;
     end
 
-    else if FConfigData.Prop.ValueType = VtInt then
+    else if FConfigData.Prop.ValueTypeProp = VtInt then
     begin
         FEdit := TEdit.Create(nil);
         with FEdit as TEdit do
@@ -283,13 +283,13 @@ begin
 
             Visible := False;
             Parent := Tree;
-            Text := FConfigData.Prop.FValue;
+            Text := FConfigData.Prop.Value;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
             //OnChange := EditOnChange;
         end;
     end
-    else if FConfigData.Prop.ValueType in [VtFloat, VtNullFloat] then
+    else if FConfigData.Prop.ValueTypeProp in [VtFloat, VtNullFloat] then
     begin
         FEdit := TEdit.Create(nil);
         with FEdit as TEdit do
@@ -297,14 +297,14 @@ begin
 
             Visible := False;
             Parent := Tree;
-            Text := FConfigData.Prop.FValue;
+            Text := FConfigData.Prop.Value;
             OnKeyDown := EditKeyDown;
             OnKeyUp := EditKeyUp;
             //OnChange := EditOnChange;
         end;
     end
 
-    else if FConfigData.Prop.ValueType = VtBool then
+    else if FConfigData.Prop.ValueTypeProp = VtBool then
     begin
         FEdit := TCheckBox.Create(nil);
         with FEdit as TCheckBox do
@@ -336,7 +336,7 @@ end;
 procedure TPropertyEditLink.CheckBoxOnChange(Sender: TObject);
 begin
     FConfigData.Prop.Bool := (Sender as TCheckBox).Checked;
-    ChangePropertyValue(FConfigData.Prop.FValue);
+    ChangePropertyValue(FConfigData.Prop.Value);
 end;
 
 
@@ -377,9 +377,9 @@ begin
         try
             TSettingsSvc.SetValue(pc.FSection, pc.FName, pc.FValue);
         except
-            on E: ERemoteError do
+            on E: ERpcRemoteErrorException do
             begin
-                FConfigData.Prop.FError := E.Message;
+                FConfigData.Prop.Error := E.Message;
             end;
         end;
     end;

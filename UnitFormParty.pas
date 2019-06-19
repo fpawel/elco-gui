@@ -50,7 +50,7 @@ var
 
 implementation
 
-uses stringgridutils, services, stringutils, UnitFormFirmware, pipe;
+uses stringgridutils, services, stringutils, UnitFormFirmware;
 
 {$R *.dfm}
 
@@ -69,9 +69,9 @@ begin
     GetCursorPos(pt);
     pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-    if (ARow < 1) or (ARow >= Length(FParty.FProducts)) then
+    if (ARow < 1) or (ARow >= Length(FParty.Products)) then
         exit;
-    FormFirmware.product := FParty.FProducts[ARow - 1];
+    FormFirmware.product := FParty.Products[ARow - 1];
     FormFirmware.Show;
 end;
 
@@ -96,11 +96,11 @@ begin
         exit;
     end;
 
-    p := FParty.FProducts[ARow - 1];
+    p := FParty.Products[ARow - 1];
 
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
-    else if p.FProduction or p.FHAsFirmware then
+    else if p.Production or p.HAsFirmware then
     begin
         cnv.Brush.Color := grd.Color;
         // cnv.Font.Color := clNavy;
@@ -123,9 +123,9 @@ begin
     case TProductColumn(FColumns[ACol]) of
         pcPlace:
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
-              p.FProduction);
+              p.Production);
         pcFirmware:
-            if p.FHAsFirmware then
+            if p.HAsFirmware then
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
@@ -156,10 +156,10 @@ begin
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
     if (ACol > 0) or (ARow = 0) then
         exit;
-    p := FParty.FProducts[ARow - 1];
+    p := FParty.Products[ARow - 1];
 
     try
-        TPartiesCatalogueSvc.ToggleProductProduction(p.FProductID);
+        TPartiesCatalogueSvc.ToggleProductProduction(p.ProductID);
     except
         on e: Exception do
         begin
@@ -168,7 +168,7 @@ begin
         end;
     end;
 
-    p.FProduction := not p.FProduction;
+    p.Production := not p.Production;
     StringGrid_RedrawRow(StringGrid1, ARow);
 
 end;
@@ -219,17 +219,17 @@ begin
 
     with StringGrid1 do
     begin
-        if Length(FParty.FProducts) = 0 then
+        if Length(FParty.Products) = 0 then
         begin
             Visible := false;
             exit;
 
         end;
         Visible := true;
-        FColumns := GetProductColumns(FParty.FProducts, []);
+        FColumns := GetProductColumns(FParty.Products, []);
 
         ColCount := Length(FColumns);
-        RowCount := Length(FParty.FProducts) + 1;
+        RowCount := Length(FParty.Products) + 1;
         if RowCount > 1 then
             FixedRows := 1;
         if ColCount > 1 then
@@ -239,7 +239,7 @@ begin
         begin
             Cells[ACol, 0] := product_column_name[FColumns[ACol]];
             ColWidths[ACol] := ProductColumnWidth(FColumns[ACol],
-              StringGrid1.Canvas, FParty.FProducts);
+              StringGrid1.Canvas, FParty.Products);
         end;
 
         for ARow := 1 to RowCount - 1 do
@@ -261,7 +261,7 @@ end;
 function TFormParty.GetProductValue(ColumnIndex, RowIndex: Integer)
   : RProductValue;
 begin
-    result := GetProductColumnValue(FParty.FProducts[RowIndex],
+    result := GetProductColumnValue(FParty.Products[RowIndex],
       FColumns[ColumnIndex]);
 
 end;
@@ -274,11 +274,12 @@ begin
     with StringGrid1 do
         for ARow := Selection.Top to Selection.Bottom do
         begin
-            p := FParty.FProducts[ARow - 1];
-            p.FProduction := Sender = MenuCheck;
+            p := FParty.Products[ARow - 1];
+            p.Production := Sender = MenuCheck;
             Cells[0,ARow] := GetProductColumnValue(p, pcPlace).Value;
             try
-                TPartiesCatalogueSvc.SetProductProduction(p.FProductID, p.FProduction);
+                TPartiesCatalogueSvc.SetProductProduction(p.ProductID, p.Production);
+                FParty.Products[ARow - 1] := p;
             except
                 on e: Exception do
                 begin

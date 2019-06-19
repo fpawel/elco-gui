@@ -79,7 +79,7 @@ var
 implementation
 
 uses
-    Math, stringgridutils, vclutils, pipe;
+    Math, stringgridutils, vclutils;
 
 {$R *.DFM}
 // ----------------- TFormProperties ------------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ begin
     VST3.Clear;
     VST3.RootNodeCount := 0;
     FConfig := AConfig;
-    VST3.RootNodeCount := Length(FConfig.FSections);
+    VST3.RootNodeCount := Length(FConfig.Sections);
 end;
 
 // ----------------------------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ procedure TFormProperties.VST3InitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 begin
     if Node.Parent = Sender.RootNode then
-        ChildCount := Length(FConfig.FSections[Node.Index].FProperties)
+        ChildCount := Length(FConfig.Sections[Node.Index].Properties)
     else
         ChildCount := 0;
 end;
@@ -134,13 +134,13 @@ begin
     if ParentNode = nil then
     begin
         InitialStates := InitialStates + [ivsHasChildren, ivsExpanded];
-        p.Sect := FConfig.FSections[Node.Index];
-        p.Prop := nil;
+        p.Sect := FConfig.Sections[Node.Index];
+        p.Prop.Name := '';
     end
     else
     begin
-        p.Sect := FConfig.FSections[Node.Parent.Index];
-        p.Prop := FConfig.FSections[Node.Parent.Index].FProperties[Node.Index];
+        p.Sect := FConfig.Sections[Node.Parent.Index];
+        p.Prop := FConfig.Sections[Node.Parent.Index].Properties[Node.Index];
 
     end;
 end;
@@ -158,23 +158,23 @@ begin
     if (Node.Parent = Sender.RootNode) then
     begin
         if Column = 0 then
-            CellText := FConfig.FSections[Node.Index].FHint;
+            CellText := FConfig.Sections[Node.Index].Hint;
         exit;
     end;
 
     case Column of
         0:
             begin
-                CellText := FConfig.FSections[Node.Parent.Index].FProperties
-                  [Node.Index].FHint;
+                CellText := FConfig.Sections[Node.Parent.Index].Properties
+                  [Node.Index].Hint;
             end;
         1:
             begin
-                CellText := Prop[Node].FValue;
+                CellText := Prop[Node].Value;
             end;
         2:
             begin
-                CellText := Prop[Node].FError;
+                CellText := Prop[Node].Error;
             end;
     end;
 
@@ -191,18 +191,16 @@ begin
         exit;
     with Prop[Node] do
     begin
-        HintText := FHint;
+        HintText := Hint;
 
-        if FMin.FValid then
-            HintText := HintText + #13 + 'минимум: ' +
-              floattostr(FMin.FFloat64);
+        if Min.Valid then
+            HintText := HintText + #13 + 'минимум: ' + floattostr(Min.Float64);
 
-        if FMax.FValid then
-            HintText := HintText + #13 + 'максимум: ' +
-              floattostr(FMax.FFloat64);
+        if Max.Valid then
+            HintText := HintText + #13 + 'максимум: ' + floattostr(Max.Float64);
 
-        if FError <> '' then
-            HintText := HintText + #13#13 + '"' + FValue + '": ' + FError;
+        if Error <> '' then
+            HintText := HintText + #13#13 + '"' + Value + '": ' + Error;
     end;
 
 end;
@@ -300,7 +298,7 @@ procedure TFormProperties.VST3DrawText(Sender: TBaseVirtualTree;
 var
     R: TRect;
 begin
-    if (Column = 1) and (Prop[Node].ValueType = VtBool) then
+    if (Column = 1) and (Prop[Node].ValueTypeProp = VtBool) then
     begin
         R := CellRect;
         R.Left := R.Left - 9;
@@ -342,11 +340,11 @@ begin
     if Node.Parent = Sender.RootNode then
     begin
         // root nodes
-        PropText := FConfig.FSections[Node.Index].FHint;
+        PropText := FConfig.Sections[Node.Index].Hint;
     end
     else
-        PropText := FConfig.FSections[Node.Parent.Index].FProperties
-          [Node.Index].FName;
+        PropText := FConfig.Sections[Node.Parent.Index].Properties
+          [Node.Index].Name;
 
     // By using StrLIComp we can specify a maximum length to compare. This allows us to find also nodes
     // which match only partially. Don't forget to specify the shorter string length as search length.
@@ -392,7 +390,7 @@ end;
 
 function TFormProperties.GetProp(Node: PVirtualNode): TConfigProperty;
 begin
-    if not Assigned(TreeData[Node].Prop) then
+    if TreeData[Node].Prop.Name = '' then
         raise Exception.Create('not a prop');
     Result := TreeData[Node].Prop;
 end;

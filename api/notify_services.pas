@@ -4,12 +4,12 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
+    TPartyHandler = reference to procedure (x:TParty);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
-    TPartyHandler = reference to procedure (x:TParty);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -33,11 +33,15 @@ procedure SetOnWriteConsole( AHandler : TStringHandler);
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
 implementation 
-uses Rest.Json, stringutils, sysutils;
+uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
     TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
     CmdWriteConsole);
+
+    type _deserializer = record
+        class function deserialize<T>(str:string):T;static;
+    end;
 
 var
     _OnReadCurrent : TReadCurrentHandler;
@@ -56,6 +60,11 @@ var
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
     _enabled:boolean;
+
+class function _deserializer.deserialize<T>(str:string):T;
+begin
+    TgoBsonSerializer.Deserialize(str, Result);
+end;
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 begin
@@ -79,7 +88,7 @@ begin
         begin
             if not Assigned(_OnReadCurrent) then
                 raise Exception.Create('_OnReadCurrent must be set');
-            _OnReadCurrent(TJson.JsonToObject<TReadCurrent>(str));
+            _OnReadCurrent(_deserializer.deserialize<TReadCurrent>(str));
         end;
         CmdErrorOccurred:
         begin
@@ -115,7 +124,7 @@ begin
         begin
             if not Assigned(_OnKtx500Info) then
                 raise Exception.Create('_OnKtx500Info must be set');
-            _OnKtx500Info(TJson.JsonToObject<TKtx500Info>(str));
+            _OnKtx500Info(_deserializer.deserialize<TKtx500Info>(str));
         end;
         CmdKtx500Error:
         begin
@@ -133,13 +142,13 @@ begin
         begin
             if not Assigned(_OnDelay) then
                 raise Exception.Create('_OnDelay must be set');
-            _OnDelay(TJson.JsonToObject<TDelayInfo>(str));
+            _OnDelay(_deserializer.deserialize<TDelayInfo>(str));
         end;
         CmdLastPartyChanged:
         begin
             if not Assigned(_OnLastPartyChanged) then
                 raise Exception.Create('_OnLastPartyChanged must be set');
-            _OnLastPartyChanged(TJson.JsonToObject<TParty>(str));
+            _OnLastPartyChanged(_deserializer.deserialize<TParty>(str));
         end;
         CmdStartServerApplication:
         begin
@@ -151,7 +160,7 @@ begin
         begin
             if not Assigned(_OnReadFirmware) then
                 raise Exception.Create('_OnReadFirmware must be set');
-            _OnReadFirmware(TJson.JsonToObject<TFirmwareInfo>(str));
+            _OnReadFirmware(_deserializer.deserialize<TFirmwareInfo>(str));
         end;
         CmdPanic:
         begin

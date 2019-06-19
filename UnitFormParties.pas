@@ -1,4 +1,4 @@
-unit UnitFormParties;
+п»їunit UnitFormParties;
 
 interface
 
@@ -182,7 +182,7 @@ begin
                     trdDay:
                         CellText := inttostr2(p.Value);
                     trdParty:
-                        CellText := p.Party.FProductTypeName;
+                        CellText := p.Party.ProductTypeName;
                 end;
             end;
         1:
@@ -196,8 +196,8 @@ begin
             begin
                 case p.NodeKind of
                     trdParty:
-                        if p.Party.FNote.FValid then
-                            CellText := p.Party.FNote.FString;
+                        if p.Party.Note.Valid then
+                            CellText := p.Party.Note.Str;
                 end;
             end;
     end;
@@ -213,23 +213,23 @@ begin
 
     case TreeData[FNode].NodeKind of
         trdYear:
-            s := format('год %d', [TreeData[FNode].Value]);
+            s := format('пїЅпїЅпїЅ %d', [TreeData[FNode].Value]);
         trdMonth:
-            s := format('год %d, месяц %s %s', [TreeData[FNode.Parent].Value,
+            s := format('пїЅпїЅпїЅ %d, пїЅпїЅпїЅпїЅпїЅ %s %s', [TreeData[FNode.Parent].Value,
               inttostr2(TreeData[FNode].Value),
               month_name(TreeData[FNode].Value)]);
         trdDay:
-            s := format('год %d, месяц %s %s, день %s',
+            s := format('пїЅпїЅпїЅ %d, пїЅпїЅпїЅпїЅпїЅ %s %s, пїЅпїЅпїЅпїЅ %s',
               [TreeData[FNode.Parent.Parent].Value,
               inttostr2(TreeData[FNode.Parent].Value),
               month_name(TreeData[FNode.Parent].Value),
               inttostr2(TreeData[FNode].Value)]);
         trdParty:
-            s := format('партия %d', [TreeData[FNode].Value]);
+            s := format('пїЅпїЅпїЅпїЅпїЅпїЅ %d', [TreeData[FNode].Value]);
     end;
 
-    if MessageBox(Handle, Pchar('Подтвердите необходимость удвления данных: ' +
-      s), 'Запрос подтверждения', mb_IconQuestion or mb_YesNo) <> mrYes then
+    if MessageBox(Handle, Pchar('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: ' +
+      s), 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', mb_IconQuestion or mb_YesNo) <> mrYes then
         exit;
 
     case TreeData[FNode].NodeKind of
@@ -263,7 +263,7 @@ begin
         Node := TreeView1.AddChild(ParentNode);
         NodeData := TreeData[Node];
         NodeData.Party := Party;
-        NodeData.Value := NodeData.Party.FPartyID;
+        NodeData.Value := NodeData.Party.PartyID;
         NodeData.NodeKind := trdParty;
     end;
 end;
@@ -337,10 +337,10 @@ begin
     p := TreeData[Node];
     v := p.Value;
 
-    if not Assigned(FormParty.Party) then
-        FormParty.Party := TLastPartySvc.Party;
+//    if FormParty.Party.PartyID <> 0 then
+//        FormParty.Party := TLastPartySvc.Party;
 
-    dt := FormParty.Party.FCreatedAt;
+    dt := FormParty.Party.CreatedAt;
     case p.NodeKind of
         trdYear:
             if v = YearOf(dt) then
@@ -355,7 +355,7 @@ begin
               (TreeData[Node.Parent.Parent].Value = YearOf(dt)) then
                 exit(true);
         trdParty:
-            exit(p.Value = FormParty.Party.FPartyID)
+            exit(p.Value = FormParty.Party.PartyID)
     end;
     exit(false);
 end;
@@ -363,7 +363,7 @@ end;
 procedure TFormParties.MenuCopyItemClick(Sender: TObject);
 begin
     FormLastParty.SetParty(TPartiesCatalogueSvc.CopyParty(TreeData[FNode]
-      .Party.FPartyID));
+      .Party.PartyID));
 end;
 
 procedure TFormParties.MenuDeleteItemClick(Sender: TObject);
@@ -389,7 +389,7 @@ end;
 
 procedure TFormParties.MenuPDFClick(Sender: TObject);
 begin
-    TPdfSvc.Run(TreeData[FNode].Party.FPartyID);
+    TPdfSvc.Run(TreeData[FNode].Party.PartyID);
 end;
 
 procedure TFormParties.PopupMenu1Popup(Sender: TObject);
@@ -404,28 +404,28 @@ begin
                 FormParty.Party := services.TPartiesCatalogueSvc.Party
                   (TreeData[FNode].Value);
                 s := format('%d %s %s', [TreeData[FNode].Value,
-                  TreeData[FNode].Party.FProductTypeName,
+                  TreeData[FNode].Party.ProductTypeName,
                   FormatDatetime('YYYY MMMM dd',
-                  TreeData[FNode].Party.FCreatedAt)]);
-                MenuDeleteItem.Caption := 'Удалить партию ' + s;
-                MenuCopyItem.Caption := 'Копировать партию ' + s;
-                MenuPDF.Caption := 'Отчёт ' + s;
+                  TreeData[FNode].Party.CreatedAt)]);
+                MenuDeleteItem.Caption := 'РЈРґР°Р»РёС‚СЊ РїР°СЂС‚РёСЋ : ' + s;
+                MenuCopyItem.Caption := 'РљРѕРїРёСЂРѕРІР°С‚СЊ : ' + s;
+                MenuPDF.Caption := 'РћС‚С‡С‘С‚ : ' + s;
             end;
 
         trdYear:
-            MenuDeleteItem.Caption := format('Удалить  год %d',
+            MenuDeleteItem.Caption := format('РЈРґР°Р»РёС‚СЊ РґР°РЅРЅС‹Рµ Р·Р° РіРѕРґ %d',
               [TreeData[FNode].Value]);
 
         trdMonth:
 
-            MenuDeleteItem.Caption := format('Удалить год %d, месяц %s %s',
+            MenuDeleteItem.Caption := format('РЈРґР°Р»РёС‚СЊ РґР°РЅРЅС‹Рµ Р·Р° РјРµСЃСЏС† %d, %s %s',
               [TreeData[FNode.Parent].Value, inttostr2(TreeData[FNode].Value),
               month_name(TreeData[FNode].Value)]);
 
         trdDay:
 
             MenuDeleteItem.Caption :=
-              format('Удалить год %d, месяц %s %s, день %s',
+              format('РЈРґР°Р»РёС‚СЊ РґР°РЅРЅС‹Рµ Р·Р° РґРµРЅСЊ %d, %s %s, %s',
               [TreeData[FNode.Parent.Parent].Value,
               inttostr2(TreeData[FNode.Parent].Value),
               month_name(TreeData[FNode.Parent].Value),

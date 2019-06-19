@@ -8,7 +8,7 @@ uses
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
     Vcl.ExtCtrls, server_data_types, server_data_types_helpers,
     System.ImageList, Vcl.ImgList, Vcl.ToolWin, Vcl.Grids, VclTee.TeeGDIPlus,
-    VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, pipe, VclTee.Series;
+    VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, VclTee.Series;
 
 type
     TFormFirmware = class(TForm)
@@ -249,7 +249,7 @@ begin
             Last_Edited_Row := -1; // Indicate no cell is edited
             // Do whatever wanted after user has finish editing a cell
             with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-                SetTemperaturePointsChart(FTemp, FFon, FSens);
+                SetTemperaturePointsChart(Temp, Fon, Sens);
 
         end
         else
@@ -292,7 +292,7 @@ begin
         end;
     end;
     with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-        SetTemperaturePointsChart(FTemp, FFon, FSens);
+        SetTemperaturePointsChart(Temp, Fon, Sens);
 end;
 
 procedure TFormFirmware.ToolButton3Click(Sender: TObject);
@@ -311,7 +311,7 @@ begin
     end;
 
     with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-        SetTemperaturePointsChart(FTemp, FFon, FSens);
+        SetTemperaturePointsChart(Temp, Fon, Sens);
 end;
 
 procedure TFormFirmware.ToolButton4Click(Sender: TObject);
@@ -581,17 +581,17 @@ begin
     for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
 
-    ComboBoxPlace.ItemIndex := f.FPlace;
-    DateTimePicker1.DateTime := f.FTime;
-    EditSerial.text := f.FSerial;
-    EditSens.text := f.FSensitivity;
-    EditScaleBegin.text := f.FScaleBeg;
-    EditScaleEnd.text := f.FScaleEnd;
-    SetComboBoxText(ComboBoxProductType, f.FProductType);
-    SetComboBoxText(ComboBoxUnits, f.FUnits);
-    SetComboBoxText(ComboBoxGas, f.FGas);
-    SetTemperaturePointsChart(f.FTemp, f.FFon, f.FSens);
-    SetTemperaturePointsGrid(f.FTemp, f.FFon, f.FSens);
+    ComboBoxPlace.ItemIndex := f.Place;
+    DateTimePicker1.DateTime := f.Time;
+    EditSerial.text := f.Serial;
+    EditSens.text := f.Sensitivity;
+    EditScaleBegin.text := f.ScaleBeg;
+    EditScaleEnd.text := f.ScaleEnd;
+    SetComboBoxText(ComboBoxProductType, f.ProductType);
+    SetComboBoxText(ComboBoxUnits, f.Units);
+    SetComboBoxText(ComboBoxGas, f.Gas);
+    SetTemperaturePointsChart(f.Temp, f.Fon, f.Sens);
+    SetTemperaturePointsGrid(f.Temp, f.Fon, f.Sens);
 
     with StringGrid2 do
     begin
@@ -600,15 +600,14 @@ begin
             if not try_str_to_float(Cells[0, i], temp) then
                 continue;
             if (temp = 20) then
-                Cells[3, i] := f.FISPlus20
+                Cells[3, i] := f.ISPlus20
             else if (temp = -20) then
-                Cells[3, i] := f.FISMinus20
+                Cells[3, i] := f.ISMinus20
             else if (temp = 50) then
-                Cells[3, i] := f.FISPlus50;
+                Cells[3, i] := f.ISPlus50;
 
         end;
     end;
-    f.Free;
 end;
 
 function TFormFirmware.GetTemperatureValues: TArray<string>;
@@ -705,13 +704,13 @@ end;
 
 procedure TFormFirmware.applyProduct;
 begin
-    if FProduct.FProductID <> 0 then
+    if FProduct.ProductID <> 0 then
     begin
         if RadioButton1.Checked then
         begin
-            if FProduct.FHasFirmware then
+            if FProduct.HasFirmware then
                 SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo
-                  (FProduct.FProductID))
+                  (FProduct.ProductID))
             else
             begin
                 ClearFirmwareInfo;
@@ -719,13 +718,13 @@ begin
         end
         else
             SetFirmwareInfo(TPlaceFirmware.CalculateFirmwareInfo
-              (FProduct.FProductID));
+              (FProduct.ProductID));
     end
     else
     begin
         ClearFirmwareInfo;
     end;
-    ComboBoxPlace.ItemIndex := FProduct.FPlace;
+    ComboBoxPlace.ItemIndex := FProduct.Place;
 end;
 
 procedure TFormFirmware.SetProduct(p: TProduct);

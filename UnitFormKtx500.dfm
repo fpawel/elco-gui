@@ -60,8 +60,6 @@ object FormKtx500: TFormKtx500
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 0
-    ExplicitLeft = -3
-    ExplicitWidth = 492
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object SeriesCurrentTemperature: TFastLineSeries

@@ -126,7 +126,6 @@
         <DCCReference Include="utils\superobject\supertimezone.pas"/>
         <DCCReference Include="utils\superobject\supertypes.pas"/>
         <DCCReference Include="utils\superobject\superxmlparser.pas"/>
-        <DCCReference Include="utils\pipe.pas"/>
         <DCCReference Include="api\server_data_types.pas"/>
         <DCCReference Include="api\server_data_types_helpers.pas"/>
         <DCCReference Include="api\services.pas"/>
@@ -178,6 +177,29 @@
             <Form>FormKtx500</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.BinaryCoding.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.IO.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.Path.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.Serialization.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Collections.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Console.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.DateUtils.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Hash.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Hooking.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Http.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.JWT.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.MemoryPool.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.PropertyBag.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.SocketPool.Win.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.System.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.SysUtils.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Uri.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Winsock2.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.API.pas"/>
+        <DCCReference Include="utils\HttpRpcClient.pas"/>
+        <DCCReference Include="utils\SuperObjectHelp.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

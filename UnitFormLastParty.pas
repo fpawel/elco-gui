@@ -75,8 +75,9 @@ var
 
 implementation
 
-uses stringgridutils, pipe, stringutils, superobject, server_data_types_helpers,
-    services, UnitFormFirmware, dateutils, UnitFormSelectProducts;
+uses stringgridutils,  stringutils, superobject, server_data_types_helpers,
+    services, UnitFormFirmware, dateutils, UnitFormSelectProducts,
+  HttpRpcClient;
 
 {$R *.dfm}
 
@@ -221,24 +222,24 @@ procedure TFormLastParty.StringGrid1MouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
     ACol, ARow: Integer;
-    p: TProduct;
+    p: ^TProduct;
 begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
     if (ACol > 0) or (ARow = 0) then
         exit;
-    p := FProducts[ARow - 1];
-    if not Assigned(p) then
+    p := addr(FProducts[ARow - 1]);
+    if p.ProductId = 0 then
         exit;
 
     try
 
-        p.FProductID := TLastPartySvc.ToggleProductProductionAtPlace(p.FPlace);
-        p.FProduction := not p.FProduction;
+        p.ProductID := TLastPartySvc.ToggleProductProductionAtPlace(p.Place);
+        p.Production := not p.Production;
         PanelError.Visible := false;
     except
-        on E: ERemoteError do
+        on E: ERpcRemoteErrorException do
         begin
             PanelError.Caption := Format('%s: %s: %s',
               [ProductValues[0, ARow - 1].Value,
@@ -272,14 +273,14 @@ begin
     if ARow = 0 then
     begin
         for p in FProducts do
-            if p.FProduction then
+            if p.Production then
             begin
                 f := True;
                 break;
             end;
 
         for p in FProducts do
-            p.FProduction := not f;
+            FProducts[p.Place].Production := not f;
 
     end;
 
@@ -288,8 +289,7 @@ begin
     if ACol > 0 then
     begin
         StringGrid1.EditorMode := false;
-        p := FProducts[ARow - 1];
-        FormFirmware.Product := p;
+        FormFirmware.Product := FProducts[ARow - 1];
         FormFirmware.Show;
     end;
 
@@ -319,7 +319,7 @@ begin
 
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
-    else if p.FProductID > 0 then
+    else if p.ProductID > 0 then
     begin
         cnv.Brush.Color := grd.Color;
         // cnv.Font.Color := clNavy;
@@ -333,9 +333,9 @@ begin
     case TProductColumn(FColumns[ACol]) of
         pcPlace:
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
-              p.FProduction);
+              p.Production);
         pcFirmware:
-            if p.FHasFirmware then
+            if p.HasFirmware then
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
@@ -358,7 +358,6 @@ end;
 procedure TFormLastParty.StringGrid1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-    p: TProduct;
     ACol: Integer;
 begin
 
@@ -367,8 +366,7 @@ begin
         if EditorMode or (Row < 0) or (Key <> VK_DELETE) then
             exit;
 
-        p := FProducts[Row - 1];
-        if p.FProductID = 0 then
+        if FProducts[Row - 1].ProductID = 0 then
             exit;
 
         ComboBox1.Hide;
@@ -382,16 +380,17 @@ begin
 
         try
             TLastPartySvc.DeleteProductAtPlace(Row - 1);
-            p.Free;
-            p := TProduct.Create;
-            p.FPlace := Row - 1;
-            FProducts[Row - 1] := p;
+            with FProducts[Row - 1] do begin
+                Place := Row - 1;
+                ProductID := 0;
+            end;
+
             Cells[0, Row] := ProductValues[0, Row - 1].Value;
             for ACol := 1 to colcount - 1 do
                 Cells[ACol, Row] := '';
             PanelError.Visible := false;
         except
-            on E: ERemoteError do
+            on E: ERpcRemoteErrorException do
             begin
                 PanelError.Caption :=
                   Format('%s: %s: %s', [ProductValues[0, Row - 1].Value,
@@ -488,28 +487,27 @@ var
     i: Integer;
     ARow, ACol: Integer;
     s: string;
+    emptyProduct:TProduct;
 begin
     FParty := party;
 
     with Application.MainForm do
     begin
         Caption := Format('Партия ЭХЯ № %d, создана %s',
-          [FParty.FPartyID, FormatDateTime('dd MMMM yyyy hh:nn',
-          IncHour(FParty.FCreatedAt, 3))])
+          [FParty.PartyID, FormatDateTime('dd MMMM yyyy hh:nn',
+          IncHour(FParty.CreatedAt, 3))])
     end;
 
     for i := 0 to 95 do
-        FProducts[i] := nil;
-    for i := 0 to Length(FParty.FProducts) - 1 do
-        FProducts[FParty.FProducts[i].FPlace] := FParty.FProducts[i];
+        FProducts[i] := emptyProduct;
+    for i := 0 to Length(FParty.Products) - 1 do
+        FProducts[FParty.Products[i].Place] := FParty.Products[i];
 
     for i := 0 to 95 do
+    with FProducts[i] do
     begin
-        if not Assigned(FProducts[i]) then
-        begin
-            FProducts[i] := TProduct.Create;
-            FProducts[i].FPlace := i;
-        end;
+        ProductID := 0;
+        Place := i;
     end;
     FColumns := GetProductColumns(FProducts, [pcPlace, pcSerial,
       pcProdType, pcPointsMethod, pcNote]);
@@ -526,7 +524,7 @@ begin
         begin
             Cells[ACol, 0] := product_column_name[FColumns[ACol]];
             ColWidths[ACol] := ProductColumnWidth(FColumns[ACol],
-              StringGrid1.Canvas, FParty.FProducts);
+              StringGrid1.Canvas, FParty.Products);
         end;
 
         for ARow := 1 to RowCount - 1 do
@@ -558,14 +556,14 @@ end;
 
 procedure TFormLastParty.UpdateNote(ACol, ARow: Integer; Value: string);
 var
-    p: TProduct;
+    p: ^TProduct;
 
 begin
     try
-        p := FProducts[ARow - 1];
-        p.FProductID := TLastPartySvc.SetProductNoteAtPlace(p.FPlace, Value);
-        p.FNote.FString := Value;
-        p.FNote.FValid := True;
+        p := addr(FProducts[ARow - 1]);
+        p.ProductID := TLastPartySvc.SetProductNoteAtPlace(p.Place, Value);
+        p.Note.Str := Value;
+        p.Note.Valid := True;
         PanelError.Visible := false;
     except
         on E: Exception do
@@ -578,11 +576,11 @@ begin
         end;
     end;
 
-    if Value <> p.FNote.str then
+    if Value <> p.Note.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FNote.str;
+            Cells[ACol, ARow] := p.Note.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -591,16 +589,16 @@ end;
 
 procedure TFormLastParty.UpdateProductType(ACol, ARow: Integer; Value: string);
 var
-    p: TProduct;
+    p: ^TProduct;
 begin
     try
-        p := FProducts[ARow - 1];
-        p.FProductID := TLastPartySvc.SetProductTypeAtPlace(p.FPlace, Value);
-        p.FProductTypeName.FString := Value;
-        p.FProductTypeName.FValid := Trim(Value) <> '';
+        p := @FProducts[ARow - 1];
+        p.ProductID := TLastPartySvc.SetProductTypeAtPlace(p.Place, Value);
+        p.ProductTypeName.Str := Value;
+        p.ProductTypeName.Valid := Trim(Value) <> '';
         PanelError.Visible := false;
     except
-        on E: ERemoteError do
+        on E: ERpcRemoteErrorException do
         begin
 
             PanelError.Caption := Format('%s: %s: "%s": %s',
@@ -610,11 +608,11 @@ begin
         end;
     end;
 
-    if Value <> p.FProductTypeName.str then
+    if Value <> p.ProductTypeName.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FProductTypeName.str;
+            Cells[ACol, ARow] := p.ProductTypeName.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -623,22 +621,22 @@ end;
 
 procedure TFormLastParty.UpdatePointsMethod(ACol, ARow: Integer; Value: string);
 var
-    p: TProduct;
+    p: ^TProduct;
     points_meth: int64;
     Valid: Boolean;
 begin
     try
-        p := FProducts[ARow - 1];
+        p := @FProducts[ARow - 1];
 
         Valid := TryStrToInt64(Value, points_meth);
 
-        p.FProductID := TLastPartySvc.SetPointsMethodAtPlace(p.FPlace,
+        p.ProductID := TLastPartySvc.SetPointsMethodAtPlace(p.Place,
           points_meth, Valid);
-        p.FPointsMethod.FInt64 := points_meth;
-        p.FPointsMethod.FValid := Valid;
+        p.PointsMethod.Int64 := points_meth;
+        p.PointsMethod.Valid := Valid;
         PanelError.Visible := false;
     except
-        on E: ERemoteError do
+        on E: ERpcRemoteErrorException do
         begin
 
             PanelError.Caption := Format('%s: %s: "%s": %s',
@@ -648,11 +646,11 @@ begin
         end;
     end;
 
-    if Value <> p.FPointsMethod.str then
+    if Value <> p.PointsMethod.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FPointsMethod.str;
+            Cells[ACol, ARow] := p.PointsMethod.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -661,14 +659,14 @@ end;
 
 procedure TFormLastParty.UpdateSerial(ACol, ARow: Integer; Value: string);
 var
-    p: TProduct;
+    p: ^TProduct;
 begin
     try
-        p := FProducts[ARow - 1];
-        p.FProductID := TLastPartySvc.SetProductSerialAtPlace(p.FPlace,
+        p := @FProducts[ARow - 1];
+        p.ProductID := TLastPartySvc.SetProductSerialAtPlace(p.Place,
           strtoint(Value));
-        p.FSerial.FInt64 := strtoint(Value);
-        p.FSerial.FValid := True;
+        p.Serial.Int64 := strtoint(Value);
+        p.Serial.Valid := True;
         PanelError.Visible := false;
     except
         on E: Exception do
@@ -681,11 +679,11 @@ begin
         end;
     end;
 
-    if Value <> p.FSerial.str then
+    if Value <> p.Serial.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.FSerial.str;
+            Cells[ACol, ARow] := p.Serial.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);
@@ -698,8 +696,8 @@ begin
     TLastPartySvc.SelectAll(production);
     for p in FProducts do
     begin
-        p.FProduction := production;
-        StringGrid_RedrawCell(StringGrid1, 0, p.FPlace + 1);
+        FProducts[p.Place].Production := production;
+        StringGrid_RedrawCell(StringGrid1, 0, p.Place + 1);
     end;
 
 end;
@@ -711,10 +709,10 @@ var
 begin
     TLastPartySvc.SetBlockChecked(Block, integer(production) );
     for p in FProducts do
-        if (p.FPlace div 8) = block then
+        if (p.Place div 8) = block then
         begin
-            p.FProduction := production;
-            StringGrid_RedrawCell(StringGrid1, 0, p.FPlace + 1);
+            FProducts[p.Place].Production := production;
+            StringGrid_RedrawCell(StringGrid1, 0, p.Place + 1);
         end;
 
 end;

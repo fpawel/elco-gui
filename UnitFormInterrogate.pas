@@ -62,12 +62,8 @@ begin
 end;
 
 procedure TFormInterrogate.FormShow(Sender: TObject);
-var
-    r: TGetCheckBlocksArg;
 begin
-    r := TLastPartySvc.GetCheckBlocks;
-    FCheckBlock := r.FCheck;
-    r.Free;
+    FCheckBlock := TLastPartySvc.GetCheckBlocks.Check;
 end;
 
 procedure TFormInterrogate.LinkLabel1MouseMove(Sender: TObject;
@@ -169,8 +165,7 @@ var
     ARow: Integer;
 begin
     r := TLastPartySvc.GetCheckBlocks;
-    FCheckBlock := r.FCheck;
-    r.Free;
+    FCheckBlock := r.Check;
     for ARow := 1 to 12 do
         StringGrid1.Cells[0, ARow] := StringGrid1.Cells[0, ARow];
 end;

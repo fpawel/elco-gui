@@ -53,8 +53,8 @@ uses System.SysUtils;
 
 function ff(v: TNullFloat64): string;
 begin
-    if v.FValid then
-        Result := floattostr(v.FFloat64)
+    if v.Valid then
+        Result := floattostr(v.Float64)
     else
         Result := '';
 end;
@@ -63,11 +63,11 @@ function Chk2(v: TNullFloat64; a, b: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.FValid then
+    if not v.Valid then
         exit;
-    Result.Value := floattostr(v.FFloat64);
+    Result.Value := floattostr(v.Float64);
 
-    if v.FValid then
+    if v.Valid then
     begin
         if a AND b then
             Result.Valid := vpvValid
@@ -81,11 +81,11 @@ function Chk3(v: TNullFloat64; a, b, c: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.FValid then
+    if not v.Valid then
         exit;
-    Result.Value := floattostr(v.FFloat64);
+    Result.Value := floattostr(v.Float64);
 
-    if v.FValid then
+    if v.Valid then
     begin
         if a AND b AND c then
             Result.Valid := vpvValid
@@ -99,9 +99,9 @@ function Chk(v: TNullFloat64; c: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.FValid then
+    if not v.Valid then
         exit;
-    Result.Value := floattostr(v.FFloat64);
+    Result.Value := floattostr(v.Float64);
 
     if c then
         Result.Valid := vpvValid
@@ -118,56 +118,56 @@ begin
     with product do
         case column of
             pcPlace:
-                exit(ProdVal(inttostr((FPlace div 8) + 1) + '.' +
-                  inttostr((FPlace mod 8) + 1)));
+                exit(ProdVal(inttostr((Place div 8) + 1) + '.' +
+                  inttostr((Place mod 8) + 1)));
 
             pcFirmware:
                 ;
 
             pcSerial:
-                if FSerial.FValid then
-                    Result.Value := inttostr(FSerial.FInt64);
+                if Serial.Valid then
+                    Result.Value := inttostr(Serial.Int64);
 
             pcProdType:
-                if FProductTypeName.FValid then
-                    Result.Value := FProductTypeName.FString;
+                if ProductTypeName.Valid then
+                    Result.Value := ProductTypeName.Str;
             pcFon20:
-                Result := Chk2(FIFPlus20, FOkMinFon20, FOkMaxFon20);
+                Result := Chk2(IFPlus20, OkMinFon20, OkMaxFon20);
             pcFon20_2:
-                Result := Chk3(FI13, FOkDFon20, FOkMinFon20r, FOkMaxFon20r);
+                Result := Chk3(I13, OkDFon20, OkMinFon20r, OkMaxFon20r);
             pcSens20:
-                Result := Chk2(FISPlus20, FOkMinKSens20, FOkMaxKSens20);
+                Result := Chk2(ISPlus20, OkMinKSens20, OkMaxKSens20);
             pcKSens20:
-                Result := Chk2(FKSens20, FOkMinKSens20, FOkMaxKSens20);
+                Result := Chk2(KSens20, OkMinKSens20, OkMaxKSens20);
 
             pcFonMinus20:
-                Result.Value := ff(FIFMinus20);
+                Result.Value := ff(IFMinus20);
             pcSensMinus20:
-                Result.Value := ff(FISMinus20);
+                Result.Value := ff(ISMinus20);
 
             pcFon50:
-                Result := Chk(FIFPlus50, FOkDFon50);
+                Result := Chk(IFPlus50, OkDFon50);
             pcSens50:
-                Result := Chk2(FISPlus50, FOkMinKSens50, FOkMaxKSens50);
+                Result := Chk2(ISPlus50, OkMinKSens50, OkMaxKSens50);
             pcKSens50:
-                Result := Chk2(FKSens50, FOkMinKSens50, FOkMaxKSens50);
+                Result := Chk2(KSens50, OkMinKSens50, OkMaxKSens50);
 
             pci24:
-                Result.Value := ff(FI24);
+                Result.Value := ff(I24);
             pci35:
-                Result.Value := ff(FI35);
+                Result.Value := ff(I35);
             pci26:
-                Result.Value := ff(FI26);
+                Result.Value := ff(I26);
             pci17:
-                Result.Value := ff(FI17);
+                Result.Value := ff(I17);
             pcNotMeasured:
-                Result := Chk(FNotMeasured, FOKDNotMeasured);
+                Result := Chk(NotMeasured, OKDNotMeasured);
 
             pcPointsMethod:
-                Result.Value := FPointsMethod.GetStr;
+                Result.Value := PointsMethod.GetStr;
 
             pcNote:
-                Result.Value := FNote.Str;
+                Result.Value := Note.Str;
         else
             assert(false, 'uncmown case: ' + inttostr(integer(column)));
         end;
@@ -186,7 +186,7 @@ begin
         for p in prods do
         begin
             if (c in cols) OR (GetProductColumnValue(p, c).Value <> '') or
-              ((c = pcFirmware) AND p.FHasFirmware) then
+              ((c = pcFirmware) AND p.HasFirmware) then
             begin
                 SetLength(Result, Length(Result) + 1);
                 Result[Length(Result) - 1] := c;
