@@ -115,6 +115,10 @@ function GetProductColumnValue(product: TProduct; column: TProductColumn)
 begin
     Result.Valid := vpvNotCheck;
     Result.Value := '';
+    if (product.ProductID = 0 ) AND (column <>pcPlace ) then
+        exit;
+
+
     with product do
         case column of
             pcPlace:
