@@ -301,7 +301,7 @@ var
     req : ISuperobject;
 begin
     req := SO;
-    ThttpRpcClient.Call('LastPartySvc.PartyID', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.PartyID', req), Result); 
 end;
 
  
@@ -341,7 +341,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
-    ThttpRpcClient.Call('LastPartySvc.SetBlockChecked', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetBlockChecked', req), Result); 
 end;
 
  
@@ -353,7 +353,7 @@ begin
     SuperObject_SetField(req, 'Place', Place);
     SuperObject_SetField(req, 'PointsMethod', PointsMethod);
     SuperObject_SetField(req, 'Valid', Valid);
-    ThttpRpcClient.Call('LastPartySvc.SetPointsMethodAtPlace', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetPointsMethodAtPlace', req), Result); 
 end;
 
  
@@ -364,7 +364,7 @@ begin
     req := SO;
     SuperObject_SetField(req, 'Place', Place);
     SuperObject_SetField(req, 'Note', Note);
-    ThttpRpcClient.Call('LastPartySvc.SetProductNoteAtPlace', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetProductNoteAtPlace', req), Result); 
 end;
 
  
@@ -375,7 +375,7 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
-    ThttpRpcClient.Call('LastPartySvc.SetProductSerialAtPlace', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetProductSerialAtPlace', req), Result); 
 end;
 
  
@@ -386,7 +386,7 @@ begin
     req := SO;
     SuperObject_SetField(req, 'Place', Place);
     SuperObject_SetField(req, 'ProductType', ProductType);
-    ThttpRpcClient.Call('LastPartySvc.SetProductTypeAtPlace', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetProductTypeAtPlace', req), Result); 
 end;
 
  
@@ -396,7 +396,7 @@ var
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    ThttpRpcClient.Call('LastPartySvc.ToggleProductProductionAtPlace', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.ToggleProductProductionAtPlace', req), Result); 
 end;
 
   
@@ -497,7 +497,7 @@ var
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    Result := ThttpRpcClient.GetResponse('SettingsSvc.ChangePredefinedConfig', req).AsString; 
+    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.ChangePredefinedConfig', req), Result); 
 end;
 
  
@@ -506,7 +506,7 @@ var
     req : ISuperobject;
 begin
     req := SO;
-    Result := ThttpRpcClient.GetResponse('SettingsSvc.PredefinedConfig', req).AsString; 
+    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.PredefinedConfig', req), Result); 
 end;
 
  
@@ -524,7 +524,7 @@ var
     req : ISuperobject;
 begin
     req := SO;
-    Result := ThttpRpcClient.GetResponse('SettingsSvc.SetDefaultPredefinedConfig', req).AsString; 
+    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.SetDefaultPredefinedConfig', req), Result); 
 end;
 
  
