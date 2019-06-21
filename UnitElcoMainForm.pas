@@ -112,7 +112,7 @@ type
         { Private declarations }
         FInitialized: Boolean;
         FhWndTip: THandle;
-        FOnPipeBusyActiveControl: TWinControl;
+
         procedure AppException(Sender: TObject; E: Exception);
 
         procedure RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);

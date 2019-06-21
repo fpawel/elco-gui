@@ -34,6 +34,7 @@ object FormParty: TFormParty
     OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
     OnMouseDown = StringGrid1MouseDown
+    OnSelectCell = StringGrid1SelectCell
     ColWidths = (
       64
       64

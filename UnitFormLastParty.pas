@@ -174,6 +174,8 @@ begin
             ComboBox2.Visible := false;
         end;
     end;
+    StringGrid_RedrawRow(grd, grd.Row);
+    StringGrid_RedrawRow(grd, ARow);
 
 end;
 
@@ -317,8 +319,12 @@ begin
 
     p := FProducts[ARow - 1];
 
+
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
+    else if ARow = grd.Row then
+        cnv.Brush.Color := clInfoBk
+
     else if p.ProductId > 0 then
     begin
         cnv.Brush.Color := grd.Color;
@@ -363,6 +369,17 @@ begin
 
     with StringGrid1 do
     begin
+        if EditorMode AND (Key = VK_RETURN) then
+        begin
+            if row  < Rowcount-1 then
+                row := row + 1
+            else
+                EditorMode := false;
+            exit;
+        end;
+
+
+
         if EditorMode or (Row < 0) or (Key <> VK_DELETE) then
             exit;
 
@@ -674,6 +691,7 @@ begin
               [ProductValues[0, ARow - 1].Value, product_column_name[pcSerial],
               Value, E.Message]);
             PanelError.Visible := True;
+            //StringGrid1.Options := StringGrid1.Options - [goEditing];
         end;
     end;
 

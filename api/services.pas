@@ -70,7 +70,7 @@ type
         class procedure RunMainError;static;
         class procedure RunReadAndSaveProductCurrents( param1: string) ;static;
         class procedure RunReadCurrent;static;
-        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;static;
+        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;static;
         class procedure RunWritePartyFirmware;static;
         class procedure SkipDelay;static;
         class procedure StopHardware;static;
@@ -568,7 +568,7 @@ begin
 end;
 
  
-class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean) ;
+class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
 var
     req : ISuperobject;
 begin
@@ -576,6 +576,7 @@ begin
     req.AsArray.Add(param1) ;
     req.AsArray.Add(param2) ;
     req.AsArray.Add(param3) ;
+    req.AsArray.Add(param4) ;
     ThttpRpcClient.GetResponse('RunnerSvc.RunTemperature', req); 
 end;
 

@@ -23,6 +23,8 @@ type
         procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
         procedure MenuCheckClick(Sender: TObject);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
     private
         { Private declarations }
         FParty: TParty;
@@ -100,6 +102,8 @@ begin
 
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
+    else if ARow = grd.Row then
+        cnv.Brush.Color := clInfoBk
     else if p.Production or p.HAsFirmware then
     begin
         cnv.Brush.Color := grd.Color;
@@ -171,6 +175,13 @@ begin
     p.Production := not p.Production;
     StringGrid_RedrawRow(StringGrid1, ARow);
 
+end;
+
+procedure TFormParty.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+    StringGrid_RedrawRow(StringGrid1, StringGrid1.Row);
+    StringGrid_RedrawRow(StringGrid1, ARow);
 end;
 
 procedure TFormParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
