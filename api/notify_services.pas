@@ -4,12 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TIntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -29,6 +30,7 @@ procedure SetOnStartServerApplication( AHandler : TStringHandler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
+procedure SetOnReadPlace( AHandler : TIntegerHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
@@ -36,8 +38,8 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, 
-    CmdWriteConsole);
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, 
+    CmdReadPlace);
 
     type _deserializer = record
         class function deserialize<T>(str:string):T;static;
@@ -59,6 +61,7 @@ var
     _OnReadFirmware : TFirmwareInfoHandler;
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
+    _OnReadPlace : TIntegerHandler;
     _enabled:boolean;
 
 class function _deserializer.deserialize<T>(str:string):T;
@@ -174,6 +177,12 @@ begin
                 raise Exception.Create('_OnWriteConsole must be set');
             _OnWriteConsole(str);
         end;
+        CmdReadPlace:
+        begin
+            if not Assigned(_OnReadPlace) then
+                raise Exception.Create('_OnReadPlace must be set');
+            _OnReadPlace(StrToInt(str));
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -269,6 +278,12 @@ begin
     if Assigned(_OnWriteConsole) then
         raise Exception.Create('_OnWriteConsole already set');
     _OnWriteConsole := AHandler;
+end;
+procedure SetOnReadPlace( AHandler : TIntegerHandler);
+begin
+    if Assigned(_OnReadPlace) then
+        raise Exception.Create('_OnReadPlace already set');
+    _OnReadPlace := AHandler;
 end;
 
 

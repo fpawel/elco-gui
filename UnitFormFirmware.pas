@@ -582,7 +582,7 @@ begin
         ComboBoxUnits.Items.Add(s);
 
     ComboBoxPlace.ItemIndex := f.Place;
-    DateTimePicker1.DateTime := f.Time;
+    DateTimePicker1.DateTime := f.CreatedAt.DateTime;
     EditSerial.text := f.Serial;
     EditSens.text := f.Sensitivity;
     EditScaleBegin.text := f.ScaleBeg;

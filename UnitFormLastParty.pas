@@ -14,8 +14,14 @@ type
         StringGrid1: TStringGrid;
         PanelError: TPanel;
         ImageList1: TImageList;
-        ComboBox1: TComboBox;
-        ComboBox2: TComboBox;
+        PopupMenu1: TPopupMenu;
+        MenuCheck: TMenuItem;
+        MenuUncheck: TMenuItem;
+        N1: TMenuItem;
+        N21: TMenuItem;
+        N31: TMenuItem;
+        N2: TMenuItem;
+        MenuProductType: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -28,11 +34,10 @@ type
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1KeyDown(Sender: TObject; var Key: Word;
           Shift: TShiftState);
-        procedure ComboBox1CloseUp(Sender: TObject);
-        procedure ComboBox1Exit(Sender: TObject);
         procedure StringGrid1DblClick(Sender: TObject);
-        procedure ComboBox2CloseUp(Sender: TObject);
-        procedure ComboBox2Exit(Sender: TObject);
+        procedure MenuCheckClick(Sender: TObject);
+        procedure N2Click(Sender: TObject);
+    procedure MenuProductTypeClick(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -40,6 +45,8 @@ type
         FParty: TParty;
         FProducts: TArray<TProduct>;
         FColumns: TProductColumns;
+
+        FReadPlace: integer;
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
 
@@ -51,10 +58,8 @@ type
 
         procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 
-        procedure UpdatePointsMethod(ACol, ARow: Integer; Value: string);
         procedure UpdateSerial(ACol, ARow: Integer; Value: string);
         procedure UpdateNote(ACol, ARow: Integer; Value: string);
-        procedure UpdateProductType(ACol, ARow: Integer; Value: string);
 
         property ProductValues[ColumnIndex, RowIndex: Integer]: RProductValue
           read GetProductValue;
@@ -65,6 +70,8 @@ type
         procedure SetProductionBlock(block: Integer; production: Boolean);
         procedure SetParty(party: TParty);
         procedure reload_data;
+
+        procedure SetReadPlace(APlace:integer);
 
         property party: TParty read FParty;
 
@@ -77,12 +84,13 @@ implementation
 
 uses stringgridutils, stringutils, superobject, server_data_types_helpers,
     services, UnitFormFirmware, dateutils, UnitFormSelectProducts,
-    HttpRpcClient;
+    HttpRpcClient, UnitFormSelectStendPlacesDialog, UnitFormProductTypeDialog;
 
 {$R *.dfm}
 
 procedure TFormLastParty.FormCreate(Sender: TObject);
 begin
+    FReadPlace := -1;
     SetLength(FProducts, 96);
     reload_data;
 end;
@@ -119,61 +127,6 @@ begin
     else
         grd.Options := grd.Options - [goEditing];
 
-    case FColumns[ACol] of
-        pcPointsMethod:
-            begin
-                r := grd.CellRect(ACol, ARow);
-                r.Left := r.Left + grd.Left;
-                r.Right := r.Right + grd.Left;
-                r.Top := r.Top + grd.Top;
-                r.Bottom := r.Bottom + grd.Top;
-
-                with ComboBox2 do
-                begin
-                    ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
-                    if (ItemIndex = -1) then
-                    begin
-                        Items.Add(grd.Cells[ACol, ARow]);
-                        ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
-                    end;
-
-                    Width := r.Width;
-                    Left := r.Left;
-                    Top := r.Top;
-                    Visible := True;
-                end;
-                ComboBox1.Visible := false;
-            end;
-        pcProdType:
-            begin
-                r := grd.CellRect(ACol, ARow);
-                r.Left := r.Left + grd.Left;
-                r.Right := r.Right + grd.Left;
-                r.Top := r.Top + grd.Top;
-                r.Bottom := r.Bottom + grd.Top;
-
-                with ComboBox1 do
-                begin
-                    ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
-                    if (ItemIndex = -1) then
-                    begin
-                        Items.Add(grd.Cells[ACol, ARow]);
-                        ItemIndex := Items.IndexOf(grd.Cells[ACol, ARow]);
-                    end;
-
-                    Width := r.Width;
-                    Left := r.Left;
-                    Top := r.Top;
-                    Visible := True;
-                end;
-                ComboBox2.Visible := false;
-            end;
-    else
-        begin
-            ComboBox1.Visible := false;
-            ComboBox2.Visible := false;
-        end;
-    end;
     StringGrid_RedrawRow(grd, grd.Row);
     StringGrid_RedrawRow(grd, ARow);
 
@@ -197,6 +150,7 @@ begin
                 case TProductColumn(FColumns[ACol]) of
                     pcSerial:
                         begin
+
                             UpdateSerial(ACol, ARow, Value);
                             // StringGrid1.col := ACol;
                             // StringGrid1.Row := ARow;
@@ -317,14 +271,16 @@ begin
         exit;
     end;
 
-    p := FProducts[ARow - 1];
 
+
+    p := FProducts[ARow - 1];
 
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
     else if ARow = grd.Row then
         cnv.Brush.Color := clInfoBk
-
+    else if FReadPlace = ARow - 1 then
+        cnv.Brush.Color := clSkyBlue
     else if p.ProductId > 0 then
     begin
         cnv.Brush.Color := grd.Color;
@@ -371,23 +327,18 @@ begin
     begin
         if EditorMode AND (Key = VK_RETURN) then
         begin
-            if row  < Rowcount-1 then
-                row := row + 1
+            if Row < Rowcount - 1 then
+                Row := Row + 1
             else
                 EditorMode := false;
             exit;
         end;
-
-
 
         if EditorMode or (Row < 0) or (Key <> VK_DELETE) then
             exit;
 
         if FProducts[Row - 1].ProductId = 0 then
             exit;
-
-        ComboBox1.Hide;
-        ComboBox2.Hide;
 
         if MessageDlg
           (Format('Подтвердите необходимость удаления данных ЭХЯ %s?',
@@ -449,42 +400,6 @@ begin
     DrawCellStr(ACol, ARow, Rect, ta, StringGrid1.Cells[ACol, ARow]);
 end;
 
-procedure TFormLastParty.ComboBox1CloseUp(Sender: TObject);
-begin
-    with ComboBox1, StringGrid1 do
-    begin
-        if ItemIndex <> -1 then
-            Cells[col, Row] := Items[ItemIndex]
-        else
-            Cells[col, Row] := '';
-        UpdateProductType(col, Row, ComboBox1.Text)
-    end;
-    // StringGrid1.SetFocus;
-end;
-
-procedure TFormLastParty.ComboBox1Exit(Sender: TObject);
-begin
-    ComboBox1.Visible := false;
-end;
-
-procedure TFormLastParty.ComboBox2CloseUp(Sender: TObject);
-begin
-    with ComboBox2, StringGrid1 do
-    begin
-        if ItemIndex <> -1 then
-            Cells[col, Row] := Items[ItemIndex]
-        else
-            Cells[col, Row] := '';
-        UpdatePointsMethod(col, Row, ComboBox2.Text)
-    end;
-    // StringGrid1.SetFocus;
-end;
-
-procedure TFormLastParty.ComboBox2Exit(Sender: TObject);
-begin
-    ComboBox2.Visible := false;
-end;
-
 procedure TFormLastParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 var
     bmp: TBitmap;
@@ -504,6 +419,7 @@ var
     i: Integer;
     ARow, ACol: Integer;
     s: string;
+    m: TMenuItem;
 begin
     FParty := party;
 
@@ -524,13 +440,12 @@ begin
     for i := 0 to Length(FParty.Products) - 1 do
         FProducts[FParty.Products[i].Place] := FParty.Products[i];
 
-    FColumns := GetProductColumns(FProducts, [pcPlace, pcSerial, pcProdType,
-      pcPointsMethod, pcNote]);
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcSerial, pcNote]);
 
     with StringGrid1 do
     begin
         colcount := Length(FColumns);
-        RowCount := 96 + 1;
+        Rowcount := 96 + 1;
         FixedRows := 1;
         FixedCols := 1;
         ColWidths[0] := 80;
@@ -542,7 +457,7 @@ begin
               StringGrid1.Canvas, FParty.Products);
         end;
 
-        for ARow := 1 to RowCount - 1 do
+        for ARow := 1 to Rowcount - 1 do
         begin
             for ACol := 0 to colcount - 1 do
             begin
@@ -551,10 +466,11 @@ begin
         end;
     end;
 
-    ComboBox1.Items.Clear;
-    ComboBox1.Items.Add('');
-    for s in TProductTypesSvc.Names do
-        ComboBox1.Items.Add(s);
+//    MenuProductType.Clear;
+//    m := TMenuItem.Create(self);
+//    m.Caption := 'как в партии';
+//    MenuProductType.Add(m);
+
 end;
 
 procedure TFormLastParty.reload_data;
@@ -566,6 +482,55 @@ function TFormLastParty.GetProductValue(ColumnIndex, RowIndex: Integer)
   : RProductValue;
 begin
     result := GetProductColumnValue(FProducts[RowIndex], FColumns[ColumnIndex]);
+
+end;
+
+procedure TFormLastParty.MenuCheckClick(Sender: TObject);
+var
+    ARow: Integer;
+    p: ^TProduct;
+    ProductIDs: TArray<Int64>;
+
+begin
+    with StringGrid1 do
+    begin
+        for ARow := Selection.Top to Selection.Bottom do
+        begin
+            p := @FProducts[ARow - 1];
+            if p.ProductId = 0 then
+                Continue;
+            p.production := Sender = MenuCheck;
+            Cells[0, ARow] := GetProductColumnValue(p^, pcPlace).Value;
+            SetLength(ProductIDs, Length(ProductIDs) + 1);
+            ProductIDs[Length(ProductIDs) - 1] := p.ProductId;
+        end;
+    end;
+
+    TPartiesCatalogueSvc.SetProductsProduction(ProductIDs, Sender = MenuCheck);
+end;
+
+procedure TFormLastParty.MenuProductTypeClick(Sender: TObject);
+var pt:TPoint;
+begin
+    With StringGrid1 do
+    begin
+        FormProductTypeDialog.SetPlaces(Selection.Top-1, Selection.Bottom-1);
+        pt := ClientToScreen(CellRect(Selection.Right, Selection.Bottom).BottomRight);
+        FormProductTypeDialog.Left := pt.X;
+        FormProductTypeDialog.Top := pt.Y;
+        FormProductTypeDialog.Show;
+    end;
+end;
+
+procedure TFormLastParty.N2Click(Sender: TObject);
+var
+    ARow: Integer;
+    p: ^TProduct;
+begin
+    with StringGrid1.Selection do
+        TLastPartySvc.SetPointsMethodInPlacesRange(Top - 1, Bottom - 1,
+          (Sender as TComponent).Tag);
+    reload_data;
 
 end;
 
@@ -602,85 +567,18 @@ begin
 
 end;
 
-procedure TFormLastParty.UpdateProductType(ACol, ARow: Integer; Value: string);
-var
-    p: ^TProduct;
-begin
-    try
-        p := @FProducts[ARow - 1];
-        p.ProductId := TLastPartySvc.SetProductTypeAtPlace(p.Place, Value);
-        p.ProductTypeName.str := Value;
-        p.ProductTypeName.Valid := Trim(Value) <> '';
-        PanelError.Visible := false;
-    except
-        on E: ERpcRemoteErrorException do
-        begin
-
-            PanelError.Caption := Format('%s: %s: "%s": %s',
-              [ProductValues[0, ARow - 1].Value,
-              product_column_name[pcProdType], Value, E.Message]);
-            PanelError.Visible := True;
-        end;
-    end;
-
-    if Value <> p.ProductTypeName.str then
-        with StringGrid1 do
-        begin
-            OnSetEditText := nil;
-            Cells[ACol, ARow] := p.ProductTypeName.str;
-            OnSetEditText := StringGrid1SetEditText;
-        end;
-    StringGrid_RedrawRow(StringGrid1, ARow);
-
-end;
-
-procedure TFormLastParty.UpdatePointsMethod(ACol, ARow: Integer; Value: string);
-var
-    p: ^TProduct;
-    points_meth: int64;
-    Valid: Boolean;
-begin
-    try
-        p := @FProducts[ARow - 1];
-
-        Valid := TryStrToInt64(Value, points_meth);
-
-        p.ProductId := TLastPartySvc.SetPointsMethodAtPlace(p.Place,
-          points_meth, Valid);
-        p.PointsMethod.int64 := points_meth;
-        p.PointsMethod.Valid := Valid;
-        PanelError.Visible := false;
-    except
-        on E: ERpcRemoteErrorException do
-        begin
-
-            PanelError.Caption := Format('%s: %s: "%s": %s',
-              [ProductValues[0, ARow - 1].Value,
-              product_column_name[pcPointsMethod], Value, E.Message]);
-            PanelError.Visible := True;
-        end;
-    end;
-
-    if Value <> p.PointsMethod.str then
-        with StringGrid1 do
-        begin
-            OnSetEditText := nil;
-            Cells[ACol, ARow] := p.PointsMethod.str;
-            OnSetEditText := StringGrid1SetEditText;
-        end;
-    StringGrid_RedrawRow(StringGrid1, ARow);
-
-end;
-
 procedure TFormLastParty.UpdateSerial(ACol, ARow: Integer; Value: string);
 var
     p: ^TProduct;
 begin
     try
         p := @FProducts[ARow - 1];
+        if (p.ProductId = 0) AND (Trim(Value) = '') then
+            exit;
+
         p.ProductId := TLastPartySvc.SetProductSerialAtPlace(p.Place,
           strtoint(Value));
-        p.Serial.int64 := strtoint(Value);
+        p.Serial.Int64 := strtoint(Value);
         p.Serial.Valid := True;
         PanelError.Visible := false;
     except
@@ -691,7 +589,7 @@ begin
               [ProductValues[0, ARow - 1].Value, product_column_name[pcSerial],
               Value, E.Message]);
             PanelError.Visible := True;
-            //StringGrid1.Options := StringGrid1.Options - [goEditing];
+            // StringGrid1.Options := StringGrid1.Options - [goEditing];
         end;
     end;
 
@@ -731,6 +629,21 @@ begin
             StringGrid_RedrawCell(StringGrid1, 0, p.Place + 1);
         end;
 
+end;
+
+procedure TFormLastParty.SetReadPlace(APlace:integer);
+var
+    prevReadPlace: Integer;
+begin
+    if APlace = FReadPlace then
+        exit;
+
+    prevReadPlace := FReadPlace;
+    FReadPlace := APlace;
+
+    if (prevReadPlace > -1) then
+        StringGrid_RedrawRow(StringGrid1, prevReadPlace + 1);
+    StringGrid_RedrawRow(StringGrid1, APlace + 1);
 end;
 
 end.

@@ -62,7 +62,8 @@ uses
   Grijjy.OpenSSL in '..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.pas',
   Grijjy.OpenSSL.API in '..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.API.pas',
   HttpRpcClient in 'utils\HttpRpcClient.pas',
-  SuperObjectHelp in 'utils\SuperObjectHelp.pas';
+  SuperObjectHelp in 'utils\SuperObjectHelp.pas',
+  UnitFormProductTypeDialog in 'UnitFormProductTypeDialog.pas' {FormProductTypeDialog};
 
 {$R *.res}
 
@@ -95,6 +96,7 @@ begin
   Application.CreateForm(TFormConsole, FormConsole);
   Application.CreateForm(TFormPopup, FormPopup);
   Application.CreateForm(TFormKtx500, FormKtx500);
+  Application.CreateForm(TFormProductTypeDialog, FormProductTypeDialog);
   Application.Run;
 
 end.

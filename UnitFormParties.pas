@@ -384,6 +384,10 @@ begin
         trdParty:
             TPartiesCatalogueSvc.DeletePartyID(TreeData[FNode].Value);
     end;
+    if Assigned(FNode.Parent) then
+        TreeView1.Expanded[FNode.Parent] := false
+    else
+        CreateYearsNodes;
 
 end;
 

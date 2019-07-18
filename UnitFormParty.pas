@@ -14,8 +14,8 @@ type
         StringGrid1: TStringGrid;
         ImageList1: TImageList;
         PopupMenu1: TPopupMenu;
-    MenuCheck: TMenuItem;
-    MenuUncheck: TMenuItem;
+        MenuCheck: TMenuItem;
+        MenuUncheck: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -23,8 +23,8 @@ type
         procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
         procedure MenuCheckClick(Sender: TObject);
-    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
+        procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+          var CanSelect: Boolean);
     private
         { Private declarations }
         FParty: TParty;
@@ -280,26 +280,32 @@ end;
 procedure TFormParty.MenuCheckClick(Sender: TObject);
 var
     ARow: Integer;
-    p : TProduct;
+    p: ^TProduct;
+    ProductIDs: TArray<Int64>;
+
 begin
     with StringGrid1 do
+    begin
         for ARow := Selection.Top to Selection.Bottom do
         begin
-            p := FParty.Products[ARow - 1];
+            p := @FParty.Products[ARow - 1];
             p.Production := Sender = MenuCheck;
-            Cells[0,ARow] := GetProductColumnValue(p, pcPlace).Value;
-            try
-                TPartiesCatalogueSvc.SetProductProduction(p.ProductID, p.Production);
-                FParty.Products[ARow - 1] := p;
-            except
-                on e: Exception do
-                begin
-                    Application.ShowException(e);
-                    exit;
-                end;
-            end;
+            Cells[0, ARow] := GetProductColumnValue(p^, pcPlace).Value;
+            SetLength(ProductIDs, Length(ProductIDs) + 1);
+            ProductIDs[Length(ProductIDs) - 1] := p.ProductID;
         end;
-    //StringGrid_Redraw(StringGrid1);
+    end;
+
+    try
+        TPartiesCatalogueSvc.SetProductsProduction(ProductIDs,
+          Sender = MenuCheck);
+    except
+        on e: Exception do
+        begin
+            Application.ShowException(e);
+            exit;
+        end;
+    end;
 end;
 
 end.

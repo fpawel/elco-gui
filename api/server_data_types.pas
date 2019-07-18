@@ -3,7 +3,7 @@ unit server_data_types;
 
 interface
 
-uses Grijjy.Bson;
+uses Grijjy.Bson, Grijjy.Bson.Serialization;
 
 type
      
@@ -116,13 +116,25 @@ type
         
     end;
  
+    TGoDateTime = record
+    public 
+        Year : Integer;
+        Month : Integer;
+        Day : Integer;
+        Hour : Integer;
+        Minute : Integer;
+        Second : Integer;
+        Millisecond : Integer;
+        
+    end;
+ 
     TFirmwareInfo = record
     public 
         Temp : TArray<Double>;
         Fon : TArray<Double>;
         Sens : TArray<Double>;
         Place : Integer;
-        Time : TDateTime;
+        CreatedAt : TGoDateTime;
         Sensitivity : string;
         Serial : string;
         ProductType : string;

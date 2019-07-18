@@ -30,7 +30,7 @@ const
     product_column_name: array [TProductColumn] of string = ('№', 'Зав.№',
       'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
       'Ч.50', 'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
-      'неизм.', 'исполнение', 'т.расчёт', 'примичание');
+      'неизм.', 'исполнение', 'т.расчёт', 'примечание');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;

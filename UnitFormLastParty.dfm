@@ -13,9 +13,6 @@ object FormLastParty: TFormLastParty
   OldCreateOrder = False
   OnCreate = FormCreate
   OnShow = FormShow
-  DesignSize = (
-    878
-    440)
   PixelsPerInch = 96
   TextHeight = 13
   object StringGrid1: TStringGrid
@@ -34,6 +31,7 @@ object FormLastParty: TFormLastParty
     FixedRows = 0
     GradientEndColor = clBlack
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
+    PopupMenu = PopupMenu1
     TabOrder = 0
     OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
@@ -68,46 +66,6 @@ object FormLastParty: TFormLastParty
     ParentFont = False
     TabOrder = 1
     Visible = False
-  end
-  object ComboBox1: TComboBox
-    Left = 303
-    Top = 65
-    Width = 145
-    Height = 24
-    BevelInner = bvNone
-    BevelOuter = bvNone
-    Style = csOwnerDrawFixed
-    Anchors = []
-    Color = clGradientInactiveCaption
-    ItemHeight = 18
-    ItemIndex = 0
-    TabOrder = 2
-    Text = 'COM1'
-    Visible = False
-    OnCloseUp = ComboBox1CloseUp
-    OnExit = ComboBox1Exit
-    Items.Strings = (
-      'COM1')
-  end
-  object ComboBox2: TComboBox
-    Left = 499
-    Top = 48
-    Width = 145
-    Height = 24
-    BevelInner = bvNone
-    BevelOuter = bvNone
-    Style = csOwnerDrawFixed
-    Anchors = []
-    Color = clGradientInactiveCaption
-    ItemHeight = 18
-    TabOrder = 3
-    Visible = False
-    OnCloseUp = ComboBox2CloseUp
-    OnExit = ComboBox2Exit
-    Items.Strings = (
-      ''
-      '2'
-      '3')
   end
   object ImageList1: TImageList
     ColorDepth = cd32Bit
@@ -332,5 +290,38 @@ object FormLastParty: TFormLastParty
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 216
+    Top = 96
+    object MenuCheck: TMenuItem
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      OnClick = MenuCheckClick
+    end
+    object MenuUncheck: TMenuItem
+      Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+      OnClick = MenuCheckClick
+    end
+    object N1: TMenuItem
+      Caption = #1056#1072#1089#1095#1105#1090
+      object N2: TMenuItem
+        Caption = #1082#1072#1082' '#1074' '#1087#1072#1088#1090#1080#1080
+        OnClick = N2Click
+      end
+      object N21: TMenuItem
+        Tag = 2
+        Caption = '2 '#1090#1086#1095#1082#1080
+        OnClick = N2Click
+      end
+      object N31: TMenuItem
+        Tag = 3
+        Caption = '3 '#1090#1086#1095#1082#1080
+        OnClick = N2Click
+      end
+    end
+    object MenuProductType: TMenuItem
+      Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
+      OnClick = MenuProductTypeClick
+    end
   end
 end

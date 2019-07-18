@@ -16,7 +16,7 @@ object FormParties: TFormParties
   PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
-    Left = 385
+    Left = 353
     Top = 0
     Width = 5
     Height = 510
@@ -27,7 +27,7 @@ object FormParties: TFormParties
   object TreeView1: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 385
+    Width = 353
     Height = 510
     Align = alLeft
     DefaultNodeHeight = 25
@@ -58,11 +58,12 @@ object FormParties: TFormParties
       end
       item
         Position = 1
-        Width = 34
+        Width = 71
         WideText = #8470
       end
       item
         Position = 2
+        Width = 109
         WideText = #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
       end>
   end

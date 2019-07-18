@@ -18,7 +18,7 @@ type
         class function NewParty: TParty;static;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;static;
         class function Party( param1: Int64) : TParty;static;
-        class procedure SetProductProduction( ProductID: Int64; Production: Boolean) ;static;
+        class procedure SetProductsProduction( ProductIDs: TArray<Int64>; Production: Boolean) ;static;
         class procedure ToggleProductProduction( param1: Int64) ;static;
         class function Years: TArray<Integer>;static;
          
@@ -37,10 +37,10 @@ type
         class procedure SelectAll( param1: Boolean) ;static;
         class function SelectOnlyOkProductsProduction: TParty;static;
         class function SetBlockChecked( param1: Integer; param2: Integer) : Int64;static;
-        class function SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;static;
+        class function SetPointsMethodInPlacesRange( Place1: Integer; Place2: Integer; Value: Integer) : Int64;static;
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;static;
         class function SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;static;
-        class function SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;static;
+        class function SetProductTypeAtPlacesRange( Place1: Integer; Place2: Integer; ProductType: string) : Int64;static;
         class function ToggleProductProductionAtPlace( param1: Integer) : Int64;static;
          
     end; TProductTypesSvc = class 
@@ -78,6 +78,11 @@ type
     end; TPdfSvc = class 
     public
         class procedure Run( param1: Int64) ;static;
+         
+    end; TPeerSvc = class 
+    public
+        class procedure Close;static;
+        class procedure Init;static;
          
     end;
 
@@ -191,14 +196,14 @@ begin
 end;
 
  
-class procedure TPartiesCatalogueSvc.SetProductProduction( ProductID: Int64; Production: Boolean) ;
+class procedure TPartiesCatalogueSvc.SetProductsProduction( ProductIDs: TArray<Int64>; Production: Boolean) ;
 var
     req : ISuperobject;
 begin
     req := SO;
-    SuperObject_SetField(req, 'ProductID', ProductID);
+    SuperObject_SetField(req, 'ProductIDs', ProductIDs);
     SuperObject_SetField(req, 'Production', Production);
-    ThttpRpcClient.GetResponse('PartiesCatalogueSvc.SetProductProduction', req); 
+    ThttpRpcClient.GetResponse('PartiesCatalogueSvc.SetProductsProduction', req); 
 end;
 
  
@@ -345,15 +350,15 @@ begin
 end;
 
  
-class function TLastPartySvc.SetPointsMethodAtPlace( Place: Integer; PointsMethod: Int64; Valid: Boolean) : Int64;
+class function TLastPartySvc.SetPointsMethodInPlacesRange( Place1: Integer; Place2: Integer; Value: Integer) : Int64;
 var
     req : ISuperobject;
 begin
     req := SO;
-    SuperObject_SetField(req, 'Place', Place);
-    SuperObject_SetField(req, 'PointsMethod', PointsMethod);
-    SuperObject_SetField(req, 'Valid', Valid);
-    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetPointsMethodAtPlace', req), Result); 
+    SuperObject_SetField(req, 'Place1', Place1);
+    SuperObject_SetField(req, 'Place2', Place2);
+    SuperObject_SetField(req, 'Value', Value);
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetPointsMethodInPlacesRange', req), Result); 
 end;
 
  
@@ -379,14 +384,15 @@ begin
 end;
 
  
-class function TLastPartySvc.SetProductTypeAtPlace( Place: Integer; ProductType: string) : Int64;
+class function TLastPartySvc.SetProductTypeAtPlacesRange( Place1: Integer; Place2: Integer; ProductType: string) : Int64;
 var
     req : ISuperobject;
 begin
     req := SO;
-    SuperObject_SetField(req, 'Place', Place);
+    SuperObject_SetField(req, 'Place1', Place1);
+    SuperObject_SetField(req, 'Place2', Place2);
     SuperObject_SetField(req, 'ProductType', ProductType);
-    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetProductTypeAtPlace', req), Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('LastPartySvc.SetProductTypeAtPlacesRange', req), Result); 
 end;
 
  
@@ -615,6 +621,24 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
     ThttpRpcClient.GetResponse('PdfSvc.Run', req); 
+end;
+
+  
+class procedure TPeerSvc.Close;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    ThttpRpcClient.GetResponse('PeerSvc.Close', req); 
+end;
+
+ 
+class procedure TPeerSvc.Init;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    ThttpRpcClient.GetResponse('PeerSvc.Init', req); 
 end;
 
  

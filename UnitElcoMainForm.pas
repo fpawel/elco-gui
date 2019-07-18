@@ -55,8 +55,6 @@ type
         ToolBar2: TToolBar;
         ToolButton3: TToolButton;
         RichEditlMessageBoxText: TRichEdit;
-        PanelWaitResponseMsg: TPanel;
-        Image2: TImage;
         ImageInfo: TImage;
         TabSheetInterrogate: TTabSheet;
         PopupMenu2: TPopupMenu;
@@ -173,8 +171,6 @@ begin
 
     PanelMessageBox.Width := 700;
     PanelMessageBox.Height := 350;
-    PanelWaitResponseMsg.Width := 500;
-    PanelWaitResponseMsg.Height := 115;
 
     FIni := TIniFile.Create(ExtractFileDir(paramstr(0)) + '\main.ini');
     FInitialized := false;
@@ -331,6 +327,7 @@ begin
             PanelMessageBox.Show;
             PanelMessageBox.BringToFront;
             FormResize(self);
+            FormLastParty.SetReadPlace(-1);
         end);
 
     SetOnReadCurrent(OnReadCurrent);
@@ -343,6 +340,7 @@ begin
             LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
             TimerPerforming.Enabled := true;
             LabelStatusBottom.Caption := '';
+            FormLastParty.SetReadPlace(-1);
         end);
 
     SetOnWorkStopped(
@@ -353,7 +351,7 @@ begin
             TimerPerforming.Enabled := false;
             LabelStatusTop.Font.Color := clBlack;
             LabelStatusBottom.Caption := '';
-
+            FormLastParty.SetReadPlace(-1);
         end);
 
     SetOnStatus(
@@ -392,7 +390,6 @@ begin
             FormParties.CreateYearsNodes;
             FormParty.party := FormLastParty.party;
             PanelMessageBox.Hide;
-            PanelWaitResponseMsg.Hide;
         end);
 
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
@@ -448,8 +445,10 @@ begin
 
         end);
 
+    SetOnReadPlace(FormLastParty.SetReadPlace);
+
     NotifyServices_SetEnabled(true);
-    TRunnerSvc.StopHardware;
+    TPeerSvc.Init;
 end;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -461,9 +460,8 @@ begin
 
     NotifyServices_SetEnabled(false);
     try
-        TRunnerSvc.StopHardware;
+        TPeerSvc.Close;
     except
-
     end;
 
     fs := TFileStream.Create(TPath.Combine(ExtractFilePath(paramstr(0)),
@@ -494,15 +492,6 @@ begin
         PanelMessageBox.Top := ClientHeight div 2 -
           PanelMessageBox.Height div 2;
     end;
-
-    if PanelWaitResponseMsg.Visible then
-    begin
-        PanelWaitResponseMsg.Left := ClientWidth div 2 -
-          PanelWaitResponseMsg.Width div 2;
-        PanelWaitResponseMsg.Top := ClientHeight div 2 -
-          PanelWaitResponseMsg.Height div 2;
-    end;
-
 end;
 
 procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
@@ -673,20 +662,6 @@ begin
     Writeln(FErrorLog, StringOfChar('-', 120));
 
     CloseFile(FErrorLog);
-
-    if E is ERpcNoResponseException then
-    begin
-        // PanelMessageBoxTitle.Caption := E.ClassName;
-        // RichEditlMessageBoxText.Text := E.Message;
-        // RichEditlMessageBoxText.Font.Color := clRed;
-        // PanelMessageBox.Visible := true;
-        // FormResize(self);
-        PanelWaitResponseMsg.Caption := 'Подключение...';
-        PanelWaitResponseMsg.Visible := true;
-        PanelWaitResponseMsg.BringToFront;
-        FormResize(self);
-        exit;
-    end;
 
     if E is EHostApplicationPanic then
     begin

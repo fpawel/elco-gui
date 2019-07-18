@@ -17,9 +17,20 @@ type
         property Str: string read GetStr;
     end;
 
+    TGoDateTimeHelper = record helper for TGoDateTime
+        function DateTime: TDateTime;
+    end;
+
+
+
 implementation
 
 uses sysutils, dateutils;
+
+function TGoDateTimeHelper.DateTime: TDateTime;
+begin
+    exit( EncodeDateTime(Year, Month, Day, Hour, Minute, Second, Millisecond) );
+end;
 
 function TNullFloat64Helper.GetStr: string;
 begin
