@@ -37,7 +37,7 @@ type
         procedure StringGrid1DblClick(Sender: TObject);
         procedure MenuCheckClick(Sender: TObject);
         procedure N2Click(Sender: TObject);
-    procedure MenuProductTypeClick(Sender: TObject);
+        procedure MenuProductTypeClick(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -46,7 +46,7 @@ type
         FProducts: TArray<TProduct>;
         FColumns: TProductColumns;
 
-        FReadPlace: integer;
+        FReadPlace, FReadBlock: Integer;
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
 
@@ -71,7 +71,8 @@ type
         procedure SetParty(party: TParty);
         procedure reload_data;
 
-        procedure SetReadPlace(APlace:integer);
+        procedure SetReadPlace(APlace: Integer);
+        procedure SetReadBlock(ABlock: Integer);
 
         property party: TParty read FParty;
 
@@ -91,6 +92,7 @@ uses stringgridutils, stringutils, superobject, server_data_types_helpers,
 procedure TFormLastParty.FormCreate(Sender: TObject);
 begin
     FReadPlace := -1;
+    FReadBlock := -1;
     SetLength(FProducts, 96);
     reload_data;
 end;
@@ -271,15 +273,13 @@ begin
         exit;
     end;
 
-
-
     p := FProducts[ARow - 1];
 
     if gdSelected in State then
         cnv.Brush.Color := clGradientInactiveCaption
     else if ARow = grd.Row then
         cnv.Brush.Color := clInfoBk
-    else if FReadPlace = ARow - 1 then
+    else if (FReadPlace = ARow - 1) or ((ARow - 1) div 8 = FReadBlock) then
         cnv.Brush.Color := clSkyBlue
     else if p.ProductId > 0 then
     begin
@@ -466,10 +466,10 @@ begin
         end;
     end;
 
-//    MenuProductType.Clear;
-//    m := TMenuItem.Create(self);
-//    m.Caption := 'как в партии';
-//    MenuProductType.Add(m);
+    // MenuProductType.Clear;
+    // m := TMenuItem.Create(self);
+    // m.Caption := 'как в партии';
+    // MenuProductType.Add(m);
 
 end;
 
@@ -510,12 +510,15 @@ begin
 end;
 
 procedure TFormLastParty.MenuProductTypeClick(Sender: TObject);
-var pt:TPoint;
+var
+    pt: TPoint;
 begin
     With StringGrid1 do
     begin
-        FormProductTypeDialog.SetPlaces(Selection.Top-1, Selection.Bottom-1);
-        pt := ClientToScreen(CellRect(Selection.Right, Selection.Bottom).BottomRight);
+        FormProductTypeDialog.SetPlaces(Selection.Top - 1,
+          Selection.Bottom - 1);
+        pt := ClientToScreen(CellRect(Selection.Right, Selection.Bottom)
+          .BottomRight);
         FormProductTypeDialog.Left := pt.X;
         FormProductTypeDialog.Top := pt.Y;
         FormProductTypeDialog.Show;
@@ -631,7 +634,25 @@ begin
 
 end;
 
-procedure TFormLastParty.SetReadPlace(APlace:integer);
+procedure TFormLastParty.SetReadBlock(ABlock: Integer);
+var
+    i, prevReadBlock: Integer;
+begin
+    if ABlock = FReadBlock then
+        exit;
+
+    prevReadBlock := FReadBlock;
+    FReadBlock := ABlock;
+
+    if (prevReadBlock > -1) then
+        for i := prevReadBlock * 8 to (prevReadBlock + 1) * 8 do
+            StringGrid_RedrawRow(StringGrid1, i + 1);
+
+    for i := ABlock * 8 to (ABlock  + 1)* 8 do
+        StringGrid_RedrawRow(StringGrid1, i + 1);
+end;
+
+procedure TFormLastParty.SetReadPlace(APlace: Integer);
 var
     prevReadPlace: Integer;
 begin

@@ -328,6 +328,7 @@ begin
             PanelMessageBox.BringToFront;
             FormResize(self);
             FormLastParty.SetReadPlace(-1);
+            FormLastParty.SetReadBlock(-1);
         end);
 
     SetOnReadCurrent(OnReadCurrent);
@@ -341,6 +342,7 @@ begin
             TimerPerforming.Enabled := true;
             LabelStatusBottom.Caption := '';
             FormLastParty.SetReadPlace(-1);
+            FormLastParty.SetReadBlock(-1);
         end);
 
     SetOnWorkStopped(
@@ -352,6 +354,7 @@ begin
             LabelStatusTop.Font.Color := clBlack;
             LabelStatusBottom.Caption := '';
             FormLastParty.SetReadPlace(-1);
+            FormLastParty.SetReadBlock(-1);
         end);
 
     SetOnStatus(
@@ -446,6 +449,7 @@ begin
         end);
 
     SetOnReadPlace(FormLastParty.SetReadPlace);
+    SetOnReadBlock(FormLastParty.SetReadBlock);
 
     NotifyServices_SetEnabled(true);
     TPeerSvc.Init;

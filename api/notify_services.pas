@@ -4,13 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TIntegerHandler = reference to procedure (x:Integer);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
-    TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TIntegerHandler = reference to procedure (x:Integer);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TStringHandler = reference to procedure (x:string);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -31,6 +31,7 @@ procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
 procedure SetOnReadPlace( AHandler : TIntegerHandler);
+procedure SetOnReadBlock( AHandler : TIntegerHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
@@ -38,8 +39,8 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, 
-    CmdReadPlace);
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
+    CmdReadBlock);
 
     type _deserializer = record
         class function deserialize<T>(str:string):T;static;
@@ -62,6 +63,7 @@ var
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
     _OnReadPlace : TIntegerHandler;
+    _OnReadBlock : TIntegerHandler;
     _enabled:boolean;
 
 class function _deserializer.deserialize<T>(str:string):T;
@@ -80,11 +82,12 @@ var
     cmd: TServerAppCmd;
     str:string;
 begin
+    Message.result := 1;
     if not _enabled then
         exit;
     cd := PCOPYDATASTRUCT(Message.LParam);
     cmd := TServerAppCmd(Message.WParam);
-    Message.result := 1;
+
     SetString(str, PWideChar(cd.lpData), cd.cbData div 2);
     case cmd of
         CmdReadCurrent:
@@ -182,6 +185,12 @@ begin
             if not Assigned(_OnReadPlace) then
                 raise Exception.Create('_OnReadPlace must be set');
             _OnReadPlace(StrToInt(str));
+        end;
+        CmdReadBlock:
+        begin
+            if not Assigned(_OnReadBlock) then
+                raise Exception.Create('_OnReadBlock must be set');
+            _OnReadBlock(StrToInt(str));
         end;
         
     else
@@ -284,6 +293,12 @@ begin
     if Assigned(_OnReadPlace) then
         raise Exception.Create('_OnReadPlace already set');
     _OnReadPlace := AHandler;
+end;
+procedure SetOnReadBlock( AHandler : TIntegerHandler);
+begin
+    if Assigned(_OnReadBlock) then
+        raise Exception.Create('_OnReadBlock already set');
+    _OnReadBlock := AHandler;
 end;
 
 
