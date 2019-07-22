@@ -49,7 +49,7 @@ procedure TFormSelectTemperaturesDialog.ToolButton2Click(Sender: TObject);
 begin
     hide;
     with CheckListBox1 do
-        TRunnerSvc.RunTemperature(Checked[0], Checked[1], Checked[2], Checked[3]);
+        TRunnerSvc.RunMain(Checked[0], Checked[1], Checked[2], Checked[3]);
     hide;
 end;
 

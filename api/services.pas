@@ -67,17 +67,18 @@ type
          
     end; TRunnerSvc = class 
     public
-        class procedure RunMainError;static;
+        class procedure RunMain( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;static;
         class procedure RunReadAndSaveProductCurrents( param1: string) ;static;
         class procedure RunReadCurrent;static;
-        class procedure RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;static;
+        class procedure RunSwitchGas( param1: Integer) ;static;
         class procedure RunWritePartyFirmware;static;
         class procedure SkipDelay;static;
         class procedure StopHardware;static;
          
     end; TPdfSvc = class 
     public
-        class procedure Run( param1: Int64) ;static;
+        class procedure RunPartyID( param1: Int64) ;static;
+        class procedure RunProductID( param1: Int64) ;static;
          
     end; TPeerSvc = class 
     public
@@ -546,12 +547,16 @@ begin
 end;
 
   
-class procedure TRunnerSvc.RunMainError;
+class procedure TRunnerSvc.RunMain( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
 var
     req : ISuperobject;
 begin
-    req := SO;
-    ThttpRpcClient.GetResponse('RunnerSvc.RunMainError', req); 
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    req.AsArray.Add(param2) ;
+    req.AsArray.Add(param3) ;
+    req.AsArray.Add(param4) ;
+    ThttpRpcClient.GetResponse('RunnerSvc.RunMain', req); 
 end;
 
  
@@ -574,16 +579,13 @@ begin
 end;
 
  
-class procedure TRunnerSvc.RunTemperature( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
+class procedure TRunnerSvc.RunSwitchGas( param1: Integer) ;
 var
     req : ISuperobject;
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    req.AsArray.Add(param2) ;
-    req.AsArray.Add(param3) ;
-    req.AsArray.Add(param4) ;
-    ThttpRpcClient.GetResponse('RunnerSvc.RunTemperature', req); 
+    ThttpRpcClient.GetResponse('RunnerSvc.RunSwitchGas', req); 
 end;
 
  
@@ -614,13 +616,23 @@ begin
 end;
 
   
-class procedure TPdfSvc.Run( param1: Int64) ;
+class procedure TPdfSvc.RunPartyID( param1: Int64) ;
 var
     req : ISuperobject;
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    ThttpRpcClient.GetResponse('PdfSvc.Run', req); 
+    ThttpRpcClient.GetResponse('PdfSvc.RunPartyID', req); 
+end;
+
+ 
+class procedure TPdfSvc.RunProductID( param1: Int64) ;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    ThttpRpcClient.GetResponse('PdfSvc.RunProductID', req); 
 end;
 
   

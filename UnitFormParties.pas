@@ -393,7 +393,7 @@ end;
 
 procedure TFormParties.MenuPDFClick(Sender: TObject);
 begin
-    TPdfSvc.Run(TreeData[FNode].Party.PartyID);
+    TPdfSvc.RunPartyID(TreeData[FNode].Party.PartyID);
 end;
 
 procedure TFormParties.PopupMenu1Popup(Sender: TObject);

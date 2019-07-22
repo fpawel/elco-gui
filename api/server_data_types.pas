@@ -201,8 +201,8 @@ type
  
     TDelayInfo = record
     public 
-        Run : Boolean;
-        TimeSeconds : Integer;
+        TotalSeconds : Integer;
+        ElapsedSeconds : Integer;
         What : string;
         
     end;

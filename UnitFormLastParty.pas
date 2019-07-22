@@ -22,6 +22,7 @@ type
         N31: TMenuItem;
         N2: TMenuItem;
         MenuProductType: TMenuItem;
+    N3: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -38,6 +39,7 @@ type
         procedure MenuCheckClick(Sender: TObject);
         procedure N2Click(Sender: TObject);
         procedure MenuProductTypeClick(Sender: TObject);
+    procedure N3Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -440,7 +442,7 @@ begin
     for i := 0 to Length(FParty.Products) - 1 do
         FProducts[FParty.Products[i].Place] := FParty.Products[i];
 
-    FColumns := GetProductColumns(FProducts, [pcPlace, pcSerial, pcNote]);
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcProductID, pcSerial, pcNote]);
 
     with StringGrid1 do
     begin
@@ -535,6 +537,11 @@ begin
           (Sender as TComponent).Tag);
     reload_data;
 
+end;
+
+procedure TFormLastParty.N3Click(Sender: TObject);
+begin
+    TPdfSvc.RunProductID(FProducts[StringGrid1.Row - 1].ProductID);
 end;
 
 procedure TFormLastParty.UpdateNote(ACol, ARow: Integer; Value: string);

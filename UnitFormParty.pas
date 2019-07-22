@@ -16,6 +16,7 @@ type
         PopupMenu1: TPopupMenu;
         MenuCheck: TMenuItem;
         MenuUncheck: TMenuItem;
+    N1: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -25,6 +26,7 @@ type
         procedure MenuCheckClick(Sender: TObject);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
           var CanSelect: Boolean);
+    procedure N1Click(Sender: TObject);
     private
         { Private declarations }
         FParty: TParty;
@@ -306,6 +308,11 @@ begin
             exit;
         end;
     end;
+end;
+
+procedure TFormParty.N1Click(Sender: TObject);
+begin
+    TPdfSvc.RunProductID(FParty.Products[StringGrid1.Row - 1].ProductID);
 end;
 
 end.

@@ -4,13 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
-    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
-    TPartyHandler = reference to procedure (x:TParty);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TIntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
+    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TPartyHandler = reference to procedure (x:TParty);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -25,6 +25,7 @@ procedure SetOnKtx500Info( AHandler : TKtx500InfoHandler);
 procedure SetOnKtx500Error( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
+procedure SetOnEndDelay( AHandler : TStringHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
 procedure SetOnStartServerApplication( AHandler : TStringHandler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
@@ -39,7 +40,7 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
     CmdReadBlock);
 
     type _deserializer = record
@@ -57,6 +58,7 @@ var
     _OnKtx500Error : TStringHandler;
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
+    _OnEndDelay : TStringHandler;
     _OnLastPartyChanged : TPartyHandler;
     _OnStartServerApplication : TStringHandler;
     _OnReadFirmware : TFirmwareInfoHandler;
@@ -82,12 +84,11 @@ var
     cmd: TServerAppCmd;
     str:string;
 begin
-    Message.result := 1;
     if not _enabled then
         exit;
     cd := PCOPYDATASTRUCT(Message.LParam);
     cmd := TServerAppCmd(Message.WParam);
-
+    Message.result := 1;
     SetString(str, PWideChar(cd.lpData), cd.cbData div 2);
     case cmd of
         CmdReadCurrent:
@@ -149,6 +150,12 @@ begin
             if not Assigned(_OnDelay) then
                 raise Exception.Create('_OnDelay must be set');
             _OnDelay(_deserializer.deserialize<TDelayInfo>(str));
+        end;
+        CmdEndDelay:
+        begin
+            if not Assigned(_OnEndDelay) then
+                raise Exception.Create('_OnEndDelay must be set');
+            _OnEndDelay(str);
         end;
         CmdLastPartyChanged:
         begin
@@ -257,6 +264,12 @@ begin
     if Assigned(_OnDelay) then
         raise Exception.Create('_OnDelay already set');
     _OnDelay := AHandler;
+end;
+procedure SetOnEndDelay( AHandler : TStringHandler);
+begin
+    if Assigned(_OnEndDelay) then
+        raise Exception.Create('_OnEndDelay already set');
+    _OnEndDelay := AHandler;
 end;
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
 begin

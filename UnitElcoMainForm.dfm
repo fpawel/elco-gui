@@ -5760,34 +5760,18 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -6805,19 +6789,18 @@ object ElcoMainForm: TElcoMainForm
     Left = 400
     Top = 72
     object N4: TMenuItem
-      Caption = #1058#1077#1088#1084#1086#1082#1086#1084#1087#1077#1085#1089#1072#1094#1080#1103
+      Caption = #1057#1085#1103#1090#1080#1077'...'
       OnClick = N4Click
-    end
-    object N8: TMenuItem
-      Caption = #1055#1086#1075#1088#1077#1096#1085#1086#1089#1090#1100' '#1080' '#1074#1072#1088#1080#1072#1094#1080#1103
-      OnClick = N8Click
     end
     object N3: TMenuItem
       Caption = #1055#1088#1086#1096#1080#1074#1082#1072
       OnClick = N3Click
     end
-    object N1: TMenuItem
-      Caption = '-'
+    object N7: TMenuItem
+      Caption = #1057#1085#1103#1090#1080#1077' '#1090#1086#1095#1082#1080
+    end
+    object N8: TMenuItem
+      Caption = #1043#1072#1079
     end
   end
   object ImageList4: TImageList
@@ -11660,12 +11643,6 @@ object ElcoMainForm: TElcoMainForm
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
-  end
-  object TimerDelay: TTimer
-    Enabled = False
-    OnTimer = TimerDelayTimer
-    Left = 216
-    Top = 56
   end
   object TimerPerforming: TTimer
     Enabled = False

@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
     Vcl.ComCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList, Vcl.Grids,
-    server_data_types, Vcl.Menus,  ComponentBaloonHintU,
+    server_data_types, Vcl.Menus, ComponentBaloonHintU,
     Vcl.Imaging.pngimage, inifiles;
 
 type
@@ -37,13 +37,11 @@ type
         LabelDelayElepsedTime: TLabel;
         LabelProgress: TLabel;
         LabelWhat: TLabel;
-        TimerDelay: TTimer;
         ToolBar6: TToolBar;
         ToolButtonStop: TToolButton;
         Panel2: TPanel;
         ProgressBar1: TProgressBar;
         N3: TMenuItem;
-        N8: TMenuItem;
         TabSheetConsole: TTabSheet;
         TimerPerforming: TTimer;
         PanelPlaceholderMain: TPanel;
@@ -65,7 +63,6 @@ type
         ToolButton10: TToolButton;
         MenuNewParty: TMenuItem;
         N2: TMenuItem;
-        N1: TMenuItem;
         N5: TMenuItem;
         N201: TMenuItem;
         N202: TMenuItem;
@@ -74,7 +71,9 @@ type
         TabSheetKtx500: TTabSheet;
         LabelStatusBottom: TLabel;
         LabelStatusKtx500: TLabel;
-    N6: TMenuItem;
+        N6: TMenuItem;
+        N7: TMenuItem;
+        N8: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -89,8 +88,6 @@ type
         procedure ToolButton4Click(Sender: TObject);
         procedure N4Click(Sender: TObject);
         procedure ToolButtonStopClick(Sender: TObject);
-        procedure TimerDelayTimer(Sender: TObject);
-        procedure N8Click(Sender: TObject);
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure N2Click(Sender: TObject);
@@ -105,7 +102,7 @@ type
         procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
         procedure N203Click(Sender: TObject);
-    procedure N6Click(Sender: TObject);
+        procedure N6Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -114,6 +111,7 @@ type
         procedure AppException(Sender: TObject; E: Exception);
 
         procedure RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
+        procedure RunSwitchGasMenuClick(Sender: TObject);
 
         procedure SetupDelay(i: TDelayInfo);
 
@@ -181,10 +179,23 @@ begin
     for i := 0 to length(WorkItems) - 1 do
     begin
         menu := TMenuItem.Create(self);
-        PopupMenu1.Items.Add(menu);
+        N7.Add(menu);
         menu.Caption := WorkItems[i, 0];
         menu.Tag := i;
         menu.OnClick := RunReadAndSaveProductCurrentsMenuClick;
+    end;
+
+    for i := 0 to 4 do
+    begin
+        menu := TMenuItem.Create(self);
+        N8.Add(menu);
+        if i = 0 then
+            menu.Caption := 'Отключить газ'
+        else
+            menu.Caption := 'ПГС' + inttostr(i);
+
+        menu.Tag := i;
+        menu.OnClick := RunSwitchGasMenuClick;
     end;
 
 end;
@@ -252,7 +263,7 @@ begin
         Parent := TabSheetConsole;
         BorderStyle := bsNone;
         Align := alClient;
-        //FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
+        // FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
         FFileName := '';
         Show;
     end;
@@ -374,11 +385,7 @@ begin
             if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
                 TRunnerSvc.StopHardware;
         end);
-    SetOnDelay(
-        procedure(X: TDelayInfo)
-        begin
-            SetupDelay(X);
-        end);
+    SetOnDelay(SetupDelay);
 
     SetOnLastPartyChanged(
         procedure(party: TParty)
@@ -419,8 +426,8 @@ begin
         procedure(s: string)
         begin
             LabelStatusKtx500.Font.Color := clRed;
-            LabelStatusKtx500.Caption := TimeToStr(now) + ' ' +s;
-        end);;
+            LabelStatusKtx500.Caption := TimeToStr(now) + ' ' + s;
+        end);
 
     SetOnKtx500Info(
         procedure(X: TKtx500Info)
@@ -440,16 +447,18 @@ begin
             LabelStatusKtx500.Font.Color := clNavy;
             LabelStatusKtx500.Caption :=
 
-              Format('%s %s %s"C-->%s"C%s', [TimeToStr(now),
-              strOn, floattostr(X.Temperature),
-              floattostr(X.Destination), strCool
-
-              ])
-
+              Format('%s %s %s"C-->%s"C%s', [TimeToStr(now), strOn,
+              floattostr(X.Temperature), floattostr(X.Destination), strCool])
         end);
 
     SetOnReadPlace(FormLastParty.SetReadPlace);
     SetOnReadBlock(FormLastParty.SetReadBlock);
+
+    SetOnEndDelay(
+        procedure(s: string)
+        begin
+            PanelDelay.Hide;
+        end);
 
     NotifyServices_SetEnabled(true);
     TPeerSvc.Init;
@@ -509,7 +518,8 @@ begin
     if PageControl.ActivePage = TabSheetParties then
     begin
         if FormParty.party.PartyID = 0 then
-            FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.PartyID)
+            FormParty.party := TPartiesCatalogueSvc.party
+              (FormParty.party.PartyID)
         else
             FormParty.party := TLastPartySvc.party;
 
@@ -542,23 +552,6 @@ Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
     if Button = TMouseButton.mbRight then
         RichEdit_PopupMenu(RichEditlMessageBoxText);
-end;
-
-procedure TElcoMainForm.TimerDelayTimer(Sender: TObject);
-var
-    s: string;
-    v: TDateTime;
-begin
-    s := LabelDelayElepsedTime.Caption;
-    if TryStrToTime(s, v) then
-        LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
-          IncSecond(v));
-    ProgressBar1.Position := ProgressBar1.Position +
-      Integer(TimerDelay.Interval);
-
-    LabelProgress.Caption :=
-      inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
-
 end;
 
 procedure TElcoMainForm.TimerPerformingTimer(Sender: TObject);
@@ -614,7 +607,7 @@ end;
 
 procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
 begin
-    TPDfSvc.Run(TLastPartySvc.PartyID);
+    TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
 end;
 
 procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
@@ -797,21 +790,24 @@ begin
     FormLastParty.SetParty(TLastPartySvc.SelectOnlyOkProductsProduction);
 end;
 
-procedure TElcoMainForm.N8Click(Sender: TObject);
-begin
-    TRunnerSvc.RunMainError;
-end;
-
 procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
+var
+    v: TDateTime;
 begin
 
-    LabelDelayElepsedTime.Caption := '00:00:00';
+    PanelDelay.Visible := true;
+
     LabelWhat.Caption := i.What;
     LabelProgress.Caption := '';
-    ProgressBar1.Position := 0;
-    ProgressBar1.Max := i.TimeSeconds * 1000;
-    PanelDelay.Visible := i.Run;
-    TimerDelay.Enabled := i.Run;
+    ProgressBar1.Position := i.ElapsedSeconds * 1000;
+    ProgressBar1.Max := i.TotalSeconds * 1000;
+    v := 0;
+    LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
+      IncSecond(i.ElapsedSeconds));
+
+    LabelProgress.Caption :=
+      inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
+
 end;
 
 procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);
@@ -835,6 +831,11 @@ procedure TElcoMainForm.RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
 begin
     TRunnerSvc.RunReadAndSaveProductCurrents
       (WorkItems[(Sender as TMenuItem).Tag][1]);
+end;
+
+procedure TElcoMainForm.RunSwitchGasMenuClick(Sender: TObject);
+begin
+    TRunnerSvc.RunSwitchGas((Sender as TMenuItem).Tag);
 end;
 
 function FormatFloatArray(v: TArray<double>): string;

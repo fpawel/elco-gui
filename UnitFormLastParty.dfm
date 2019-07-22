@@ -323,5 +323,9 @@ object FormLastParty: TFormLastParty
       Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
       OnClick = MenuProductTypeClick
     end
+    object N3: TMenuItem
+      Caption = #1055#1072#1089#1087#1086#1088#1090
+      OnClick = N3Click
+    end
   end
 end
