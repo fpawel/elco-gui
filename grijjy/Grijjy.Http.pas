@@ -1958,24 +1958,12 @@ end;
 
 initialization
 
-try
-    Writeln('Grijjy.Http: initialization');
-    _HttpClientSocketManager := TgoClientSocketManager.Create;
-    HttpClientManager := TgoHttpClientManager.Create;
-except
-    on e: Exception do
-        Writeln('Grijjy.Http: exception: ' + e.ClassName + ': ' + e.Message);
-end;
+_HttpClientSocketManager := TgoClientSocketManager.Create;
+HttpClientManager := TgoHttpClientManager.Create;
 
 finalization
 
-try
-    Writeln('Grijjy.Http: finalization');
-    HttpClientManager.Free;
-    _HttpClientSocketManager.Free;
-except
-    on e: Exception do
-        Writeln('Grijjy.Http: exception: ' + e.ClassName + ': ' + e.Message);
-end;
+HttpClientManager.Free;
+_HttpClientSocketManager.Free;
 
 end.

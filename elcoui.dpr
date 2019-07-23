@@ -1,3 +1,4 @@
+// JCL_DEBUG_EXPERT_GENERATEJDBG ON
 program elcoui;
 
 uses
@@ -70,7 +71,6 @@ uses
 var
     hWnd: THandle;
 begin
-    Writeln('init ui');
     hWnd := FindWindow('TElcoMainForm', nil);
     if hWnd <> 0 then // prevent application from running twice
     begin

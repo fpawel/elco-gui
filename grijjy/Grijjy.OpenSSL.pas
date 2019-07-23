@@ -483,25 +483,21 @@ end;
 initialization
 
 try
-    Writeln('Grijjy.OpenSSL: initialization');
     TgoSSLHelper.LoadSSL;
     SSL_load_error_strings;
     SSL_library_init;
     _MemBufferPool := TgoMemoryPool.Create(DEFAULT_BLOCK_SIZE);
 except
-    on E: Exception do
-        Writeln('Grijjy.OpenSSL: exception: ' + E.ClassName + ': ' + E.Message);
+    on E: Exception do;
 end;
 
 finalization
 
 try
-    Writeln('Grijjy.OpenSSL: finalization');
     TgoSSLHelper.UnloadSSL;
     _MemBufferPool.Free;
 except
-    on E: Exception do
-        Writeln('Grijjy.OpenSSL: exception: ' + E.ClassName + ': ' + E.Message);
+    on E: Exception do ;
 end;
 
 end.
