@@ -433,11 +433,10 @@ begin
     end;
 
     for i := 0 to 95 do
-        with FProducts[i] do
-        begin
-            ProductId := 0;
-            Place := i;
-        end;
+    begin
+        ZeroMemory(@FProducts[i],SizeOf(FProducts[i]));
+        FProducts[i].Place := i;
+    end;
 
     for i := 0 to Length(FParty.Products) - 1 do
         FProducts[FParty.Products[i].Place] := FParty.Products[i];

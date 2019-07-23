@@ -213,23 +213,23 @@ begin
 
     case TreeData[FNode].NodeKind of
         trdYear:
-            s := format('��� %d', [TreeData[FNode].Value]);
+            s := format('год %d', [TreeData[FNode].Value]);
         trdMonth:
-            s := format('��� %d, ����� %s %s', [TreeData[FNode.Parent].Value,
+            s := format('год %d, месяц %s %s', [TreeData[FNode.Parent].Value,
               inttostr2(TreeData[FNode].Value),
               month_name(TreeData[FNode].Value)]);
         trdDay:
-            s := format('��� %d, ����� %s %s, ���� %s',
+            s := format('год %d, месяц %s %s, день %s',
               [TreeData[FNode.Parent.Parent].Value,
               inttostr2(TreeData[FNode.Parent].Value),
               month_name(TreeData[FNode.Parent].Value),
               inttostr2(TreeData[FNode].Value)]);
         trdParty:
-            s := format('������ %d', [TreeData[FNode].Value]);
+            s := format('партия %d', [TreeData[FNode].Value]);
     end;
 
-    if MessageBox(Handle, Pchar('����������� ������������� �������� ������: ' +
-      s), '������ �������������', mb_IconQuestion or mb_YesNo) <> mrYes then
+    if MessageBox(Handle, Pchar('поддтвердите необходимость удаления данных: ' +
+      s), 'Удаление данных', mb_IconQuestion or mb_YesNo) <> mrYes then
         exit;
 
     case TreeData[FNode].NodeKind of

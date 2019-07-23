@@ -198,6 +198,8 @@ begin
         menu.OnClick := RunSwitchGasMenuClick;
     end;
 
+
+
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);

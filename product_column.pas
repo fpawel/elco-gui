@@ -6,14 +6,18 @@ uses dbutils, classes, server_data_types, server_data_types_helpers,
     Vcl.graphics;
 
 type
-    TProductColumn = (pcPlace, pcSerial, pcProductID, pcFirmware, pcFon20,
-      pcFon20_2, pcSens20, pcKSens20,
+    TProductColumn = (pcPlace, pcSerial, pcProductID, pcFirmware,
+
+      pcFon20, pcSens20, pcKSens20,
+
+      pcFon20_2, pci24, pci35, pci26, pci17, pcNotMeasured,
+
+      pcFonMinus20, pcSensMinus20, pcKSensMinus20,
 
       pcFon50, pcSens50, pcKSens50,
 
-      pcFonMinus20, pcSensMinus20,
-
-      pci24, pci35, pci26, pci17, pcNotMeasured, pcProdType, pcPointsMethod, pcNote);
+       pcProdType,
+      pcPointsMethod, pcNote);
 
 type
     TValidProductValue = (vpvValid, vpvInvalid, vpvNotCheck);
@@ -27,10 +31,20 @@ type
     TProductColumnsSet = set of TProductColumn;
 
 const
-    product_column_name: array [TProductColumn] of string = ('№', 'Зав.№', 'ID',
-      'прошивка', 'ФОН.20', 'ФОН.20.2', 'Ч.20', 'Kч20', 'ФОН.50',
-      'Ч.50', 'Kч50', 'ФОН.-20', 'Ч.-20', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
-      'неизм.', 'исполнение', 'т.расчёт', 'примечание');
+    product_column_name: array [TProductColumn] of string = (
+
+      '№', 'Зав.№', 'ID', 'прошивка',
+
+      'ФОН20',  'Ч20', 'Kч20',
+
+      'ФОН20.2', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1', 'неизм.',
+
+      'ФОН-20', 'Ч-20', 'Kч-20',
+
+      'ФОН50', 'Ч50', 'Kч50',
+
+       'исполнение', 'т.расчёт',
+      'примечание');
 
 function ProdVal(AValue: String): RProductValue;
 function OkProdVal(AValue: String): RProductValue;
@@ -115,9 +129,8 @@ function GetProductColumnValue(product: TProduct; column: TProductColumn)
 begin
     Result.Valid := vpvNotCheck;
     Result.Value := '';
-    if (product.ProductID = 0 ) AND (column <>pcPlace ) then
+    if (product.ProductID = 0) AND (column <> pcPlace) then
         exit;
-
 
     with product do
         case column of
@@ -151,6 +164,9 @@ begin
                 Result.Value := ff(IFMinus20);
             pcSensMinus20:
                 Result.Value := ff(ISMinus20);
+
+            pcKSensMinus20:
+                Result.Value := ff(KSensMinus20);
 
             pcFon50:
                 Result := Chk(IFPlus50, OkDFon50);

@@ -89,6 +89,7 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -178,11 +179,8 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.BinaryCoding.pas"/>
-        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.IO.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.pas"/>
-        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.Path.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.Serialization.pas"/>
-        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Collections.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Console.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.DateUtils.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Hash.pas"/>
@@ -196,7 +194,6 @@
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.SysUtils.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Uri.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Winsock2.pas"/>
-        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.pas"/>
         <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.API.pas"/>
         <DCCReference Include="utils\HttpRpcClient.pas"/>
         <DCCReference Include="utils\SuperObjectHelp.pas"/>
@@ -204,6 +201,9 @@
             <Form>FormProductTypeDialog</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Bson.IO.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.Collections.pas"/>
+        <DCCReference Include="..\..\grijjy\GrijjyFoundation\Grijjy.OpenSSL.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -230,10 +230,10 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
+                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo150x150.png</RemoteName>
+                        <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -257,10 +257,10 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo44x44.png</RemoteName>
+                        <RemoteName>Logo150x150.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
