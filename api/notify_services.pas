@@ -4,13 +4,13 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TIntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -27,7 +27,6 @@ procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnEndDelay( AHandler : TStringHandler);
 procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
-procedure SetOnStartServerApplication( AHandler : TStringHandler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
@@ -40,7 +39,7 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdStartServerApplication, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
+    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
     CmdReadBlock);
 
     type _deserializer = record
@@ -60,7 +59,6 @@ var
     _OnDelay : TDelayInfoHandler;
     _OnEndDelay : TStringHandler;
     _OnLastPartyChanged : TPartyHandler;
-    _OnStartServerApplication : TStringHandler;
     _OnReadFirmware : TFirmwareInfoHandler;
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
@@ -162,12 +160,6 @@ begin
             if not Assigned(_OnLastPartyChanged) then
                 raise Exception.Create('_OnLastPartyChanged must be set');
             _OnLastPartyChanged(_deserializer.deserialize<TParty>(str));
-        end;
-        CmdStartServerApplication:
-        begin
-            if not Assigned(_OnStartServerApplication) then
-                raise Exception.Create('_OnStartServerApplication must be set');
-            _OnStartServerApplication(str);
         end;
         CmdReadFirmware:
         begin
@@ -276,12 +268,6 @@ begin
     if Assigned(_OnLastPartyChanged) then
         raise Exception.Create('_OnLastPartyChanged already set');
     _OnLastPartyChanged := AHandler;
-end;
-procedure SetOnStartServerApplication( AHandler : TStringHandler);
-begin
-    if Assigned(_OnStartServerApplication) then
-        raise Exception.Create('_OnStartServerApplication already set');
-    _OnStartServerApplication := AHandler;
 end;
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 begin

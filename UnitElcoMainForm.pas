@@ -74,6 +74,7 @@ type
         N6: TMenuItem;
         N7: TMenuItem;
         N8: TMenuItem;
+    LabelDelayTotalSeconds: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -804,12 +805,13 @@ begin
     ProgressBar1.Position := i.ElapsedSeconds * 1000;
     ProgressBar1.Max := i.TotalSeconds * 1000;
     v := 0;
-    LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
-      IncSecond(i.ElapsedSeconds));
+    LabelDelayTotalSeconds.Caption := FormatDateTime('HH:mm:ss',
+      IncSecond(0, i.TotalSeconds));
 
+    LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
+      IncSecond(0, i.ElapsedSeconds));
     LabelProgress.Caption :=
       inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
-
 end;
 
 procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);

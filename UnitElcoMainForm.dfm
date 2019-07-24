@@ -5555,14 +5555,16 @@ object ElcoMainForm: TElcoMainForm
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
-        Left = 517
+        Left = 498
         Top = 3
-        Width = 31
+        Width = 50
         Height = 25
         Margins.Left = 5
         Margins.Right = 5
         Align = alRight
-        Caption = '50%'
+        Caption = '1000%'
+        Constraints.MaxWidth = 50
+        Constraints.MinWidth = 50
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clTeal
         Font.Height = -15
@@ -5570,11 +5572,11 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitHeight = 18
+        ExplicitTop = 4
       end
       object LabelWhat: TLabel
         AlignWithMargins = True
-        Left = 73
+        Left = 141
         Top = 3
         Width = 23
         Height = 25
@@ -5584,6 +5586,26 @@ object ElcoMainForm: TElcoMainForm
         Caption = '?dd'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clNavy
+        Font.Height = -15
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
+        ExplicitLeft = 73
+        ExplicitHeight = 18
+      end
+      object LabelDelayTotalSeconds: TLabel
+        AlignWithMargins = True
+        Left = 73
+        Top = 3
+        Width = 58
+        Height = 25
+        Margins.Left = 5
+        Margins.Right = 5
+        Align = alLeft
+        Caption = '00:00:00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clMaroon
         Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -5618,9 +5640,9 @@ object ElcoMainForm: TElcoMainForm
         end
       end
       object Panel2: TPanel
-        Left = 101
+        Left = 169
         Top = 0
-        Width = 411
+        Width = 324
         Height = 31
         Align = alClient
         Alignment = taLeftJustify
@@ -5634,16 +5656,19 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
+        ExplicitLeft = 101
+        ExplicitWidth = 411
         DesignSize = (
-          411
+          324
           31)
         object ProgressBar1: TProgressBar
           Left = 3
           Top = 8
-          Width = 405
+          Width = 318
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
+          ExplicitWidth = 405
         end
       end
     end
@@ -5760,34 +5785,18 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
