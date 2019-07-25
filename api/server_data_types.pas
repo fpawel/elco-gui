@@ -183,6 +183,17 @@ type
         
     end;
  
+    TUserConfig = record
+    public 
+        ComportMeasurer : string;
+        ComportGas : string;
+        ChipType : Integer;
+        AmbientTemperature : Double;
+        BlowGasMinutes : Integer;
+        HoldTemperatureMinutes : Integer;
+        
+    end;
+ 
     TReadCurrent = record
     public 
         Values : TArray<Double>;

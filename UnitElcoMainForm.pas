@@ -396,15 +396,6 @@ begin
             FormLastParty.SetParty(party);
         end);
 
-    SetOnStartServerApplication(
-        procedure(n: string)
-        begin
-            FormLastParty.reload_data;
-            FormParties.CreateYearsNodes;
-            FormParty.party := FormLastParty.party;
-            PanelMessageBox.Hide;
-        end);
-
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
     SetOnPanic(
         procedure(pnicStr: String)

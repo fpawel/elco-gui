@@ -85,6 +85,10 @@ type
         class procedure Close;static;
         class procedure Init;static;
          
+    end; TConfigSvc = class 
+    public
+        class function UserAppSetts: TUserConfig;static;
+         
     end;
 
 implementation 
@@ -651,6 +655,15 @@ var
 begin
     req := SO;
     ThttpRpcClient.GetResponse('PeerSvc.Init', req); 
+end;
+
+  
+class function TConfigSvc.UserAppSetts: TUserConfig;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    ThttpRpcClient.Call('ConfigSvc.UserAppSetts', req, Result); 
 end;
 
  

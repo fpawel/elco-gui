@@ -441,7 +441,7 @@ begin
     for i := 0 to Length(FParty.Products) - 1 do
         FProducts[FParty.Products[i].Place] := FParty.Products[i];
 
-    FColumns := GetProductColumns(FProducts, [pcPlace, pcProductID, pcSerial, pcNote]);
+    FColumns := GetProductColumns(FProducts, [pcPlace, pcProductID, pcSerial, pcProdType, pcNote]);
 
     with StringGrid1 do
     begin
