@@ -312,6 +312,10 @@ begin
                 RichEditlMessageBoxText.Text := '';
 
             PanelMessageBoxTitle.Caption := 'Произошла ошибка';
+
+            s  := StringReplace(s, ': ', #13#10#9' - ',
+                          [rfReplaceAll, rfIgnoreCase]);
+
             RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
             RichEditlMessageBoxText.Font.Color := clRed;
 
