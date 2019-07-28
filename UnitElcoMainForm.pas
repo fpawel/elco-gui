@@ -36,7 +36,6 @@ type
         PanelDelay: TPanel;
         LabelDelayElepsedTime: TLabel;
         LabelProgress: TLabel;
-        LabelWhat: TLabel;
         ToolBar6: TToolBar;
         ToolButtonStop: TToolButton;
         Panel2: TPanel;
@@ -74,7 +73,6 @@ type
         N6: TMenuItem;
         N7: TMenuItem;
         N8: TMenuItem;
-    LabelDelayTotalSeconds: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -795,14 +793,10 @@ begin
 
     PanelDelay.Visible := true;
 
-    LabelWhat.Caption := i.What;
     LabelProgress.Caption := '';
     ProgressBar1.Position := i.ElapsedSeconds * 1000;
     ProgressBar1.Max := i.TotalSeconds * 1000;
     v := 0;
-    LabelDelayTotalSeconds.Caption := FormatDateTime('HH:mm:ss',
-      IncSecond(0, i.TotalSeconds));
-
     LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
       IncSecond(0, i.ElapsedSeconds));
     LabelProgress.Caption :=
