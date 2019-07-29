@@ -23,10 +23,7 @@ uses
   server_data_types_helpers in 'api\server_data_types_helpers.pas',
   services in 'api\services.pas',
   UnitFormFirmware in 'UnitFormFirmware.pas' {FormFirmware},
-  config_helpers in 'api\config_helpers.pas',
-  PropertyValueEditors in 'PropertyValueEditors.pas',
   listports in 'utils\listports.pas',
-  UnitFormProperties in 'UnitFormProperties.pas' {FormProperties},
   notify_services in 'api\notify_services.pas',
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
   UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
@@ -64,7 +61,8 @@ uses
   UnitFormProductTypeDialog in 'UnitFormProductTypeDialog.pas' {FormProductTypeDialog},
   Grijjy.Bson.IO in 'grijjy\Grijjy.Bson.IO.pas',
   Grijjy.Collections in 'grijjy\Grijjy.Collections.pas',
-  Grijjy.OpenSSL in 'grijjy\Grijjy.OpenSSL.pas';
+  Grijjy.OpenSSL in 'grijjy\Grijjy.OpenSSL.pas',
+  UnitFormAppConfig in 'UnitFormAppConfig.pas' {FormAppConfig};
 
 {$R *.res}
 
@@ -85,7 +83,6 @@ begin
   Application.CreateForm(TFormLastParty, FormLastParty);
   Application.CreateForm(TFormParty, FormParty);
   Application.CreateForm(TFormFirmware, FormFirmware);
-  Application.CreateForm(TFormProperties, FormProperties);
   Application.CreateForm(TFormEditText, FormEditText);
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
@@ -97,6 +94,7 @@ begin
   Application.CreateForm(TFormPopup, FormPopup);
   Application.CreateForm(TFormKtx500, FormKtx500);
   Application.CreateForm(TFormProductTypeDialog, FormProductTypeDialog);
+  Application.CreateForm(TFormAppConfig, FormAppConfig);
   Application.Run;
 
 end.

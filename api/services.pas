@@ -8,7 +8,6 @@ uses server_data_types, superobject;
 type 
      TPartiesCatalogueSvc = class 
     public
-        class function CopyParty( param1: Int64) : TParty;static;
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;static;
         class procedure DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;static;
         class procedure DeleteMonth( param1: Integer; param2: Integer) ;static;
@@ -41,6 +40,7 @@ type
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;static;
         class function SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;static;
         class function SetProductTypeAtPlacesRange( Place1: Integer; Place2: Integer; ProductType: string) : Int64;static;
+        class procedure SetValues( Values: TLastPartyValues) ;static;
         class function ToggleProductProductionAtPlace( param1: Integer) : Int64;static;
          
     end; TProductTypesSvc = class 
@@ -57,16 +57,9 @@ type
         class function StoredFirmwareInfo( param1: Int64) : TFirmwareInfo;static;
         class function TempPoints( Values: TArray<string>) : TTempPoints;static;
          
-    end; TSettingsSvc = class 
-    public
-        class function ChangePredefinedConfig( param1: string) : string;static;
-        class function PredefinedConfig: string;static;
-        class function Sections: TConfigSections;static;
-        class function SetDefaultPredefinedConfig: string;static;
-        class procedure SetValue( param1: string; param2: string; param3: string) ;static;
-         
     end; TRunnerSvc = class 
     public
+        class function CopyParty( param1: Int64) : TParty;static;
         class procedure RunMain( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;static;
         class procedure RunReadAndSaveProductCurrents( param1: string) ;static;
         class procedure RunReadCurrent;static;
@@ -87,25 +80,19 @@ type
          
     end; TConfigSvc = class 
     public
-        class function UserAppSetts: TUserConfig;static;
+        class function Dev: string;static;
+        class function GetGui: TGuiSettings;static;
+        class function SetDefaultDev: string;static;
+        class function SetDev( param1: string) : string;static;
+        class procedure SetGui( C: TGuiSettings) ;static;
          
     end;
 
 implementation 
 
-uses HttpRpcClient, SuperObjectHelp;
+uses HttpRpcClient, SuperObjectHelp, Grijjy.Bson.Serialization;
 
   
-class function TPartiesCatalogueSvc.CopyParty( param1: Int64) : TParty;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    ThttpRpcClient.Call('PartiesCatalogueSvc.CopyParty', req, Result); 
-end;
-
- 
 class function TPartiesCatalogueSvc.Days( Year: Integer; Month: Integer) : TArray<Integer>;
 var
     req : ISuperobject;
@@ -401,6 +388,17 @@ begin
 end;
 
  
+class procedure TLastPartySvc.SetValues( Values: TLastPartyValues) ;
+var
+    req : ISuperobject;
+    s:string;
+begin
+    req := SO;
+    TgoBsonSerializer.serialize(Values, s); req['Values'] := SO(s);
+    ThttpRpcClient.GetResponse('LastPartySvc.SetValues', req); 
+end;
+
+ 
 class function TLastPartySvc.ToggleProductProductionAtPlace( param1: Integer) : Int64;
 var
     req : ISuperobject;
@@ -502,55 +500,16 @@ begin
 end;
 
   
-class function TSettingsSvc.ChangePredefinedConfig( param1: string) : string;
+class function TRunnerSvc.CopyParty( param1: Int64) : TParty;
 var
     req : ISuperobject;
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.ChangePredefinedConfig', req), Result); 
+    ThttpRpcClient.Call('RunnerSvc.CopyParty', req, Result); 
 end;
 
  
-class function TSettingsSvc.PredefinedConfig: string;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.PredefinedConfig', req), Result); 
-end;
-
- 
-class function TSettingsSvc.Sections: TConfigSections;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    ThttpRpcClient.Call('SettingsSvc.Sections', req, Result); 
-end;
-
- 
-class function TSettingsSvc.SetDefaultPredefinedConfig: string;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    SuperObject_Get(ThttpRpcClient.GetResponse('SettingsSvc.SetDefaultPredefinedConfig', req), Result); 
-end;
-
- 
-class procedure TSettingsSvc.SetValue( param1: string; param2: string; param3: string) ;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    req.AsArray.Add(param2) ;
-    req.AsArray.Add(param3) ;
-    ThttpRpcClient.GetResponse('SettingsSvc.SetValue', req); 
-end;
-
-  
 class procedure TRunnerSvc.RunMain( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;
 var
     req : ISuperobject;
@@ -658,12 +617,51 @@ begin
 end;
 
   
-class function TConfigSvc.UserAppSetts: TUserConfig;
+class function TConfigSvc.Dev: string;
 var
     req : ISuperobject;
 begin
     req := SO;
-    ThttpRpcClient.Call('ConfigSvc.UserAppSetts', req, Result); 
+    SuperObject_Get(ThttpRpcClient.GetResponse('ConfigSvc.Dev', req), Result); 
+end;
+
+ 
+class function TConfigSvc.GetGui: TGuiSettings;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    ThttpRpcClient.Call('ConfigSvc.GetGui', req, Result); 
+end;
+
+ 
+class function TConfigSvc.SetDefaultDev: string;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    SuperObject_Get(ThttpRpcClient.GetResponse('ConfigSvc.SetDefaultDev', req), Result); 
+end;
+
+ 
+class function TConfigSvc.SetDev( param1: string) : string;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1) ;
+    SuperObject_Get(ThttpRpcClient.GetResponse('ConfigSvc.SetDev', req), Result); 
+end;
+
+ 
+class procedure TConfigSvc.SetGui( C: TGuiSettings) ;
+var
+    req : ISuperobject;
+    s:string;
+begin
+    req := SO;
+    TgoBsonSerializer.serialize(C, s); req['C'] := SO(s);
+    ThttpRpcClient.GetResponse('ConfigSvc.SetGui', req); 
 end;
 
  

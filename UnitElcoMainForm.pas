@@ -144,11 +144,12 @@ implementation
 
 uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormParties, UnitFormLastParty, vclutils,
-    services, UnitFormParty, UnitFormProperties,
+    services, UnitFormParty,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
-    UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient;
+    UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
+  UnitFormAppConfig;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -588,10 +589,10 @@ begin
     with ToolBar3 do
         with ClientToScreen(Point(0, Height)) do
         begin
-            FormProperties.SetConfig(TSettingsSvc.Sections);
-            FormProperties.Left := X - 5 - FormProperties.Width;
-            FormProperties.Top := Y + 5;
-            FormProperties.Show;
+            //FormAppConfig.SetConfig(TSettingsSvc.Sections);
+            FormAppConfig.Left := X - 5 - FormAppConfig.Width;
+            FormAppConfig.Top := Y + 5;
+            FormAppConfig.Show;
             // ShowWindow(FormProperties.Handle, SW_SHOW);
         end;
 end;

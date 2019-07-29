@@ -116,6 +116,27 @@ type
         
     end;
  
+    TLastPartyValues = record
+    public 
+        ProductTypeName : string;
+        Concentration1 : Double;
+        Concentration2 : Double;
+        Concentration3 : Double;
+        Note : TNullString;
+        MinFon : TNullFloat64;
+        MaxFon : TNullFloat64;
+        MaxDFon : TNullFloat64;
+        MinKSens20 : TNullFloat64;
+        MaxKSens20 : TNullFloat64;
+        MinKSens50 : TNullFloat64;
+        MaxKSens50 : TNullFloat64;
+        MinDTemp : TNullFloat64;
+        MaxDTemp : TNullFloat64;
+        MaxDNotMeasured : TNullFloat64;
+        PointsMethod : Int64;
+        
+    end;
+ 
     TGoDateTime = record
     public 
         Year : Integer;
@@ -156,41 +177,15 @@ type
         
     end;
  
-    TConfigProperty = record
-    public 
-        Hint : string;
-        Name : string;
-        Value : string;
-        Error : string;
-        Min : TNullFloat64;
-        Max : TNullFloat64;
-        ValueType : Integer;
-        List : TArray<string>;
-        
-    end;
- 
-    TConfigSection = record
-    public 
-        Name : string;
-        Hint : string;
-        Properties : TArray<TConfigProperty>;
-        
-    end;
- 
-    TConfigSections = record
-    public 
-        Sections : TArray<TConfigSection>;
-        
-    end;
- 
-    TUserConfig = record
+    TGuiSettings = record
     public 
         ComportMeasurer : string;
         ComportGas : string;
-        ChipType : Integer;
+        ChipType : string;
         AmbientTemperature : Double;
         BlowGasMinutes : Integer;
         HoldTemperatureMinutes : Integer;
+        EndScaleGas2 : Boolean;
         
     end;
  

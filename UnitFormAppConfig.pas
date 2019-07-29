@@ -6,7 +6,7 @@ uses
     Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
     System.Classes, Vcl.Graphics, System.Generics.collections,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-    ComponentBaloonHintU;
+    ComponentBaloonHintU, server_data_types;
 
 type
     EWrongInputExcpetion = class(Exception);
@@ -18,54 +18,60 @@ type
     Label11: TLabel;
     Label12: TLabel;
     Label14: TLabel;
-    Edit7: TEdit;
-    Edit10: TEdit;
+    Editfon20Min: TEdit;
+    Editfon20Max: TEdit;
     Label17: TLabel;
-    Edit11: TEdit;
+    EditDfon20Max: TEdit;
     Label18: TLabel;
     Label19: TLabel;
-    Edit12: TEdit;
-    Edit13: TEdit;
+    EditKch20Min: TEdit;
+    EditKch20Max: TEdit;
     Label20: TLabel;
-    Edit14: TEdit;
-    Edit15: TEdit;
+    EditKch50Min: TEdit;
+    EditKch50Max: TEdit;
     Label21: TLabel;
-    Edit16: TEdit;
-    Edit17: TEdit;
+    EditDfon50Min: TEdit;
+    EditDfon50Max: TEdit;
     Panel1: TPanel;
     GroupBox1: TGroupBox;
     GridPanel1: TGridPanel;
     Label15: TLabel;
     ComboBoxComportProducts: TComboBox;
     Label1: TLabel;
-    Edit1: TEdit;
+    EditAmbientTemp: TEdit;
     Label13: TLabel;
-    Edit8: TEdit;
-    Edit9: TEdit;
+    EditDurMinutesBlowGas: TEdit;
+    EditDurMinutesHoldTemperature: TEdit;
     Label16: TLabel;
     Label2: TLabel;
     ComboBoxComportGas: TComboBox;
     Label9: TLabel;
-    ComboBox3: TComboBox;
+    ComboBoxChipType: TComboBox;
     GroupBox2: TGroupBox;
     GridPanel2: TGridPanel;
     Label3: TLabel;
-    ComboBox1: TComboBox;
+    ComboBoxProductTypeName: TComboBox;
     Label4: TLabel;
-    Edit3: TEdit;
+    EditC1: TEdit;
     Label5: TLabel;
-    Edit4: TEdit;
+    EditC2: TEdit;
     Label7: TLabel;
-    Edit5: TEdit;
+    EditC3: TEdit;
     Label8: TLabel;
-    Edit6: TEdit;
     Label6: TLabel;
-    ComboBox2: TComboBox;
+    ComboBoxPointsMethod: TComboBox;
+    ComboBoxEndScaleGas: TComboBox;
+    Label22: TLabel;
+    EditNotMeasuredMax: TEdit;
+    GroupBox4: TGroupBox;
+    Memo1: TMemo;
+    TimerDebounceParty: TTimer;
         procedure FormCreate(Sender: TObject);
         procedure FormDeactivate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ComboBoxComportProductsChange(Sender: TObject);
         procedure ComboBoxProductTypeNameChange(Sender: TObject);
+    procedure TimerDebouncePartyTimer(Sender: TObject);
     private
         { Private declarations }
         FhWndTip: THandle;
@@ -78,8 +84,9 @@ type
         procedure ShowBalloonTip(c: TWinControl; Icon: TIconKind;
           Title, Text: string);
 
-        function TryEditToInt(ed: TEdit): Integer;
-        function TryEditToFloat(ed: TEdit): double;
+        function TryEdToInt(ed: TEdit): Integer;
+        function TryEdToFloat(ed: TEdit): double;
+        function TryEdToNullFloat(ed: TEdit): TNullFloat64;
 
     public
         { Public declarations }
@@ -92,11 +99,41 @@ implementation
 
 {$R *.dfm}
 
-uses stringutils, services, server_data_types, comport;
+uses registry,  stringutils, services;
+
+procedure EnumComports(const Ports: TStrings);
+var
+    nInd: integer;
+begin
+    with TRegistry.Create(KEY_READ) do
+        try
+            RootKey := HKEY_LOCAL_MACHINE;
+            if OpenKey('hardware\devicemap\serialcomm', false) then
+            begin
+                Ports.BeginUpdate();
+                GetValueNames(Ports);
+                for nInd := Ports.count - 1 downto 0 do
+                    Ports.Strings[nInd] := ReadString(Ports.Strings[nInd]);
+            end;
+
+        finally
+            Ports.EndUpdate();
+            CloseKey();
+            Free();
+        end
+end;
 
 procedure setupCB(cb: TComboBox; s: string);
 begin
     cb.ItemIndex := cb.Items.IndexOf(s);
+end;
+
+procedure setNullFloatEd(ed: TEdit; v: TNullFloat64);
+begin
+    if v.Valid then
+        ed.Text := FloatToStr(v.Float64)
+    else
+        ed.Text := '';
 end;
 
 procedure TFormAppConfig.FormCreate(Sender: TObject);
@@ -107,39 +144,58 @@ end;
 procedure TFormAppConfig.FormShow(Sender: TObject);
 var
     s: string;
-    v: TUserConfig;
-
+    v: TGuiSettings;
     p: TParty;
 
 begin
     FEnableOnEdit := false;
     ComboBoxProductTypeName.Items.Clear;
-    for s in TConfigSvc.ProductTypesNames do
+    for s in TProductTypesSvc.Names do
         ComboBoxProductTypeName.Items.Add(s);
     EnumComports(ComboBoxComportProducts.Items);
-    EnumComports(ComboBoxComportTemp.Items);
     EnumComports(ComboBoxComportGas.Items);
-    v := TConfigSvc.UserAppSetts;
+    v := TConfigSvc.GetGui;
 
-    setupCB(ComboBoxComportProducts, v.ComportProducts);
-    setupCB(ComboBoxComportTemp, v.ComportTemperature);
+    setupCB(ComboBoxComportProducts, v.ComportMeasurer);
     setupCB(ComboBoxComportGas, v.ComportGas);
-
+    setupCB(ComboBoxChipType, v.ChipType);
+    EditAmbientTemp.Text := FloatToStr(v.AmbientTemperature);
     EditDurMinutesBlowGas.Text := IntToStr(v.BlowGasMinutes);
-    EditDurMinutesBlowAir.Text := IntToStr(v.BlowAirMinutes);
-    EditDurMinutesHoldT.Text := IntToStr(v.HoldTemperatureMinutes);
-    EditTempMinus.Text := FloatToStr(v.TemperatureMinus);
-    EditTempPlus.Text := FloatToStr(v.TemperaturePlus);
+    EditDurMinutesHoldTemperature.Text := IntToStr(v.HoldTemperatureMinutes);
+    if v.EndScaleGas2 then
+        setupCB(ComboBoxEndScaleGas, 'ПГС2')
+    else
+        setupCB(ComboBoxEndScaleGas, 'ПГС3');
 
-    EditInterrogateInerval.Text := IntToStr(v.InterrogateProductVarIntervalMillis);
 
     p := TLastPartySvc.Party;
-    setupCB(ComboBoxProductTypeName, p.ProductType);
-    EditC1.Text := FloatToStr(p.C1);
-    EditC2.Text := FloatToStr(p.C2);
-    EditC3.Text := FloatToStr(p.C3);
-    EditC4.Text := FloatToStr(p.C4);
+    setupCB(ComboBoxProductTypeName, p.ProductTypeName);
+    EditC1.Text := FloatToStr(p.Concentration1);
+    EditC2.Text := FloatToStr(p.Concentration2);
+    EditC3.Text := FloatToStr(p.Concentration3);
+    if p.PointsMethod = 2 then
+        setupCB(ComboBoxPointsMethod, '2 точки')
+    else
+        setupCB(ComboBoxPointsMethod, '3 точки');
 
+    setNullFloatEd(Editfon20Min, p.MinFon);
+    setNullFloatEd(Editfon20Max, p.MaxFon);
+    setNullFloatEd(EditDfon20Max, p.MaxDFon);
+    setNullFloatEd(EditDfon50Min, p.MinDTemp);
+    setNullFloatEd(EditDfon50Max, p.MaxDTemp);
+
+    setNullFloatEd(EditKch20Min, p.MinKSens20);
+    setNullFloatEd(EditKch20Max, p.MaxKSens20);
+    setNullFloatEd(EditKch50Min, p.MinKSens50);
+    setNullFloatEd(EditKch50Max, p.MaxKSens50);
+    setNullFloatEd(EditNotMeasuredMax, p.MaxDNotMeasured);
+
+    if p.Note.Valid then
+        Memo1.Lines.Text := p.Note.Str
+    else
+        Memo1.Lines.Text := '';
+
+    p.CreatedAt := now;
     FEnableOnEdit := true;
 end;
 
@@ -149,62 +205,31 @@ begin
 end;
 
 procedure TFormAppConfig.ComboBoxProductTypeNameChange(Sender: TObject);
-var
-    v: TPartySettings;
-    x:TTempPlusMinus;
 begin
     if not FEnableOnEdit then
         exit;
     CloseWindow(FhWndTip);
-    try
-        v.ProductType := ComboBoxProductTypeName.Text;
-        v.C1 := TryEditToFloat(EditC1);
-        v.C2 := TryEditToFloat(EditC2);
-        v.C3 := TryEditToFloat(EditC3);
-        v.C4 := TryEditToFloat(EditC4);
-
-        CloseWindow(FhWndTip);
-        TLastPartySvc.SetPartySettings(v);
-        if Sender = ComboboxProductTypeName then
-        with TConfigSvc.ProductTypeTemperatures(ComboboxProductTypeName.Text) do
-        begin
-            FEnableOnEdit := false;
-            EditTempMinus.Text := floattostr(TempMinus);
-            EditTempPlus.Text := floattostr(TempPlus);
-            FEnableOnEdit := true;
-            ComboBoxComportProductsChange(EditTempMinus);
-        end;
-
-        TLastPartySvc.SetPartySettings(v);
-
-        (Sender as TWinControl).SetFocus;
-    except
-        on EWrongInputExcpetion do
-            exit;
-    end;
-
+    (Sender as TWinControl).SetFocus;
+    TimerDebounceParty.Enabled := true;
 end;
 
 procedure TFormAppConfig.ComboBoxComportProductsChange(Sender: TObject);
 var
-    v: TUserAppSettings;
+    v: TGuiSettings;
 begin
     if not FEnableOnEdit then
         exit;
     CloseWindow(FhWndTip);
 
     try
-        v.ComportProducts := ComboBoxComportProducts.Text;
-        v.ComportTemperature := ComboBoxComportTemp.Text;
+        v.ComportMeasurer := ComboBoxComportProducts.Text;
         v.ComportGas := ComboBoxComportGas.Text;
-        v.BlowGasMinutes := TryEditToInt(EditDurMinutesBlowGas);
-        v.BlowAirMinutes := TryEditToInt(EditDurMinutesBlowAir);
-        v.HoldTemperatureMinutes := TryEditToInt(EditDurMinutesHoldT);
-        v.TemperatureMinus := TryEditToFloat(EditTempMinus);
-        v.TemperaturePlus := TryEditToFloat(EditTempPlus);
-        v.InterrogateProductVarIntervalMillis := TryEditToInt(EditInterrogateInerval);
-        TConfigSvc.SetUserAppSetts(v);
-
+        v.BlowGasMinutes := TryEdToInt(EditDurMinutesBlowGas);
+        v.HoldTemperatureMinutes := TryEdToInt(EditDurMinutesHoldTemperature);
+        v.ChipType := ComboBoxChipType.Text;
+        v.AmbientTemperature := TryEdToFloat(EditAmbientTemp);
+        v.EndScaleGas2 := ComboBoxEndScaleGas.ItemIndex = 0;
+        TConfigSvc.SetGui(v);
         (Sender as TWinControl).SetFocus;
     except
         on EWrongInputExcpetion do
@@ -237,7 +262,7 @@ begin
     FhWndTip := ComponentBaloonHintU.ShowBalloonTip(c, Icon, Title, Text);
 end;
 
-function TFormAppConfig.TryEditToInt(ed: TEdit): Integer;
+function TFormAppConfig.TryEdToInt(ed: TEdit): Integer;
 begin
     if TryStrToInt(ed.Text, result) then
         exit(result);
@@ -249,12 +274,69 @@ begin
 
 end;
 
-function TFormAppConfig.TryEditToFloat(ed: TEdit): double;
+procedure TFormAppConfig.TimerDebouncePartyTimer(Sender: TObject);
+var
+    p: TLastPartyValues;
+begin
+    TimerDebounceParty.Enabled := false;
+    try
+        p.ProductTypeName := ComboBoxProductTypeName.Text;
+        p.Concentration1 := TryEdToFloat(EditC1);
+        p.Concentration2 := TryEdToFloat(EditC2);
+        p.Concentration3 := TryEdToFloat(EditC3);
+
+        if ComboBoxPointsMethod.ItemIndex = 1 then
+            p.PointsMethod := 3
+        else
+            p.PointsMethod := 2;
+
+        p.MinFon := TryEdToNullFloat(Editfon20Min);
+        p.MaxFon := TryEdToNullFloat(Editfon20Max);
+        p.MaxDFon := TryEdToNullFloat(Editdfon20Max);
+        p.MinDTemp := TryEdToNullFloat(EditDfon50Min);
+        p.MaxDTemp := TryEdToNullFloat(EditDfon50Max);
+
+        p.MinKSens20 := TryEdToNullFloat(EditKch20Min);
+        p.MaxKSens20 := TryEdToNullFloat(EditKch20Max);
+
+        p.MinKSens50 := TryEdToNullFloat(EditKch50Min);
+        p.MaxKSens50 := TryEdToNullFloat(EditKch50Max);
+        p.MaxDNotMeasured := TryEdToNullFloat(EditNotMeasuredMax);
+
+        with p.Note do
+        begin
+            Valid := length(Trim(Memo1.Lines.Text)) > 0;
+            Str := Memo1.Lines.Text;
+        end;
+
+        TLastPartySvc.SetValues(p);
+    except
+        on EWrongInputExcpetion do
+            exit;
+    end;
+
+end;
+
+function TFormAppConfig.TryEdToFloat(ed: TEdit): double;
 begin
     if try_str_to_float(ed.Text, result) then
         exit(result);
     ShowBalloonTip(ed, TIconKind.Error, 'не допустимое значение',
       'ожидалось число c плавающей точкой');
+    ed.SetFocus;
+    raise EWrongInputExcpetion.Create('');
+
+end;
+
+function TFormAppConfig.TryEdToNullFloat(ed: TEdit): TNullFloat64;
+begin
+    result.Valid := try_str_to_float(ed.Text, result.Float64);
+    if result.Valid then
+        exit;
+    if length(Trim(ed.Text))=0 then
+        exit;
+    ShowBalloonTip(ed, TIconKind.Error, 'не допустимое значение',
+      'ожидалось число c плавающей точкой или пустая строка');
     ed.SetFocus;
     raise EWrongInputExcpetion.Create('');
 

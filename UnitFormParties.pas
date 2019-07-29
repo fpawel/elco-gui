@@ -362,7 +362,7 @@ end;
 
 procedure TFormParties.MenuCopyItemClick(Sender: TObject);
 begin
-    FormLastParty.SetParty(TPartiesCatalogueSvc.CopyParty(TreeData[FNode]
+    FormLastParty.SetParty(TRunnerSvc.CopyParty(TreeData[FNode]
       .Party.PartyID));
 end;
 
