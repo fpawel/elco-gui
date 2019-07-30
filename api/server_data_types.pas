@@ -200,7 +200,7 @@ type
     public 
         Temperature : Double;
         Destination : Double;
-        On : Boolean;
+        TemperatureOn : Boolean;
         CoolOn : Boolean;
         
     end;

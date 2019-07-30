@@ -40,7 +40,7 @@ var
 begin
     SeriesDestinationTemperature.AddXY(now, X.Destination);
     SeriesCurrentTemperature.AddXY(now, X.Temperature);
-    if X.On then
+    if X.TemperatureOn = true then
     begin
         b := 1;
         strOn := 'вкл.'
@@ -51,7 +51,7 @@ begin
         strOn := 'выкл.'
     end;
     SeriesOnOff.AddXY(now, b);
-    if X.CoolOn then
+    if X.CoolOn = true then
     begin
         b := 1;
         strCool := ' компрессор'

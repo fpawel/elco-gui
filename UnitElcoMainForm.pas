@@ -164,6 +164,7 @@ var
     i: Integer;
     menu: TMenuItem;
 begin
+
     if GetParentProcessName = 'cmd.exe' then
         Writeln('we are cmd.exe');
 
@@ -433,11 +434,11 @@ begin
         begin
             FormKtx500.AddEntry(X);
             LabelStatusKtx500.Font.Color := clRed;
-            if X.On then
+            if X.TemperatureOn = true then
                 strOn := 'вкл.'
             else
                 strOn := 'выкл.';
-            if X.CoolOn then
+            if X.CoolOn = true then
                 strCool := ' компрессор'
             else
                 strCool := '';
