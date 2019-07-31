@@ -9,7 +9,6 @@ uses
   dbutils in 'utils\dbutils.pas',
   stringutils in 'utils\stringutils.pas',
   product_column in 'product_column.pas',
-  UnitFormParties in 'UnitFormParties.pas' {FormParties},
   UnitFormLastParty in 'UnitFormLastParty.pas' {FormLastParty},
   UnitFormParty in 'UnitFormParty.pas' {FormParty},
   vclutils in 'utils\vclutils.pas',
@@ -62,7 +61,9 @@ uses
   Grijjy.Bson.IO in 'grijjy\Grijjy.Bson.IO.pas',
   Grijjy.Collections in 'grijjy\Grijjy.Collections.pas',
   Grijjy.OpenSSL in 'grijjy\Grijjy.OpenSSL.pas',
-  UnitFormAppConfig in 'UnitFormAppConfig.pas' {FormAppConfig};
+  UnitFormAppConfig in 'UnitFormAppConfig.pas' {FormAppConfig},
+  UnitFormArchive in 'UnitFormArchive.pas' {FormArchive},
+  UnitFormModalMessage in 'UnitFormModalMessage.pas' {FormModalMessage};
 
 {$R *.res}
 
@@ -79,7 +80,6 @@ begin
     Application.Initialize;
     Application.MainFormOnTaskbar := True;
     Application.CreateForm(TElcoMainForm, ElcoMainForm);
-  Application.CreateForm(TFormParties, FormParties);
   Application.CreateForm(TFormLastParty, FormLastParty);
   Application.CreateForm(TFormParty, FormParty);
   Application.CreateForm(TFormFirmware, FormFirmware);
@@ -95,6 +95,8 @@ begin
   Application.CreateForm(TFormKtx500, FormKtx500);
   Application.CreateForm(TFormProductTypeDialog, FormProductTypeDialog);
   Application.CreateForm(TFormAppConfig, FormAppConfig);
+  Application.CreateForm(TFormArchive, FormArchive);
+  Application.CreateForm(TFormModalMessage, FormModalMessage);
   Application.Run;
 
 end.

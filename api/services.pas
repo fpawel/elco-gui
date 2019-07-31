@@ -9,17 +9,16 @@ type
      TPartiesCatalogueSvc = class 
     public
         class function Days( Year: Integer; Month: Integer) : TArray<Integer>;static;
-        class procedure DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;static;
-        class procedure DeleteMonth( param1: Integer; param2: Integer) ;static;
         class procedure DeletePartyID( param1: Int64) ;static;
-        class procedure DeleteYear( param1: Integer) ;static;
         class function Months( Year: Integer) : TArray<Integer>;static;
         class function NewParty: TParty;static;
         class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;static;
+        class function PartiesOfYearMonth( Year: Integer; Month: Integer) : TArray<TParty2>;static;
         class function Party( param1: Int64) : TParty;static;
         class procedure SetProductsProduction( ProductIDs: TArray<Int64>; Production: Boolean) ;static;
         class procedure ToggleProductProduction( param1: Int64) ;static;
         class function Years: TArray<Integer>;static;
+        class function YearsMonths: TArray<TYearMonth>;static;
          
     end; TLastPartySvc = class 
     public
@@ -59,7 +58,7 @@ type
          
     end; TRunnerSvc = class 
     public
-        class function CopyParty( param1: Int64) : TParty;static;
+        class procedure CopyParty( param1: Int64) ;static;
         class procedure RunMain( param1: Boolean; param2: Boolean; param3: Boolean; param4: Boolean) ;static;
         class procedure RunReadAndSaveProductCurrents( param1: string) ;static;
         class procedure RunReadCurrent;static;
@@ -104,29 +103,6 @@ begin
 end;
 
  
-class procedure TPartiesCatalogueSvc.DeleteDay( param1: Integer; param2: Integer; param3: Integer) ;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    req.AsArray.Add(param2) ;
-    req.AsArray.Add(param3) ;
-    ThttpRpcClient.GetResponse('PartiesCatalogueSvc.DeleteDay', req); 
-end;
-
- 
-class procedure TPartiesCatalogueSvc.DeleteMonth( param1: Integer; param2: Integer) ;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    req.AsArray.Add(param2) ;
-    ThttpRpcClient.GetResponse('PartiesCatalogueSvc.DeleteMonth', req); 
-end;
-
- 
 class procedure TPartiesCatalogueSvc.DeletePartyID( param1: Int64) ;
 var
     req : ISuperobject;
@@ -134,16 +110,6 @@ begin
     req := SA([]);
     req.AsArray.Add(param1) ;
     ThttpRpcClient.GetResponse('PartiesCatalogueSvc.DeletePartyID', req); 
-end;
-
- 
-class procedure TPartiesCatalogueSvc.DeleteYear( param1: Integer) ;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-    req.AsArray.Add(param1) ;
-    ThttpRpcClient.GetResponse('PartiesCatalogueSvc.DeleteYear', req); 
 end;
 
  
@@ -175,6 +141,17 @@ begin
     SuperObject_SetField(req, 'Month', Month);
     SuperObject_SetField(req, 'Day', Day);
     ThttpRpcClient.Call('PartiesCatalogueSvc.Parties', req, Result); 
+end;
+
+ 
+class function TPartiesCatalogueSvc.PartiesOfYearMonth( Year: Integer; Month: Integer) : TArray<TParty2>;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    SuperObject_SetField(req, 'Year', Year);
+    SuperObject_SetField(req, 'Month', Month);
+    ThttpRpcClient.Call('PartiesCatalogueSvc.PartiesOfYearMonth', req, Result); 
 end;
 
  
@@ -215,6 +192,15 @@ var
 begin
     req := SO;
     ThttpRpcClient.Call('PartiesCatalogueSvc.Years', req, Result); 
+end;
+
+ 
+class function TPartiesCatalogueSvc.YearsMonths: TArray<TYearMonth>;
+var
+    req : ISuperobject;
+begin
+    req := SO;
+    ThttpRpcClient.Call('PartiesCatalogueSvc.YearsMonths', req, Result); 
 end;
 
   
@@ -500,13 +486,13 @@ begin
 end;
 
   
-class function TRunnerSvc.CopyParty( param1: Int64) : TParty;
+class procedure TRunnerSvc.CopyParty( param1: Int64) ;
 var
     req : ISuperobject;
 begin
     req := SA([]);
     req.AsArray.Add(param1) ;
-    ThttpRpcClient.Call('RunnerSvc.CopyParty', req, Result); 
+    ThttpRpcClient.GetResponse('RunnerSvc.CopyParty', req); 
 end;
 
  

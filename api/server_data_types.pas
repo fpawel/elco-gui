@@ -110,6 +110,23 @@ type
         
     end;
  
+    TParty2 = record
+    public 
+        PartyID : Integer;
+        Day : Integer;
+        ProductTypeName : string;
+        Note : TNullString;
+        Last : Boolean;
+        
+    end;
+ 
+    TYearMonth = record
+    public 
+        Year : Integer;
+        Month : Integer;
+        
+    end;
+ 
     TGetCheckBlocksArg = record
     public 
         Check : TArray<Boolean>;
@@ -193,6 +210,14 @@ type
     public 
         Values : TArray<Double>;
         Block : Integer;
+        
+    end;
+ 
+    TWorkResult = record
+    public 
+        WorkName : string;
+        Tag : Integer;
+        Message : string;
         
     end;
  

@@ -21,7 +21,7 @@ type
         N4: TMenuItem;
         PageControlMain: TPageControl;
         TabSheetParty: TTabSheet;
-        TabSheetParties: TTabSheet;
+        TabSheetArchive: TTabSheet;
         ImageList4: TImageList;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
@@ -122,6 +122,8 @@ type
         procedure WMActivateApp(var AMessage: TMessage); message WM_ACTIVATEAPP;
 
         procedure OnReadCurrent(v: TReadCurrent);
+        procedure OnWorkComplete(X: TWorkResult);
+        procedure OnWarning(content: string);
 
     public
         { Public declarations }
@@ -143,13 +145,13 @@ implementation
 {$R *.dfm}
 
 uses stringgridutils, stringutils, JclDebug,
-    superobject, UnitFormParties, UnitFormLastParty, vclutils,
+    superobject, UnitFormLastParty, vclutils,
     services, UnitFormParty,
     notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
-  UnitFormAppConfig;
+    UnitFormAppConfig, UnitFormArchive, UnitFormModalMessage;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -199,8 +201,6 @@ begin
         menu.OnClick := RunSwitchGasMenuClick;
     end;
 
-
-
 end;
 
 procedure TElcoMainForm.FormShow(Sender: TObject);
@@ -233,10 +233,10 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
-    with FormParties do
+    with FormArchive do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetParties;
+        Parent := TabSheetArchive;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -254,7 +254,7 @@ begin
     with FormParty do
     begin
         Font.Assign(self.Font);
-        Parent := FormParties;
+        Parent := FormArchive;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -297,58 +297,6 @@ begin
         Show;
     end;
 
-    SetOnErrorOccurred(
-        procedure(s: string)
-        var
-            sz: TSize;
-        begin
-            ImageInfo.Hide;
-            ImageError.Show;
-
-            if PanelMessageBox.Visible then
-                RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text +
-                  #10#13#10#13
-            else
-                RichEditlMessageBoxText.Text := '';
-
-            PanelMessageBoxTitle.Caption := 'Произошла ошибка';
-
-            s  := StringReplace(s, ': ', #13#10#9' - ',
-                          [rfReplaceAll, rfIgnoreCase]);
-
-            RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
-            RichEditlMessageBoxText.Font.Color := clRed;
-
-            sz := GetTextSize(RichEditlMessageBoxText.Text,
-              RichEditlMessageBoxText.Font);
-
-            PanelMessageBox.Show;
-            PanelMessageBox.BringToFront;
-            FormResize(self);
-        end);
-
-    SetOnWorkComplete(
-        procedure(s: string)
-        begin
-            ImageInfo.Show;
-            ImageError.Hide;
-
-            if PanelMessageBox.Visible then
-                RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text +
-                  #10#13#10#13
-            else
-                RichEditlMessageBoxText.Text := '';
-
-            PanelMessageBoxTitle.Caption := 'Выполнение окончено';
-            RichEditlMessageBoxText.Text := RichEditlMessageBoxText.Text + s;
-            RichEditlMessageBoxText.Font.Color := clNavy;
-            PanelMessageBox.Show;
-            PanelMessageBox.BringToFront;
-            FormResize(self);
-            FormLastParty.SetReadPlace(-1);
-            FormLastParty.SetReadBlock(-1);
-        end);
-
     SetOnReadCurrent(OnReadCurrent);
 
     SetOnWorkStarted(
@@ -363,17 +311,7 @@ begin
             FormLastParty.SetReadBlock(-1);
         end);
 
-    SetOnWorkStopped(
-        procedure(s: string)
-        begin
-            ToolBarStop.Visible := false;
-            LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
-            TimerPerforming.Enabled := false;
-            LabelStatusTop.Font.Color := clBlack;
-            LabelStatusBottom.Caption := '';
-            FormLastParty.SetReadPlace(-1);
-            FormLastParty.SetReadBlock(-1);
-        end);
+    SetOnWorkComplete(OnWorkComplete);
 
     SetOnStatus(
         procedure(s: string)
@@ -381,23 +319,14 @@ begin
             LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
         end);
 
-    SetOnWarning(
-        procedure(content: string)
-        var
-            s: string;
-        begin
-            s := content + #10#13#10#13;
-            s := s + 'Нажмите OK чтобы игнорировать ошибку и продолжить технологический процесс.'#10#13#10#13;
-            s := s + 'Нажмите ОТМЕНА чтобы прервать технологический процесс.';
-            if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
-                TRunnerSvc.StopHardware;
-        end);
+    SetOnWarning(OnWarning);
     SetOnDelay(SetupDelay);
 
     SetOnLastPartyChanged(
         procedure(party: TParty)
         begin
             FormLastParty.SetParty(party);
+            FormArchive.FetchYearsMonths;
         end);
 
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
@@ -513,20 +442,21 @@ begin
     PageControl := Sender as TPageControl;
     PageControl.Repaint;
     PanelMessageBox.Hide;
-    if PageControl.ActivePage = TabSheetParties then
+    if PageControl.ActivePage = TabSheetArchive then
     begin
         if FormParty.party.PartyID = 0 then
             FormParty.party := TPartiesCatalogueSvc.party
               (FormParty.party.PartyID)
         else
             FormParty.party := TLastPartySvc.party;
+        FormArchive.FetchYearsMonths;
 
-        if not FormParties.HasYears then
-        begin
-            FormParties.CreateYearsNodes;
-            FormParty.party := TLastPartySvc.party;
-            exit;
-        end;
+        // if not FormParties.HasYears then
+        // begin
+        // FormParties.CreateYearsNodes;
+        // FormParty.party := TLastPartySvc.party;
+        // exit;
+        // end;
     end
     else if PageControl.ActivePage = TabSheetParty then
     begin
@@ -590,7 +520,7 @@ begin
     with ToolBar3 do
         with ClientToScreen(Point(0, Height)) do
         begin
-            //FormAppConfig.SetConfig(TSettingsSvc.Sections);
+            // FormAppConfig.SetConfig(TSettingsSvc.Sections);
             FormAppConfig.Left := X - 5 - FormAppConfig.Width;
             FormAppConfig.Top := Y + 5;
             FormAppConfig.Show;
@@ -762,7 +692,7 @@ end;
 procedure TElcoMainForm.N2Click(Sender: TObject);
 begin
     FormLastParty.SetParty(TLastPartySvc.Import);
-    FormParties.CreateYearsNodes;
+    FormArchive.FetchYearsMonths;
 
 end;
 
@@ -855,6 +785,89 @@ begin
     finally
         LBmp.Free;
     end;
+end;
+
+procedure TElcoMainForm.OnWorkComplete(X: TWorkResult);
+var
+    s: string;
+begin
+    ToolBarStop.Visible := false;
+
+    TimerPerforming.Enabled := false;
+
+    if RichEditlMessageBoxText.Lines.Count > 14 then
+        RichEditlMessageBoxText.ScrollBars := ssVertical
+    else
+        RichEditlMessageBoxText.ScrollBars := ssNone;
+
+    LabelStatusTop.Caption := TimeToStr(now) + ': ' + X.WorkName;
+
+    case X.Tag of
+        0:
+            begin
+                ImageInfo.Show;
+                ImageError.Hide;
+                LabelStatusTop.Font.Color := clNavy;
+                RichEditlMessageBoxText.Font.Color := clNavy;
+                PanelMessageBoxTitle.Caption := X.WorkName + ': успешно';
+                LabelStatusTop.Caption := LabelStatusTop.Caption + ': успешно';
+            end;
+        1:
+            begin
+                ImageInfo.Show;
+                ImageError.Hide;
+                LabelStatusTop.Font.Color := clMaroon;
+                RichEditlMessageBoxText.Font.Color := clMaroon;
+                PanelMessageBoxTitle.Caption := X.WorkName + ': прервано';
+                LabelStatusTop.Caption := LabelStatusTop.Caption + ': прервано';
+            end;
+        2:
+            begin
+                ImageInfo.Hide;
+                ImageError.Show;
+                LabelStatusTop.Font.Color := clRed;
+                RichEditlMessageBoxText.Font.Color := clRed;
+                PanelMessageBoxTitle.Caption := X.WorkName + ': не выполнено';
+                LabelStatusTop.Caption := LabelStatusTop.Caption +
+                  ': не выполнено';
+            end;
+    else
+        raise Exception.Create('unknown work result: ' + inttostr(X.Tag));
+    end;
+
+    RichEditlMessageBoxText.Text := stringreplace(X.Message, ': ',
+      #13#10#9' - ', [rfReplaceAll, rfIgnoreCase]);
+
+    LabelStatusBottom.Caption := '';
+    PanelMessageBox.Show;
+    PanelMessageBox.BringToFront;
+    FormResize(self);
+    FormLastParty.SetReadPlace(-1);
+    FormLastParty.SetReadBlock(-1);
+end;
+
+procedure TElcoMainForm.OnWarning(content: string);
+var
+    s: string;
+begin
+    s := content + #10#13#10#13;
+    s := s + '"Принять" - игнорировать ошибку и продолжить.'#10#13#10#13;
+    s := s + '"Отмена" - прервать выполнение.';
+    //FormModalMessage.Parent := self;
+    FormModalMessage.PanelMessageBoxTitle.Caption := 'Предупреждение';
+    FormModalMessage.RichEditlMessageBoxText.Text := content;
+    FormModalMessage.ImageInfo.Hide;
+    FormModalMessage.ImageError.Show;
+
+    FormModalMessage.ShowModal;
+    if FormModalMessage.ModalResult <> mrOk then
+        TRunnerSvc.StopHardware;
+
+//    s := content + #10#13#10#13;
+//    s := s + '"Ok" - игнорировать ошибку и продолжить.'#10#13#10#13;
+//    s := s + '"Cancel" - прервать выполнение.';
+//    if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
+//        TRunnerSvc.StopHardware;
 end;
 
 end.

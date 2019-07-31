@@ -5743,34 +5743,18 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
-      object TabSheetParties: TTabSheet
+      object TabSheetArchive: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -5778,7 +5762,7 @@ object ElcoMainForm: TElcoMainForm
     Left = 235
     Top = 263
     Width = 581
-    Height = 177
+    Height = 234
     BevelKind = bkFlat
     BevelOuter = bvNone
     Color = clInfoBk
@@ -5788,7 +5772,7 @@ object ElcoMainForm: TElcoMainForm
     Visible = False
     DesignSize = (
       577
-      173)
+      230)
     object ImageError: TImage
       Left = 8
       Top = 38
@@ -6046,21 +6030,19 @@ object ElcoMainForm: TElcoMainForm
     object RichEditlMessageBoxText: TRichEdit
       Left = 112
       Top = 38
-      Width = 456
-      Height = 131
+      Width = 457
+      Height = 187
       Anchors = [akLeft, akTop, akRight, akBottom]
       BorderStyle = bsNone
       Font.Charset = RUSSIAN_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clMaroon
       Font.Height = -17
       Font.Name = 'Tahoma'
       Font.Style = []
       Lines.Strings = (
-        'RichEditlMessageBoxTex'
-        't')
+        'RichEditlMessageBoxText')
       ParentColor = True
       ParentFont = False
-      ReadOnly = True
       TabOrder = 1
       Zoom = 100
       OnMouseDown = RichEditlMessageBoxTextMouseDown

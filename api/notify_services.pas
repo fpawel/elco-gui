@@ -4,22 +4,21 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TIntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TWorkResultHandler = reference to procedure (x:TWorkResult);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TPartyHandler = reference to procedure (x:TParty);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TIntegerHandler = reference to procedure (x:Integer);
     
 
 procedure HandleCopydata(var Message: TMessage);
 
 procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
-procedure SetOnErrorOccurred( AHandler : TStringHandler);
-procedure SetOnWorkComplete( AHandler : TStringHandler);
+procedure SetOnWorkComplete( AHandler : TWorkResultHandler);
 procedure SetOnWorkStarted( AHandler : TStringHandler);
-procedure SetOnWorkStopped( AHandler : TStringHandler);
 procedure SetOnStatus( AHandler : TStringHandler);
 procedure SetOnKtx500Info( AHandler : TKtx500InfoHandler);
 procedure SetOnKtx500Error( AHandler : TStringHandler);
@@ -39,7 +38,7 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdErrorOccurred, CmdWorkComplete, CmdWorkStarted, CmdWorkStopped, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
+    TServerAppCmd = (CmdReadCurrent, CmdWorkComplete, CmdWorkStarted, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
     CmdReadBlock);
 
     type _deserializer = record
@@ -48,10 +47,8 @@ type
 
 var
     _OnReadCurrent : TReadCurrentHandler;
-    _OnErrorOccurred : TStringHandler;
-    _OnWorkComplete : TStringHandler;
+    _OnWorkComplete : TWorkResultHandler;
     _OnWorkStarted : TStringHandler;
-    _OnWorkStopped : TStringHandler;
     _OnStatus : TStringHandler;
     _OnKtx500Info : TKtx500InfoHandler;
     _OnKtx500Error : TStringHandler;
@@ -95,29 +92,17 @@ begin
                 raise Exception.Create('_OnReadCurrent must be set');
             _OnReadCurrent(_deserializer.deserialize<TReadCurrent>(str));
         end;
-        CmdErrorOccurred:
-        begin
-            if not Assigned(_OnErrorOccurred) then
-                raise Exception.Create('_OnErrorOccurred must be set');
-            _OnErrorOccurred(str);
-        end;
         CmdWorkComplete:
         begin
             if not Assigned(_OnWorkComplete) then
                 raise Exception.Create('_OnWorkComplete must be set');
-            _OnWorkComplete(str);
+            _OnWorkComplete(_deserializer.deserialize<TWorkResult>(str));
         end;
         CmdWorkStarted:
         begin
             if not Assigned(_OnWorkStarted) then
                 raise Exception.Create('_OnWorkStarted must be set');
             _OnWorkStarted(str);
-        end;
-        CmdWorkStopped:
-        begin
-            if not Assigned(_OnWorkStopped) then
-                raise Exception.Create('_OnWorkStopped must be set');
-            _OnWorkStopped(str);
         end;
         CmdStatus:
         begin
@@ -203,13 +188,7 @@ begin
         raise Exception.Create('_OnReadCurrent already set');
     _OnReadCurrent := AHandler;
 end;
-procedure SetOnErrorOccurred( AHandler : TStringHandler);
-begin
-    if Assigned(_OnErrorOccurred) then
-        raise Exception.Create('_OnErrorOccurred already set');
-    _OnErrorOccurred := AHandler;
-end;
-procedure SetOnWorkComplete( AHandler : TStringHandler);
+procedure SetOnWorkComplete( AHandler : TWorkResultHandler);
 begin
     if Assigned(_OnWorkComplete) then
         raise Exception.Create('_OnWorkComplete already set');
@@ -220,12 +199,6 @@ begin
     if Assigned(_OnWorkStarted) then
         raise Exception.Create('_OnWorkStarted already set');
     _OnWorkStarted := AHandler;
-end;
-procedure SetOnWorkStopped( AHandler : TStringHandler);
-begin
-    if Assigned(_OnWorkStopped) then
-        raise Exception.Create('_OnWorkStopped already set');
-    _OnWorkStopped := AHandler;
 end;
 procedure SetOnStatus( AHandler : TStringHandler);
 begin
