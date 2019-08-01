@@ -89,14 +89,12 @@ type
         procedure ToolButtonStopClick(Sender: TObject);
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-        procedure N2Click(Sender: TObject);
         procedure TimerPerformingTimer(Sender: TObject);
         procedure N3Click(Sender: TObject);
         procedure ToolButton5Click(Sender: TObject);
         procedure ToolButton6Click(Sender: TObject);
         procedure MenuItem8Click(Sender: TObject);
         procedure ToolButton10Click(Sender: TObject);
-        procedure MenuItem6Click(Sender: TObject);
         procedure MenuNewPartyClick(Sender: TObject);
         procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
@@ -323,7 +321,7 @@ begin
     SetOnDelay(SetupDelay);
 
     SetOnLastPartyChanged(
-        procedure(party: TParty)
+        procedure(party: TParty1)
         begin
             FormLastParty.SetParty(party);
             FormArchive.FetchYearsMonths;
@@ -633,11 +631,6 @@ begin
     notify_services.HandleCopydata(Message);
 end;
 
-procedure TElcoMainForm.MenuItem6Click(Sender: TObject);
-begin
-    TLastPartySvc.Export;
-end;
-
 procedure TElcoMainForm.MenuItem8Click(Sender: TObject);
 begin
     FormEditText.Show;
@@ -687,13 +680,6 @@ l:
     if not try_str_to_float(s, v) then
         goto l;
     FormLastParty.SetParty(TLastPartySvc.CalculateSensPlus50(v));
-end;
-
-procedure TElcoMainForm.N2Click(Sender: TObject);
-begin
-    FormLastParty.SetParty(TLastPartySvc.Import);
-    FormArchive.FetchYearsMonths;
-
 end;
 
 procedure TElcoMainForm.N3Click(Sender: TObject);

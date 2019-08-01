@@ -25,8 +25,6 @@ object FormAppConfig: TFormAppConfig
     Align = alClient
     Caption = #1050#1086#1085#1090#1088#1086#1083#1100' '#1082#1072#1095#1077#1089#1090#1074#1072' '#1069#1061#1071
     TabOrder = 0
-    ExplicitWidth = 689
-    ExplicitHeight = 283
     object GridPanel3: TGridPanel
       Left = 2
       Top = 23
@@ -181,56 +179,47 @@ object FormAppConfig: TFormAppConfig
           Value = 40.000000000000000000
         end>
       TabOrder = 0
-      ExplicitHeight = 322
       object Label10: TLabel
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 395
+        Width = 71
         Height = 21
         Align = alTop
         Alignment = taCenter
         Caption = #1055#1072#1088#1072#1084#1077#1090#1088
         WordWrap = True
-        ExplicitWidth = 71
       end
       object Label11: TLabel
         AlignWithMargins = True
         Left = 404
         Top = 3
-        Width = 114
+        Width = 71
         Height = 21
         Align = alTop
         Caption = #1052#1080#1085#1080#1084#1091#1084
         WordWrap = True
-        ExplicitLeft = 332
-        ExplicitWidth = 71
       end
       object Label12: TLabel
         AlignWithMargins = True
         Left = 524
         Top = 3
-        Width = 114
+        Width = 76
         Height = 21
         Align = alTop
         Caption = #1052#1072#1082#1089#1080#1084#1091#1084
         WordWrap = True
-        ExplicitLeft = 452
-        ExplicitWidth = 76
       end
       object Label14: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 267
         Top = 43
-        Width = 395
+        Width = 131
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1060#1086#1085#1086#1074#1099#1081' '#1090#1086#1082', '#1084#1082#1040
         WordWrap = True
-        ExplicitLeft = 311
-        ExplicitTop = 53
-        ExplicitWidth = 131
       end
       object Editfon20Min: TEdit
         AlignWithMargins = True
@@ -249,8 +238,6 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 0
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 448
-        ExplicitTop = 53
       end
       object Editfon20Max: TEdit
         AlignWithMargins = True
@@ -269,22 +256,17 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 1
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 568
-        ExplicitTop = 53
       end
       object Label17: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 138
         Top = 83
-        Width = 395
+        Width = 260
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1092#1086#1085#1086#1074#1086#1075#1086' '#1090#1086#1082#1072' '#1087#1088#1080' +20'#8304'C, '#1084#1082#1040
         WordWrap = True
-        ExplicitLeft = 182
-        ExplicitTop = 93
-        ExplicitWidth = 260
       end
       object EditDfon20Max: TEdit
         AlignWithMargins = True
@@ -303,35 +285,27 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 2
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 568
-        ExplicitTop = 93
       end
       object Label18: TLabel
         AlignWithMargins = True
-        Left = 404
+        Left = 514
         Top = 83
-        Width = 114
+        Width = 4
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         WordWrap = True
-        ExplicitLeft = 558
-        ExplicitTop = 93
-        ExplicitWidth = 4
       end
       object Label19: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 219
         Top = 123
-        Width = 395
+        Width = 179
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1050#1095' '#1087#1088#1080' +20'#8304'C, '#1084#1082#1040'/'#1082#1086#1085#1094'.'
         WordWrap = True
-        ExplicitLeft = 263
-        ExplicitTop = 133
-        ExplicitWidth = 179
       end
       object EditKch20Min: TEdit
         AlignWithMargins = True
@@ -350,8 +324,6 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 3
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 448
-        ExplicitTop = 133
       end
       object EditKch20Max: TEdit
         AlignWithMargins = True
@@ -370,22 +342,17 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 4
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 568
-        ExplicitTop = 133
       end
       object Label20: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 219
         Top = 163
-        Width = 395
+        Width = 179
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1050#1095' '#1087#1088#1080' +50'#8304'C, '#1084#1082#1040'/'#1082#1086#1085#1094'.'
         WordWrap = True
-        ExplicitLeft = 263
-        ExplicitTop = 173
-        ExplicitWidth = 179
       end
       object EditKch50Min: TEdit
         AlignWithMargins = True
@@ -404,8 +371,6 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 5
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 386
-        ExplicitTop = 171
       end
       object EditKch50Max: TEdit
         AlignWithMargins = True
@@ -424,22 +389,17 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 6
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 568
-        ExplicitTop = 173
       end
       object Label21: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 138
         Top = 203
-        Width = 395
+        Width = 260
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1092#1086#1085#1086#1074#1086#1075#1086' '#1090#1086#1082#1072' '#1087#1088#1080' +50'#8304'C, '#1084#1082#1040
         WordWrap = True
-        ExplicitLeft = 182
-        ExplicitTop = 213
-        ExplicitWidth = 260
       end
       object EditDfon50Min: TEdit
         AlignWithMargins = True
@@ -458,8 +418,6 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 7
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 448
-        ExplicitTop = 213
       end
       object EditDfon50Max: TEdit
         AlignWithMargins = True
@@ -478,28 +436,24 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 8
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 568
-        ExplicitTop = 213
       end
       object Label22: TLabel
         AlignWithMargins = True
-        Left = 3
+        Left = 126
         Top = 243
-        Width = 395
+        Width = 272
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1090#1086#1082#1072' '#1085#1072' '#1085#1077#1080#1079#1084#1077#1088#1103#1077#1084#1086#1084' '#1075#1072#1079#1077', '#1084#1082#1040
         WordWrap = True
-        ExplicitLeft = 126
-        ExplicitWidth = 272
       end
       object EditNotMeasuredMax: TEdit
         AlignWithMargins = True
         Left = 524
         Top = 243
         Width = 114
-        Height = 29
+        Height = 26
         Align = alTop
         Color = clInfoBk
         Font.Charset = DEFAULT_CHARSET
@@ -511,7 +465,6 @@ object FormAppConfig: TFormAppConfig
         TabOrder = 9
         Text = 'EditPgs1'
         OnChange = ComboBoxProductTypeNameChange
-        ExplicitLeft = 548
       end
     end
   end
@@ -525,7 +478,6 @@ object FormAppConfig: TFormAppConfig
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 1
-    ExplicitWidth = 689
     object GroupBox1: TGroupBox
       Left = 0
       Top = 0
@@ -534,7 +486,6 @@ object FormAppConfig: TFormAppConfig
       Align = alClient
       Caption = #1054#1073#1086#1088#1091#1076#1086#1074#1072#1085#1080#1077
       TabOrder = 0
-      ExplicitWidth = 625
       object GridPanel1: TGridPanel
         Left = 2
         Top = 23
@@ -641,7 +592,8 @@ object FormAppConfig: TFormAppConfig
             Value = 40.000000000000000000
           end>
         TabOrder = 0
-        ExplicitWidth = 375
+        ExplicitLeft = 3
+        ExplicitTop = 22
         object Label15: TLabel
           AlignWithMargins = True
           Left = 3
@@ -651,7 +603,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = '   '#1057#1054#1052' '#1087#1086#1088#1090' '#1089#1090#1077#1085#1076#1072
-          ExplicitLeft = 143
+          ExplicitLeft = 89
           ExplicitWidth = 138
         end
         object ComboBoxComportProducts: TComboBox
@@ -676,7 +628,6 @@ object FormAppConfig: TFormAppConfig
           OnChange = ComboBoxComportProductsChange
           Items.Strings = (
             'COM1')
-          ExplicitLeft = 287
         end
         object Label1: TLabel
           AlignWithMargins = True
@@ -688,7 +639,7 @@ object FormAppConfig: TFormAppConfig
           Alignment = taRightJustify
           Caption = '  '#1058#8304'C '#1086#1082#1088#1091#1078#1072#1102#1097#1077#1081' '#1089#1088#1077#1076#1099
           WordWrap = True
-          ExplicitLeft = 100
+          ExplicitLeft = 46
           ExplicitWidth = 181
         end
         object EditAmbientTemp: TEdit
@@ -708,8 +659,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 1
           Text = 'EditPgs1'
           OnChange = ComboBoxComportProductsChange
-          ExplicitLeft = 228
-          ExplicitTop = 75
         end
         object Label13: TLabel
           AlignWithMargins = True
@@ -721,7 +670,7 @@ object FormAppConfig: TFormAppConfig
           Alignment = taRightJustify
           Caption = #1055#1088#1086#1076#1091#1074#1082#1072' '#1075#1072#1079#1072', '#1084#1080#1085'.'
           WordWrap = True
-          ExplicitLeft = 139
+          ExplicitLeft = 85
           ExplicitWidth = 142
         end
         object EditDurMinutesBlowGas: TEdit
@@ -741,7 +690,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 2
           Text = 'EditPgs1'
           OnChange = ComboBoxComportProductsChange
-          ExplicitLeft = 287
         end
         object EditDurMinutesHoldTemperature: TEdit
           AlignWithMargins = True
@@ -760,7 +708,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 3
           Text = 'EditPgs1'
           OnChange = ComboBoxComportProductsChange
-          ExplicitLeft = 287
         end
         object Label16: TLabel
           AlignWithMargins = True
@@ -772,7 +719,7 @@ object FormAppConfig: TFormAppConfig
           Alignment = taRightJustify
           Caption = #1042#1099#1076#1077#1088#1078#1082#1072'  '#1058#8304'C, '#1084#1080#1085'.'
           WordWrap = True
-          ExplicitLeft = 136
+          ExplicitLeft = 82
           ExplicitWidth = 145
         end
         object Label2: TLabel
@@ -784,7 +731,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = '   '#1057#1054#1052' '#1087#1086#1088#1090' '#1075#1072#1079#1086#1074#1086#1075#1086' '#1073#1083#1086#1082#1072
-          ExplicitLeft = 83
+          ExplicitLeft = 29
           ExplicitWidth = 198
         end
         object ComboBoxComportGas: TComboBox
@@ -809,7 +756,6 @@ object FormAppConfig: TFormAppConfig
           OnChange = ComboBoxComportProductsChange
           Items.Strings = (
             'COM1')
-          ExplicitLeft = 287
         end
         object Label9: TLabel
           AlignWithMargins = True
@@ -821,7 +767,7 @@ object FormAppConfig: TFormAppConfig
           Alignment = taRightJustify
           Caption = #1058#1080#1087' '#1084#1080#1082#1088#1086#1089#1093#1077#1084#1099' '#1087#1072#1084#1103#1090#1080' '#1069#1061#1071
           WordWrap = True
-          ExplicitLeft = 73
+          ExplicitLeft = 19
           ExplicitWidth = 208
         end
         object ComboBoxChipType: TComboBox
@@ -846,7 +792,6 @@ object FormAppConfig: TFormAppConfig
             '24LC16'
             '24LC64'
             '24LC256')
-          ExplicitLeft = 287
         end
       end
     end
@@ -858,7 +803,6 @@ object FormAppConfig: TFormAppConfig
       Align = alRight
       Caption = #1047#1072#1075#1088#1091#1079#1082#1072' '#1069#1061#1071
       TabOrder = 1
-      ExplicitLeft = 656
       object GridPanel2: TGridPanel
         Left = 2
         Top = 23
@@ -965,8 +909,6 @@ object FormAppConfig: TFormAppConfig
             Value = 40.000000000000000000
           end>
         TabOrder = 0
-        ExplicitLeft = 1
-        ExplicitWidth = 221
         object Label3: TLabel
           AlignWithMargins = True
           Left = 3
@@ -976,7 +918,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
-          ExplicitLeft = 66
+          ExplicitLeft = 76
           ExplicitWidth = 88
         end
         object ComboBoxProductTypeName: TComboBox
@@ -1001,7 +943,6 @@ object FormAppConfig: TFormAppConfig
           OnChange = ComboBoxProductTypeNameChange
           Items.Strings = (
             'COM1')
-          ExplicitLeft = 160
         end
         object Label4: TLabel
           AlignWithMargins = True
@@ -1012,7 +953,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = #1043#1057#1054'-'#1055#1043#1057'1'
-          ExplicitLeft = 80
+          ExplicitLeft = 90
           ExplicitWidth = 74
         end
         object EditC1: TEdit
@@ -1032,7 +973,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 1
           Text = 'EditPgs1'
           OnChange = ComboBoxProductTypeNameChange
-          ExplicitLeft = 160
         end
         object Label5: TLabel
           AlignWithMargins = True
@@ -1043,7 +983,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = #1043#1057#1054'-'#1055#1043#1057'2'
-          ExplicitLeft = 80
+          ExplicitLeft = 90
           ExplicitWidth = 74
         end
         object EditC2: TEdit
@@ -1063,7 +1003,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 2
           Text = 'EditPgs1'
           OnChange = ComboBoxProductTypeNameChange
-          ExplicitLeft = 160
         end
         object Label7: TLabel
           AlignWithMargins = True
@@ -1074,7 +1013,7 @@ object FormAppConfig: TFormAppConfig
           Align = alTop
           Alignment = taRightJustify
           Caption = #1043#1057#1054'-'#1055#1043#1057'3'
-          ExplicitLeft = 80
+          ExplicitLeft = 90
           ExplicitWidth = 74
         end
         object EditC3: TEdit
@@ -1094,8 +1033,6 @@ object FormAppConfig: TFormAppConfig
           TabOrder = 3
           Text = 'EditPgs1'
           OnChange = ComboBoxProductTypeNameChange
-          ExplicitLeft = 103
-          ExplicitTop = 131
         end
         object Label8: TLabel
           AlignWithMargins = True
@@ -1119,7 +1056,7 @@ object FormAppConfig: TFormAppConfig
           Alignment = taRightJustify
           Caption = #1056#1072#1089#1095#1105#1090' T '#8304'C'
           WordWrap = True
-          ExplicitLeft = 74
+          ExplicitLeft = 84
           ExplicitWidth = 80
         end
         object ComboBoxPointsMethod: TComboBox
@@ -1145,7 +1082,6 @@ object FormAppConfig: TFormAppConfig
           Items.Strings = (
             '2 '#1090#1086#1095#1082#1080
             '3 '#1090#1086#1095#1082#1080)
-          ExplicitLeft = 160
         end
         object ComboBoxEndScaleGas: TComboBox
           AlignWithMargins = True
@@ -1170,9 +1106,6 @@ object FormAppConfig: TFormAppConfig
           Items.Strings = (
             #1055#1043#1057'2'
             #1055#1043#1057'3')
-          ExplicitLeft = 160
-          ExplicitTop = 165
-          ExplicitHeight = 29
         end
       end
     end
@@ -1185,7 +1118,6 @@ object FormAppConfig: TFormAppConfig
     Align = alBottom
     Caption = #1058#1077#1082#1089#1090' '#1087#1088#1080#1084#1077#1095#1072#1085#1080#1103' '#1090#1077#1082#1091#1097#1077#1081' '#1079#1072#1075#1088#1091#1079#1082#1080' '#1069#1061#1071
     TabOrder = 2
-    ExplicitTop = 582
     object Memo1: TMemo
       Left = 2
       Top = 23
@@ -1197,8 +1129,6 @@ object FormAppConfig: TFormAppConfig
         'Memo1')
       TabOrder = 0
       OnChange = ComboBoxProductTypeNameChange
-      ExplicitTop = 4
-      ExplicitHeight = 73
     end
   end
   object TimerDebounceParty: TTimer

@@ -13,10 +13,7 @@ type
     ImageError: TImage;
     ImageInfo: TImage;
     PanelMessageBoxTitle: TPanel;
-    ToolBar2: TToolBar;
-    ToolButton3: TToolButton;
     RichEditlMessageBoxText: TRichEdit;
-    ImageList3: TImageList;
     Button1: TButton;
     Button2: TButton;
     procedure Button1Click(Sender: TObject);

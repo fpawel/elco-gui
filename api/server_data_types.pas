@@ -7,9 +7,9 @@ uses Grijjy.Bson, Grijjy.Bson.Serialization;
 
 type
      
-    TNullString = record
+    TNullInt64 = record
     public 
-         [BsonElement('String')]Str : string;
+        Int64 : Int64;
         Valid : Boolean;
         
     end;
@@ -21,9 +21,9 @@ type
         
     end;
  
-    TNullInt64 = record
+    TNullString = record
     public 
-        Int64 : Int64;
+         [BsonElement('String')]Str : string;
         Valid : Boolean;
         
     end;
@@ -83,36 +83,17 @@ type
         
     end;
  
-    TParty = record
+    TParty1 = record
     public 
         PartyID : Int64;
-        OldPartyID : TNullString;
         CreatedAt : TDateTime;
-        UpdatedAt : TDateTime;
-        ProductTypeName : string;
-        Concentration1 : Double;
-        Concentration2 : Double;
-        Concentration3 : Double;
-        Note : TNullString;
-        MinFon : TNullFloat64;
-        MaxFon : TNullFloat64;
-        MaxDFon : TNullFloat64;
-        MinKSens20 : TNullFloat64;
-        MaxKSens20 : TNullFloat64;
-        MinKSens50 : TNullFloat64;
-        MaxKSens50 : TNullFloat64;
-        MinDTemp : TNullFloat64;
-        MaxDTemp : TNullFloat64;
-        MaxDNotMeasured : TNullFloat64;
-        PointsMethod : Int64;
         Products : TArray<TProduct>;
-        Last : Boolean;
         
     end;
  
     TParty2 = record
     public 
-        PartyID : Integer;
+        PartyID : Int64;
         Day : Integer;
         ProductTypeName : string;
         Note : TNullString;
@@ -133,7 +114,7 @@ type
         
     end;
  
-    TLastPartyValues = record
+    TParty3 = record
     public 
         ProductTypeName : string;
         Concentration1 : Double;

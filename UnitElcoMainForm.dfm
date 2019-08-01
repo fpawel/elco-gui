@@ -5743,18 +5743,34 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetArchive: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
@@ -11663,11 +11679,9 @@ object ElcoMainForm: TElcoMainForm
     end
     object MenuItem6: TMenuItem
       Caption = #1069#1082#1089#1087#1086#1088#1090
-      OnClick = MenuItem6Click
     end
     object MenuItem7: TMenuItem
       Caption = #1048#1084#1087#1086#1088#1090
-      OnClick = N2Click
     end
   end
 end

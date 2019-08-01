@@ -29,10 +29,10 @@ type
     procedure N1Click(Sender: TObject);
     private
         { Private declarations }
-        FParty: TParty;
+        FParty: TParty1;
         FColumns: TProductColumns;
 
-        procedure SetParty(AParty: TParty);
+        procedure SetParty(AParty: TParty1);
         procedure DoSetParty;
 
         procedure DrawCellText(ACol, ARow: Integer; Rect: TRect;
@@ -45,7 +45,7 @@ type
           read GetProductValue;
     public
         { Public declarations }
-        property Party: TParty read FParty write SetParty;
+        property Party: TParty1 read FParty write SetParty;
 
     end;
 
@@ -106,7 +106,7 @@ begin
         cnv.Brush.Color := clGradientInactiveCaption
     else if ARow = grd.Row then
         cnv.Brush.Color := clInfoBk
-    else if p.Production or p.HAsFirmware then
+    else if (p.Production = true) or (p.HAsFirmware = true) then
     begin
         cnv.Brush.Color := grd.Color;
         // cnv.Font.Color := clNavy;
@@ -131,7 +131,7 @@ begin
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
               p.Production);
         pcFirmware:
-            if p.HAsFirmware then
+            if p.HAsFirmware = true then
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
@@ -265,7 +265,7 @@ begin
     end;
 end;
 
-procedure TFormParty.SetParty(AParty: TParty);
+procedure TFormParty.SetParty(AParty: TParty1);
 begin
     FParty := AParty;
     DoSetParty;

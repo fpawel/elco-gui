@@ -44,7 +44,7 @@ type
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
 
-        FParty: TParty;
+        FParty: TParty1;
         FProducts: TArray<TProduct>;
         FColumns: TProductColumns;
 
@@ -70,13 +70,13 @@ type
         { Public declarations }
         procedure SetProductionAll(production: Boolean);
         procedure SetProductionBlock(block: Integer; production: Boolean);
-        procedure SetParty(party: TParty);
+        procedure SetParty(party: TParty1);
         procedure reload_data;
 
         procedure SetReadPlace(APlace: Integer);
         procedure SetReadBlock(ABlock: Integer);
 
-        property party: TParty read FParty;
+        property party: TParty1 read FParty;
 
     end;
 
@@ -416,7 +416,7 @@ begin
     bmp.Free
 end;
 
-procedure TFormLastParty.SetParty(party: TParty);
+procedure TFormLastParty.SetParty(party: TParty1);
 var
     i: Integer;
     ARow, ACol: Integer;

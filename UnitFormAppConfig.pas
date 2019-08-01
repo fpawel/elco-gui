@@ -130,7 +130,7 @@ end;
 
 procedure setNullFloatEd(ed: TEdit; v: TNullFloat64);
 begin
-    if v.Valid then
+    if v.Valid = true then
         ed.Text := FloatToStr(v.Float64)
     else
         ed.Text := '';
@@ -145,7 +145,7 @@ procedure TFormAppConfig.FormShow(Sender: TObject);
 var
     s: string;
     v: TGuiSettings;
-    p: TParty;
+    p: TParty3;
 
 begin
     FEnableOnEdit := false;
@@ -162,13 +162,13 @@ begin
     EditAmbientTemp.Text := FloatToStr(v.AmbientTemperature);
     EditDurMinutesBlowGas.Text := IntToStr(v.BlowGasMinutes);
     EditDurMinutesHoldTemperature.Text := IntToStr(v.HoldTemperatureMinutes);
-    if v.EndScaleGas2 then
+    if v.EndScaleGas2 = true then
         setupCB(ComboBoxEndScaleGas, 'œ√—2')
     else
         setupCB(ComboBoxEndScaleGas, 'œ√—3');
 
 
-    p := TLastPartySvc.Party;
+    p := TLastPartySvc.GetValues;
     setupCB(ComboBoxProductTypeName, p.ProductTypeName);
     EditC1.Text := FloatToStr(p.Concentration1);
     EditC2.Text := FloatToStr(p.Concentration2);
@@ -190,12 +190,10 @@ begin
     setNullFloatEd(EditKch50Max, p.MaxKSens50);
     setNullFloatEd(EditNotMeasuredMax, p.MaxDNotMeasured);
 
-    if p.Note.Valid then
+    if p.Note.Valid = true then
         Memo1.Lines.Text := p.Note.Str
     else
         Memo1.Lines.Text := '';
-
-    p.CreatedAt := now;
     FEnableOnEdit := true;
 end;
 
@@ -276,7 +274,7 @@ end;
 
 procedure TFormAppConfig.TimerDebouncePartyTimer(Sender: TObject);
 var
-    p: TLastPartyValues;
+    p: TParty3;
 begin
     TimerDebounceParty.Enabled := false;
     try
@@ -331,7 +329,7 @@ end;
 function TFormAppConfig.TryEdToNullFloat(ed: TEdit): TNullFloat64;
 begin
     result.Valid := try_str_to_float(ed.Text, result.Float64);
-    if result.Valid then
+    if result.Valid = true then
         exit;
     if length(Trim(ed.Text))=0 then
         exit;

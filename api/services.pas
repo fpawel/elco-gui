@@ -8,38 +8,33 @@ uses server_data_types, superobject;
 type 
      TPartiesCatalogueSvc = class 
     public
-        class function Days( Year: Integer; Month: Integer) : TArray<Integer>;static;
         class procedure DeletePartyID( param1: Int64) ;static;
-        class function Months( Year: Integer) : TArray<Integer>;static;
-        class function NewParty: TParty;static;
-        class function Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;static;
+        class function NewParty: TParty1;static;
         class function PartiesOfYearMonth( Year: Integer; Month: Integer) : TArray<TParty2>;static;
-        class function Party( param1: Int64) : TParty;static;
+        class function Party( param1: Int64) : TParty1;static;
         class procedure SetProductsProduction( ProductIDs: TArray<Int64>; Production: Boolean) ;static;
         class procedure ToggleProductProduction( param1: Int64) ;static;
-        class function Years: TArray<Integer>;static;
         class function YearsMonths: TArray<TYearMonth>;static;
          
     end; TLastPartySvc = class 
     public
-        class function CalculateFonMinus20: TParty;static;
-        class function CalculateSensMinus20( param1: Double) : TParty;static;
-        class function CalculateSensPlus50( param1: Double) : TParty;static;
+        class function CalculateFonMinus20: TParty1;static;
+        class function CalculateSensMinus20( param1: Double) : TParty1;static;
+        class function CalculateSensPlus50( param1: Double) : TParty1;static;
         class procedure DeleteProductAtPlace( param1: Integer) ;static;
-        class procedure Export;static;
         class function GetCheckBlocks: TGetCheckBlocksArg;static;
-        class function Import: TParty;static;
-        class function Party: TParty;static;
+        class function GetValues: TParty3;static;
+        class function Party: TParty1;static;
         class function PartyID: Int64;static;
         class function ProductAtPlace( param1: Integer) : TProduct;static;
         class procedure SelectAll( param1: Boolean) ;static;
-        class function SelectOnlyOkProductsProduction: TParty;static;
+        class function SelectOnlyOkProductsProduction: TParty1;static;
         class function SetBlockChecked( param1: Integer; param2: Integer) : Int64;static;
         class function SetPointsMethodInPlacesRange( Place1: Integer; Place2: Integer; Value: Integer) : Int64;static;
         class function SetProductNoteAtPlace( Place: Integer; Note: string) : Int64;static;
         class function SetProductSerialAtPlace( param1: Integer; param2: Integer) : Int64;static;
         class function SetProductTypeAtPlacesRange( Place1: Integer; Place2: Integer; ProductType: string) : Int64;static;
-        class procedure SetValues( Values: TLastPartyValues) ;static;
+        class procedure SetValues( P: TParty3) ;static;
         class function ToggleProductProductionAtPlace( param1: Integer) : Int64;static;
          
     end; TProductTypesSvc = class 
@@ -92,17 +87,6 @@ implementation
 uses HttpRpcClient, SuperObjectHelp, Grijjy.Bson.Serialization;
 
   
-class function TPartiesCatalogueSvc.Days( Year: Integer; Month: Integer) : TArray<Integer>;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    SuperObject_SetField(req, 'Year', Year);
-    SuperObject_SetField(req, 'Month', Month);
-    ThttpRpcClient.Call('PartiesCatalogueSvc.Days', req, Result); 
-end;
-
- 
 class procedure TPartiesCatalogueSvc.DeletePartyID( param1: Int64) ;
 var
     req : ISuperobject;
@@ -113,34 +97,12 @@ begin
 end;
 
  
-class function TPartiesCatalogueSvc.Months( Year: Integer) : TArray<Integer>;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    SuperObject_SetField(req, 'Year', Year);
-    ThttpRpcClient.Call('PartiesCatalogueSvc.Months', req, Result); 
-end;
-
- 
-class function TPartiesCatalogueSvc.NewParty: TParty;
+class function TPartiesCatalogueSvc.NewParty: TParty1;
 var
     req : ISuperobject;
 begin
     req := SO;
     ThttpRpcClient.Call('PartiesCatalogueSvc.NewParty', req, Result); 
-end;
-
- 
-class function TPartiesCatalogueSvc.Parties( Year: Integer; Month: Integer; Day: Integer) : TArray<TParty>;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    SuperObject_SetField(req, 'Year', Year);
-    SuperObject_SetField(req, 'Month', Month);
-    SuperObject_SetField(req, 'Day', Day);
-    ThttpRpcClient.Call('PartiesCatalogueSvc.Parties', req, Result); 
 end;
 
  
@@ -155,7 +117,7 @@ begin
 end;
 
  
-class function TPartiesCatalogueSvc.Party( param1: Int64) : TParty;
+class function TPartiesCatalogueSvc.Party( param1: Int64) : TParty1;
 var
     req : ISuperobject;
 begin
@@ -186,15 +148,6 @@ begin
 end;
 
  
-class function TPartiesCatalogueSvc.Years: TArray<Integer>;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    ThttpRpcClient.Call('PartiesCatalogueSvc.Years', req, Result); 
-end;
-
- 
 class function TPartiesCatalogueSvc.YearsMonths: TArray<TYearMonth>;
 var
     req : ISuperobject;
@@ -204,7 +157,7 @@ begin
 end;
 
   
-class function TLastPartySvc.CalculateFonMinus20: TParty;
+class function TLastPartySvc.CalculateFonMinus20: TParty1;
 var
     req : ISuperobject;
 begin
@@ -213,7 +166,7 @@ begin
 end;
 
  
-class function TLastPartySvc.CalculateSensMinus20( param1: Double) : TParty;
+class function TLastPartySvc.CalculateSensMinus20( param1: Double) : TParty1;
 var
     req : ISuperobject;
 begin
@@ -223,7 +176,7 @@ begin
 end;
 
  
-class function TLastPartySvc.CalculateSensPlus50( param1: Double) : TParty;
+class function TLastPartySvc.CalculateSensPlus50( param1: Double) : TParty1;
 var
     req : ISuperobject;
 begin
@@ -243,15 +196,6 @@ begin
 end;
 
  
-class procedure TLastPartySvc.Export;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    ThttpRpcClient.GetResponse('LastPartySvc.Export', req); 
-end;
-
- 
 class function TLastPartySvc.GetCheckBlocks: TGetCheckBlocksArg;
 var
     req : ISuperobject;
@@ -261,16 +205,16 @@ begin
 end;
 
  
-class function TLastPartySvc.Import: TParty;
+class function TLastPartySvc.GetValues: TParty3;
 var
     req : ISuperobject;
 begin
     req := SO;
-    ThttpRpcClient.Call('LastPartySvc.Import', req, Result); 
+    ThttpRpcClient.Call('LastPartySvc.GetValues', req, Result); 
 end;
 
  
-class function TLastPartySvc.Party: TParty;
+class function TLastPartySvc.Party: TParty1;
 var
     req : ISuperobject;
 begin
@@ -308,7 +252,7 @@ begin
 end;
 
  
-class function TLastPartySvc.SelectOnlyOkProductsProduction: TParty;
+class function TLastPartySvc.SelectOnlyOkProductsProduction: TParty1;
 var
     req : ISuperobject;
 begin
@@ -374,13 +318,13 @@ begin
 end;
 
  
-class procedure TLastPartySvc.SetValues( Values: TLastPartyValues) ;
+class procedure TLastPartySvc.SetValues( P: TParty3) ;
 var
     req : ISuperobject;
     s:string;
 begin
     req := SO;
-    TgoBsonSerializer.serialize(Values, s); req['Values'] := SO(s);
+    TgoBsonSerializer.serialize(P, s); req['P'] := SO(s);
     ThttpRpcClient.GetResponse('LastPartySvc.SetValues', req); 
 end;
 

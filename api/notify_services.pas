@@ -4,14 +4,14 @@ unit notify_services;
 interface
 uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
 type
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TWorkResultHandler = reference to procedure (x:TWorkResult);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
-    TPartyHandler = reference to procedure (x:TParty);
+    TParty1Handler = reference to procedure (x:TParty1);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TIntegerHandler = reference to procedure (x:Integer);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -25,7 +25,7 @@ procedure SetOnKtx500Error( AHandler : TStringHandler);
 procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnEndDelay( AHandler : TStringHandler);
-procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
+procedure SetOnLastPartyChanged( AHandler : TParty1Handler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
@@ -55,7 +55,7 @@ var
     _OnWarning : TStringHandler;
     _OnDelay : TDelayInfoHandler;
     _OnEndDelay : TStringHandler;
-    _OnLastPartyChanged : TPartyHandler;
+    _OnLastPartyChanged : TParty1Handler;
     _OnReadFirmware : TFirmwareInfoHandler;
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
@@ -144,7 +144,7 @@ begin
         begin
             if not Assigned(_OnLastPartyChanged) then
                 raise Exception.Create('_OnLastPartyChanged must be set');
-            _OnLastPartyChanged(_deserializer.deserialize<TParty>(str));
+            _OnLastPartyChanged(_deserializer.deserialize<TParty1>(str));
         end;
         CmdReadFirmware:
         begin
@@ -236,7 +236,7 @@ begin
         raise Exception.Create('_OnEndDelay already set');
     _OnEndDelay := AHandler;
 end;
-procedure SetOnLastPartyChanged( AHandler : TPartyHandler);
+procedure SetOnLastPartyChanged( AHandler : TParty1Handler);
 begin
     if Assigned(_OnLastPartyChanged) then
         raise Exception.Create('_OnLastPartyChanged already set');
