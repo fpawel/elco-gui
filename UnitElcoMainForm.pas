@@ -318,7 +318,7 @@ begin
         end);
 
     SetOnWarning(OnWarning);
-    SetOnDelay(SetupDelay);
+
 
     SetOnLastPartyChanged(
         procedure(party: TParty1)
@@ -379,6 +379,7 @@ begin
     SetOnReadPlace(FormLastParty.SetReadPlace);
     SetOnReadBlock(FormLastParty.SetReadBlock);
 
+    SetOnDelay(SetupDelay);
     SetOnEndDelay(
         procedure(s: string)
         begin
