@@ -475,8 +475,7 @@ begin
     else if PageControl.ActivePage = TabSheetInterrogate then
     begin
         FormInterrogate.UpdateCheckBlocks;
-    end else if PageControl.ActivePage = TabSheetJournalProducts then
-        FormJournalProducts.Fetch;
+    end;
 
 end;
 

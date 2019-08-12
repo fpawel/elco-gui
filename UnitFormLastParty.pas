@@ -551,8 +551,8 @@ begin
     try
         p := addr(FProducts[ARow - 1]);
         p.ProductId := TLastPartySvc.SetProductNoteAtPlace(p.Place, Value);
-        p.Note.str := Value;
-        p.Note.Valid := True;
+        p.NoteProduct.str := Value;
+        p.NoteProduct.Valid := True;
         PanelError.Visible := false;
     except
         on E: Exception do
@@ -565,11 +565,11 @@ begin
         end;
     end;
 
-    if Value <> p.Note.str then
+    if Value <> p.NoteProduct.str then
         with StringGrid1 do
         begin
             OnSetEditText := nil;
-            Cells[ACol, ARow] := p.Note.str;
+            Cells[ACol, ARow] := p.NoteProduct.str;
             OnSetEditText := StringGrid1SetEditText;
         end;
     StringGrid_RedrawRow(StringGrid1, ARow);

@@ -22,45 +22,31 @@ object FormJournalProducts: TFormJournalProducts
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 635
-    object Panel14: TPanel
-      AlignWithMargins = True
-      Left = 5
-      Top = 0
-      Width = 113
-      Height = 33
-      Margins.Left = 5
-      Margins.Top = 0
-      Margins.Right = 5
-      Margins.Bottom = 0
-      Align = alLeft
-      BevelOuter = bvNone
-      Caption = #1057#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088
-      TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitHeight = 65
-    end
     object Edit1: TEdit
       AlignWithMargins = True
-      Left = 128
+      Left = 230
       Top = 5
-      Width = 121
+      Width = 267
       Height = 23
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
       Margins.Bottom = 5
       Align = alLeft
-      TabOrder = 1
-      ExplicitLeft = 232
-      ExplicitTop = 8
-      ExplicitHeight = 26
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnChange = Edit1Change
     end
     object Panel3: TPanel
       AlignWithMargins = True
-      Left = 259
+      Left = 5
       Top = 0
-      Width = 102
+      Width = 60
       Height = 33
       Margins.Left = 5
       Margins.Top = 0
@@ -68,25 +54,61 @@ object FormJournalProducts: TFormJournalProducts
       Margins.Bottom = 0
       Align = alLeft
       BevelOuter = bvNone
-      Caption = #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
-      TabOrder = 2
-      ExplicitLeft = 483
+      Caption = #1060#1080#1083#1100#1090#1088':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
     end
-    object Edit2: TEdit
+    object ComboBox1: TComboBox
       AlignWithMargins = True
-      Left = 371
+      Left = 75
       Top = 5
-      Width = 696
+      Width = 145
       Height = 23
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
       Margins.Bottom = 5
-      Align = alClient
+      Align = alLeft
+      Style = csOwnerDrawFixed
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemHeight = 17
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 2
+      Text = #1057#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088
+      Items.Strings = (
+        #1057#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088
+        #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
+        #1053#1086#1084#1077#1088' '#1069#1061#1071
+        #1053#1086#1084#1077#1088' '#1079#1072#1075#1088#1091#1079#1082#1080)
+      ExplicitLeft = 38
+    end
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 505
+      Top = 3
+      Width = 77
+      Height = 27
+      Align = alLeft
+      Caption = #1087#1086#1080#1089#1082
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 3
-      ExplicitLeft = 683
-      ExplicitTop = 4
-      ExplicitWidth = 121
+      OnClick = Button1Click
+      ExplicitLeft = 992
     end
   end
   object StringGrid1: TStringGrid
@@ -106,9 +128,7 @@ object FormJournalProducts: TFormJournalProducts
     GradientEndColor = clBlack
     TabOrder = 1
     OnDrawCell = StringGrid1DrawCell
-    ExplicitTop = 3
-    ExplicitWidth = 629
-    ExplicitHeight = 293
+    OnSelectCell = StringGrid1SelectCell
     ColWidths = (
       64
       64
@@ -340,5 +360,9 @@ object FormJournalProducts: TFormJournalProducts
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000}
+  end
+  object Timer1: TTimer
+    Left = 352
+    Top = 152
   end
 end

@@ -190,7 +190,7 @@ begin
                 Result.Value := PointsMethod.GetStr;
 
             pcNote:
-                Result.Value := Note.Str;
+                Result.Value := NoteProduct.Str;
         else
             assert(false, 'uncmown case: ' + inttostr(integer(column)));
         end;
