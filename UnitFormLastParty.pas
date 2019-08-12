@@ -45,7 +45,7 @@ type
         Last_Edited_Col, Last_Edited_Row: Integer;
 
         FParty: TParty1;
-        FProducts: TArray<TProduct>;
+        FProducts: TArray<TProductInfo>;
         FColumns: TProductColumns;
 
         FReadPlace, FReadBlock: Integer;
@@ -182,7 +182,7 @@ procedure TFormLastParty.StringGrid1MouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
     ACol, ARow: Integer;
-    p: ^TProduct;
+    p: ^TProductInfo;
 begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
@@ -215,7 +215,7 @@ procedure TFormLastParty.StringGrid1DblClick(Sender: TObject);
 var
     ACol, ARow, i: Integer;
     pt: TPoint;
-    p: TProduct;
+    p: TProductInfo;
     f: Boolean;
 begin
     GetCursorPos(pt);
@@ -233,7 +233,7 @@ begin
     if ARow = 0 then
     begin
         for p in FProducts do
-            if p.production then
+            if p.production = true then
             begin
                 f := True;
                 break;
@@ -260,7 +260,7 @@ procedure TFormLastParty.StringGrid1DrawCell(Sender: TObject;
 var
     grd: TStringGrid;
     cnv: TCanvas;
-    p: TProduct;
+    p: TProductInfo;
 
 begin
     grd := StringGrid1;
@@ -299,7 +299,7 @@ begin
             StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
               p.production);
         pcFirmware:
-            if p.HasFirmware then
+            if p.HasFirmware = true then
                 DrawCellFirmware(Rect, State)
             else
                 StringGrid1.Canvas.FillRect(Rect);
@@ -489,7 +489,7 @@ end;
 procedure TFormLastParty.MenuCheckClick(Sender: TObject);
 var
     ARow: Integer;
-    p: ^TProduct;
+    p: ^TProductInfo;
     ProductIDs: TArray<Int64>;
 
 begin
@@ -529,7 +529,7 @@ end;
 procedure TFormLastParty.N2Click(Sender: TObject);
 var
     ARow: Integer;
-    p: ^TProduct;
+    p: ^TProductInfo;
 begin
     with StringGrid1.Selection do
         TLastPartySvc.SetPointsMethodInPlacesRange(Top - 1, Bottom - 1,
@@ -545,7 +545,7 @@ end;
 
 procedure TFormLastParty.UpdateNote(ACol, ARow: Integer; Value: string);
 var
-    p: ^TProduct;
+    p: ^TProductInfo;
 
 begin
     try
@@ -578,7 +578,7 @@ end;
 
 procedure TFormLastParty.UpdateSerial(ACol, ARow: Integer; Value: string);
 var
-    p: ^TProduct;
+    p: ^TProductInfo;
 begin
     try
         p := @FProducts[ARow - 1];
@@ -614,7 +614,7 @@ end;
 
 procedure TFormLastParty.SetProductionAll(production: Boolean);
 var
-    p: TProduct;
+    p: TProductInfo;
 begin
     TLastPartySvc.SelectAll(production);
     for p in FProducts do
@@ -628,7 +628,7 @@ end;
 procedure TFormLastParty.SetProductionBlock(block: Integer;
   production: Boolean);
 var
-    p: TProduct;
+    p: TProductInfo;
 begin
     TLastPartySvc.SetBlockChecked(block, Integer(production));
     for p in FProducts do

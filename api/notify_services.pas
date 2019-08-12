@@ -2,39 +2,42 @@
 unit notify_services;
 
 interface
-uses server_data_types, superobject, Winapi.Windows, Winapi.Messages;
+
+uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
+
 type
-    TWorkResultHandler = reference to procedure (x:TWorkResult);
-    TStringHandler = reference to procedure (x:string);
+    stringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TParty1Handler = reference to procedure (x:TParty1);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TIntegerHandler = reference to procedure (x:Integer);
+    IntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TWorkResultHandler = reference to procedure (x:TWorkResult);
     
 
 procedure HandleCopydata(var Message: TMessage);
 
 procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
 procedure SetOnWorkComplete( AHandler : TWorkResultHandler);
-procedure SetOnWorkStarted( AHandler : TStringHandler);
-procedure SetOnStatus( AHandler : TStringHandler);
+procedure SetOnWorkStarted( AHandler : stringHandler);
+procedure SetOnStatus( AHandler : stringHandler);
 procedure SetOnKtx500Info( AHandler : TKtx500InfoHandler);
-procedure SetOnKtx500Error( AHandler : TStringHandler);
-procedure SetOnWarning( AHandler : TStringHandler);
+procedure SetOnKtx500Error( AHandler : stringHandler);
+procedure SetOnWarning( AHandler : stringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
-procedure SetOnEndDelay( AHandler : TStringHandler);
+procedure SetOnEndDelay( AHandler : stringHandler);
 procedure SetOnLastPartyChanged( AHandler : TParty1Handler);
 procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
-procedure SetOnPanic( AHandler : TStringHandler);
-procedure SetOnWriteConsole( AHandler : TStringHandler);
-procedure SetOnReadPlace( AHandler : TIntegerHandler);
-procedure SetOnReadBlock( AHandler : TIntegerHandler);
+procedure SetOnPanic( AHandler : stringHandler);
+procedure SetOnWriteConsole( AHandler : stringHandler);
+procedure SetOnReadPlace( AHandler : IntegerHandler);
+procedure SetOnReadBlock( AHandler : IntegerHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
 implementation 
+
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
@@ -48,19 +51,19 @@ type
 var
     _OnReadCurrent : TReadCurrentHandler;
     _OnWorkComplete : TWorkResultHandler;
-    _OnWorkStarted : TStringHandler;
-    _OnStatus : TStringHandler;
+    _OnWorkStarted : stringHandler;
+    _OnStatus : stringHandler;
     _OnKtx500Info : TKtx500InfoHandler;
-    _OnKtx500Error : TStringHandler;
-    _OnWarning : TStringHandler;
+    _OnKtx500Error : stringHandler;
+    _OnWarning : stringHandler;
     _OnDelay : TDelayInfoHandler;
-    _OnEndDelay : TStringHandler;
+    _OnEndDelay : stringHandler;
     _OnLastPartyChanged : TParty1Handler;
     _OnReadFirmware : TFirmwareInfoHandler;
-    _OnPanic : TStringHandler;
-    _OnWriteConsole : TStringHandler;
-    _OnReadPlace : TIntegerHandler;
-    _OnReadBlock : TIntegerHandler;
+    _OnPanic : stringHandler;
+    _OnWriteConsole : stringHandler;
+    _OnReadPlace : IntegerHandler;
+    _OnReadBlock : IntegerHandler;
     _enabled:boolean;
 
 class function _deserializer.deserialize<T>(str:string):T;
@@ -194,13 +197,13 @@ begin
         raise Exception.Create('_OnWorkComplete already set');
     _OnWorkComplete := AHandler;
 end;
-procedure SetOnWorkStarted( AHandler : TStringHandler);
+procedure SetOnWorkStarted( AHandler : stringHandler);
 begin
     if Assigned(_OnWorkStarted) then
         raise Exception.Create('_OnWorkStarted already set');
     _OnWorkStarted := AHandler;
 end;
-procedure SetOnStatus( AHandler : TStringHandler);
+procedure SetOnStatus( AHandler : stringHandler);
 begin
     if Assigned(_OnStatus) then
         raise Exception.Create('_OnStatus already set');
@@ -212,13 +215,13 @@ begin
         raise Exception.Create('_OnKtx500Info already set');
     _OnKtx500Info := AHandler;
 end;
-procedure SetOnKtx500Error( AHandler : TStringHandler);
+procedure SetOnKtx500Error( AHandler : stringHandler);
 begin
     if Assigned(_OnKtx500Error) then
         raise Exception.Create('_OnKtx500Error already set');
     _OnKtx500Error := AHandler;
 end;
-procedure SetOnWarning( AHandler : TStringHandler);
+procedure SetOnWarning( AHandler : stringHandler);
 begin
     if Assigned(_OnWarning) then
         raise Exception.Create('_OnWarning already set');
@@ -230,7 +233,7 @@ begin
         raise Exception.Create('_OnDelay already set');
     _OnDelay := AHandler;
 end;
-procedure SetOnEndDelay( AHandler : TStringHandler);
+procedure SetOnEndDelay( AHandler : stringHandler);
 begin
     if Assigned(_OnEndDelay) then
         raise Exception.Create('_OnEndDelay already set');
@@ -248,25 +251,25 @@ begin
         raise Exception.Create('_OnReadFirmware already set');
     _OnReadFirmware := AHandler;
 end;
-procedure SetOnPanic( AHandler : TStringHandler);
+procedure SetOnPanic( AHandler : stringHandler);
 begin
     if Assigned(_OnPanic) then
         raise Exception.Create('_OnPanic already set');
     _OnPanic := AHandler;
 end;
-procedure SetOnWriteConsole( AHandler : TStringHandler);
+procedure SetOnWriteConsole( AHandler : stringHandler);
 begin
     if Assigned(_OnWriteConsole) then
         raise Exception.Create('_OnWriteConsole already set');
     _OnWriteConsole := AHandler;
 end;
-procedure SetOnReadPlace( AHandler : TIntegerHandler);
+procedure SetOnReadPlace( AHandler : IntegerHandler);
 begin
     if Assigned(_OnReadPlace) then
         raise Exception.Create('_OnReadPlace already set');
     _OnReadPlace := AHandler;
 end;
-procedure SetOnReadBlock( AHandler : TIntegerHandler);
+procedure SetOnReadBlock( AHandler : IntegerHandler);
 begin
     if Assigned(_OnReadBlock) then
         raise Exception.Create('_OnReadBlock already set');

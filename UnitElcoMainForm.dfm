@@ -5731,30 +5731,44 @@ object ElcoMainForm: TElcoMainForm
       Align = alClient
       MultiLine = True
       OwnerDraw = True
-      TabHeight = 100
+      TabHeight = 120
       TabOrder = 0
       TabPosition = tpLeft
-      TabWidth = 40
+      TabWidth = 50
       OnChange = PageControlMainChange
       OnDrawTab = PageControlMainDrawTab
       object TabSheetParty: TTabSheet
-        Caption = #1055#1072#1088#1090#1080#1103
+        Caption = #1058#1077#1082#1091#1097#1072#1103' '#1079#1072#1075#1088#1091#1079#1082#1072
+        ExplicitLeft = 104
+        ExplicitWidth = 805
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
+        ExplicitLeft = 104
+        ExplicitWidth = 805
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
+        ExplicitLeft = 104
+        ExplicitWidth = 805
       end
-      object TabSheetArchive: TTabSheet
-        Caption = #1040#1088#1093#1080#1074
+      object TabSheetJournalParties: TTabSheet
+        Caption = #1046#1091#1088#1085#1072#1083' '#1079#1072#1075#1088#1091#1079#1086#1082
         ImageIndex = 1
+        ExplicitLeft = 104
+        ExplicitWidth = 805
+      end
+      object TabSheetJournalProducts: TTabSheet
+        Caption = #1046#1091#1088#1085#1072#1083' '#1069#1061#1071
+        ImageIndex = 5
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
+        ExplicitLeft = 104
+        ExplicitWidth = 805
       end
     end
   end

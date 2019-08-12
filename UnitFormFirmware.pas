@@ -75,7 +75,7 @@ type
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
 
-        FProduct: TProduct;
+        FProduct: TProductInfo;
 
         procedure DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
           ta: TAlignment);
@@ -89,13 +89,13 @@ type
         procedure SetFirmwareInfo(f: TFirmwareInfo);
         procedure ClearFirmwareInfo;
 
-        procedure SetProduct(p: TProduct);
+        procedure SetProduct(p: TProductInfo);
         procedure applyProduct;
 
     public
         { Public declarations }
         procedure SetReadFirmwareInfo(f: TFirmwareInfo);
-        property Product: TProduct read FProduct write SetProduct;
+        property Product: TProductInfo read FProduct write SetProduct;
 
     end;
 
@@ -708,7 +708,7 @@ begin
     begin
         if RadioButton1.Checked then
         begin
-            if FProduct.HasFirmware then
+            if FProduct.HasFirmware = true then
                 SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo
                   (FProduct.ProductID))
             else
@@ -727,7 +727,7 @@ begin
     ComboBoxPlace.ItemIndex := FProduct.Place;
 end;
 
-procedure TFormFirmware.SetProduct(p: TProduct);
+procedure TFormFirmware.SetProduct(p: TProductInfo);
 begin
     FProduct := p;
     applyProduct;

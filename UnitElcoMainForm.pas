@@ -21,7 +21,7 @@ type
         N4: TMenuItem;
         PageControlMain: TPageControl;
         TabSheetParty: TTabSheet;
-        TabSheetArchive: TTabSheet;
+    TabSheetJournalParties: TTabSheet;
         ImageList4: TImageList;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
@@ -73,6 +73,7 @@ type
         N6: TMenuItem;
         N7: TMenuItem;
         N8: TMenuItem;
+    TabSheetJournalProducts: TTabSheet;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -149,7 +150,8 @@ uses stringgridutils, stringutils, JclDebug,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
-    UnitFormAppConfig, UnitFormArchive, UnitFormModalMessage;
+    UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
+  UnitFormJournalProducts;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -231,10 +233,10 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
-    with FormArchive do
+    with FormJournalParties do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetArchive;
+        Parent := TabSheetJournalParties;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -252,7 +254,7 @@ begin
     with FormParty do
     begin
         Font.Assign(self.Font);
-        Parent := FormArchive;
+        Parent := FormJournalParties;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -281,6 +283,15 @@ begin
     begin
         Font.Assign(self.Font);
         Parent := TabSheetInterrogate;
+        BorderStyle := bsNone;
+        Align := alClient;
+        Show;
+    end;
+
+    with FormJournalProducts do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetJournalProducts;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -324,7 +335,7 @@ begin
         procedure(party: TParty1)
         begin
             FormLastParty.SetParty(party);
-            FormArchive.FetchYearsMonths;
+            FormJournalParties.FetchYearsMonths;
         end);
 
     SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
@@ -441,14 +452,14 @@ begin
     PageControl := Sender as TPageControl;
     PageControl.Repaint;
     PanelMessageBox.Hide;
-    if PageControl.ActivePage = TabSheetArchive then
+    if PageControl.ActivePage = TabSheetJournalParties then
     begin
         if FormParty.party.PartyID = 0 then
             FormParty.party := TPartiesCatalogueSvc.party
               (FormParty.party.PartyID)
         else
             FormParty.party := TLastPartySvc.party;
-        FormArchive.FetchYearsMonths;
+        FormJournalParties.FetchYearsMonths;
 
         // if not FormParties.HasYears then
         // begin
@@ -464,7 +475,8 @@ begin
     else if PageControl.ActivePage = TabSheetInterrogate then
     begin
         FormInterrogate.UpdateCheckBlocks;
-    end;
+    end else if PageControl.ActivePage = TabSheetJournalProducts then
+        FormJournalProducts.Fetch;
 
 end;
 

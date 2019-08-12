@@ -62,8 +62,9 @@ uses
   Grijjy.Collections in 'grijjy\Grijjy.Collections.pas',
   Grijjy.OpenSSL in 'grijjy\Grijjy.OpenSSL.pas',
   UnitFormAppConfig in 'UnitFormAppConfig.pas' {FormAppConfig},
-  UnitFormArchive in 'UnitFormArchive.pas' {FormArchive},
-  UnitFormModalMessage in 'UnitFormModalMessage.pas' {FormModalMessage};
+  UnitFormJournalParties in 'UnitFormJournalParties.pas' {FormJournalParties},
+  UnitFormModalMessage in 'UnitFormModalMessage.pas' {FormModalMessage},
+  UnitFormJournalProducts in 'UnitFormJournalProducts.pas' {FormJournalProducts};
 
 {$R *.res}
 
@@ -95,8 +96,9 @@ begin
   Application.CreateForm(TFormKtx500, FormKtx500);
   Application.CreateForm(TFormProductTypeDialog, FormProductTypeDialog);
   Application.CreateForm(TFormAppConfig, FormAppConfig);
-  Application.CreateForm(TFormArchive, FormArchive);
+  Application.CreateForm(TFormJournalParties, FormJournalParties);
   Application.CreateForm(TFormModalMessage, FormModalMessage);
+  Application.CreateForm(TFormJournalProducts, FormJournalProducts);
   Application.Run;
 
 end.

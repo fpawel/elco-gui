@@ -1,4 +1,4 @@
-unit UnitFormArchive;
+unit UnitFormJournalParties;
 
 interface
 
@@ -9,7 +9,7 @@ uses
     server_data_types, Vcl.Menus;
 
 type
-    TFormArchive = class(TForm)
+    TFormJournalParties = class(TForm)
         Panel1: TPanel;
         StringGrid1: TStringGrid;
         Panel3: TPanel;
@@ -44,7 +44,7 @@ type
     end;
 
 var
-    FormArchive: TFormArchive;
+    FormJournalParties: TFormJournalParties;
 
 implementation
 
@@ -53,24 +53,24 @@ implementation
 uses httprpcclient, dateutils, stringgridutils, stringutils, services,
     UnitFormParty, UnitFormLastParty;
 
-procedure TFormArchive.FormCreate(Sender: TObject);
+procedure TFormJournalParties.FormCreate(Sender: TObject);
 begin
     //
 end;
 
-procedure TFormArchive.FormShow(Sender: TObject);
+procedure TFormJournalParties.FormShow(Sender: TObject);
 begin
     //
 end;
 
-procedure TFormArchive.MenuCopyItemClick(Sender: TObject);
+procedure TFormJournalParties.MenuCopyItemClick(Sender: TObject);
 begin
     if StringGrid1.Row < 1 then
         exit;
     TRunnerSvc.CopyParty(Party.PartyID);
 end;
 
-procedure TFormArchive.MenuDeleteItemClick(Sender: TObject);
+procedure TFormJournalParties.MenuDeleteItemClick(Sender: TObject);
 begin
     if StringGrid1.Row < 1 then
         exit;
@@ -82,14 +82,14 @@ begin
     ComboBox1Change(nil);
 end;
 
-procedure TFormArchive.MenuPDFClick(Sender: TObject);
+procedure TFormJournalParties.MenuPDFClick(Sender: TObject);
 begin
     if StringGrid1.Row < 1 then
         exit;
     TPdfSvc.RunPartyID(Party.PartyID);
 end;
 
-procedure TFormArchive.Panel1Resize(Sender: TObject);
+procedure TFormJournalParties.Panel1Resize(Sender: TObject);
 begin
     with StringGrid1 do
     begin
@@ -102,7 +102,7 @@ begin
     end;
 end;
 
-procedure TFormArchive.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+procedure TFormJournalParties.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var
     grd: TStringGrid;
@@ -131,18 +131,18 @@ begin
                 cnv.Font.Color := clBlack;
             end;
     end;
-    DrawCellText(StringGrid1, ACol, ARow, Rect, ta,
+    StringGrid_DrawCellText(StringGrid1, ACol, ARow, Rect, ta,
       StringGrid1.Cells[ACol, ARow]);
 end;
 
-procedure TFormArchive.StringGrid1KeyDown(Sender: TObject; var Key: Word;
+procedure TFormJournalParties.StringGrid1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
     if Key =  VK_DELETE then
         MenuDeleteItem.Click;
 end;
 
-procedure TFormArchive.StringGrid1SelectCell(Sender: TObject;
+procedure TFormJournalParties.StringGrid1SelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 begin
     if ARow - 1 >= length(FParties) then
@@ -154,7 +154,7 @@ begin
     // [FBuckets[ARow - 1].BucketID]), OnResponse);
 end;
 
-procedure TFormArchive.ComboBox1Change(Sender: TObject);
+procedure TFormJournalParties.ComboBox1Change(Sender: TObject);
 var
     I: Integer;
 begin
@@ -192,7 +192,7 @@ begin
 
 end;
 
-procedure TFormArchive.FetchYearsMonths;
+procedure TFormJournalParties.FetchYearsMonths;
 var
     I: Integer;
     ym: TYearMonth;
@@ -217,12 +217,12 @@ begin
 end;
 
 
-function TFormArchive.Party: TParty2;
+function TFormJournalParties.Party: TParty2;
 begin
     result := FParties[StringGrid1.Row - 1];
 end;
 
-function TFormArchive.PartyStr: string;
+function TFormJournalParties.PartyStr: string;
 begin
     result := format('№%d %s, день %s, %s', [Party.PartyID, ComboBox1.Text,
         inttostr2( Party.Day),

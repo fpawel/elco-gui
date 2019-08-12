@@ -52,14 +52,14 @@ function BadProdVal(AValue: String): RProductValue;
 
 function ProdColumnAlignment(pc: TProductColumn): TAlignment;
 
-function GetProductColumnValue(product: TProduct; column: TProductColumn)
+function GetProductColumnValue(product: TProductInfo; column: TProductColumn)
   : RProductValue;
 
-function GetProductColumns(prods: TArray<TProduct>; cols: TProductColumnsSet)
+function GetProductColumns(prods: TArray<TProductInfo>; cols: TProductColumnsSet)
   : TProductColumns;
 
 function ProductColumnWidth(column: TProductColumn; canvas: TCanvas;
-  prods: TArray<TProduct>): integer;
+  prods: TArray<TProductInfo>): integer;
 
 implementation
 
@@ -67,7 +67,7 @@ uses System.SysUtils;
 
 function ff(v: TNullFloat64): string;
 begin
-    if v.Valid then
+    if v.Valid = true then
         Result := floattostr(v.Float64)
     else
         Result := '';
@@ -77,11 +77,11 @@ function Chk2(v: TNullFloat64; a, b: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.Valid then
+    if v.Valid = false then
         exit;
     Result.Value := floattostr(v.Float64);
 
-    if v.Valid then
+    if v.Valid = true then
     begin
         if a AND b then
             Result.Valid := vpvValid
@@ -95,11 +95,11 @@ function Chk3(v: TNullFloat64; a, b, c: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.Valid then
+    if v.Valid = false then
         exit;
     Result.Value := floattostr(v.Float64);
 
-    if v.Valid then
+    if v.Valid = true then
     begin
         if a AND b AND c then
             Result.Valid := vpvValid
@@ -113,7 +113,7 @@ function Chk(v: TNullFloat64; c: boolean): RProductValue;
 begin
     Result.Value := '';
     Result.Valid := vpvNotCheck;
-    if not v.Valid then
+    if v.Valid = false then
         exit;
     Result.Value := floattostr(v.Float64);
 
@@ -124,7 +124,7 @@ begin
 
 end;
 
-function GetProductColumnValue(product: TProduct; column: TProductColumn)
+function GetProductColumnValue(product: TProductInfo; column: TProductColumn)
   : RProductValue;
 begin
     Result.Valid := vpvNotCheck;
@@ -145,11 +145,11 @@ begin
                 ;
 
             pcSerial:
-                if Serial.Valid then
+                if Serial.Valid = true then
                     Result.Value := inttostr(Serial.Int64);
 
             pcProdType:
-                if ProductTypeName.Valid then
+                if ProductTypeName.Valid = true then
                     Result.Value := ProductTypeName.Str;
             pcFon20:
                 Result := Chk2(IFPlus20, OkMinFon20, OkMaxFon20);
@@ -197,10 +197,10 @@ begin
 
 end;
 
-function GetProductColumns(prods: TArray<TProduct>; cols: TProductColumnsSet)
+function GetProductColumns(prods: TArray<TProductInfo>; cols: TProductColumnsSet)
   : TProductColumns;
 var
-    p: TProduct;
+    p: TProductInfo;
     c: TProductColumn;
 begin
     // [pcCol0, pcSerial]
@@ -259,9 +259,9 @@ begin
 end;
 
 function ProductColumnWidth(column: TProductColumn; canvas: TCanvas;
-  prods: TArray<TProduct>): integer;
+  prods: TArray<TProductInfo>): integer;
 var
-    p: TProduct;
+    p: TProductInfo;
     w: integer;
 begin
 

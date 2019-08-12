@@ -67,7 +67,7 @@ procedure TFormParty.StringGrid1DblClick(Sender: TObject);
 var
     ACol, ARow: Integer;
     pt: TPoint;
-    product: TProduct;
+    product: TProductInfo;
     f: TFirmwareInfo;
 begin
     GetCursorPos(pt);
@@ -84,7 +84,7 @@ procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
 var
     grd: TStringGrid;
     cnv: TCanvas;
-    p: TProduct;
+    p: TProductInfo;
     pcol: TProductColumn;
 
 begin
@@ -155,7 +155,7 @@ procedure TFormParty.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
     ACol, ARow: Integer;
-    p: TProduct;
+    p: TProductInfo;
 begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
@@ -282,7 +282,7 @@ end;
 procedure TFormParty.MenuCheckClick(Sender: TObject);
 var
     ARow: Integer;
-    p: ^TProduct;
+    p: ^TProductInfo;
     ProductIDs: TArray<Int64>;
 
 begin

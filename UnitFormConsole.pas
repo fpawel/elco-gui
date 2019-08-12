@@ -177,7 +177,7 @@ begin
 
             end;
 
-    DrawCellText(StringGrid1, ACol, ARow, Rect, ta, AText);
+    StringGrid_DrawCellText(StringGrid1, ACol, ARow, Rect, ta, AText);
     // StringGrid_DrawCellBounds(StringGrid1.Canvas, ACol, ARow, Rect);
 end;
 

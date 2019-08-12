@@ -200,12 +200,16 @@
             <Form>FormAppConfig</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="UnitFormArchive.pas">
-            <Form>FormArchive</Form>
+        <DCCReference Include="UnitFormJournalParties.pas">
+            <Form>FormJournalParties</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFormModalMessage.pas">
             <Form>FormModalMessage</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnitFormJournalProducts.pas">
+            <Form>FormJournalProducts</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
@@ -234,10 +238,10 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
+                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo150x150.png</RemoteName>
+                        <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -261,10 +265,10 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo44x44.png</RemoteName>
+                        <RemoteName>Logo150x150.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

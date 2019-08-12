@@ -1,7 +1,7 @@
-object FormArchive: TFormArchive
+object FormJournalParties: TFormJournalParties
   Left = 0
   Top = 0
-  Caption = 'FormArchive'
+  Caption = 'FormJournalParties'
   ClientHeight = 557
   ClientWidth = 635
   Color = clWindow
@@ -61,8 +61,6 @@ object FormArchive: TFormArchive
       OnDrawCell = StringGrid1DrawCell
       OnKeyDown = StringGrid1KeyDown
       OnSelectCell = StringGrid1SelectCell
-      ExplicitLeft = 0
-      ExplicitWidth = 259
       ColWidths = (
         64
         64
@@ -89,7 +87,6 @@ object FormArchive: TFormArchive
       ParentBackground = False
       ParentFont = False
       TabOrder = 1
-      ExplicitWidth = 265
       object ComboBox1: TComboBox
         Left = 77
         Top = 2
