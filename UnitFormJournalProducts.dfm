@@ -41,6 +41,8 @@ object FormJournalProducts: TFormJournalProducts
       ParentFont = False
       TabOrder = 0
       OnChange = Edit1Change
+      OnKeyDown = Edit1KeyDown
+      ExplicitHeight = 24
     end
     object Panel3: TPanel
       AlignWithMargins = True
@@ -90,7 +92,6 @@ object FormJournalProducts: TFormJournalProducts
         #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
         #1053#1086#1084#1077#1088' '#1069#1061#1071
         #1053#1086#1084#1077#1088' '#1079#1072#1075#1088#1091#1079#1082#1080)
-      ExplicitLeft = 38
     end
     object Button1: TButton
       AlignWithMargins = True
@@ -108,7 +109,6 @@ object FormJournalProducts: TFormJournalProducts
       ParentFont = False
       TabOrder = 3
       OnClick = Button1Click
-      ExplicitLeft = 992
     end
   end
   object StringGrid1: TStringGrid

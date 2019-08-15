@@ -5454,11 +5454,12 @@ object ElcoMainForm: TElcoMainForm
       Left = 128
       Top = 5
       Width = 100
-      Height = 18
+      Height = 23
       Margins.Left = 5
       Margins.Top = 5
       Align = alLeft
       Caption = 'LabelStatusTop'
+      ExplicitHeight = 18
     end
     object ToolBar1: TToolBar
       Left = 0
@@ -5538,7 +5539,7 @@ object ElcoMainForm: TElcoMainForm
         Left = 5
         Top = 3
         Width = 58
-        Height = 18
+        Height = 25
         Margins.Left = 5
         Margins.Right = 5
         Align = alLeft
@@ -5550,13 +5551,14 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitHeight = 18
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
         Left = 498
         Top = 3
         Width = 50
-        Height = 18
+        Height = 25
         Margins.Left = 5
         Margins.Right = 5
         Align = alRight
@@ -5570,6 +5572,7 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
         Left = 553
@@ -5728,7 +5731,7 @@ object ElcoMainForm: TElcoMainForm
       Align = alClient
       MultiLine = True
       OwnerDraw = True
-      TabHeight = 120
+      TabHeight = 80
       TabOrder = 0
       TabPosition = tpLeft
       TabWidth = 50
@@ -5736,10 +5739,8 @@ object ElcoMainForm: TElcoMainForm
       OnDrawTab = PageControlMainDrawTab
       object TabSheetParty: TTabSheet
         Caption = #1058#1077#1082#1091#1097#1072#1103' '#1079#1072#1075#1088#1091#1079#1082#1072
-        ExplicitLeft = 104
-        ExplicitTop = 0
-        ExplicitWidth = 805
-        ExplicitHeight = 0
+        ExplicitLeft = 124
+        ExplicitWidth = 785
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
@@ -6035,7 +6036,6 @@ object ElcoMainForm: TElcoMainForm
         Left = 544
         Top = 0
         Width = 33
-        Height = 29
         Align = alRight
         ButtonHeight = 31
         ButtonWidth = 32
@@ -6110,17 +6110,19 @@ object ElcoMainForm: TElcoMainForm
       Left = 0
       Top = 0
       Width = 74
-      Height = 18
+      Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
+      ExplicitHeight = 18
     end
     object LabelStatusKtx500: TLabel
       Left = 451
       Top = 0
       Width = 74
-      Height = 18
+      Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
+      ExplicitHeight = 18
     end
   end
   object ImageList3: TImageList

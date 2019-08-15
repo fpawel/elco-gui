@@ -99,7 +99,9 @@ type
     TProductsCatalogueSvc = class
     public
         class function ListProductsByNote(param1:string):TArray<TArray<TCell>>;static;
+        class function ListProductsByPartyID(param1:Integer):TArray<TArray<TCell>>;static;
         class function ListProductsBySerial(param1:Integer):TArray<TArray<TCell>>;static;
+        class function ProductByID(param1:Int64):TArray<TArray<TCell>>;static;
          
     end;
 
@@ -779,6 +781,19 @@ begin
 end;
 
 
+class function TProductsCatalogueSvc.ListProductsByPartyID(param1:Integer):TArray<TArray<TCell>>;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+
+    req.AsArray.Add(param1); 
+    
+
+    ThttpRpcClient.Call('ProductsCatalogueSvc.ListProductsByPartyID', req, Result); 
+end;
+
+
 class function TProductsCatalogueSvc.ListProductsBySerial(param1:Integer):TArray<TArray<TCell>>;
 var
     req : ISuperobject;
@@ -789,6 +804,19 @@ begin
     
 
     ThttpRpcClient.Call('ProductsCatalogueSvc.ListProductsBySerial', req, Result); 
+end;
+
+
+class function TProductsCatalogueSvc.ProductByID(param1:Int64):TArray<TArray<TCell>>;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+
+    req.AsArray.Add(param1); 
+    
+
+    ThttpRpcClient.Call('ProductsCatalogueSvc.ProductByID', req, Result); 
 end;
 
  

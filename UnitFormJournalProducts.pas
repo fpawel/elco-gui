@@ -25,6 +25,7 @@ type
           var CanSelect: Boolean);
         procedure Edit1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Edit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     private
         { Private declarations }
         FTable: TArray<TArray<TCell>>;
@@ -159,9 +160,14 @@ begin
         0:
             if TryStrToInt(Edit1.Text, n) then
                 FTable := TProductsCatalogueSvc.ListProductsBySerial(n);
-
         1:
             FTable := TProductsCatalogueSvc.ListProductsByNote(Edit1.Text);
+        2:
+            if TryStrToInt(Edit1.Text, n) then
+                FTable := TProductsCatalogueSvc.ProductByID(n);
+        3:
+            if TryStrToInt(Edit1.Text, n) then
+                FTable := TProductsCatalogueSvc.ListProductsByPartyID(n);
 
     end;
 
@@ -184,6 +190,13 @@ end;
 procedure TFormJournalProducts.Edit1Change(Sender: TObject);
 begin
     Timer1.Enabled := true;
+end;
+
+procedure TFormJournalProducts.Edit1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    if Key = VK_RETURN then
+        Button1.Click;
 end;
 
 end.
