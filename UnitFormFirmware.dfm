@@ -35,8 +35,6 @@ object FormFirmware: TFormFirmware
       BevelOuter = bvNone
       FlowStyle = fsTopBottomLeftRight
       TabOrder = 0
-      ExplicitLeft = 6
-      ExplicitTop = 32
       object Label2: TLabel
         AlignWithMargins = True
         Left = 3
@@ -482,7 +480,7 @@ object FormFirmware: TFormFirmware
         ImageIndex = 0
         ParentShowHint = False
         ShowHint = True
-        OnClick = Chart1AfterDraw
+        OnClick = ToolButton2Click
       end
     end
   end

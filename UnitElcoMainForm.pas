@@ -21,7 +21,7 @@ type
         N4: TMenuItem;
         PageControlMain: TPageControl;
         TabSheetParty: TTabSheet;
-    TabSheetJournalParties: TTabSheet;
+        TabSheetJournalParties: TTabSheet;
         ImageList4: TImageList;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
@@ -73,7 +73,7 @@ type
         N6: TMenuItem;
         N7: TMenuItem;
         N8: TMenuItem;
-    TabSheetJournalProducts: TTabSheet;
+        TabSheetJournalProducts: TTabSheet;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -151,7 +151,7 @@ uses stringgridutils, stringutils, JclDebug,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
-  UnitFormJournalProducts;
+    UnitFormJournalProducts;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -329,7 +329,6 @@ begin
         end);
 
     SetOnWarning(OnWarning);
-
 
     SetOnLastPartyChanged(
         procedure(party: TParty1)
@@ -729,8 +728,9 @@ begin
     v := 0;
     LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
       IncSecond(0, i.ElapsedSeconds));
-    LabelProgress.Caption :=
-      inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
+    if ProgressBar1.Max <> 0 then
+        LabelProgress.Caption :=
+          inttostr(ceil(ProgressBar1.Position * 100 / ProgressBar1.Max)) + '%';
 end;
 
 procedure TElcoMainForm.OnReadCurrent(v: TReadCurrent);
@@ -851,7 +851,7 @@ begin
     s := content + #10#13#10#13;
     s := s + '"Принять" - игнорировать ошибку и продолжить.'#10#13#10#13;
     s := s + '"Отмена" - прервать выполнение.';
-    //FormModalMessage.Parent := self;
+    // FormModalMessage.Parent := self;
     FormModalMessage.PanelMessageBoxTitle.Caption := 'Предупреждение';
     FormModalMessage.RichEditlMessageBoxText.Text := content;
     FormModalMessage.ImageInfo.Hide;
@@ -861,11 +861,11 @@ begin
     if FormModalMessage.ModalResult <> mrOk then
         TRunnerSvc.StopHardware;
 
-//    s := content + #10#13#10#13;
-//    s := s + '"Ok" - игнорировать ошибку и продолжить.'#10#13#10#13;
-//    s := s + '"Cancel" - прервать выполнение.';
-//    if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
-//        TRunnerSvc.StopHardware;
+    // s := content + #10#13#10#13;
+    // s := s + '"Ok" - игнорировать ошибку и продолжить.'#10#13#10#13;
+    // s := s + '"Cancel" - прервать выполнение.';
+    // if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
+    // TRunnerSvc.StopHardware;
 end;
 
 end.

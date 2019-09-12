@@ -6,17 +6,18 @@ interface
 uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
 
 type
-    TStringHandler = reference to procedure (x:string);
-    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TParty1Handler = reference to procedure (x:TParty1);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TIntegerHandler = reference to procedure (x:Integer);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TWorkResultHandler = reference to procedure (x:TWorkResult);
+    TStringHandler = reference to procedure (x:string);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     
 
 procedure HandleCopydata(var Message: TMessage);
+procedure CloseServerWindow;
 
 procedure SetOnReadCurrent( AHandler : TReadCurrentHandler);
 procedure SetOnWorkComplete( AHandler : TWorkResultHandler);
@@ -65,6 +66,11 @@ var
     _OnReadPlace : TIntegerHandler;
     _OnReadBlock : TIntegerHandler;
     _enabled:boolean;
+
+procedure CloseServerWindow;
+begin
+    SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0)
+end;
 
 class function _deserializer.deserialize<T>(str:string):T;
 begin

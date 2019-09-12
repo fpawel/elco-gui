@@ -55,7 +55,6 @@ uses
   Grijjy.Uri in 'grijjy\Grijjy.Uri.pas',
   Grijjy.Winsock2 in 'grijjy\Grijjy.Winsock2.pas',
   Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas',
-  HttpRpcClient in 'utils\HttpRpcClient.pas',
   SuperObjectHelp in 'utils\SuperObjectHelp.pas',
   UnitFormProductTypeDialog in 'UnitFormProductTypeDialog.pas' {FormProductTypeDialog},
   Grijjy.Bson.IO in 'grijjy\Grijjy.Bson.IO.pas',
@@ -64,7 +63,10 @@ uses
   UnitFormAppConfig in 'UnitFormAppConfig.pas' {FormAppConfig},
   UnitFormJournalParties in 'UnitFormJournalParties.pas' {FormJournalParties},
   UnitFormModalMessage in 'UnitFormModalMessage.pas' {FormModalMessage},
-  UnitFormJournalProducts in 'UnitFormJournalProducts.pas' {FormJournalProducts};
+  UnitFormJournalProducts in 'UnitFormJournalProducts.pas' {FormJournalProducts},
+  HttpClient in 'api\HttpClient.pas',
+  HttpExceptions in 'api\HttpExceptions.pas',
+  HttpRpcClient in 'api\HttpRpcClient.pas';
 
 {$R *.res}
 

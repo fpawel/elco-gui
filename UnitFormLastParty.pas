@@ -86,7 +86,7 @@ var
 implementation
 
 uses stringgridutils, stringutils, superobject, server_data_types_helpers,
-    services, UnitFormFirmware, dateutils, UnitFormSelectProducts,
+    services, UnitFormFirmware, dateutils, UnitFormSelectProducts,  HttpExceptions,
     HttpRpcClient, UnitFormSelectStendPlacesDialog, UnitFormProductTypeDialog;
 
 {$R *.dfm}

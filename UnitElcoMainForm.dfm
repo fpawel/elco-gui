@@ -5739,8 +5739,6 @@ object ElcoMainForm: TElcoMainForm
       OnDrawTab = PageControlMainDrawTab
       object TabSheetParty: TTabSheet
         Caption = #1058#1077#1082#1091#1097#1072#1103' '#1079#1072#1075#1088#1091#1079#1082#1072
-        ExplicitLeft = 124
-        ExplicitWidth = 785
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
