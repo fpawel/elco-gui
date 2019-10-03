@@ -5743,42 +5743,22 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 4
-        ExplicitLeft = 104
-        ExplicitTop = 0
-        ExplicitWidth = 805
-        ExplicitHeight = 0
       end
       object TabSheetKtx500: TTabSheet
         Caption = #1050#1058#1061'-500'
         ImageIndex = 4
-        ExplicitLeft = 104
-        ExplicitTop = 0
-        ExplicitWidth = 805
-        ExplicitHeight = 0
       end
       object TabSheetJournalParties: TTabSheet
         Caption = #1046#1091#1088#1085#1072#1083' '#1079#1072#1075#1088#1091#1079#1086#1082
         ImageIndex = 1
-        ExplicitLeft = 104
-        ExplicitTop = 0
-        ExplicitWidth = 805
-        ExplicitHeight = 0
       end
       object TabSheetJournalProducts: TTabSheet
         Caption = #1046#1091#1088#1085#1072#1083' '#1069#1061#1071
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1083#1086#1100
         ImageIndex = 2
-        ExplicitLeft = 104
-        ExplicitTop = 0
-        ExplicitWidth = 805
-        ExplicitHeight = 0
       end
     end
   end
@@ -11685,11 +11665,8 @@ object ElcoMainForm: TElcoMainForm
     object N5: TMenuItem
       Caption = '-'
     end
-    object MenuItem6: TMenuItem
-      Caption = #1069#1082#1089#1087#1086#1088#1090
-    end
-    object MenuItem7: TMenuItem
-      Caption = #1048#1084#1087#1086#1088#1090
+    object N1: TMenuItem
+      Caption = #1050#1072#1090#1072#1083#1086#1075
     end
   end
 end

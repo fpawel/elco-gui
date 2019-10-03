@@ -183,43 +183,48 @@ object FormAppConfig: TFormAppConfig
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 71
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taCenter
         Caption = #1055#1072#1088#1072#1084#1077#1090#1088
         WordWrap = True
+        ExplicitWidth = 71
       end
       object Label11: TLabel
         AlignWithMargins = True
         Left = 404
         Top = 3
-        Width = 71
+        Width = 114
         Height = 21
         Align = alTop
         Caption = #1052#1080#1085#1080#1084#1091#1084
         WordWrap = True
+        ExplicitWidth = 71
       end
       object Label12: TLabel
         AlignWithMargins = True
         Left = 524
         Top = 3
-        Width = 76
+        Width = 114
         Height = 21
         Align = alTop
         Caption = #1052#1072#1082#1089#1080#1084#1091#1084
         WordWrap = True
+        ExplicitWidth = 76
       end
       object Label14: TLabel
         AlignWithMargins = True
-        Left = 267
+        Left = 3
         Top = 43
-        Width = 131
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1060#1086#1085#1086#1074#1099#1081' '#1090#1086#1082', '#1084#1082#1040
         WordWrap = True
+        ExplicitLeft = 267
+        ExplicitWidth = 131
       end
       object Editfon20Min: TEdit
         AlignWithMargins = True
@@ -259,14 +264,16 @@ object FormAppConfig: TFormAppConfig
       end
       object Label17: TLabel
         AlignWithMargins = True
-        Left = 138
+        Left = 3
         Top = 83
-        Width = 260
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1092#1086#1085#1086#1074#1086#1075#1086' '#1090#1086#1082#1072' '#1087#1088#1080' +20'#8304'C, '#1084#1082#1040
         WordWrap = True
+        ExplicitLeft = 138
+        ExplicitWidth = 260
       end
       object EditDfon20Max: TEdit
         AlignWithMargins = True
@@ -288,24 +295,28 @@ object FormAppConfig: TFormAppConfig
       end
       object Label18: TLabel
         AlignWithMargins = True
-        Left = 514
+        Left = 404
         Top = 83
-        Width = 4
+        Width = 114
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         WordWrap = True
+        ExplicitLeft = 514
+        ExplicitWidth = 4
       end
       object Label19: TLabel
         AlignWithMargins = True
-        Left = 219
+        Left = 3
         Top = 123
-        Width = 179
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1050#1095' '#1087#1088#1080' +20'#8304'C, '#1084#1082#1040'/'#1082#1086#1085#1094'.'
         WordWrap = True
+        ExplicitLeft = 219
+        ExplicitWidth = 179
       end
       object EditKch20Min: TEdit
         AlignWithMargins = True
@@ -345,14 +356,16 @@ object FormAppConfig: TFormAppConfig
       end
       object Label20: TLabel
         AlignWithMargins = True
-        Left = 219
+        Left = 3
         Top = 163
-        Width = 179
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1050#1095' '#1087#1088#1080' +50'#8304'C, '#1084#1082#1040'/'#1082#1086#1085#1094'.'
         WordWrap = True
+        ExplicitLeft = 219
+        ExplicitWidth = 179
       end
       object EditKch50Min: TEdit
         AlignWithMargins = True
@@ -392,14 +405,16 @@ object FormAppConfig: TFormAppConfig
       end
       object Label21: TLabel
         AlignWithMargins = True
-        Left = 138
+        Left = 3
         Top = 203
-        Width = 260
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1092#1086#1085#1086#1074#1086#1075#1086' '#1090#1086#1082#1072' '#1087#1088#1080' +50'#8304'C, '#1084#1082#1040
         WordWrap = True
+        ExplicitLeft = 138
+        ExplicitWidth = 260
       end
       object EditDfon50Min: TEdit
         AlignWithMargins = True
@@ -439,14 +454,16 @@ object FormAppConfig: TFormAppConfig
       end
       object Label22: TLabel
         AlignWithMargins = True
-        Left = 126
+        Left = 3
         Top = 243
-        Width = 272
+        Width = 395
         Height = 21
         Align = alTop
         Alignment = taRightJustify
         Caption = #1059#1093#1086#1076' '#1090#1086#1082#1072' '#1085#1072' '#1085#1077#1080#1079#1084#1077#1088#1103#1077#1084#1086#1084' '#1075#1072#1079#1077', '#1084#1082#1040
         WordWrap = True
+        ExplicitLeft = 126
+        ExplicitWidth = 272
       end
       object EditNotMeasuredMax: TEdit
         AlignWithMargins = True
@@ -592,8 +609,6 @@ object FormAppConfig: TFormAppConfig
             Value = 40.000000000000000000
           end>
         TabOrder = 0
-        ExplicitLeft = 3
-        ExplicitTop = 22
         object Label15: TLabel
           AlignWithMargins = True
           Left = 3

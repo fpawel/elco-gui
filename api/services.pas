@@ -35,6 +35,7 @@ type
         class function SetPointsMethodInPlacesRange(Place1:Integer; Place2:Integer; Value:Integer):Int64;static;
         class function SetProductNoteAtPlace(Place:Integer; Note:string):Int64;static;
         class function SetProductSerialAtPlace(param1:Integer; param2:Integer):Int64;static;
+        class procedure SetProductType(param1:string);static;
         class function SetProductTypeAtPlacesRange(Place1:Integer; Place2:Integer; ProductType:string):Int64;static;
         class procedure SetValues(P:TParty3);static;
         class function ToggleProductProductionAtPlace(param1:Integer):Int64;static;
@@ -346,6 +347,16 @@ begin
     req := SA([]);
     req.AsArray.Add(param1); req.AsArray.Add(param2); 
     SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductSerialAtPlace', req), Result); 
+end;
+
+
+class procedure TLastPartySvc.SetProductType(param1:string);
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductType', req); 
 end;
 
 

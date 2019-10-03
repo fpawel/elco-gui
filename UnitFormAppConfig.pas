@@ -208,7 +208,13 @@ begin
         exit;
     CloseWindow(FhWndTip);
     (Sender as TWinControl).SetFocus;
-    TimerDebounceParty.Enabled := true;
+    if Sender <> ComboBoxProductTypeName then
+    begin
+        TimerDebounceParty.Enabled := true;
+        exit;
+    end;
+    TLastPartySvc.SetProductType(ComboBoxProductTypeName.Text);
+    FormShow(self);
 end;
 
 procedure TFormAppConfig.ComboBoxComportProductsChange(Sender: TObject);

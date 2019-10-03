@@ -55,8 +55,6 @@ type
         ImageInfo: TImage;
         TabSheetInterrogate: TTabSheet;
         PopupMenu2: TPopupMenu;
-        MenuItem6: TMenuItem;
-        MenuItem7: TMenuItem;
         ToolBar5: TToolBar;
         ToolButton9: TToolButton;
         ToolButton10: TToolButton;
@@ -74,6 +72,7 @@ type
         N7: TMenuItem;
         N8: TMenuItem;
         TabSheetJournalProducts: TTabSheet;
+    N1: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
