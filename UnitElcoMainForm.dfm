@@ -5486,7 +5486,7 @@ object ElcoMainForm: TElcoMainForm
       end
     end
     object ToolBar3: TToolBar
-      Left = 820
+      Left = 855
       Top = 0
       Width = 63
       Height = 31
@@ -5498,6 +5498,7 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 1
+      ExplicitLeft = 820
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -5519,7 +5520,7 @@ object ElcoMainForm: TElcoMainForm
     object PanelDelay: TPanel
       Left = 231
       Top = 0
-      Width = 589
+      Width = 624
       Height = 31
       Align = alClient
       Alignment = taLeftJustify
@@ -5534,6 +5535,7 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 2
       Visible = False
+      ExplicitWidth = 589
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5555,7 +5557,7 @@ object ElcoMainForm: TElcoMainForm
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
-        Left = 498
+        Left = 533
         Top = 3
         Width = 50
         Height = 25
@@ -5572,10 +5574,11 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitLeft = 498
         ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
-        Left = 553
+        Left = 588
         Top = 0
         Width = 36
         Height = 31
@@ -5587,6 +5590,7 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
+        ExplicitLeft = 553
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5603,7 +5607,7 @@ object ElcoMainForm: TElcoMainForm
       object Panel2: TPanel
         Left = 68
         Top = 0
-        Width = 425
+        Width = 460
         Height = 31
         Align = alClient
         Alignment = taLeftJustify
@@ -5617,16 +5621,18 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 425
         DesignSize = (
-          425
+          460
           31)
         object ProgressBar1: TProgressBar
           Left = 3
           Top = 8
-          Width = 419
+          Width = 454
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
+          ExplicitWidth = 419
         end
       end
     end
@@ -5655,31 +5661,6 @@ object ElcoMainForm: TElcoMainForm
         OnClick = ToolButton2Click
       end
     end
-    object ToolBar4: TToolBar
-      Left = 883
-      Top = 0
-      Width = 35
-      Height = 31
-      Align = alRight
-      ButtonHeight = 30
-      ButtonWidth = 30
-      Caption = 'ToolBarStop'
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Images = ImageList4
-      TabOrder = 4
-      Visible = False
-      object ToolButton5: TToolButton
-        Left = 0
-        Top = 0
-        Hint = #1047#1072#1082#1088#1099#1090#1100' '#1087#1072#1085#1077#1083#1100' '#1087#1088#1086#1096#1080#1074#1082#1080
-        Caption = 'ToolButtonStop'
-        ImageIndex = 5
-        ParentShowHint = False
-        ShowHint = True
-        OnClick = ToolButton5Click
-      end
-    end
     object ToolBar5: TToolBar
       Left = 30
       Top = 0
@@ -5692,7 +5673,7 @@ object ElcoMainForm: TElcoMainForm
       EdgeInner = esNone
       EdgeOuter = esNone
       Images = ImageList4
-      TabOrder = 5
+      TabOrder = 4
       object ToolButton9: TToolButton
         Left = 0
         Top = 0
@@ -6100,7 +6081,7 @@ object ElcoMainForm: TElcoMainForm
       Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
-      ExplicitHeight = 18
+      ExplicitTop = 2
     end
   end
   object ImageList3: TImageList

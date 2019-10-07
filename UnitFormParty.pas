@@ -12,7 +12,6 @@ uses
 type
     TFormParty = class(TForm)
         StringGrid1: TStringGrid;
-        ImageList1: TImageList;
         PopupMenu1: TPopupMenu;
         MenuCheck: TMenuItem;
         MenuUncheck: TMenuItem;
@@ -39,7 +38,6 @@ type
           ta: TAlignment);
 
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
-        procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
 
         property ProductValues[ColumnIndex, RowIndex: Integer]: RProductValue
           read GetProductValue;
@@ -54,7 +52,8 @@ var
 
 implementation
 
-uses stringgridutils, services, stringutils, UnitFormFirmware;
+uses stringgridutils, services, stringutils, UnitFormFirmware,
+  UnitFormLastParty;
 
 {$R *.dfm}
 
@@ -132,7 +131,7 @@ begin
               p.Production);
         pcFirmware:
             if p.HAsFirmware = true then
-                DrawCellFirmware(Rect, State)
+                FormLastParty.DrawCellFirmware(grd, Rect, State, ACol, ARow)
             else
                 StringGrid1.Canvas.FillRect(Rect);
 
@@ -184,20 +183,6 @@ procedure TFormParty.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
 begin
     StringGrid_RedrawRow(StringGrid1, StringGrid1.Row);
     StringGrid_RedrawRow(StringGrid1, ARow);
-end;
-
-procedure TFormParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
-var
-    bmp: TBitmap;
-begin
-    bmp := TBitmap.Create;
-    if gdSelected in State then
-        ImageList1.GetBitmap(1, bmp)
-    else
-        ImageList1.GetBitmap(0, bmp);
-    StringGrid1.Canvas.FillRect(Rect);
-    StringGrid_DrawCellBmp(StringGrid1, Rect, bmp);
-    bmp.Free
 end;
 
 procedure TFormParty.DrawCellText(ACol, ARow: Integer; Rect: TRect;

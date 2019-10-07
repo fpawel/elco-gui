@@ -64,7 +64,7 @@ type
     public
         class procedure CopyParty(param1:Int64);static;
         class procedure RunMain(param1:Boolean; param2:Boolean; param3:Boolean; param4:Boolean);static;
-        class procedure RunReadAndSaveProductCurrents(param1:string);static;
+        class procedure RunReadAndSaveProductCurrents(Column:string; Gas:Integer; Temperature:Double);static;
         class procedure RunReadCurrent;static;
         class procedure RunSwitchGas(param1:Integer);static;
         class procedure RunWritePartyFirmware;static;
@@ -77,13 +77,6 @@ type
     public
         class procedure RunPartyID(param1:Int64);static;
         class procedure RunProductID(param1:Int64);static;
-         
-    end;
-
-    TPeerSvc = class
-    public
-        class procedure Close;static;
-        class procedure Init;static;
          
     end;
 
@@ -103,6 +96,9 @@ type
         class function ListProductsByPartyID(param1:Integer):TArray<TArray<TCell>>;static;
         class function ListProductsBySerial(param1:Integer):TArray<TArray<TCell>>;static;
         class function ProductByID(param1:Int64):TArray<TArray<TCell>>;static;
+        class function ProductByIDHasFirmware(param1:Int64):Boolean;static;
+        class function ProductCurrents(param1:Int64):TArray<TProductCurrent>;static;
+        class function ProductInfoByID(param1:Int64):TProductInfo;static;
          
     end;
 
@@ -490,12 +486,12 @@ begin
 end;
 
 
-class procedure TRunnerSvc.RunReadAndSaveProductCurrents(param1:string);
+class procedure TRunnerSvc.RunReadAndSaveProductCurrents(Column:string; Gas:Integer; Temperature:Double);
 var
-    req : ISuperobject;
+    req : ISuperobject;s:string;
 begin
-    req := SA([]);
-    req.AsArray.Add(param1); 
+    req := SO;
+    SuperObject_SetField(req, 'Column', Column); SuperObject_SetField(req, 'Gas', Gas); SuperObject_SetField(req, 'Temperature', Temperature); 
     ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadAndSaveProductCurrents', req); 
 end;
 
@@ -567,26 +563,6 @@ begin
     req := SA([]);
     req.AsArray.Add(param1); 
     ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PdfSvc.RunProductID', req); 
-end;
-
- 
-class procedure TPeerSvc.Close;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    
-    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PeerSvc.Close', req); 
-end;
-
-
-class procedure TPeerSvc.Init;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    
-    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PeerSvc.Init', req); 
 end;
 
  
@@ -677,6 +653,36 @@ begin
     req := SA([]);
     req.AsArray.Add(param1); 
     ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByID', req, Result); 
+end;
+
+
+class function TProductsCatalogueSvc.ProductByIDHasFirmware(param1:Int64):Boolean;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByIDHasFirmware', req), Result); 
+end;
+
+
+class function TProductsCatalogueSvc.ProductCurrents(param1:Int64):TArray<TProductCurrent>;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductCurrents', req, Result); 
+end;
+
+
+class function TProductsCatalogueSvc.ProductInfoByID(param1:Int64):TProductInfo;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductInfoByID', req, Result); 
 end;
 
  

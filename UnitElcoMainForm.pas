@@ -44,8 +44,6 @@ type
         TabSheetConsole: TTabSheet;
         TimerPerforming: TTimer;
         PanelPlaceholderMain: TPanel;
-        ToolBar4: TToolBar;
-        ToolButton5: TToolButton;
         PanelMessageBox: TPanel;
         ImageError: TImage;
         PanelMessageBoxTitle: TPanel;
@@ -72,7 +70,7 @@ type
         N7: TMenuItem;
         N8: TMenuItem;
         TabSheetJournalProducts: TTabSheet;
-    N1: TMenuItem;
+        N1: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ToolButtonPartyClick(Sender: TObject);
@@ -91,7 +89,6 @@ type
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure TimerPerformingTimer(Sender: TObject);
         procedure N3Click(Sender: TObject);
-        procedure ToolButton5Click(Sender: TObject);
         procedure ToolButton6Click(Sender: TObject);
         procedure MenuItem8Click(Sender: TObject);
         procedure ToolButton10Click(Sender: TObject);
@@ -150,7 +147,7 @@ uses stringgridutils, stringutils, JclDebug,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
-    UnitFormJournalProducts;
+    UnitFormJournalProducts, UnitFormPopup;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -159,6 +156,10 @@ const
       ('50"C ПГС1', 'i_f_plus50'), ('50"C ПГС3', 'i_s_plus50'), ('ПГС2', 'i24'),
       ('ПГС3', 'i35'), ('ПГС2', 'i26'), ('ПГС1', 'i17'),
       ('неизмеряемый', 'not_measured'));
+
+    GasTempItems: array [0 .. 11, 0 .. 1] of Integer = ((1, 20), (3, 20),
+      (1, 20), (1, -20), (3, -20), (1, 50), (3, 50), (2, 20), (3, 20), (2, 20),
+      (1, 20), (0, 20));
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 var
@@ -259,6 +260,14 @@ begin
         Show;
     end;
 
+    with FormFirmware do
+    begin
+        Font.Assign(self.Font);
+        Parent := self;
+        BorderStyle := bsNone;
+        Align := alRight;
+    end;
+
     with FormConsole do
     begin
         Font.Assign(self.Font);
@@ -268,14 +277,6 @@ begin
         // FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
         FFileName := '';
         Show;
-    end;
-
-    with FormFirmware do
-    begin
-        Font.Assign(self.Font);
-        Parent := self;
-        BorderStyle := bsNone;
-        Align := alClient;
     end;
 
     with FormInterrogate do
@@ -396,7 +397,7 @@ begin
         end);
 
     NotifyServices_SetEnabled(true);
-    TPeerSvc.Init;
+    TRunnerSvc.StopHardware;
 end;
 
 procedure TElcoMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -408,7 +409,7 @@ begin
 
     NotifyServices_SetEnabled(false);
     try
-        TPeerSvc.Close;
+        TRunnerSvc.StopHardware;
     except
     end;
 
@@ -534,11 +535,6 @@ begin
             FormAppConfig.Show;
             // ShowWindow(FormProperties.Handle, SW_SHOW);
         end;
-end;
-
-procedure TElcoMainForm.ToolButton5Click(Sender: TObject);
-begin
-    FormFirmware.Hide;
 end;
 
 procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
@@ -750,9 +746,12 @@ begin
 end;
 
 procedure TElcoMainForm.RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
+var
+    n: Integer;
 begin
-    TRunnerSvc.RunReadAndSaveProductCurrents
-      (WorkItems[(Sender as TMenuItem).Tag][1]);
+    n := (Sender as TMenuItem).Tag;
+    TRunnerSvc.RunReadAndSaveProductCurrents(WorkItems[n][1],
+      GasTempItems[n][0], GasTempItems[n][1]);
 end;
 
 procedure TElcoMainForm.RunSwitchGasMenuClick(Sender: TObject);

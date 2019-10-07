@@ -14,7 +14,6 @@ type
         Edit1: TEdit;
         Panel3: TPanel;
         StringGrid1: TStringGrid;
-        ImageList1: TImageList;
         Timer1: TTimer;
         ComboBox1: TComboBox;
     Button1: TButton;
@@ -26,11 +25,10 @@ type
         procedure Edit1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Edit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure StringGrid1DblClick(Sender: TObject);
     private
         { Private declarations }
         FTable: TArray<TArray<TCell>>;
-        FBmpFirmware, FBmpFirmwareSelected: TBitmap;
-        procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
     public
         { Public declarations }
     end;
@@ -42,7 +40,7 @@ implementation
 
 {$R *.dfm}
 
-uses stringgridutils, services;
+uses stringgridutils, services, UnitFormLastParty, UnitFormFirmware;
 
 procedure SetTableGrid(grd: TStringGrid; ATable: TArray < TArray < TCell >> );
 var
@@ -73,10 +71,24 @@ end;
 
 procedure TFormJournalProducts.FormCreate(Sender: TObject);
 begin
-    FBmpFirmware := TBitmap.Create;
-    FBmpFirmwareSelected := TBitmap.Create;
-    ImageList1.GetBitmap(0, FBmpFirmware);
-    ImageList1.GetBitmap(1, FBmpFirmwareSelected);
+    //
+end;
+
+procedure TFormJournalProducts.StringGrid1DblClick(Sender: TObject);
+var
+    ACol, ARow: Integer;
+    pt: TPoint;
+    product: TProductInfo;
+    f: TFirmwareInfo;
+begin
+    GetCursorPos(pt);
+    pt := StringGrid1.ScreenToClient(pt);
+    StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
+    if (ARow < 1)  then
+        exit;
+    FormFirmware.product := TProductsCatalogueSvc.ProductInfoByID(
+    StrToInt(StringGrid1.Cells[0,Arow]));
+    FormFirmware.Show;
 end;
 
 procedure TFormJournalProducts.StringGrid1DrawCell(Sender: TObject;
@@ -113,7 +125,7 @@ begin
     if (ARow > 0) AND (ACol = 2) then
     begin
         if cell.Str = 'true' then
-            DrawCellFirmware(Rect, State)
+            FormLastParty.DrawCellFirmware(grd, Rect, State, ACol, ARow)
         else
             StringGrid1.Canvas.FillRect(Rect);
     end
@@ -176,16 +188,6 @@ begin
 
 end;
 
-procedure TFormJournalProducts.DrawCellFirmware(Rect: TRect;
-  State: TGridDrawState);
-begin
-    StringGrid1.Canvas.FillRect(Rect);
-    if gdSelected in State then
-        StringGrid_DrawCellBmp(StringGrid1, Rect, FBmpFirmwareSelected)
-    else
-        StringGrid_DrawCellBmp(StringGrid1, Rect, FBmpFirmware);
-
-end;
 
 procedure TFormJournalProducts.Edit1Change(Sender: TObject);
 begin

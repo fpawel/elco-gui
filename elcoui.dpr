@@ -66,7 +66,9 @@ uses
   UnitFormJournalProducts in 'UnitFormJournalProducts.pas' {FormJournalProducts},
   HttpClient in 'api\HttpClient.pas',
   HttpExceptions in 'api\HttpExceptions.pas',
-  HttpRpcClient in 'api\HttpRpcClient.pas';
+  HttpRpcClient in 'api\HttpRpcClient.pas',
+  UnitFormProductCurrents in 'UnitFormProductCurrents.pas' {FormProductCurrents},
+  UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart};
 
 {$R *.res}
 
@@ -101,6 +103,8 @@ begin
   Application.CreateForm(TFormJournalParties, FormJournalParties);
   Application.CreateForm(TFormModalMessage, FormModalMessage);
   Application.CreateForm(TFormJournalProducts, FormJournalProducts);
+  Application.CreateForm(TFormProductCurrents, FormProductCurrents);
+  Application.CreateForm(TFormFirmwareChart, FormFirmwareChart);
   Application.Run;
 
 end.

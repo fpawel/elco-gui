@@ -50,6 +50,8 @@ type
 
         FReadPlace, FReadBlock: Integer;
 
+        FBmp: array [0..2] of TBitmap;
+
         function GetProductValue(ColumnIndex, RowIndex: Integer): RProductValue;
 
         procedure DrawCellStr(ACol, ARow: Integer; Rect: TRect; ta: TAlignment;
@@ -58,7 +60,7 @@ type
         procedure DrawCellText(ACol, ARow: Integer; Rect: TRect;
           ta: TAlignment);
 
-        procedure DrawCellFirmware(Rect: TRect; State: TGridDrawState);
+
 
         procedure UpdateSerial(ACol, ARow: Integer; Value: string);
         procedure UpdateNote(ACol, ARow: Integer; Value: string);
@@ -76,6 +78,8 @@ type
         procedure SetReadPlace(APlace: Integer);
         procedure SetReadBlock(ABlock: Integer);
 
+        procedure DrawCellFirmware(grd:TStringGrid;Rect: TRect; State: TGridDrawState; ACol, ARow:integer);
+
         property party: TParty1 read FParty;
 
     end;
@@ -92,7 +96,15 @@ uses stringgridutils, stringutils, superobject, server_data_types_helpers,
 {$R *.dfm}
 
 procedure TFormLastParty.FormCreate(Sender: TObject);
+var
+  I: Integer;
+
 begin
+    for I := 0 to 2 do
+    begin
+        FBmp[i] := TBitmap.Create;
+        ImageList1.GetBitmap(i, FBmp[i]);
+    end;
     FReadPlace := -1;
     FReadBlock := -1;
     SetLength(FProducts, 96);
@@ -300,7 +312,7 @@ begin
               p.production);
         pcFirmware:
             if p.HasFirmware = true then
-                DrawCellFirmware(Rect, State)
+                DrawCellFirmware( grd, Rect, State, ACol, ARow)
             else
                 StringGrid1.Canvas.FillRect(Rect);
 
@@ -402,18 +414,18 @@ begin
     DrawCellStr(ACol, ARow, Rect, ta, StringGrid1.Cells[ACol, ARow]);
 end;
 
-procedure TFormLastParty.DrawCellFirmware(Rect: TRect; State: TGridDrawState);
-var
-    bmp: TBitmap;
+procedure TFormLastParty.DrawCellFirmware(grd:TStringGrid; Rect: TRect; State: TGridDrawState; ACol, ARow:integer);
+var bmpIndex:integer;
 begin
-    bmp := TBitmap.Create;
     if gdSelected in State then
-        ImageList1.GetBitmap(1, bmp)
+        bmpIndex := 1
     else
-        ImageList1.GetBitmap(0, bmp);
-    StringGrid1.Canvas.FillRect(Rect);
-    StringGrid_DrawCellBmp(StringGrid1, Rect, bmp);
-    bmp.Free
+        if ARow = grd.Row then
+            bmpIndex := 2
+        else
+            bmpIndex := 0;
+    grd.Canvas.FillRect(Rect);
+    StringGrid_DrawCellBmp(grd, Rect, FBmp[bmpIndex]);
 end;
 
 procedure TFormLastParty.SetParty(party: TParty1);
