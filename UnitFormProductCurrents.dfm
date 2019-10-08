@@ -2,7 +2,7 @@ object FormProductCurrents: TFormProductCurrents
   Left = 0
   Top = 0
   Caption = 'FormProductCurrents'
-  ClientHeight = 300
+  ClientHeight = 442
   ClientWidth = 635
   Color = clHighlightText
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object FormProductCurrents: TFormProductCurrents
     Left = 3
     Top = 3
     Width = 629
-    Height = 294
+    Height = 436
     Align = alClient
     BorderStyle = bsNone
     ColCount = 4
@@ -31,8 +31,7 @@ object FormProductCurrents: TFormProductCurrents
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
     TabOrder = 0
     OnDrawCell = StringGrid1DrawCell
-    ExplicitLeft = -2
-    ExplicitTop = -2
+    ExplicitHeight = 294
     ColWidths = (
       64
       64

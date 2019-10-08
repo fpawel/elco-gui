@@ -68,7 +68,8 @@ uses
   HttpExceptions in 'api\HttpExceptions.pas',
   HttpRpcClient in 'api\HttpRpcClient.pas',
   UnitFormProductCurrents in 'UnitFormProductCurrents.pas' {FormProductCurrents},
-  UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart};
+  UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart},
+  UnitFormNewPartyDialog in 'UnitFormNewPartyDialog.pas' {FormNewPartyDialog};
 
 {$R *.res}
 
@@ -105,6 +106,7 @@ begin
   Application.CreateForm(TFormJournalProducts, FormJournalProducts);
   Application.CreateForm(TFormProductCurrents, FormProductCurrents);
   Application.CreateForm(TFormFirmwareChart, FormFirmwareChart);
+  Application.CreateForm(TFormNewPartyDialog, FormNewPartyDialog);
   Application.Run;
 
 end.

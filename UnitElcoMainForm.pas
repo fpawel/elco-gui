@@ -147,7 +147,7 @@ uses stringgridutils, stringutils, JclDebug,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
-    UnitFormJournalProducts, UnitFormPopup;
+    UnitFormJournalProducts, UnitFormPopup, UnitFormNewPartyDialog;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -644,9 +644,9 @@ end;
 
 procedure TElcoMainForm.MenuNewPartyClick(Sender: TObject);
 begin
-    if MessageBox(Handle, 'Подтвердите необходимость создания новой партии.',
-      'Запрос подтверждения', mb_IconQuestion or mb_YesNo) = mrYes then
-        FormLastParty.SetParty(TPartiesCatalogueSvc.NewParty);
+    FormNewPartyDialog.Position := poScreenCenter;
+    FormNewPartyDialog.WindowState := wsNormal;
+    FormNewPartyDialog.Show;
 end;
 
 procedure TElcoMainForm.N201Click(Sender: TObject);

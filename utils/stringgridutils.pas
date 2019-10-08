@@ -24,21 +24,22 @@ procedure StringGrid_DrawCellBounds(cnv: TCanvas; acol, arow: integer;
 procedure StringGrid_DrawCellBmp(grd: TStringGrid; Rect: TRect;
   bmp: vcl.graphics.TBitmap);
 
-procedure StringGrid_RedrawCol(grd: TStringGrid; aCol: integer);
+procedure StringGrid_RedrawCol(grd: TStringGrid; acol: integer);
 
 procedure StringGrid_DrawCellText(StringGrid1: TStringGrid; acol, arow: integer;
   Rect: TRect; ta: TAlignment; text: string);
 
 procedure StringGrid_CopytoClipboard(StringGrid1: TStringGrid);
+procedure StringGrid_PasteFromClipBoard(grd:TStringGrid);
 
 implementation
 
-uses Clipbrd, winapi.windows, system.math, winapi.uxtheme, stringutils;
+uses Clipbrd, winapi.windows, system.math, winapi.uxtheme, stringutils, sysutils;
 
 procedure StringGrid_CopytoClipboard(StringGrid1: TStringGrid);
 var
     c, r: integer;
-    s : string;
+    s: string;
 begin
     s := '';
     with StringGrid1 do
@@ -130,15 +131,15 @@ begin
                 Cells[I, arow] := Cells[I, arow];
 end;
 
-procedure StringGrid_RedrawCol(grd: TStringGrid; aCol: integer);
+procedure StringGrid_RedrawCol(grd: TStringGrid; acol: integer);
 var
     I: integer;
 begin
     with grd do
-        if (aCol >= 0) AND (aCol < rowcount) then
+        if (acol >= 0) AND (acol < rowcount) then
             for I := 0 to colcount - 1 do
 
-                Cells[aCol, 1] := Cells[aCol, i];
+                Cells[acol, 1] := Cells[acol, I];
 end;
 
 procedure StringGrid_Clear(grd: TStringGrid);
@@ -305,5 +306,59 @@ begin
     x := r.Right + 2;
     grd.Canvas.Draw(r.Left + 2, Rect.Top + 3, bmp);
 end;
+
+procedure StringGrid_PasteFromClipBoard(grd:TStringGrid);
+var l,l2 : TStringDynArray;
+  ro,co,I,j: Integer;
+begin
+    l := Clipboard.AsText.Split([#13]);
+    for I := 0 to length(l)-1 do
+    begin
+        l2 := l[i].Split([#9]);
+        for j := 0 to Length(l2)-1 do
+        with grd do
+        begin
+            ro := row + i;
+            co := col + j;
+            if (co < colCount) AND (ro < RowCount) then
+                Cells[co,ro] := l2[j];
+        end;
+    end;
+end;
+
+// Paste
+//procedure StringGrid_PasteFromClipBoard(grd:TStringGrid);
+//var
+//    Grect: TGridRect;
+//    s, CS, F: string;
+//    L, r, c: Byte;
+//begin
+//    Grect := grd.Selection;
+//    L := Grect.Left;
+//    r := Grect.Top;
+//    s := Clipboard.AsText;
+//    r := r - 1;
+//    while Pos(#13, s) > 0 do
+//    begin
+//        r := r + 1;
+//        c := L - 1;
+//        CS := Copy(s, 1, Pos(#13, s));
+//        while Pos(#9, CS) > 0 do
+//        begin
+//            c := c + 1;
+//            if (c <= grd.colcount - 1) and
+//              (r <= grd.rowcount - 1) then
+//                grd.Cells[c, r] := Copy(CS, 1, Pos(#9, CS) - 1);
+//            F := Copy(CS, 1, Pos(#9, CS) - 1);
+//            Delete(CS, 1, Pos(#9, CS));
+//        end;
+//        if (c <= grd.colcount - 1) and (r <= grd.rowcount - 1)
+//        then
+//            grd.Cells[c + 1, r] := Copy(CS, 1, Pos(#13, CS) - 1);
+//        Delete(s, 1, Pos(#13, s));
+//        if Copy(s, 1, 1) = #10 then
+//            Delete(s, 1, 1);
+//    end;
+//end;
 
 end.

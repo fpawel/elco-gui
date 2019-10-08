@@ -5,7 +5,7 @@ interface
 uses
     Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
     System.Classes, Vcl.Graphics,
-    Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids;
+    Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls;
 
 type
     TFormProductCurrents = class(TForm)
@@ -72,7 +72,7 @@ begin
         Cells[0, 0] := 'Дата';
         Cells[1, 0] := 'Т"C';
         Cells[2, 0] := 'Газ';
-        Cells[3, 0] := 'Ток,нА';
+        Cells[3, 0] := 'Ток,мкА';
         Cells[4, 0] := 'Прим.';
 
         for ACol := 0 to ColCount - 1 do

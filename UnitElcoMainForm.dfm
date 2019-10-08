@@ -5498,7 +5498,6 @@ object ElcoMainForm: TElcoMainForm
       EdgeOuter = esNone
       Images = ImageList4
       TabOrder = 1
-      ExplicitLeft = 820
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -5535,7 +5534,6 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 2
       Visible = False
-      ExplicitWidth = 589
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5574,7 +5572,6 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitLeft = 498
         ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
@@ -5590,7 +5587,6 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
-        ExplicitLeft = 553
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5621,7 +5617,6 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 425
         DesignSize = (
           460
           31)
@@ -5632,7 +5627,6 @@ object ElcoMainForm: TElcoMainForm
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
-          ExplicitWidth = 419
         end
       end
     end
@@ -6081,7 +6075,7 @@ object ElcoMainForm: TElcoMainForm
       Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
-      ExplicitTop = 2
+      ExplicitHeight = 18
     end
   end
   object ImageList3: TImageList

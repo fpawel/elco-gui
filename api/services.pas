@@ -9,7 +9,7 @@ type
     TPartiesCatalogueSvc = class
     public
         class procedure DeletePartyID(param1:Int64);static;
-        class function NewParty:TParty1;static;
+        class function NewParty(Products:TArray<Integer>):TParty1;static;
         class function PartiesOfYearMonth(Year:Integer; Month:Integer):TArray<TParty2>;static;
         class function Party(param1:Int64):TParty1;static;
         class procedure SetProductsProduction(ProductIDs:TArray<Int64>; Production:Boolean);static;
@@ -136,12 +136,12 @@ begin
 end;
 
 
-class function TPartiesCatalogueSvc.NewParty:TParty1;
+class function TPartiesCatalogueSvc.NewParty(Products:TArray<Integer>):TParty1;
 var
-    req : ISuperobject;
+    req : ISuperobject;s:string;
 begin
     req := SO;
-    
+    SuperObject_SetField(req, 'Products', Products); 
     ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.NewParty', req, Result); 
 end;
 
