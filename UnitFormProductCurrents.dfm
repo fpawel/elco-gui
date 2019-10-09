@@ -7,12 +7,12 @@ object FormProductCurrents: TFormProductCurrents
   Color = clHighlightText
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -12
+  Font.Height = -15
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   PixelsPerInch = 96
-  TextHeight = 14
+  TextHeight = 18
   object StringGrid1: TStringGrid
     AlignWithMargins = True
     Left = 3
@@ -31,7 +31,6 @@ object FormProductCurrents: TFormProductCurrents
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
     TabOrder = 0
     OnDrawCell = StringGrid1DrawCell
-    ExplicitHeight = 294
     ColWidths = (
       64
       64

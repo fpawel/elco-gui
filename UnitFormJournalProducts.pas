@@ -26,6 +26,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Edit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure StringGrid1DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     private
         { Private declarations }
         FTable: TArray<TArray<TCell>>;
@@ -40,7 +41,23 @@ implementation
 
 {$R *.dfm}
 
-uses stringgridutils, services, UnitFormLastParty, UnitFormFirmware;
+uses stringgridutils, services, UnitFormLastParty, UnitFormFirmware,
+  UnitFormFirmwareChart, UnitFormProductCurrents;
+
+procedure SetTableGridColsWidths(grd: TStringGrid; ATable: TArray < TArray < TCell >> );
+var
+    Row: TArray<TCell>;
+    w, ACol, ARow: Integer;
+begin
+
+    for Row in ATable do
+        for ACol := 0 to Length(Row) - 1 do
+        begin
+            w := grd.Canvas.TextWidth(Row[ACol].Str) + 5;
+            if grd.ColWidths[ACol] < w then
+                grd.ColWidths[ACol] := w;
+        end;
+end;
 
 procedure SetTableGrid(grd: TStringGrid; ATable: TArray < TArray < TCell >> );
 var
@@ -59,19 +76,19 @@ begin
             FixedRows := 1;
     end;
 
-    for Row in ATable do
-        for ACol := 0 to Length(Row) - 1 do
-        begin
-            w := grd.Canvas.TextWidth(Row[ACol].Str) + 5;
-            if grd.ColWidths[ACol] < w then
-                grd.ColWidths[ACol] := w;
-        end;
-
+    SetTableGridColsWidths(grd, ATable);
 end;
+
+
 
 procedure TFormJournalProducts.FormCreate(Sender: TObject);
 begin
     //
+end;
+
+procedure TFormJournalProducts.FormShow(Sender: TObject);
+begin
+    SetTableGridColsWidths(StringGrid1, FTable);
 end;
 
 procedure TFormJournalProducts.StringGrid1DblClick(Sender: TObject);
@@ -88,7 +105,9 @@ begin
         exit;
     FormFirmware.product := TProductsCatalogueSvc.ProductInfoByID(
     StrToInt(StringGrid1.Cells[0,Arow]));
-    FormFirmware.Show;
+    FormFirmware.show;
+        FormFirmwareChart.Show;
+        FormProductCurrents.Show;
 end;
 
 procedure TFormJournalProducts.StringGrid1DrawCell(Sender: TObject;

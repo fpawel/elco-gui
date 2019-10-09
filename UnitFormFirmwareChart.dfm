@@ -1,7 +1,7 @@
 object FormFirmwareChart: TFormFirmwareChart
   Left = 0
   Top = 0
-  Caption = 'FormFirmwareChart'
+  Caption = #1043#1088#1072#1092#1080#1082' '#1087#1088#1086#1096#1080#1074#1082#1080
   ClientHeight = 300
   ClientWidth = 635
   Color = clHighlightText
@@ -51,10 +51,6 @@ object FormFirmwareChart: TFormFirmwareChart
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 0
-    ExplicitLeft = 191
-    ExplicitTop = -215
-    ExplicitWidth = 444
-    ExplicitHeight = 515
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object Series1: TFastLineSeries

@@ -47,12 +47,8 @@ type
         ToolButton18: TToolButton;
         ToolButton19: TToolButton;
         ToolButton111: TToolButton;
-        GroupBox1: TGroupBox;
         RadioButton1: TRadioButton;
         RadioButton2: TRadioButton;
-        LabelProduct: TLabel;
-        ToolButton1222: TToolButton;
-        ToolButton2: TToolButton;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -70,8 +66,6 @@ type
         procedure ToolButton8Click(Sender: TObject);
         procedure ToolButton6Click(Sender: TObject);
         procedure ToolButton4Click(Sender: TObject);
-        procedure ToolButton111Click(Sender: TObject);
-        procedure ToolButton1222Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     private
         { Private declarations }
@@ -110,7 +104,7 @@ implementation
 {$R *.dfm}
 
 uses System.Types, stringgridutils, stringutils, services, dateutils, math,
-    UnitElcoMainForm, UnitFormFirmwareChart, UnitFormProductCurrents;
+    UnitElcoMainForm, UnitFormProductCurrents, UnitFormFirmwareChart;
 
 procedure TFormFirmware.FormCreate(Sender: TObject);
 var
@@ -138,13 +132,7 @@ end;
 
 procedure TFormFirmware.FormShow(Sender: TObject);
 begin
-    with FormProductCurrents do
-    begin
-        Align := alClient;
-        BorderStyle := bsNone;
-        Parent := GroupBox1;
-        Show;
-    end;
+    //
 end;
 
 procedure TFormFirmware.StringGrid2DrawCell(Sender: TObject;
@@ -218,17 +206,6 @@ begin
             Last_Edited_Col := ACol; // Remember column of cell being edited
             Last_Edited_Row := ARow; // Remember row of cell being edited
         end;
-end;
-
-procedure TFormFirmware.ToolButton111Click(Sender: TObject);
-begin
-    FormFirmwareChart.Position := poScreenCenter;
-    FormFirmwareChart.Show;
-end;
-
-procedure TFormFirmware.ToolButton1222Click(Sender: TObject);
-begin
-    Hide;
 end;
 
 procedure TFormFirmware.ToolButton122Click(Sender: TObject);
@@ -596,9 +573,9 @@ end;
 
 procedure TFormFirmware.applyProduct;
 begin
-    FormProductCurrents.Load(FProduct.ProductID);
-    LabelProduct.Caption := 'ЭХЯ ' + inttostr(FProduct.ProductID);
-    FormFirmwareChart.Caption := 'График ЭХЯ ' + inttostr(FProduct.ProductID);
+
+    Caption := 'Прошивка ЭХЯ ' + inttostr(FProduct.ProductID);
+
 
     if FProduct.ProductID <> 0 then
     begin

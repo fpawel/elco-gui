@@ -1,7 +1,7 @@
 object FormJournalParties: TFormJournalParties
   Left = 0
   Top = 0
-  Caption = 'FormJournalParties'
+  Caption = #1046#1091#1088#1085#1072#1083' '#1079#1072#1075#1088#1091#1079#1086#1082
   ClientHeight = 557
   ClientWidth = 635
   Color = clWindow

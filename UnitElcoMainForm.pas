@@ -14,24 +14,12 @@ type
     EHostApplicationPanic = class(Exception);
 
     TElcoMainForm = class(TForm)
-        Panel1: TPanel;
-        Panel14: TPanel;
         ImageList3: TImageList;
-        PopupMenu1: TPopupMenu;
-        N4: TMenuItem;
-        PageControlMain: TPageControl;
-        TabSheetParty: TTabSheet;
-        TabSheetJournalParties: TTabSheet;
         ImageList4: TImageList;
         ToolBarStop: TToolBar;
         ToolButton2: TToolButton;
         Panel3: TPanel;
-        ToolBar1: TToolBar;
-        ToolButtonRun: TToolButton;
         ImageList90: TImageList;
-        ToolBar3: TToolBar;
-        ToolButton1: TToolButton;
-        ToolButton4: TToolButton;
         LabelStatusTop: TLabel;
         PanelDelay: TPanel;
         LabelDelayElepsedTime: TLabel;
@@ -40,8 +28,6 @@ type
         ToolButtonStop: TToolButton;
         Panel2: TPanel;
         ProgressBar1: TProgressBar;
-        N3: TMenuItem;
-        TabSheetConsole: TTabSheet;
         TimerPerforming: TTimer;
         PanelPlaceholderMain: TPanel;
         PanelMessageBox: TPanel;
@@ -51,52 +37,66 @@ type
         ToolButton3: TToolButton;
         RichEditlMessageBoxText: TRichEdit;
         ImageInfo: TImage;
-        TabSheetInterrogate: TTabSheet;
-        PopupMenu2: TPopupMenu;
-        ToolBar5: TToolBar;
-        ToolButton9: TToolButton;
-        ToolButton10: TToolButton;
-        MenuNewParty: TMenuItem;
-        N2: TMenuItem;
-        N5: TMenuItem;
-        N201: TMenuItem;
-        N202: TMenuItem;
-        N203: TMenuItem;
         GridPanelBottom: TGridPanel;
-        TabSheetKtx500: TTabSheet;
         LabelStatusBottom: TLabel;
         LabelStatusKtx500: TLabel;
+        MainMenu1: TMainMenu;
+        N10: TMenuItem;
+        N11: TMenuItem;
+        N12: TMenuItem;
+        MenuGetCurrents: TMenuItem;
+        MenuSetGas: TMenuItem;
+        N13: TMenuItem;
+        N14: TMenuItem;
+        N15: TMenuItem;
+        N17: TMenuItem;
+        N18: TMenuItem;
+        N19: TMenuItem;
+        I201: TMenuItem;
+        I501: TMenuItem;
+        N20: TMenuItem;
+        PDF2: TMenuItem;
+        N21: TMenuItem;
+        N22: TMenuItem;
+        N1: TMenuItem;
+        N2: TMenuItem;
+        N3: TMenuItem;
+        N4: TMenuItem;
+        N5: TMenuItem;
         N6: TMenuItem;
         N7: TMenuItem;
         N8: TMenuItem;
-        TabSheetJournalProducts: TTabSheet;
-        N1: TMenuItem;
+        N9: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
-        procedure ToolButtonPartyClick(Sender: TObject);
-        procedure PageControlMainChange(Sender: TObject);
-        procedure PageControlMainDrawTab(Control: TCustomTabControl;
-          TabIndex: Integer; const Rect: TRect; Active: Boolean);
         procedure FormResize(Sender: TObject);
         procedure ToolButton3Click(Sender: TObject);
         procedure ToolButton2Click(Sender: TObject);
-        procedure ToolButton1Click(Sender: TObject);
         procedure FormClose(Sender: TObject; var Action: TCloseAction);
-        procedure ToolButton4Click(Sender: TObject);
-        procedure N4Click(Sender: TObject);
         procedure ToolButtonStopClick(Sender: TObject);
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure TimerPerformingTimer(Sender: TObject);
         procedure N3Click(Sender: TObject);
-        procedure ToolButton6Click(Sender: TObject);
         procedure MenuItem8Click(Sender: TObject);
-        procedure ToolButton10Click(Sender: TObject);
-        procedure MenuNewPartyClick(Sender: TObject);
         procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
         procedure N203Click(Sender: TObject);
+        procedure PDF1Click(Sender: TObject);
+        procedure N11Click(Sender: TObject);
+        procedure N12Click(Sender: TObject);
+        procedure N14Click(Sender: TObject);
+        procedure N15Click(Sender: TObject);
+        procedure N18Click(Sender: TObject);
+        procedure I201Click(Sender: TObject);
+        procedure N20Click(Sender: TObject);
+        procedure N2Click(Sender: TObject);
+        procedure N4Click(Sender: TObject);
+        procedure N5Click(Sender: TObject);
         procedure N6Click(Sender: TObject);
+        procedure N7Click(Sender: TObject);
+        procedure N9Click(Sender: TObject);
+        procedure N8Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -147,7 +147,8 @@ uses stringgridutils, stringutils, JclDebug,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
-    UnitFormJournalProducts, UnitFormPopup, UnitFormNewPartyDialog;
+    UnitFormJournalProducts, UnitFormPopup, UnitFormNewPartyDialog,
+    UnitFormFirmwareChart, UnitFormProductCurrents;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -160,6 +161,13 @@ const
     GasTempItems: array [0 .. 11, 0 .. 1] of Integer = ((1, 20), (3, 20),
       (1, 20), (1, -20), (3, -20), (1, 50), (3, 50), (2, 20), (3, 20), (2, 20),
       (1, 20), (0, 20));
+
+procedure ShowFormCenterScreen(AForm: TForm);
+begin
+    AForm.Position := poScreenCenter;
+    AForm.Show;
+    ShowWindow(AForm.Handle, SW_RESTORE);
+end;
 
 procedure TElcoMainForm.FormCreate(Sender: TObject);
 var
@@ -182,7 +190,7 @@ begin
     for i := 0 to length(WorkItems) - 1 do
     begin
         menu := TMenuItem.Create(self);
-        N7.Add(menu);
+        MenuGetCurrents.Add(menu);
         menu.Caption := WorkItems[i, 0];
         menu.Tag := i;
         menu.OnClick := RunReadAndSaveProductCurrentsMenuClick;
@@ -191,7 +199,7 @@ begin
     for i := 0 to 4 do
     begin
         menu := TMenuItem.Create(self);
-        N8.Add(menu);
+        MenuSetGas.Add(menu);
         if i = 0 then
             menu.Caption := 'Отключить газ'
         else
@@ -233,21 +241,13 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
-    with FormJournalParties do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetJournalParties;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
     with FormLastParty do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetParty;
+        Parent := PanelPlaceholderMain;
         BorderStyle := bsNone;
         Align := alClient;
+        reload_data;
         Show;
     end;
 
@@ -255,52 +255,6 @@ begin
     begin
         Font.Assign(self.Font);
         Parent := FormJournalParties;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
-    with FormFirmware do
-    begin
-        Font.Assign(self.Font);
-        Parent := self;
-        BorderStyle := bsNone;
-        Align := alRight;
-    end;
-
-    with FormConsole do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetConsole;
-        BorderStyle := bsNone;
-        Align := alClient;
-        // FFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
-        FFileName := '';
-        Show;
-    end;
-
-    with FormInterrogate do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetInterrogate;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
-    with FormJournalProducts do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetJournalProducts;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
-
-    with FormKtx500 do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetKtx500;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
@@ -347,13 +301,10 @@ begin
 
         end);
 
-    TabSheetConsole.TabVisible := false;
     SetOnWriteConsole(
         procedure(s: String)
         begin
             FormConsole.NewLine(s);
-            if not TabSheetConsole.TabVisible then
-                TabSheetConsole.TabVisible := true;
             Application.ProcessMessages;
         end);
 
@@ -443,45 +394,9 @@ begin
     end;
 end;
 
-procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
-var
-    PageControl: TPageControl;
+procedure TElcoMainForm.PDF1Click(Sender: TObject);
 begin
-    FormFirmware.Hide;
-    PageControl := Sender as TPageControl;
-    PageControl.Repaint;
-    PanelMessageBox.Hide;
-    if PageControl.ActivePage = TabSheetJournalParties then
-    begin
-        if FormParty.party.PartyID = 0 then
-            FormParty.party := TPartiesCatalogueSvc.party
-              (FormParty.party.PartyID)
-        else
-            FormParty.party := TLastPartySvc.party;
-        FormJournalParties.FetchYearsMonths;
-
-        // if not FormParties.HasYears then
-        // begin
-        // FormParties.CreateYearsNodes;
-        // FormParty.party := TLastPartySvc.party;
-        // exit;
-        // end;
-    end
-    else if PageControl.ActivePage = TabSheetParty then
-    begin
-        FormLastParty.reload_data;
-    end
-    else if PageControl.ActivePage = TabSheetInterrogate then
-    begin
-        FormInterrogate.UpdateCheckBlocks;
-    end;
-
-end;
-
-procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
-TabIndex: Integer; const Rect: TRect; Active: Boolean);
-begin
-    PageControl_DrawVerticalTab(Control, TabIndex, Rect, Active);
+    TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
 end;
 
 procedure TElcoMainForm.RichEditlMessageBoxTextMouseDown(Sender: TObject;
@@ -500,18 +415,6 @@ begin
             Color := clRed;
 end;
 
-procedure TElcoMainForm.ToolButton10Click(Sender: TObject);
-begin
-    with ToolButton10 do
-        with ClientToScreen(Point(0, Height)) do
-            PopupMenu2.Popup(X, Y);
-end;
-
-procedure TElcoMainForm.ToolButton1Click(Sender: TObject);
-begin
-    FormEditText.Show;
-end;
-
 procedure TElcoMainForm.ToolButton2Click(Sender: TObject);
 begin
     TRunnerSvc.StopHardware;
@@ -520,31 +423,6 @@ end;
 procedure TElcoMainForm.ToolButton3Click(Sender: TObject);
 begin
     PanelMessageBox.Hide;
-end;
-
-procedure TElcoMainForm.ToolButton4Click(Sender: TObject);
-begin
-    with ToolBar3 do
-        with ClientToScreen(Point(0, Height)) do
-        begin
-            // FormAppConfig.SetConfig(TSettingsSvc.Sections);
-            FormAppConfig.Left := X - 5 - FormAppConfig.Width;
-            FormAppConfig.Top := Y + 5;
-            FormAppConfig.Show;
-            // ShowWindow(FormProperties.Handle, SW_SHOW);
-        end;
-end;
-
-procedure TElcoMainForm.ToolButton6Click(Sender: TObject);
-begin
-    TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
-end;
-
-procedure TElcoMainForm.ToolButtonPartyClick(Sender: TObject);
-begin
-    with ToolButtonRun do
-        with ClientToScreen(Point(0, Height)) do
-            PopupMenu1.Popup(X, Y);
 end;
 
 procedure TElcoMainForm.ToolButtonStopClick(Sender: TObject);
@@ -635,16 +513,51 @@ begin
     notify_services.HandleCopydata(Message);
 end;
 
+procedure TElcoMainForm.I201Click(Sender: TObject);
+var
+    s: string;
+    v: double;
+label l;
+begin
+    s := '1';
+l:
+    if not InputQuery('Пересчёт Iч -20"С', 'Укажите коэффициент пересчёта', s)
+    then
+        exit;
+    s := s.Trim;
+    if not try_str_to_float(s, v) then
+        goto l;
+    FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
+end;
+
 procedure TElcoMainForm.MenuItem8Click(Sender: TObject);
 begin
     FormEditText.Show;
 end;
 
-procedure TElcoMainForm.MenuNewPartyClick(Sender: TObject);
+procedure TElcoMainForm.N11Click(Sender: TObject);
 begin
-    FormNewPartyDialog.Position := poScreenCenter;
-    FormNewPartyDialog.WindowState := wsNormal;
-    FormNewPartyDialog.Show;
+    ShowFormCenterScreen(FormSelectTemperaturesDialog);
+end;
+
+procedure TElcoMainForm.N12Click(Sender: TObject);
+begin
+    TRunnerSvc.RunWritePartyFirmware;
+end;
+
+procedure TElcoMainForm.N14Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormAppConfig);
+end;
+
+procedure TElcoMainForm.N15Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormEditText);
+end;
+
+procedure TElcoMainForm.N18Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormNewPartyDialog);
 end;
 
 procedure TElcoMainForm.N201Click(Sender: TObject);
@@ -688,24 +601,44 @@ end;
 
 procedure TElcoMainForm.N3Click(Sender: TObject);
 begin
-    TRunnerSvc.RunWritePartyFirmware;
+    ShowFormCenterScreen(FormFirmwarechart);
 end;
 
 procedure TElcoMainForm.N4Click(Sender: TObject);
 begin
-    with ToolButtonRun do
-        with ClientToScreen(Point(0, Height)) do
-        begin
-            ToolButtonRun.PopupMenu.CloseMenu;
-            FormSelectTemperaturesDialog.Left := X + 5;
-            FormSelectTemperaturesDialog.Top := Y + 5;
-            FormSelectTemperaturesDialog.Show;
-        end;
+    FormJournalParties.FetchYearsMonths;
+    ShowFormCenterScreen(FormProductCurrents);
+end;
+
+procedure TElcoMainForm.N5Click(Sender: TObject);
+begin
+    FormInterrogate.UpdateCheckBlocks;
+    ShowFormCenterScreen(FormInterrogate);
 end;
 
 procedure TElcoMainForm.N6Click(Sender: TObject);
 begin
-    FormLastParty.SetParty(TLastPartySvc.SelectOnlyOkProductsProduction);
+    ShowFormCenterScreen(FormKtx500);
+end;
+
+procedure TElcoMainForm.N7Click(Sender: TObject);
+begin
+    // if FormParty.party.PartyID = 0 then
+    // FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.PartyID)
+    // else
+    // FormParty.party := TLastPartySvc.party;
+    FormJournalParties.FetchYearsMonths;
+    ShowFormCenterScreen(FormJournalParties);
+end;
+
+procedure TElcoMainForm.N8Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormJournalProducts);
+end;
+
+procedure TElcoMainForm.N9Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormConsole);
 end;
 
 procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
@@ -858,6 +791,16 @@ begin
     // s := s + '"Cancel" - прервать выполнение.';
     // if MessageDlg(s, mtWarning, mbOKCancel, 0) <> IDOK then
     // TRunnerSvc.StopHardware;
+end;
+
+procedure TElcoMainForm.N20Click(Sender: TObject);
+begin
+    FormLastParty.SetParty(TLastPartySvc.SelectOnlyOkProductsProduction);
+end;
+
+procedure TElcoMainForm.N2Click(Sender: TObject);
+begin
+    ShowFormCenterScreen(FormFirmware);
 end;
 
 end.

@@ -65,6 +65,7 @@ var
     v: TProductCurrent;
     ACol, ARow, w: Integer;
 begin
+    Caption := '∆урнал сн€ти€ Ё’я ' + inttostr(ProductID);
 
     with StringGrid1 do
     begin
@@ -86,7 +87,7 @@ begin
         for ARow := 1 to rowcount - 1 do
             with xs[ARow-1] do
             begin
-                Cells[0, ARow] := DateTimeToStr(StoredAt);
+                Cells[0, ARow] := FormatDateTime('dd.mm.YY HH:nn',StoredAt);
                 Cells[1, ARow] := FloatToStr(Temperature);
                 Cells[2, ARow] := IntToStr(Gas);
                 Cells[3, ARow] := FloatToStr(CurrentValue);

@@ -1,7 +1,7 @@
 object FormJournalProducts: TFormJournalProducts
   Left = 0
   Top = 0
-  Caption = 'FormJournalProducts'
+  Caption = #1046#1091#1088#1085#1072#1083' '#1069#1061#1071
   ClientHeight = 300
   ClientWidth = 1072
   Color = clWindow
@@ -12,6 +12,7 @@ object FormJournalProducts: TFormJournalProducts
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 18
   object Panel1: TPanel

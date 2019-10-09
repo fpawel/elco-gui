@@ -53,7 +53,7 @@ var
 implementation
 
 uses stringgridutils, services, stringutils, UnitFormFirmware,
-  UnitFormLastParty;
+  UnitFormLastParty, UnitFormFirmwareChart, UnitFormProductCurrents;
 
 {$R *.dfm}
 
@@ -75,7 +75,9 @@ begin
     if (ARow < 1) or (ARow >= Length(FParty.Products)) then
         exit;
     FormFirmware.product := FParty.Products[ARow - 1];
-    FormFirmware.Show;
+    FormFirmware.show;
+        FormFirmwareChart.Show;
+        FormProductCurrents.Show;
 end;
 
 procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;

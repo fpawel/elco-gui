@@ -91,7 +91,8 @@ implementation
 
 uses stringgridutils, stringutils, superobject, server_data_types_helpers,
     services, UnitFormFirmware, dateutils, UnitFormSelectProducts,  HttpExceptions,
-    HttpRpcClient, UnitFormSelectStendPlacesDialog, UnitFormProductTypeDialog;
+    HttpRpcClient, UnitFormSelectStendPlacesDialog, UnitFormProductTypeDialog,
+  UnitFormProductCurrents, UnitFormFirmwareChart;
 
 {$R *.dfm}
 
@@ -145,6 +146,8 @@ begin
 
     StringGrid_RedrawRow(grd, grd.Row);
     StringGrid_RedrawRow(grd, ARow);
+
+
 
 end;
 
@@ -255,14 +258,17 @@ begin
             FProducts[p.Place].production := not f;
 
     end;
-
     if (ARow < 1) or (ARow > Length(FProducts)) then
         exit;
     if ACol > 0 then
     begin
         StringGrid1.EditorMode := false;
         FormFirmware.Product := FProducts[ARow - 1];
-        FormFirmware.Show;
+        FormProductCurrents.Load(FProducts[ARow - 1].ProductID);
+
+        FormFirmware.show;
+        FormFirmwareChart.Show;
+        FormProductCurrents.Show;
     end;
 
 end;
