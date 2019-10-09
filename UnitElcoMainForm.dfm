@@ -5613,10 +5613,7 @@ object ElcoMainForm: TElcoMainForm
     Constraints.MinWidth = 400
     ParentColor = True
     TabOrder = 1
-    ExplicitLeft = 5
-    ExplicitTop = 36
-    ExplicitWidth = 913
-    ExplicitHeight = 547
+    ExplicitTop = 29
   end
   object PanelMessageBox: TPanel
     Left = 235
