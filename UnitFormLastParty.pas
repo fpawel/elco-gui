@@ -108,12 +108,12 @@ begin
     FReadPlace := -1;
     FReadBlock := -1;
     SetLength(FProducts, 96);
-    reload_data;
+
 end;
 
 procedure TFormLastParty.FormShow(Sender: TObject);
 begin
-    //
+    reload_data;
 end;
 
 procedure TFormLastParty.StringGrid1SelectCell(Sender: TObject;
@@ -487,8 +487,10 @@ begin
 end;
 
 procedure TFormLastParty.reload_data;
+var p:TParty1;
 begin
-    SetParty(TLastPartySvc.party);
+    p := TLastPartySvc.party;
+    SetParty(p);
 end;
 
 function TFormLastParty.GetProductValue(ColumnIndex, RowIndex: Integer)

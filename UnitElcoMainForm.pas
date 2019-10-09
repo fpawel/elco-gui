@@ -492,8 +492,6 @@ begin
 end;
 
 procedure TElcoMainForm.TimerPerformingTimer(Sender: TObject);
-var
-    v: Integer;
 begin
     with LabelStatusTop.Font do
         if Color = clRed then
@@ -711,8 +709,6 @@ begin
 end;
 
 procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
-var
-    v: TDateTime;
 begin
 
     PanelDelay.Visible := true;
@@ -720,7 +716,7 @@ begin
     LabelProgress.Caption := '';
     ProgressBar1.Position := i.ElapsedSeconds * 1000;
     ProgressBar1.Max := i.TotalSeconds * 1000;
-    v := 0;
+
     LabelDelayElepsedTime.Caption := FormatDateTime('HH:mm:ss',
       IncSecond(0, i.ElapsedSeconds));
     if ProgressBar1.Max <> 0 then
@@ -784,8 +780,6 @@ begin
 end;
 
 procedure TElcoMainForm.OnWorkComplete(X: TWorkResult);
-var
-    s: string;
 begin
     ToolBarStop.Visible := false;
 

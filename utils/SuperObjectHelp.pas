@@ -16,7 +16,7 @@ procedure SuperObject_SetField(x: ISuperObject; field: string;
 procedure SuperObject_SetField(x: ISuperObject; field: string;
   v: TArray<string>); overload;
 
-  procedure SuperObject_SetField(x: ISuperObject; field: string; v: TArray<Int64>); overload;
+procedure SuperObject_SetField(x: ISuperObject; field: string; v: TArray<Int64>); overload;
 
 procedure SuperObject_Get(x: ISuperObject; var v: int64); overload;
 procedure SuperObject_Get(x: ISuperObject; var v: integer); overload;

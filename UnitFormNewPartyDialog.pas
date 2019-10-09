@@ -30,6 +30,7 @@ type
           var CanSelect: Boolean);
         procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
           const Value: string);
+        procedure Button1Click(Sender: TObject);
     private
         Last_Edited_Col, Last_Edited_Row: Integer;
         { Private declarations }
@@ -44,13 +45,30 @@ implementation
 
 {$R *.dfm}
 
-uses stringgridutils;
+uses stringgridutils, services;
+
+procedure TFormNewPartyDialog.Button1Click(Sender: TObject);
+var
+    xs: TArray<int64>;
+    cl, ro, n: Integer;
+    v: int64;
+begin
+    SetLength(xs, 96);
+    for ro := 1 to 12 do
+        for cl := 1 to 8 do
+            xs[(ro - 1) * 8 + cl - 1] :=
+              StrToIntDef(StringGrid1.Cells[cl, ro], 0);
+    TRunnerSvc.NewParty(xs);
+    N4.Click;
+    hide;
+
+end;
 
 procedure TFormNewPartyDialog.FormCreate(Sender: TObject);
 var
     i: Integer;
 begin
-    Label1.Hide;
+    Label1.hide;
     with StringGrid1 do
     begin
         ColCount := 9;
@@ -80,8 +98,8 @@ var
 begin
     with StringGrid1 do
     begin
-        g.Left := 0;
-        g.Top := 0;
+        g.Left := 1;
+        g.Top := 1;
         g.Bottom := RowCount - 1;
         g.Right := ColCount - 1;
         Selection := g;
@@ -134,7 +152,6 @@ end;
 procedure TFormNewPartyDialog.StringGrid1SelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 var
-    r: TRect;
     grd: TStringGrid;
 
 begin
@@ -157,8 +174,9 @@ end;
 procedure TFormNewPartyDialog.StringGrid1SetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 var
-    n: Integer;
-    b: Boolean;
+    serial: int64;
+    cl, ro: Integer;
+    dup_cl, dup_ro: Integer;
 begin
     if ARow = 0 then
         exit;
@@ -170,19 +188,31 @@ begin
             Last_Edited_Col := -1; // Indicate no cell is edited
             Last_Edited_Row := -1; // Indicate no cell is edited
             // Do whatever wanted after user has finish editing a cell
-
-            n := 1;
-            b := TryStrToInt(Value, n);
-            if (not b) or (n <= 0) then
+            serial := StrToIntDef(Value, 0);
+            if serial <= 0 then
             begin
                 Label1.Caption :=
                   Format('%d:%d невозможно получить положительное целое чесло из строки "%s"',
                   [ACol, ARow, Cells[ACol, ARow]]);
                 Cells[ACol, ARow] := '';
                 Label1.Show;
-            end
-            else
-                Label1.Hide;
+                exit;
+            end;
+            for cl := 1 to 8 do
+                for ro := 1 to 12 do
+                    if (cl <> ACol) AND (ro <> ARow) AND
+                      (StrToInt64Def(Cells[cl, ro], 0) = serial) then
+                    begin
+                        Label1.Caption :=
+                          Format('%d:%d дублирует значение в ячейке %d:%d',
+                          [ACol, ARow, cl, ro]);
+                        Cells[ACol, ARow] := '';
+                        Label1.Show;
+                        exit;
+                    end;
+            Label1.hide;
+            exit;
+
         end
         else
         begin // The cell is being editted
