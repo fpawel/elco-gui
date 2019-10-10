@@ -603,6 +603,7 @@ end;
 procedure TFormFirmware.SetProduct(p: TProductInfo);
 begin
     FProduct := p;
+    FormProductCurrents.Load(p.ProductID);
     applyProduct;
 end;
 

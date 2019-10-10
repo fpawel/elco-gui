@@ -264,11 +264,7 @@ begin
     begin
         StringGrid1.EditorMode := false;
         FormFirmware.Product := FProducts[ARow - 1];
-        FormProductCurrents.Load(FProducts[ARow - 1].ProductID);
-
         FormFirmware.show;
-        FormFirmwareChart.Show;
-        FormProductCurrents.Show;
     end;
 
 end;

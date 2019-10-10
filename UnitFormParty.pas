@@ -76,8 +76,6 @@ begin
         exit;
     FormFirmware.product := FParty.Products[ARow - 1];
     FormFirmware.show;
-        FormFirmwareChart.Show;
-        FormProductCurrents.Show;
 end;
 
 procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;

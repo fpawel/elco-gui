@@ -106,8 +106,6 @@ begin
     FormFirmware.product := TProductsCatalogueSvc.ProductInfoByID(
     StrToInt(StringGrid1.Cells[0,Arow]));
     FormFirmware.show;
-        FormFirmwareChart.Show;
-        FormProductCurrents.Show;
 end;
 
 procedure TFormJournalProducts.StringGrid1DrawCell(Sender: TObject;

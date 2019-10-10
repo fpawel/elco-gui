@@ -94,7 +94,6 @@ object FormFirmware: TFormFirmware
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
-    ExplicitHeight = 613
     object GroupBox2: TGroupBox
       AlignWithMargins = True
       Left = 5
@@ -106,7 +105,6 @@ object FormFirmware: TFormFirmware
       Align = alClient
       Caption = #1058#1077#1084#1087#1077#1088#1072#1090#1091#1088#1085#1099#1077' '#1090#1086#1095#1082#1080
       TabOrder = 0
-      ExplicitHeight = 333
       object StringGrid2: TStringGrid
         AlignWithMargins = True
         Left = 7
@@ -132,7 +130,6 @@ object FormFirmware: TFormFirmware
         OnMouseDown = StringGrid2MouseDown
         OnSelectCell = StringGrid2SelectCell
         OnSetEditText = StringGrid2SetEditText
-        ExplicitTop = 25
         ColWidths = (
           80
           80
@@ -150,7 +147,6 @@ object FormFirmware: TFormFirmware
         Align = alRight
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitHeight = 305
         object ToolBar3: TToolBar
           Left = 0
           Top = 0
@@ -240,7 +236,6 @@ object FormFirmware: TFormFirmware
     Caption = 'Panel4'
     ShowCaption = False
     TabOrder = 2
-    ExplicitHeight = 607
     object Label9: TLabel
       AlignWithMargins = True
       Left = 3
