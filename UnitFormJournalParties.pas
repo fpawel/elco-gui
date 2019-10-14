@@ -68,6 +68,7 @@ begin
     if StringGrid1.Row < 1 then
         exit;
     TRunnerSvc.CopyParty(Party.PartyID);
+    FormLastParty.reload_data;
 end;
 
 procedure TFormJournalParties.MenuDeleteItemClick(Sender: TObject);
@@ -80,6 +81,7 @@ begin
         TRunnerSvc.StopHardware;
     TPartiesCatalogueSvc.DeletePartyID(Party.PartyID);
     ComboBox1Change(nil);
+    FormLastParty.reload_data;
 end;
 
 procedure TFormJournalParties.MenuPDFClick(Sender: TObject);

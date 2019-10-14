@@ -11690,10 +11690,6 @@ object ElcoMainForm: TElcoMainForm
       object MenuSetGas: TMenuItem
         Caption = #1055#1086#1076#1072#1090#1100' '#1075#1072#1079
       end
-      object N16: TMenuItem
-        Caption = #1057#1094#1077#1085#1072#1088#1080#1081
-        OnClick = N16Click
-      end
       object N17: TMenuItem
         Caption = '-'
       end
@@ -11760,6 +11756,10 @@ object ElcoMainForm: TElcoMainForm
       object N9: TMenuItem
         Caption = #1050#1086#1085#1089#1086#1083#1100
         OnClick = N9Click
+      end
+      object N16: TMenuItem
+        Caption = #1057#1094#1077#1085#1072#1088#1080#1081
+        OnClick = N16Click
       end
     end
     object N13: TMenuItem

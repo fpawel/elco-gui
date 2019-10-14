@@ -39,21 +39,16 @@ type
         EditSens: TEdit;
         GroupBox2: TGroupBox;
         StringGrid2: TStringGrid;
-        Panel3: TPanel;
         ToolBar3: TToolBar;
         ToolButton14: TToolButton;
         ToolButton15: TToolButton;
-        ToolBar5: TToolBar;
-        ToolButton18: TToolButton;
-        ToolButton19: TToolButton;
-        ToolButton111: TToolButton;
         RadioButton1: TRadioButton;
         RadioButton2: TRadioButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
-        procedure ToolButton2Click(Sender: TObject);
-        procedure ToolButton3Click(Sender: TObject);
         procedure StringGrid2MouseDown(Sender: TObject; Button: TMouseButton;
           Shift: TShiftState; X, Y: Integer);
         procedure StringGrid2SelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -67,6 +62,8 @@ type
         procedure ToolButton6Click(Sender: TObject);
         procedure ToolButton4Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -223,7 +220,7 @@ begin
       GetTemperatureValues);
 end;
 
-procedure TFormFirmware.ToolButton2Click(Sender: TObject);
+procedure TFormFirmware.ToolButton1Click(Sender: TObject);
 var
     cl, ro: Integer;
 begin
@@ -244,7 +241,7 @@ begin
         SetTemperaturePointsChart(Temp, Fon, Sens);
 end;
 
-procedure TFormFirmware.ToolButton3Click(Sender: TObject);
+procedure TFormFirmware.ToolButton2Click(Sender: TObject);
 var
     cl, ro: Integer;
 begin
@@ -515,6 +512,13 @@ procedure TFormFirmware.SetTemperaturePointsChart(ATemp: TArray<Double>;
 var
     i: Integer;
 begin
+    FormFirmwareChart.Caption := Format('График ЭХЯ %d - ', [FProduct.ProductID]);
+    if RadioButton1.Checked then
+        FormFirmwareChart.Caption := FormFirmwareChart.Caption + RadioButton1.Caption
+    else
+        FormFirmwareChart.Caption := FormFirmwareChart.Caption + RadioButton2.Caption;
+
+
     FormFirmwareChart.Series1.Clear;
     FormFirmwareChart.Series2.Clear;
     for i := 0 to length(ATemp) - 1 do

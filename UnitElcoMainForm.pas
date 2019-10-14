@@ -166,6 +166,7 @@ const
 
 procedure ShowFormCenterScreen(AForm: TForm);
 begin
+    AForm.Parent := ElcoMainForm;
     AForm.Position := poScreenCenter;
     AForm.Show;
     ShowWindow(AForm.Handle, SW_RESTORE);
@@ -560,7 +561,7 @@ end;
 
 procedure TElcoMainForm.N16Click(Sender: TObject);
 begin
-    FormScriptSource.Show;
+    ShowFormCenterScreen(FormScriptSource);
 end;
 
 procedure TElcoMainForm.N18Click(Sender: TObject);

@@ -3,7 +3,7 @@ object FormFirmware: TFormFirmware
   Top = 0
   Caption = '"'#1055#1088#1086#1096#1080#1074#1082#1072'"'
   ClientHeight = 565
-  ClientWidth = 578
+  ClientWidth = 884
   Color = clWindow
   Constraints.MinWidth = 400
   Font.Charset = DEFAULT_CHARSET
@@ -21,14 +21,15 @@ object FormFirmware: TFormFirmware
     AlignWithMargins = True
     Left = 5
     Top = 3
-    Width = 570
+    Width = 876
     Height = 35
     Margins.Left = 5
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 570
     object ToolBar2: TToolBar
-      Left = 504
+      Left = 810
       Top = 0
       Width = 66
       Height = 35
@@ -40,6 +41,7 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 0
+      ExplicitLeft = 504
       object ToolButton3: TToolButton
         Left = 0
         Top = 0
@@ -82,34 +84,37 @@ object FormFirmware: TFormFirmware
       Caption = #1056#1072#1089#1095#1080#1090#1072#1085#1086
       TabOrder = 2
       OnClick = RadioButton2Click
+      ExplicitLeft = 95
     end
   end
   object Panel2: TPanel
     Left = 156
     Top = 41
-    Width = 422
+    Width = 728
     Height = 524
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
+    ExplicitWidth = 422
     object GroupBox2: TGroupBox
       AlignWithMargins = True
       Left = 5
       Top = 3
-      Width = 412
+      Width = 718
       Height = 518
       Margins.Left = 5
       Margins.Right = 5
       Align = alClient
       Caption = #1058#1077#1084#1087#1077#1088#1072#1090#1091#1088#1085#1099#1077' '#1090#1086#1095#1082#1080
       TabOrder = 0
+      ExplicitLeft = 2
       object StringGrid2: TStringGrid
         AlignWithMargins = True
         Left = 7
         Top = 23
-        Width = 359
+        Width = 670
         Height = 490
         Margins.Left = 5
         Margins.Right = 5
@@ -130,6 +135,7 @@ object FormFirmware: TFormFirmware
         OnMouseDown = StringGrid2MouseDown
         OnSelectCell = StringGrid2SelectCell
         OnSetEditText = StringGrid2SetEditText
+        ExplicitWidth = 359
         ColWidths = (
           80
           80
@@ -138,89 +144,57 @@ object FormFirmware: TFormFirmware
         RowHeights = (
           24)
       end
-      object Panel3: TPanel
-        AlignWithMargins = True
-        Left = 374
-        Top = 23
-        Width = 33
-        Height = 490
+      object ToolBar3: TToolBar
+        Left = 682
+        Top = 20
+        Width = 34
+        Height = 496
         Align = alRight
-        BevelOuter = bvNone
+        ButtonHeight = 31
+        ButtonWidth = 33
+        Caption = 'ToolBar1'
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Images = ImageList3
         TabOrder = 1
-        object ToolBar3: TToolBar
+        ExplicitLeft = 680
+        object ToolButton14: TToolButton
           Left = 0
           Top = 0
-          Width = 33
-          Height = 78
-          ButtonHeight = 33
-          ButtonWidth = 33
-          Caption = 'ToolBar1'
-          EdgeInner = esNone
-          EdgeOuter = esNone
-          Images = ImageList3
-          TabOrder = 0
-          object ToolButton14: TToolButton
-            Left = 0
-            Top = 0
-            Hint = #1055#1077#1088#1077#1089#1095#1080#1090#1072#1090#1100' '#1090#1086#1082' '#1095#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1080' '#1074' % '#1050#1095
-            Caption = 'ToolButton10'
-            ImageIndex = 4
-            ParentShowHint = False
-            Wrap = True
-            ShowHint = True
-            OnClick = ToolButton8Click
-          end
-          object ToolButton15: TToolButton
-            Left = 0
-            Top = 33
-            Hint = #1055#1077#1088#1077#1089#1095#1080#1090#1072#1090#1100' % '#1050#1095' '#1074' '#1090#1086#1082' '#1095#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1080' '
-            Caption = 'ToolButton11'
-            ImageIndex = 6
-            ParentShowHint = False
-            ShowHint = True
-            OnClick = ToolButton6Click
-          end
+          Hint = #1055#1077#1088#1077#1089#1095#1080#1090#1072#1090#1100' '#1090#1086#1082' '#1095#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1080' '#1074' % '#1050#1095
+          Caption = 'ToolButton10'
+          ImageIndex = 4
+          ParentShowHint = False
+          Wrap = True
+          ShowHint = True
+          OnClick = ToolButton8Click
         end
-        object ToolBar5: TToolBar
+        object ToolButton15: TToolButton
           Left = 0
-          Top = 78
-          Width = 33
-          Height = 176
-          ButtonHeight = 33
-          ButtonWidth = 33
-          Caption = 'ToolBar1'
-          EdgeInner = esNone
-          EdgeOuter = esNone
-          Images = ImageList3
-          TabOrder = 1
-          object ToolButton18: TToolButton
-            Left = 0
-            Top = 0
-            Hint = #1059#1076#1072#1083#1080#1090#1100' '#1089#1090#1088#1086#1082#1091' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088#1099
-            Caption = 'ToolButton13'
-            ImageIndex = 1
-            ParentShowHint = False
-            Wrap = True
-            ShowHint = True
-            OnClick = ToolButton3Click
-          end
-          object ToolButton19: TToolButton
-            Left = 0
-            Top = 33
-            Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1089#1090#1088#1086#1082#1091' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088#1099
-            Caption = 'ToolButton12'
-            ImageIndex = 0
-            ParentShowHint = False
-            Wrap = True
-            ShowHint = True
-            OnClick = ToolButton2Click
-          end
-          object ToolButton111: TToolButton
-            Left = 0
-            Top = 66
-            Caption = 'ToolButton111'
-            ImageIndex = 7
-          end
+          Top = 31
+          Hint = #1055#1077#1088#1077#1089#1095#1080#1090#1072#1090#1100' % '#1050#1095' '#1074' '#1090#1086#1082' '#1095#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1080' '
+          Caption = 'ToolButton11'
+          ImageIndex = 6
+          ParentShowHint = False
+          Wrap = True
+          ShowHint = True
+          OnClick = ToolButton6Click
+        end
+        object ToolButton1: TToolButton
+          Left = 0
+          Top = 62
+          Caption = 'ToolButton1'
+          ImageIndex = 0
+          Wrap = True
+          OnClick = ToolButton1Click
+        end
+        object ToolButton2: TToolButton
+          Left = 0
+          Top = 93
+          Caption = 'ToolButton2'
+          ImageIndex = 1
+          Wrap = True
+          OnClick = ToolButton2Click
         end
       end
     end

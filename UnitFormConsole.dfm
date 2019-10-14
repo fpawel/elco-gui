@@ -1,7 +1,7 @@
 object FormConsole: TFormConsole
   Left = 0
   Top = 0
-  Caption = #1050#1086#1085#1089#1086#1083#1100' '#1057#1054#1052' '#1087#1086#1088#1090#1072
+  Caption = #1050#1086#1085#1089#1086#1083#1100
   ClientHeight = 264
   ClientWidth = 1063
   Color = clWindow
@@ -179,8 +179,6 @@ object FormConsole: TFormConsole
     OnDblClick = StringGrid1DblClick
     OnDrawCell = StringGrid1DrawCell
     OnKeyDown = StringGrid1KeyDown
-    ExplicitLeft = -2
-    ExplicitTop = -2
     ColWidths = (
       64
       64)

@@ -3,7 +3,7 @@ object FormScriptSource: TFormScriptSource
   Top = 0
   Caption = #1057#1094#1077#1085#1072#1088#1080#1081
   ClientHeight = 288
-  ClientWidth = 613
+  ClientWidth = 269
   Color = clHighlightText
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,14 +11,15 @@ object FormScriptSource: TFormScriptSource
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  OnShow = FormShow
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 18
   object Label1: TLabel
     AlignWithMargins = True
     Left = 3
     Top = 267
-    Width = 607
+    Width = 263
     Height = 18
     Align = alBottom
     Caption = 'Label1'
@@ -28,14 +29,12 @@ object FormScriptSource: TFormScriptSource
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    ExplicitLeft = 0
-    ExplicitTop = 270
     ExplicitWidth = 41
   end
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 613
+    Width = 269
     Height = 33
     Align = alTop
     BevelOuter = bvNone
@@ -44,11 +43,11 @@ object FormScriptSource: TFormScriptSource
     ParentBackground = False
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 635
+    ExplicitWidth = 613
     object ToolBar6: TToolBar
       Left = 0
       Top = 0
-      Width = 613
+      Width = 269
       Height = 33
       Align = alClient
       ButtonHeight = 30
@@ -60,14 +59,11 @@ object FormScriptSource: TFormScriptSource
       Images = ImageList4
       ParentColor = False
       TabOrder = 0
-      ExplicitTop = 8
-      ExplicitWidth = 635
+      ExplicitWidth = 613
       object ToolButtonStop: TToolButton
         Left = 0
         Top = 0
-        Hint = 
-          #1055#1088#1077#1088#1074#1072#1090#1100' '#1087#1088#1086#1076#1091#1074#1082#1091'/'#1087#1088#1086#1075#1088#1077#1074' '#1080' '#1087#1077#1088#1077#1081#1090#1080' '#1082' '#1089#1083#1077#1076#1091#1102#1097#1077#1081' '#1086#1087#1077#1088#1072#1094#1080#1080' '#1090#1077#1093'. '#1087#1088 +
-          #1086#1094#1077#1089#1089#1072' '#1085#1072#1089#1090#1088#1086#1081#1082#1080
+        Hint = #1047#1072#1087#1091#1089#1090#1080#1090#1100' '#1089#1094#1077#1085#1072#1088#1080#1081
         Caption = 'ToolButtonCancel'
         ImageIndex = 0
         ParentShowHint = False
@@ -77,14 +73,22 @@ object FormScriptSource: TFormScriptSource
       object ToolButton1: TToolButton
         Left = 30
         Top = 0
+        Hint = #1047#1072#1075#1088#1091#1079#1080#1090#1100' '#1089#1094#1077#1085#1072#1088#1080#1081' '#1080#1079' '#1092#1072#1081#1083#1072
         Caption = 'ToolButton1'
         ImageIndex = 1
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = ToolButton1Click
       end
       object ToolButton2: TToolButton
         Left = 60
         Top = 0
-        Caption = 'ToolButton2'
+        Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1089#1094#1077#1085#1072#1088#1080#1081' '#1074' '#1092#1072#1081#1083
+        Caption = #1089#1086#1093#1088#1072#1085#1080#1090#1100' '#1089#1094#1077#1085#1072#1088#1080#1081' '#1074' '#1092#1072#1081#1083
         ImageIndex = 2
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = ToolButton2Click
       end
     end
   end
@@ -92,7 +96,7 @@ object FormScriptSource: TFormScriptSource
     AlignWithMargins = True
     Left = 3
     Top = 36
-    Width = 607
+    Width = 263
     Height = 225
     Align = alClient
     BorderStyle = bsNone
@@ -101,14 +105,11 @@ object FormScriptSource: TFormScriptSource
     Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
-    Lines.Strings = (
-      'RichEdit1')
     ParentFont = False
     TabOrder = 1
     Zoom = 100
-    OnChange = RichEdit1Change
-    ExplicitWidth = 378
-    ExplicitHeight = 155
+    ExplicitLeft = -2
+    ExplicitWidth = 607
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit

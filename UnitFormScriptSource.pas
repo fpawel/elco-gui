@@ -20,8 +20,10 @@ type
         RichEdit1: TRichEdit;
         Label1: TLabel;
         procedure ToolButtonStopClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure RichEdit1Change(Sender: TObject);
+        procedure ToolButton1Click(Sender: TObject);
+        procedure ToolButton2Click(Sender: TObject);
+        procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     private
         { Private declarations }
     public
@@ -36,14 +38,61 @@ implementation
 
 {$R *.dfm}
 
-uses services, richeditutils, UnitElcoMainForm;
+uses services, richeditutils;
 
-procedure TFormScriptSource.FormShow(Sender: TObject);
+procedure TFormScriptSource.FormCreate(Sender: TObject);
 begin
-    RichEdit1.Lines.Text := ElcoMainForm.FIni.ReadString('work', 'script', '');
+    if FileExists(ExtractFileDir(ParamStr(0)) + '\scenary.scn') then
+        RichEdit1.Lines.LoadFromFile(ExtractFileDir(ParamStr(0)) +
+          '\scenary.scn');
+
     Label1.Hide;
 end;
 
+procedure TFormScriptSource.FormDestroy(Sender: TObject);
+begin
+    RichEdit1.Lines.SaveToFile(ExtractFileDir(ParamStr(0)) + '\scenary.scn');
+end;
+
+procedure TFormScriptSource.ToolButton1Click(Sender: TObject);
+begin
+    with TFileOpenDialog.Create(nil) do
+    begin
+        with fileTypes.Add do
+        begin
+            DisplayName := 'Файлы сценария *.scn';
+            FileMask := '*.scn';
+        end;
+        DefaultFolder := ExtractFileDir(ParamStr(0));
+        DefaultExtension := '*.scn';
+
+        if Execute then
+            RichEdit1.Lines.LoadFromFile(FileName);
+
+
+        Free;
+    end;
+end;
+
+procedure TFormScriptSource.ToolButton2Click(Sender: TObject);
+begin
+    with TFileSaveDialog.Create(nil) do
+    begin
+        with fileTypes.Add do
+        begin
+            DisplayName := 'Файлы сценария *.scn';
+            FileMask := '*.scn';
+        end;
+        DefaultFolder := ExtractFileDir(ParamStr(0));
+        DefaultExtension := '*.scn';
+        Options := Options + [fdoOverwritePrompt];
+        if Execute then
+            RichEdit1.Lines.SaveToFile(FileName);
+
+        Free;
+    end;
+
+end;
 
 procedure TFormScriptSource.ToolButtonStopClick(Sender: TObject);
 var
@@ -63,14 +112,14 @@ begin
 
 end;
 
-
 procedure TFormScriptSource.OnScriptLine(x: TScriptLine);
-var s : string;
+var
+    s: string;
 begin
     s := RichEdit1.Lines.Text;
     RichEdit1.Lines.Clear;
     RichEdit1.Lines.Text := s;
-    RichEdit1.SelStart := RichEdit1.Perform(EM_LINEINDEX, x.Lineno-1, 0);
+    RichEdit1.SelStart := RichEdit1.Perform(EM_LINEINDEX, x.Lineno - 1, 0);
     RichEdit1.SelLength := RichEdit1.Perform(EM_LINEINDEX, x.Lineno, 0) -
       RichEdit1.SelStart;
     RichEdit1.SelAttributes.Style := [fsBold];
@@ -78,11 +127,6 @@ begin
     RichEdit_SetBackgroundColor(RichEdit1, clGradientInactiveCaption);
     RichEdit1.SelLength := 0;
 
-end;
-
-procedure TFormScriptSource.RichEdit1Change(Sender: TObject);
-begin
-    ElcoMainForm.FIni.WriteString('work', 'script', RichEdit1.Lines.Text);
 end;
 
 end.
