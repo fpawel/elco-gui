@@ -66,6 +66,7 @@ type
         class procedure RunMain(param1:Boolean; param2:Boolean; param3:Boolean; param4:Boolean);static;
         class procedure RunReadAndSaveProductCurrents(Column:string; Gas:Integer; Temperature:Double);static;
         class procedure RunReadCurrent;static;
+        class function RunScript(param1:string):TRunScriptResult;static;
         class procedure RunSwitchGas(param1:Integer);static;
         class procedure RunWritePartyFirmware;static;
         class procedure SkipDelay;static;
@@ -503,6 +504,16 @@ begin
     req := SO;
     
     ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadCurrent', req); 
+end;
+
+
+class function TRunnerSvc.RunScript(param1:string):TRunScriptResult;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunScript', req, Result); 
 end;
 
 

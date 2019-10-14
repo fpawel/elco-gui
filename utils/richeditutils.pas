@@ -18,6 +18,7 @@ function RichEdit_CurrentlineNumber(re: TRichEdit): Integer;
 procedure RichEdit_PopupMenu(re: TRichEdit);
 
 procedure RichEdit_DeleteEmptiLines(re: TRichEdit);
+procedure RichEdit_SetBackgroundColor(r: TRichEdit; c: TColor);
 
 implementation
 
@@ -32,7 +33,7 @@ begin
     Result := Pos.Y + 1;
 end;
 
-procedure setBackcolor(r: TRichEdit; c: TColor);
+procedure RichEdit_SetBackgroundColor(r: TRichEdit; c: TColor);
 var
     cf: TCharFormat2;
 begin
@@ -54,7 +55,7 @@ procedure RichEdit_AddText2(RichEdit1: TRichEdit;
   font_color, back_color: TColor; text: string);
 begin
     RichEdit1.SelAttributes.Color := font_color;
-    setBackcolor(RichEdit1, back_color);
+    RichEdit_SetBackgroundColor(RichEdit1, back_color);
     RichEdit1.SelText := text + #13;
 end;
 

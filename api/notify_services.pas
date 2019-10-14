@@ -6,14 +6,15 @@ interface
 uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
 
 type
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TIntegerHandler = reference to procedure (x:Integer);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TWorkResultHandler = reference to procedure (x:TWorkResult);
     TStringHandler = reference to procedure (x:string);
     TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
-    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     TParty1Handler = reference to procedure (x:TParty1);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TIntegerHandler = reference to procedure (x:Integer);
+    TScriptLineHandler = reference to procedure (x:TScriptLine);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -33,6 +34,7 @@ procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
 procedure SetOnReadPlace( AHandler : TIntegerHandler);
 procedure SetOnReadBlock( AHandler : TIntegerHandler);
+procedure SetOnScriptLine( AHandler : TScriptLineHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
@@ -41,8 +43,8 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdWorkComplete, CmdWorkStarted, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, 
-    CmdReadBlock);
+    TServerAppCmd = (CmdReadCurrent, CmdWorkComplete, CmdWorkStarted, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, CmdReadBlock, 
+    CmdScriptLine);
 
     type _deserializer = record
         class function deserialize<T>(str:string):T;static;
@@ -64,6 +66,7 @@ var
     _OnWriteConsole : TStringHandler;
     _OnReadPlace : TIntegerHandler;
     _OnReadBlock : TIntegerHandler;
+    _OnScriptLine : TScriptLineHandler;
     _enabled:boolean;
 
 class function _deserializer.deserialize<T>(str:string):T;
@@ -179,6 +182,12 @@ begin
                 raise Exception.Create('_OnReadBlock must be set');
             _OnReadBlock(StrToInt(str));
         end;
+        CmdScriptLine:
+        begin
+            if not Assigned(_OnScriptLine) then
+                raise Exception.Create('_OnScriptLine must be set');
+            _OnScriptLine(_deserializer.deserialize<TScriptLine>(str));
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -274,6 +283,12 @@ begin
     if Assigned(_OnReadBlock) then
         raise Exception.Create('_OnReadBlock already set');
     _OnReadBlock := AHandler;
+end;
+procedure SetOnScriptLine( AHandler : TScriptLineHandler);
+begin
+    if Assigned(_OnScriptLine) then
+        raise Exception.Create('_OnScriptLine already set');
+    _OnScriptLine := AHandler;
 end;
 
 

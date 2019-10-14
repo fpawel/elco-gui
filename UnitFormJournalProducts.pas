@@ -79,8 +79,6 @@ begin
     SetTableGridColsWidths(grd, ATable);
 end;
 
-
-
 procedure TFormJournalProducts.FormCreate(Sender: TObject);
 begin
     //
@@ -202,9 +200,7 @@ begin
 
     if Length(FTable) > 0 then
         SetTableGrid(StringGrid1, FTable);
-
 end;
-
 
 procedure TFormJournalProducts.Edit1Change(Sender: TObject);
 begin

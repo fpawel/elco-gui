@@ -67,6 +67,7 @@ type
         N7: TMenuItem;
         N8: TMenuItem;
         N9: TMenuItem;
+    N16: TMenuItem;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure FormResize(Sender: TObject);
@@ -97,6 +98,7 @@ type
         procedure N7Click(Sender: TObject);
         procedure N9Click(Sender: TObject);
         procedure N8Click(Sender: TObject);
+    procedure N16Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -148,7 +150,7 @@ uses stringgridutils, stringutils, JclDebug,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
     UnitFormJournalProducts, UnitFormPopup, UnitFormNewPartyDialog,
-    UnitFormFirmwareChart, UnitFormProductCurrents;
+    UnitFormFirmwareChart, UnitFormProductCurrents, UnitFormScriptSource;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -346,6 +348,7 @@ begin
         begin
             PanelDelay.Hide;
         end);
+    SetOnScriptLine(FormScriptSource.OnScriptLine);
 
     NotifyServices_SetEnabled(true);
     TRunnerSvc.StopHardware;
@@ -553,6 +556,11 @@ end;
 procedure TElcoMainForm.N15Click(Sender: TObject);
 begin
     ShowFormCenterScreen(FormEditText);
+end;
+
+procedure TElcoMainForm.N16Click(Sender: TObject);
+begin
+    FormScriptSource.Show;
 end;
 
 procedure TElcoMainForm.N18Click(Sender: TObject);

@@ -69,7 +69,8 @@ uses
   HttpRpcClient in 'api\HttpRpcClient.pas',
   UnitFormProductCurrents in 'UnitFormProductCurrents.pas' {FormProductCurrents},
   UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart},
-  UnitFormNewPartyDialog in 'UnitFormNewPartyDialog.pas' {FormNewPartyDialog};
+  UnitFormNewPartyDialog in 'UnitFormNewPartyDialog.pas' {FormNewPartyDialog},
+  UnitFormScriptSource in 'UnitFormScriptSource.pas' {FormScriptSource};
 
 {$R *.res}
 
@@ -107,6 +108,7 @@ begin
   Application.CreateForm(TFormProductCurrents, FormProductCurrents);
   Application.CreateForm(TFormFirmwareChart, FormFirmwareChart);
   Application.CreateForm(TFormNewPartyDialog, FormNewPartyDialog);
+  Application.CreateForm(TFormScriptSource, FormScriptSource);
   Application.Run;
 
 end.

@@ -5436,8 +5436,6 @@ object ElcoMainForm: TElcoMainForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitTop = 5
-    ExplicitWidth = 918
     object LabelStatusTop: TLabel
       AlignWithMargins = True
       Left = 43
@@ -5448,7 +5446,6 @@ object ElcoMainForm: TElcoMainForm
       Margins.Top = 5
       Align = alLeft
       Caption = 'LabelStatusTop'
-      ExplicitLeft = 128
       ExplicitHeight = 18
     end
     object PanelDelay: TPanel
@@ -5469,8 +5466,6 @@ object ElcoMainForm: TElcoMainForm
       ParentFont = False
       TabOrder = 0
       Visible = False
-      ExplicitLeft = 231
-      ExplicitWidth = 624
       object LabelDelayElepsedTime: TLabel
         AlignWithMargins = True
         Left = 5
@@ -5509,7 +5504,6 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitLeft = 533
         ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
@@ -5525,7 +5519,6 @@ object ElcoMainForm: TElcoMainForm
         EdgeOuter = esNone
         Images = ImageList4
         TabOrder = 0
-        ExplicitLeft = 588
         object ToolButtonStop: TToolButton
           Left = 0
           Top = 0
@@ -5556,7 +5549,6 @@ object ElcoMainForm: TElcoMainForm
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 460
         DesignSize = (
           666
           31)
@@ -5567,7 +5559,6 @@ object ElcoMainForm: TElcoMainForm
           Height = 15
           Anchors = [akLeft, akTop, akRight, akBottom]
           TabOrder = 0
-          ExplicitWidth = 454
         end
       end
     end
@@ -5590,7 +5581,6 @@ object ElcoMainForm: TElcoMainForm
       Images = ImageList4
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 90
       object ToolButton2: TToolButton
         Left = 0
         Top = 0
@@ -5613,7 +5603,6 @@ object ElcoMainForm: TElcoMainForm
     Constraints.MinWidth = 400
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 29
   end
   object PanelMessageBox: TPanel
     Left = 235
@@ -5937,7 +5926,6 @@ object ElcoMainForm: TElcoMainForm
         Value = 100.000000000000000000
       end>
     TabOrder = 3
-    ExplicitWidth = 918
     object LabelStatusBottom: TLabel
       Left = 0
       Top = 0
@@ -5954,7 +5942,6 @@ object ElcoMainForm: TElcoMainForm
       Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
-      ExplicitLeft = 451
       ExplicitHeight = 18
     end
   end
@@ -11702,6 +11689,10 @@ object ElcoMainForm: TElcoMainForm
       end
       object MenuSetGas: TMenuItem
         Caption = #1055#1086#1076#1072#1090#1100' '#1075#1072#1079
+      end
+      object N16: TMenuItem
+        Caption = #1057#1094#1077#1085#1072#1088#1080#1081
+        OnClick = N16Click
       end
       object N17: TMenuItem
         Caption = '-'
