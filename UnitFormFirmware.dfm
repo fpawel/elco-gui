@@ -2,7 +2,7 @@ object FormFirmware: TFormFirmware
   Left = 0
   Top = 0
   Caption = '"'#1055#1088#1086#1096#1080#1074#1082#1072'"'
-  ClientHeight = 565
+  ClientHeight = 651
   ClientWidth = 884
   Color = clWindow
   Constraints.MinWidth = 400
@@ -27,7 +27,6 @@ object FormFirmware: TFormFirmware
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 570
     object ToolBar2: TToolBar
       Left = 810
       Top = 0
@@ -41,7 +40,6 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 0
-      ExplicitLeft = 504
       object ToolButton3: TToolButton
         Left = 0
         Top = 0
@@ -84,38 +82,37 @@ object FormFirmware: TFormFirmware
       Caption = #1056#1072#1089#1095#1080#1090#1072#1085#1086
       TabOrder = 2
       OnClick = RadioButton2Click
-      ExplicitLeft = 95
     end
   end
   object Panel2: TPanel
     Left = 156
     Top = 41
     Width = 728
-    Height = 524
+    Height = 610
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
-    ExplicitWidth = 422
+    ExplicitHeight = 524
     object GroupBox2: TGroupBox
       AlignWithMargins = True
       Left = 5
       Top = 3
       Width = 718
-      Height = 518
+      Height = 604
       Margins.Left = 5
       Margins.Right = 5
       Align = alClient
       Caption = #1058#1077#1084#1087#1077#1088#1072#1090#1091#1088#1085#1099#1077' '#1090#1086#1095#1082#1080
       TabOrder = 0
-      ExplicitLeft = 2
+      ExplicitHeight = 518
       object StringGrid2: TStringGrid
         AlignWithMargins = True
         Left = 7
         Top = 23
         Width = 670
-        Height = 490
+        Height = 576
         Margins.Left = 5
         Margins.Right = 5
         Align = alClient
@@ -135,7 +132,7 @@ object FormFirmware: TFormFirmware
         OnMouseDown = StringGrid2MouseDown
         OnSelectCell = StringGrid2SelectCell
         OnSetEditText = StringGrid2SetEditText
-        ExplicitWidth = 359
+        ExplicitHeight = 490
         ColWidths = (
           80
           80
@@ -148,7 +145,7 @@ object FormFirmware: TFormFirmware
         Left = 682
         Top = 20
         Width = 34
-        Height = 496
+        Height = 582
         Align = alRight
         ButtonHeight = 31
         ButtonWidth = 33
@@ -157,7 +154,7 @@ object FormFirmware: TFormFirmware
         EdgeOuter = esNone
         Images = ImageList3
         TabOrder = 1
-        ExplicitLeft = 680
+        ExplicitHeight = 496
         object ToolButton14: TToolButton
           Left = 0
           Top = 0
@@ -204,12 +201,13 @@ object FormFirmware: TFormFirmware
     Left = 3
     Top = 44
     Width = 150
-    Height = 518
+    Height = 604
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel4'
     ShowCaption = False
     TabOrder = 2
+    ExplicitHeight = 518
     object Label9: TLabel
       AlignWithMargins = True
       Left = 3
@@ -299,6 +297,16 @@ object FormFirmware: TFormFirmware
       Align = alTop
       Caption = #1063#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
       ExplicitWidth = 128
+    end
+    object Label10: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 539
+      Width = 144
+      Height = 18
+      Align = alTop
+      Caption = #1060#1086#1085#1086#1074#1099#1081' '#1090#1086#1082
+      ExplicitWidth = 88
     end
     object ComboBoxPlace: TComboBox
       AlignWithMargins = True
@@ -425,6 +433,31 @@ object FormFirmware: TFormFirmware
       Color = clInfoBk
       TabOrder = 8
       Text = '100'
+    end
+    object EditSens1: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 507
+      Width = 144
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      TabOrder = 9
+      Text = '100'
+      ExplicitLeft = 6
+      ExplicitTop = 563
+    end
+    object EditFon: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 563
+      Width = 144
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      TabOrder = 10
+      Text = '100'
+      ExplicitTop = 587
     end
   end
   object ImageList3: TImageList

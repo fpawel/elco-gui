@@ -46,6 +46,9 @@ type
         RadioButton2: TRadioButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    EditSens1: TEdit;
+    Label10: TLabel;
+    EditFon: TEdit;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -419,6 +422,8 @@ begin
     DateTimePicker1.DateTime := now;
     EditSerial.text := '';
     EditSens.text := '';
+    EditSens1.text := '';
+    EditFon.text := '';
     EditScaleBegin.text := '';
     EditScaleEnd.text := '';
     SetComboBoxText(ComboBoxProductType, '');
@@ -450,6 +455,8 @@ begin
     DateTimePicker1.DateTime := f.CreatedAt.DateTime;
     EditSerial.text := f.Serial;
     EditSens.text := f.Sensitivity;
+    EditSens1.text := f.Sensitivity1;
+    Editfon.text := f.IFPlus20;
     EditScaleBegin.text := f.ScaleBeg;
     EditScaleEnd.text := f.ScaleEnd;
     SetComboBoxText(ComboBoxProductType, f.ProductType);
