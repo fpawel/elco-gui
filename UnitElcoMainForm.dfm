@@ -11718,6 +11718,7 @@ object ElcoMainForm: TElcoMainForm
       object PDF2: TMenuItem
         Caption = #1054#1090#1095#1105#1090' '#1074' PDF'
         ImageIndex = 6
+        OnClick = PDF2Click
       end
       object N22: TMenuItem
         Caption = #1050#1072#1090#1072#1083#1086#1075

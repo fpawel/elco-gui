@@ -99,6 +99,7 @@ type
         procedure N9Click(Sender: TObject);
         procedure N8Click(Sender: TObject);
     procedure N16Click(Sender: TObject);
+    procedure PDF2Click(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
@@ -401,6 +402,12 @@ end;
 procedure TElcoMainForm.PDF1Click(Sender: TObject);
 begin
     TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
+end;
+
+procedure TElcoMainForm.PDF2Click(Sender: TObject);
+begin
+    TPdfSvc.RunPartyID(TLastPartySvc.PartyID);
+
 end;
 
 procedure TElcoMainForm.RichEditlMessageBoxTextMouseDown(Sender: TObject;

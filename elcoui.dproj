@@ -186,7 +186,6 @@
         <DCCReference Include="grijjy\Grijjy.SysUtils.pas"/>
         <DCCReference Include="grijjy\Grijjy.Uri.pas"/>
         <DCCReference Include="grijjy\Grijjy.Winsock2.pas"/>
-        <DCCReference Include="grijjy\Grijjy.OpenSSL.API.pas"/>
         <DCCReference Include="utils\SuperObjectHelp.pas"/>
         <DCCReference Include="UnitFormProductTypeDialog.pas">
             <Form>FormProductTypeDialog</Form>
@@ -230,6 +229,7 @@
             <Form>FormScriptSource</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="grijjy\Grijjy.OpenSSL.API.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -256,10 +256,10 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
+                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo150x150.png</RemoteName>
+                        <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -270,7 +270,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="c:\GOPATH\src\github.com\fpawel\elco\build\elcoui.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\GOPATH\src\github.com\fpawel\elco\build\elcoui.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>elcoui.exe</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -283,10 +283,10 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\18.0\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                <DeployFile LocalName="..\..\..\..\icons8-обслуживание-96.png" Configuration="Debug" Class="UWP_DelphiLogo150">
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo44x44.png</RemoteName>
+                        <RemoteName>Logo150x150.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

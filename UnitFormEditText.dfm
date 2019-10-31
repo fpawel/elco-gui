@@ -1,7 +1,6 @@
 object FormEditText: TFormEditText
   Left = 0
   Top = 0
-  BorderStyle = bsSizeToolWin
   Caption = #1050#1086#1085#1092#1080#1075#1091#1088#1072#1094#1080#1103' '#1089#1090#1077#1085#1076#1072' 6364'
   ClientHeight = 657
   ClientWidth = 748
@@ -243,7 +242,6 @@ object FormEditText: TFormEditText
     EdgeOuter = esNone
     Images = ImageList4
     TabOrder = 0
-    ExplicitHeight = 653
     object ToolButton2: TToolButton
       Left = 0
       Top = 0
@@ -256,20 +254,9 @@ object FormEditText: TFormEditText
       ShowHint = True
       OnClick = ToolButton2Click
     end
-    object ToolButton1: TToolButton
-      Left = 0
-      Top = 86
-      Hint = #1059#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1079#1085#1072#1095#1077#1085#1080#1103' '#1087#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
-      Caption = 'ToolButton1'
-      ImageIndex = 1
-      ParentShowHint = False
-      Wrap = True
-      ShowHint = True
-      OnClick = ToolButton1Click
-    end
     object ToolButton3: TToolButton
       Left = 0
-      Top = 172
+      Top = 86
       Hint = #1054#1073#1085#1086#1074#1080#1090#1100
       Caption = 'ToolButton3'
       ImageIndex = 2

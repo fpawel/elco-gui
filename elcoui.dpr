@@ -54,7 +54,6 @@ uses
   Grijjy.SysUtils in 'grijjy\Grijjy.SysUtils.pas',
   Grijjy.Uri in 'grijjy\Grijjy.Uri.pas',
   Grijjy.Winsock2 in 'grijjy\Grijjy.Winsock2.pas',
-  Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas',
   SuperObjectHelp in 'utils\SuperObjectHelp.pas',
   UnitFormProductTypeDialog in 'UnitFormProductTypeDialog.pas' {FormProductTypeDialog},
   Grijjy.Bson.IO in 'grijjy\Grijjy.Bson.IO.pas',
@@ -70,7 +69,8 @@ uses
   UnitFormProductCurrents in 'UnitFormProductCurrents.pas' {FormProductCurrents},
   UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart},
   UnitFormNewPartyDialog in 'UnitFormNewPartyDialog.pas' {FormNewPartyDialog},
-  UnitFormScriptSource in 'UnitFormScriptSource.pas' {FormScriptSource};
+  UnitFormScriptSource in 'UnitFormScriptSource.pas' {FormScriptSource},
+  Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas';
 
 {$R *.res}
 

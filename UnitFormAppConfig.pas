@@ -140,7 +140,7 @@ end;
 procedure TFormAppConfig.FormShow(Sender: TObject);
 var
     s: string;
-    v: TGuiSettings;
+    v: TAppConfig;
     p: TParty3;
 
 begin
@@ -150,10 +150,10 @@ begin
         ComboBoxProductTypeName.Items.Add(s);
     EnumComports(ComboBoxComportProducts.Items);
     EnumComports(ComboBoxComportGas.Items);
-    v := TConfigSvc.GetGui;
+    v := TConfigSvc.GetConfig;
 
-    setupCB(ComboBoxComportProducts, v.ComportMeasurer);
-    setupCB(ComboBoxComportGas, v.ComportGas);
+    setupCB(ComboBoxComportProducts, v.ComportName);
+    setupCB(ComboBoxComportGas, v.ComportGasName);
     setupCB(ComboBoxChipType, v.ChipType);
     EditAmbientTemp.Text := FloatToStr(v.AmbientTemperature);
     EditDurMinutesBlowGas.Text := IntToStr(v.BlowGasMinutes);
@@ -210,21 +210,21 @@ end;
 
 procedure TFormAppConfig.ComboBoxComportProductsChange(Sender: TObject);
 var
-    v: TGuiSettings;
+    v: TAppConfig;
 begin
     if not FEnableOnEdit then
         exit;
     CloseWindow(FhWndTip);
 
     try
-        v.ComportMeasurer := ComboBoxComportProducts.Text;
-        v.ComportGas := ComboBoxComportGas.Text;
+        v.ComportName := ComboBoxComportProducts.Text;
+        v.ComportGasName := ComboBoxComportGas.Text;
         v.BlowGasMinutes := TryEdToInt(EditDurMinutesBlowGas);
         v.HoldTemperatureMinutes := TryEdToInt(EditDurMinutesHoldTemperature);
         v.ChipType := ComboBoxChipType.Text;
         v.AmbientTemperature := TryEdToFloat(EditAmbientTemp);
         v.EndScaleGas2 := ComboBoxEndScaleGas.ItemIndex = 0;
-        TConfigSvc.SetGui(v);
+        TConfigSvc.SetConfig(v);
         (Sender as TWinControl).SetFocus;
     except
         on EWrongInputExcpetion do
