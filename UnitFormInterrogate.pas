@@ -92,12 +92,7 @@ begin
         al := taCenter;
     end
     else if gdSelected in State then
-        cnv.Brush.Color := clGradientInactiveCaption
-    else if not FCheckBlock[ARow - 1] then
-    begin
-        cnv.Brush.Color := $F9F9F9;
-        cnv.Font.Color := clGray;
-    end;
+        cnv.Brush.Color := clGradientInactiveCaption;
 
     if (ACol = 0) and (ARow > 0) then
         StringGrid_DrawCheckBoxCell(StringGrid1, 0, ARow, Rect, State,
