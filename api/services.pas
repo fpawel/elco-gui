@@ -83,9 +83,9 @@ type
 
     TConfigSvc = class
     public
-        class function GetConfig:TAppConfig;static;
+        class function GetConfig:TPublicAppConfig;static;
         class function GetYAML:string;static;
-        class procedure SetConfig(C:TAppConfig);static;
+        class procedure SetConfig(C:TPublicAppConfig);static;
         class function SetYAML(param1:string):string;static;
          
     end;
@@ -576,7 +576,7 @@ begin
 end;
 
  
-class function TConfigSvc.GetConfig:TAppConfig;
+class function TConfigSvc.GetConfig:TPublicAppConfig;
 var
     req : ISuperobject;
 begin
@@ -596,7 +596,7 @@ begin
 end;
 
 
-class procedure TConfigSvc.SetConfig(C:TAppConfig);
+class procedure TConfigSvc.SetConfig(C:TPublicAppConfig);
 var
     req : ISuperobject;s:string;
 begin
