@@ -25,7 +25,7 @@ uses
   listports in 'utils\listports.pas',
   notify_services in 'api\notify_services.pas',
   ComponentBaloonHintU in 'utils\ComponentBaloonHintU.pas',
-  UnitFormEditText in 'UnitFormEditText.pas' {FormEditText},
+  UnitFormEditAppConfig in 'UnitFormEditAppConfig.pas' {FormEditAppConfig},
   UnitFormSelectTemperaturesDialog in 'UnitFormSelectTemperaturesDialog.pas' {FormSelectTemperaturesDialog},
   UnitFormSelectStendPlacesDialog in 'UnitFormSelectStendPlacesDialog.pas' {FormSelectStendPlacesDialog},
   richeditutils in 'utils\richeditutils.pas',
@@ -70,7 +70,9 @@ uses
   UnitFormFirmwareChart in 'UnitFormFirmwareChart.pas' {FormFirmwareChart},
   UnitFormNewPartyDialog in 'UnitFormNewPartyDialog.pas' {FormNewPartyDialog},
   UnitFormScriptSource in 'UnitFormScriptSource.pas' {FormScriptSource},
-  Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas';
+  Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas',
+  UnitFormProduct in 'UnitFormProduct.pas' {FormProduct},
+  logfile in 'logfile.pas';
 
 {$R *.res}
 
@@ -90,7 +92,7 @@ begin
   Application.CreateForm(TFormLastParty, FormLastParty);
   Application.CreateForm(TFormParty, FormParty);
   Application.CreateForm(TFormFirmware, FormFirmware);
-  Application.CreateForm(TFormEditText, FormEditText);
+  Application.CreateForm(TFormEditAppConfig, FormEditAppConfig);
   Application.CreateForm(TFormSelectTemperaturesDialog, FormSelectTemperaturesDialog);
   Application.CreateForm(TFormSelectStendPlacesDialog, FormSelectStendPlacesDialog);
   Application.CreateForm(TFormSelectBlock, FormSelectBlock);
@@ -109,6 +111,7 @@ begin
   Application.CreateForm(TFormFirmwareChart, FormFirmwareChart);
   Application.CreateForm(TFormNewPartyDialog, FormNewPartyDialog);
   Application.CreateForm(TFormScriptSource, FormScriptSource);
+  Application.CreateForm(TFormProduct, FormProduct);
   Application.Run;
 
 end.

@@ -3,8 +3,8 @@ object FormAppConfig: TFormAppConfig
   Top = 0
   BorderStyle = bsToolWindow
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 462
-  ClientWidth = 699
+  ClientHeight = 562
+  ClientWidth = 678
   Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,80 +17,87 @@ object FormAppConfig: TFormAppConfig
   PixelsPerInch = 96
   TextHeight = 21
   object Panel1: TPanel
-    Left = 184
+    Left = 161
     Top = 0
     Width = 161
-    Height = 357
+    Height = 457
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
+    ExplicitLeft = 184
+    ExplicitHeight = 357
     object Label3: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 3
-      Width = 155
-      Height = 21
-      Align = alTop
-      Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
-      ExplicitWidth = 88
-    end
-    object Label4: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 62
       Width = 155
       Height = 21
       Align = alTop
-      Caption = #1043#1057#1054'-'#1055#1043#1057'1'
-      ExplicitWidth = 74
+      Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
+      ExplicitTop = 3
+      ExplicitWidth = 88
     end
-    object Label5: TLabel
+    object Label4: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 121
       Width = 155
       Height = 21
       Align = alTop
-      Caption = #1043#1057#1054'-'#1055#1043#1057'2'
+      Caption = #1043#1057#1054'-'#1055#1043#1057'1'
+      ExplicitTop = 62
       ExplicitWidth = 74
     end
-    object Label7: TLabel
+    object Label5: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 180
       Width = 155
       Height = 21
       Align = alTop
-      Caption = #1043#1057#1054'-'#1055#1043#1057'3'
+      Caption = #1043#1057#1054'-'#1055#1043#1057'2'
+      ExplicitTop = 121
       ExplicitWidth = 74
     end
-    object Label8: TLabel
+    object Label7: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 239
       Width = 155
       Height = 21
       Align = alTop
-      Caption = #1055#1043#1057' '#1082#1086#1085#1094#1072' '#1096#1082#1072#1083#1099
-      ExplicitWidth = 129
+      Caption = #1043#1057#1054'-'#1055#1043#1057'3'
+      ExplicitTop = 180
+      ExplicitWidth = 74
     end
-    object Label6: TLabel
+    object Label8: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 298
       Width = 155
       Height = 21
       Align = alTop
-      Caption = #1056#1072#1089#1095#1105#1090' T '#8304'C'
+      Caption = #1055#1043#1057' '#1082#1086#1085#1094#1072' '#1096#1082#1072#1083#1099
+      ExplicitTop = 239
+      ExplicitWidth = 129
+    end
+    object Label9: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 155
+      Height = 21
+      Align = alTop
+      Caption = #1058#1080#1087' '#1084#1080#1082#1088#1086#1089#1093#1077#1084#1099
       WordWrap = True
-      ExplicitWidth = 80
+      ExplicitWidth = 120
     end
     object ComboBoxProductTypeName: TComboBox
       AlignWithMargins = True
       Left = 3
-      Top = 30
+      Top = 89
       Width = 155
       Height = 26
       Align = alTop
@@ -113,7 +120,7 @@ object FormAppConfig: TFormAppConfig
     object EditC1: TEdit
       AlignWithMargins = True
       Left = 3
-      Top = 89
+      Top = 148
       Width = 155
       Height = 26
       Align = alTop
@@ -127,26 +134,9 @@ object FormAppConfig: TFormAppConfig
       TabOrder = 1
       Text = 'EditPgs1'
       OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 89
     end
     object EditC2: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 148
-      Width = 155
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 2
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object EditC3: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 207
@@ -160,14 +150,34 @@ object FormAppConfig: TFormAppConfig
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      TabOrder = 2
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 148
+    end
+    object EditC3: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 266
+      Width = 155
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 3
       Text = 'EditPgs1'
       OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 207
     end
     object ComboBoxEndScaleGas: TComboBox
       AlignWithMargins = True
       Left = 3
-      Top = 266
+      Top = 325
       Width = 155
       Height = 26
       Align = alTop
@@ -187,12 +197,241 @@ object FormAppConfig: TFormAppConfig
       Items.Strings = (
         #1055#1043#1057'2'
         #1055#1043#1057'3')
+      ExplicitTop = 266
+    end
+    object ComboBoxChipType: TComboBox
+      AlignWithMargins = True
+      Left = 3
+      Top = 30
+      Width = 155
+      Height = 26
+      Align = alTop
+      Style = csOwnerDrawFixed
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemHeight = 20
+      ParentFont = False
+      TabOrder = 5
+      OnChange = ComboBoxComportProductsChange
+      Items.Strings = (
+        '24LC16'
+        '24LC64'
+        '24LC256')
+      ExplicitLeft = 6
+      ExplicitTop = -2
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 0
+    Top = 457
+    Width = 678
+    Height = 105
+    Align = alBottom
+    Caption = #1058#1077#1082#1089#1090' '#1087#1088#1080#1084#1077#1095#1072#1085#1080#1103' '#1090#1077#1082#1091#1097#1077#1081' '#1079#1072#1075#1088#1091#1079#1082#1080' '#1069#1061#1071
+    TabOrder = 1
+    ExplicitTop = 357
+    ExplicitWidth = 699
+    object Memo1: TMemo
+      Left = 2
+      Top = 23
+      Width = 674
+      Height = 80
+      Align = alClient
+      BorderStyle = bsNone
+      Lines.Strings = (
+        'Memo1')
+      TabOrder = 0
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitWidth = 695
+    end
+  end
+  object Panel2: TPanel
+    Left = 322
+    Top = 0
+    Width = 176
+    Height = 457
+    Align = alLeft
+    BevelOuter = bvNone
+    Caption = 'Panel2'
+    ShowCaption = False
+    TabOrder = 2
+    ExplicitLeft = 359
+    ExplicitTop = -1
+    ExplicitHeight = 502
+    object Label14: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 62
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = #1060#1086#1085','#1084#1080#1085'.'#1084#1082#1040
+      WordWrap = True
+      ExplicitTop = 3
+      ExplicitWidth = 94
+    end
+    object Label23: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 121
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = #1060#1086#1085','#1084#1072#1082#1089'.'#1084#1082#1040
+      WordWrap = True
+      ExplicitTop = 62
+      ExplicitWidth = 99
+    end
+    object Label17: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 180
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = 'D.'#1092#1086#1085'20.'#1084#1072#1082#1089'.'#1084#1082#1040
+      WordWrap = True
+      ExplicitTop = 121
+      ExplicitWidth = 130
+    end
+    object Label24: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 239
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = #1050#1095'20.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
+      WordWrap = True
+      ExplicitTop = 180
+      ExplicitWidth = 145
+    end
+    object Label25: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 298
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = #1050#1095'20.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
+      WordWrap = True
+      ExplicitTop = 239
+      ExplicitWidth = 150
+    end
+    object Label6: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 170
+      Height = 21
+      Align = alTop
+      Caption = #1056#1072#1089#1095#1105#1090' T '#8304'C'
+      WordWrap = True
+    end
+    object Editfon20Min: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 89
+      Width = 170
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 30
+    end
+    object Editfon20Max: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 148
+      Width = 170
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 89
+    end
+    object EditDfon20Max: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 207
+      Width = 170
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 148
+    end
+    object EditKch20Min: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 266
+      Width = 170
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 207
+    end
+    object EditKch20Max: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 325
+      Width = 170
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 266
     end
     object ComboBoxPointsMethod: TComboBox
       AlignWithMargins = True
       Left = 3
-      Top = 325
-      Width = 155
+      Top = 30
+      Width = 170
       Height = 26
       Align = alTop
       Style = csOwnerDrawFixed
@@ -213,227 +452,22 @@ object FormAppConfig: TFormAppConfig
         '3 '#1090#1086#1095#1082#1080)
     end
   end
-  object GroupBox4: TGroupBox
-    Left = 0
-    Top = 357
-    Width = 699
-    Height = 105
-    Align = alBottom
-    Caption = #1058#1077#1082#1089#1090' '#1087#1088#1080#1084#1077#1095#1072#1085#1080#1103' '#1090#1077#1082#1091#1097#1077#1081' '#1079#1072#1075#1088#1091#1079#1082#1080' '#1069#1061#1071
-    TabOrder = 1
-    object Memo1: TMemo
-      Left = 2
-      Top = 23
-      Width = 695
-      Height = 80
-      Align = alClient
-      BorderStyle = bsNone
-      Lines.Strings = (
-        'Memo1')
-      TabOrder = 0
-      OnChange = ComboBoxProductTypeNameChange
-    end
-  end
-  object Panel2: TPanel
-    Left = 345
-    Top = 0
-    Width = 176
-    Height = 357
-    Align = alLeft
-    BevelOuter = bvNone
-    Caption = 'Panel2'
-    ShowCaption = False
-    TabOrder = 2
-    object Label14: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 3
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = #1060#1086#1085','#1084#1080#1085'.'#1084#1082#1040
-      WordWrap = True
-      ExplicitWidth = 94
-    end
-    object Label23: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 62
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = #1060#1086#1085','#1084#1072#1082#1089'.'#1084#1082#1040
-      WordWrap = True
-      ExplicitWidth = 99
-    end
-    object Label17: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 121
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = 'D.'#1092#1086#1085'20.'#1084#1072#1082#1089'.'#1084#1082#1040
-      WordWrap = True
-      ExplicitWidth = 130
-    end
-    object Label24: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 180
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = #1050#1095'20.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
-      WordWrap = True
-      ExplicitWidth = 145
-    end
-    object Label25: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 239
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = #1050#1095'20.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
-      WordWrap = True
-      ExplicitWidth = 150
-    end
-    object Label26: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 298
-      Width = 170
-      Height = 21
-      Align = alTop
-      Caption = #1050#1095'50.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
-      WordWrap = True
-      ExplicitWidth = 145
-    end
-    object Editfon20Min: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 30
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 0
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object Editfon20Max: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 89
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 1
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object EditDfon20Max: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 148
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 2
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object EditKch20Min: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 207
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 3
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object EditKch20Max: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 266
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 4
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-    object EditKch50Min: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 325
-      Width = 170
-      Height = 26
-      Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 5
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
-    end
-  end
   object Panel3: TPanel
     Left = 0
     Top = 0
-    Width = 184
-    Height = 357
+    Width = 161
+    Height = 457
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel3'
     ShowCaption = False
     TabOrder = 3
+    ExplicitHeight = 502
     object Label15: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 178
+      Width = 155
       Height = 21
       Align = alTop
       Caption = #1057#1054#1052' '#1087#1086#1088#1090' '#1089#1090#1077#1085#1076#1072
@@ -443,61 +477,62 @@ object FormAppConfig: TFormAppConfig
       AlignWithMargins = True
       Left = 3
       Top = 62
-      Width = 178
+      Width = 155
       Height = 21
       Align = alTop
-      Caption = #1057#1054#1052' '#1087#1086#1088#1090' '#1075#1072#1079#1086#1074#1086#1075#1086' '#1073#1083#1086#1082#1072
-      ExplicitWidth = 186
+      Caption = #1057#1054#1052' '#1087#1086#1088#1090' '#1075#1072#1079'.'#1073#1083#1086#1082#1072
+      ExplicitWidth = 144
     end
     object Label1: TLabel
       AlignWithMargins = True
       Left = 3
-      Top = 121
-      Width = 178
+      Top = 180
+      Width = 155
       Height = 21
       Align = alTop
-      Caption = #1058#8304'C '#1086#1082#1088#1091#1078#1072#1102#1097#1077#1081' '#1089#1088#1077#1076#1099
+      Caption = #1058#8304'C '#1086#1082#1088'. '#1089#1088#1077#1076#1099
       WordWrap = True
-      ExplicitWidth = 173
+      ExplicitWidth = 105
     end
     object Label13: TLabel
       AlignWithMargins = True
       Left = 3
-      Top = 180
-      Width = 178
+      Top = 239
+      Width = 155
       Height = 21
       Align = alTop
       Caption = #1055#1088#1086#1076#1091#1074#1082#1072' '#1075#1072#1079#1072', '#1084#1080#1085'.'
       WordWrap = True
+      ExplicitTop = 180
       ExplicitWidth = 142
     end
     object Label16: TLabel
       AlignWithMargins = True
       Left = 3
-      Top = 239
-      Width = 178
+      Top = 298
+      Width = 155
       Height = 21
       Align = alTop
       Caption = #1042#1099#1076#1077#1088#1078#1082#1072'  '#1058#8304'C, '#1084#1080#1085'.'
       WordWrap = True
+      ExplicitTop = 239
       ExplicitWidth = 145
     end
-    object Label9: TLabel
+    object Label10: TLabel
       AlignWithMargins = True
       Left = 3
-      Top = 298
-      Width = 178
+      Top = 121
+      Width = 155
       Height = 21
       Align = alTop
-      Caption = #1058#1080#1087' '#1084#1080#1082#1088#1086#1089#1093#1077#1084#1099' '#1087#1072#1084#1103#1090#1080
-      WordWrap = True
-      ExplicitWidth = 176
+      Caption = #1057#1054#1052' '#1087#1086#1088#1090' '#1087#1088#1086#1075'.'
+      ExplicitWidth = 114
     end
     object ComboBoxComportProducts: TComboBox
       AlignWithMargins = True
       Left = 3
       Top = 30
-      Width = 178
+      Width = 155
       Height = 26
       Align = alTop
       Style = csOwnerDrawFixed
@@ -515,12 +550,13 @@ object FormAppConfig: TFormAppConfig
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
         'COM1')
+      ExplicitWidth = 178
     end
     object ComboBoxComportGas: TComboBox
       AlignWithMargins = True
       Left = 3
       Top = 89
-      Width = 178
+      Width = 155
       Height = 26
       Align = alTop
       Style = csOwnerDrawFixed
@@ -538,12 +574,13 @@ object FormAppConfig: TFormAppConfig
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
         'COM1')
+      ExplicitWidth = 178
     end
     object EditAmbientTemp: TEdit
       AlignWithMargins = True
       Left = 3
-      Top = 148
-      Width = 178
+      Top = 207
+      Width = 155
       Height = 26
       Align = alTop
       Color = clInfoBk
@@ -556,12 +593,14 @@ object FormAppConfig: TFormAppConfig
       TabOrder = 2
       Text = 'EditPgs1'
       OnChange = ComboBoxComportProductsChange
+      ExplicitTop = 148
+      ExplicitWidth = 178
     end
     object EditDurMinutesBlowGas: TEdit
       AlignWithMargins = True
       Left = 3
-      Top = 207
-      Width = 178
+      Top = 266
+      Width = 155
       Height = 26
       Align = alTop
       Color = clInfoBk
@@ -574,12 +613,14 @@ object FormAppConfig: TFormAppConfig
       TabOrder = 3
       Text = 'EditPgs1'
       OnChange = ComboBoxComportProductsChange
+      ExplicitTop = 207
+      ExplicitWidth = 178
     end
     object EditDurMinutesHoldTemperature: TEdit
       AlignWithMargins = True
       Left = 3
-      Top = 266
-      Width = 178
+      Top = 325
+      Width = 155
       Height = 26
       Align = alTop
       Color = clInfoBk
@@ -592,12 +633,14 @@ object FormAppConfig: TFormAppConfig
       TabOrder = 4
       Text = 'EditPgs1'
       OnChange = ComboBoxComportProductsChange
+      ExplicitTop = 266
+      ExplicitWidth = 178
     end
-    object ComboBoxChipType: TComboBox
+    object ComboBoxComport2: TComboBox
       AlignWithMargins = True
       Left = 3
-      Top = 325
-      Width = 178
+      Top = 148
+      Width = 155
       Height = 26
       Align = alTop
       Style = csOwnerDrawFixed
@@ -608,88 +651,88 @@ object FormAppConfig: TFormAppConfig
       Font.Name = 'Tahoma'
       Font.Style = []
       ItemHeight = 20
+      ItemIndex = 0
       ParentFont = False
       TabOrder = 5
+      Text = 'COM1'
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
-        '24LC16'
-        '24LC64'
-        '24LC256')
+        'COM1')
+      ExplicitLeft = 0
+      ExplicitWidth = 195
     end
   end
   object Panel4: TPanel
-    Left = 521
+    Left = 498
     Top = 0
     Width = 168
-    Height = 357
+    Height = 457
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel4'
     ShowCaption = False
     TabOrder = 4
+    ExplicitLeft = 521
+    ExplicitHeight = 357
     object Label27: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 3
-      Width = 162
-      Height = 21
-      Align = alTop
-      Caption = #1050#1095'50.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
-      WordWrap = True
-      ExplicitWidth = 150
-    end
-    object Label28: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 62
       Width = 162
       Height = 21
       Align = alTop
-      Caption = 'D.'#1092#1086#1085'50.'#1084#1080#1085'.'#1084#1082#1040
+      Caption = #1050#1095'50.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
       WordWrap = True
-      ExplicitWidth = 125
+      ExplicitTop = 3
+      ExplicitWidth = 150
     end
-    object Label29: TLabel
+    object Label28: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 121
       Width = 162
       Height = 21
       Align = alTop
-      Caption = 'D.'#1092#1086#1085'50.'#1084#1072#1082#1089'.'#1084#1082#1040
+      Caption = 'D.'#1092#1086#1085'50.'#1084#1080#1085'.'#1084#1082#1040
       WordWrap = True
-      ExplicitWidth = 130
+      ExplicitTop = 62
+      ExplicitWidth = 125
     end
-    object Label30: TLabel
+    object Label29: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 180
       Width = 162
       Height = 21
       Align = alTop
-      Caption = 'D.'#1092#1086#1085'.'#1085#1077#1080#1079#1084'.'#1084#1072#1082#1089'.'#1084#1082#1040
+      Caption = 'D.'#1092#1086#1085'50.'#1084#1072#1082#1089'.'#1084#1082#1040
       WordWrap = True
-      ExplicitWidth = 159
+      ExplicitTop = 121
+      ExplicitWidth = 130
     end
-    object EditKch50Max: TEdit
+    object Label30: TLabel
       AlignWithMargins = True
       Left = 3
-      Top = 30
+      Top = 239
       Width = 162
-      Height = 26
+      Height = 21
       Align = alTop
-      Color = clInfoBk
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 0
-      Text = 'EditPgs1'
-      OnChange = ComboBoxProductTypeNameChange
+      Caption = 'D.'#1092#1086#1085'.'#1085#1077#1080#1079#1084'.'#1084#1072#1082#1089'.'#1084#1082#1040
+      WordWrap = True
+      ExplicitTop = 180
+      ExplicitWidth = 159
     end
-    object EditDfon50Min: TEdit
+    object Label26: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 162
+      Height = 21
+      Align = alTop
+      Caption = #1050#1095'50.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
+      WordWrap = True
+    end
+    object EditKch50Max: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 89
@@ -703,11 +746,12 @@ object FormAppConfig: TFormAppConfig
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 0
       Text = 'EditPgs1'
       OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 30
     end
-    object EditDfon50Max: TEdit
+    object EditDfon50Min: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 148
@@ -721,11 +765,12 @@ object FormAppConfig: TFormAppConfig
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 1
       Text = 'EditPgs1'
       OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 89
     end
-    object EditNotMeasuredMax: TEdit
+    object EditDfon50Max: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 207
@@ -739,9 +784,49 @@ object FormAppConfig: TFormAppConfig
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      TabOrder = 2
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 148
+    end
+    object EditNotMeasuredMax: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 266
+      Width = 162
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 3
       Text = 'EditPgs1'
       OnChange = ComboBoxProductTypeNameChange
+      ExplicitTop = 207
+    end
+    object EditKch50Min: TEdit
+      AlignWithMargins = True
+      Left = 3
+      Top = 30
+      Width = 162
+      Height = 26
+      Align = alTop
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      Text = 'EditPgs1'
+      OnChange = ComboBoxProductTypeNameChange
+      ExplicitLeft = 6
+      ExplicitTop = 2
     end
   end
   object TimerDebounceParty: TTimer
@@ -749,6 +834,6 @@ object FormAppConfig: TFormAppConfig
     Interval = 500
     OnTimer = TimerDebouncePartyTimer
     Left = 82
-    Top = 416
+    Top = 392
   end
 end

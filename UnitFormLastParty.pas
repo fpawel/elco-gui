@@ -92,7 +92,7 @@ implementation
 uses stringgridutils, stringutils, superobject, server_data_types_helpers,
     services, UnitFormFirmware, dateutils, UnitFormSelectProducts,  HttpExceptions,
     HttpRpcClient, UnitFormSelectStendPlacesDialog, UnitFormProductTypeDialog,
-  UnitFormProductCurrents, UnitFormFirmwareChart;
+  UnitFormProductCurrents, UnitFormFirmwareChart, UnitFormProduct;
 
 {$R *.dfm}
 
@@ -263,8 +263,16 @@ begin
     if ACol > 0 then
     begin
         StringGrid1.EditorMode := false;
-        FormFirmware.Product := FProducts[ARow - 1];
-        FormFirmware.show;
+        with FormProduct do
+        begin
+            SetProduct(FProducts[ARow - 1]);
+            Parent := self;
+            Align := alRight;
+            Font.Assign(self.Font);
+            BorderStyle := bsNone;
+            show;
+        end;
+
     end;
 
 end;

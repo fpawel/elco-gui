@@ -5603,6 +5603,54 @@ object ElcoMainForm: TElcoMainForm
     Constraints.MinWidth = 400
     ParentColor = True
     TabOrder = 1
+    object PageControlMain: TPageControl
+      Left = 0
+      Top = 0
+      Width = 976
+      Height = 552
+      ActivePage = TabSheetParty
+      Align = alClient
+      MultiLine = True
+      OwnerDraw = True
+      TabHeight = 100
+      TabOrder = 0
+      TabPosition = tpLeft
+      TabWidth = 40
+      OnChange = PageControlMainChange
+      OnDrawTab = PageControlMainDrawTab
+      object TabSheetParty: TTabSheet
+        Caption = #1055#1072#1088#1090#1080#1103
+        ImageIndex = 4
+      end
+      object TabSheetInterrogate: TTabSheet
+        Caption = #1054#1087#1088#1086#1089
+        ImageIndex = 6
+      end
+      object TabSheetAppSettings: TTabSheet
+        Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+        ImageIndex = 3
+      end
+      object TabSheetArchiveParties: TTabSheet
+        Caption = #1040#1088#1093#1080#1074
+        ImageIndex = 3
+      end
+      object TabSheetFindProduct: TTabSheet
+        Caption = #1055#1086#1080#1089#1082' '#1069#1061#1071
+        ImageIndex = 7
+      end
+      object TabSheetTermoChamber: TTabSheet
+        Caption = #1058#1077#1088#1084#1086#1082#1072#1084#1077#1088#1072
+        ImageIndex = 4
+      end
+      object TabSheetConsole: TTabSheet
+        Caption = #1050#1086#1085#1089#1086#1083#1100
+        ImageIndex = 5
+      end
+      object TabSheetScenary: TTabSheet
+        Caption = #1057#1094#1077#1085#1072#1088#1080#1081
+        ImageIndex = 6
+      end
+    end
   end
   object PanelMessageBox: TPanel
     Left = 235
@@ -11712,6 +11760,14 @@ object ElcoMainForm: TElcoMainForm
         Caption = #1042#1099#1073#1088#1072#1090#1100' '#1075#1086#1076#1085#1099#1077' '#1069#1061#1071
         OnClick = N20Click
       end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object N15: TMenuItem
+        Caption = #1050#1086#1085#1092#1080#1075#1091#1088#1072#1094#1080#1103
+        ImageIndex = 2
+        OnClick = N15Click
+      end
       object N21: TMenuItem
         Caption = '-'
       end
@@ -11722,58 +11778,6 @@ object ElcoMainForm: TElcoMainForm
       end
       object N22: TMenuItem
         Caption = #1050#1072#1090#1072#1083#1086#1075
-      end
-    end
-    object N1: TMenuItem
-      Caption = #1054#1082#1085#1086
-      object N2: TMenuItem
-        Caption = #1055#1088#1086#1096#1080#1074#1082#1072
-        OnClick = N2Click
-      end
-      object N3: TMenuItem
-        Caption = #1043#1088#1072#1092#1080#1082
-        OnClick = N3Click
-      end
-      object N4: TMenuItem
-        Caption = #1046#1091#1088#1085#1072#1083' '#1089#1085#1103#1090#1080#1103
-        OnClick = N4Click
-      end
-      object N5: TMenuItem
-        Caption = #1054#1087#1088#1086#1089
-        OnClick = N5Click
-      end
-      object N6: TMenuItem
-        Caption = #1058#1077#1088#1084#1086#1082#1072#1084#1077#1088#1072
-        OnClick = N6Click
-      end
-      object N7: TMenuItem
-        Caption = #1046#1091#1088#1085#1072#1083' '#1079#1072#1075#1088#1091#1079#1086#1082
-        OnClick = N7Click
-      end
-      object N8: TMenuItem
-        Caption = #1046#1091#1088#1085#1072#1083' '#1069#1061#1071
-        OnClick = N8Click
-      end
-      object N9: TMenuItem
-        Caption = #1050#1086#1085#1089#1086#1083#1100
-        OnClick = N9Click
-      end
-      object N16: TMenuItem
-        Caption = #1057#1094#1077#1085#1072#1088#1080#1081
-        OnClick = N16Click
-      end
-    end
-    object N13: TMenuItem
-      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-      object N14: TMenuItem
-        Caption = #1054#1089#1085#1086#1074#1085#1099#1077
-        ImageIndex = 3
-        OnClick = N14Click
-      end
-      object N15: TMenuItem
-        Caption = #1044#1086#1087#1086#1083#1085#1080#1090#1077#1083#1100#1085#1099#1077
-        ImageIndex = 2
-        OnClick = N15Click
       end
     end
   end

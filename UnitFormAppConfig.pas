@@ -26,8 +26,6 @@ type
     EditC3: TEdit;
     Label8: TLabel;
     ComboBoxEndScaleGas: TComboBox;
-    Label6: TLabel;
-    ComboBoxPointsMethod: TComboBox;
     Panel2: TPanel;
     Label14: TLabel;
     Editfon20Min: TEdit;
@@ -39,8 +37,6 @@ type
     Label25: TLabel;
     EditKch20Min: TEdit;
     EditKch20Max: TEdit;
-    Label26: TLabel;
-    EditKch50Min: TEdit;
     Panel3: TPanel;
     Label15: TLabel;
     ComboBoxComportProducts: TComboBox;
@@ -52,8 +48,6 @@ type
     EditDurMinutesBlowGas: TEdit;
     Label16: TLabel;
     EditDurMinutesHoldTemperature: TEdit;
-    Label9: TLabel;
-    ComboBoxChipType: TComboBox;
     Panel4: TPanel;
     Label27: TLabel;
     EditKch50Max: TEdit;
@@ -63,6 +57,14 @@ type
     EditDfon50Max: TEdit;
     Label30: TLabel;
     EditNotMeasuredMax: TEdit;
+    ComboBoxComport2: TComboBox;
+    Label10: TLabel;
+    Label6: TLabel;
+    ComboBoxPointsMethod: TComboBox;
+    Label26: TLabel;
+    EditKch50Min: TEdit;
+    Label9: TLabel;
+    ComboBoxChipType: TComboBox;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ComboBoxComportProductsChange(Sender: TObject);
@@ -82,10 +84,11 @@ type
 
         function TryEdToInt(ed: TEdit): Integer;
         function TryEdToFloat(ed: TEdit): double;
-        function TryEdToNullFloat(ed: TEdit): TNullFloat64;
+        function TryEdToNullFloat(ed: TEdit): string;
 
     public
         { Public declarations }
+        procedure Upload;
     end;
 
 var
@@ -95,7 +98,7 @@ implementation
 
 {$R *.dfm}
 
-uses registry,  stringutils, services;
+uses registry,  math, stringutils, services;
 
 procedure EnumComports(const Ports: TStrings);
 var
@@ -124,10 +127,11 @@ begin
     cb.ItemIndex := cb.Items.IndexOf(s);
 end;
 
-procedure setNullFloatEd(ed: TEdit; v: TNullFloat64);
+procedure setNullFloatEd(ed: TEdit; s: string);
+var v:double;
 begin
-    if v.Valid = true then
-        ed.Text := FloatToStr(v.Float64)
+    if try_str_to_float(s, v) then
+        ed.Text := FloatToStr(v)
     else
         ed.Text := '';
 end;
@@ -137,7 +141,7 @@ begin
     FEnableOnEdit := false;
 end;
 
-procedure TFormAppConfig.FormShow(Sender: TObject);
+procedure TFormAppConfig.Upload;
 var
     s: string;
     v: TPublicAppConfig;
@@ -150,9 +154,11 @@ begin
         ComboBoxProductTypeName.Items.Add(s);
     EnumComports(ComboBoxComportProducts.Items);
     EnumComports(ComboBoxComportGas.Items);
+    EnumComports(ComboBoxComport2.Items);
     v := TConfigSvc.GetConfig;
 
     setupCB(ComboBoxComportProducts, v.ComportName);
+    setupCB(ComboBoxComport2, v.ComportName2);
     setupCB(ComboBoxComportGas, v.ComportGasName);
     setupCB(ComboBoxChipType, v.ChipType);
     EditAmbientTemp.Text := FloatToStr(v.AmbientTemperature);
@@ -186,11 +192,15 @@ begin
     setNullFloatEd(EditKch50Max, p.MaxKSens50);
     setNullFloatEd(EditNotMeasuredMax, p.MaxDNotMeasured);
 
-    if p.Note.Valid = true then
-        Memo1.Lines.Text := p.Note.Str
-    else
-        Memo1.Lines.Text := '';
+    Memo1.Lines.Text := p.Note;
     FEnableOnEdit := true;
+end;
+
+
+
+procedure TFormAppConfig.FormShow(Sender: TObject);
+begin
+    //Upload;
 end;
 
 procedure TFormAppConfig.ComboBoxProductTypeNameChange(Sender: TObject);
@@ -218,6 +228,7 @@ begin
 
     try
         v.ComportName := ComboBoxComportProducts.Text;
+        v.ComportName2 := ComboBoxComport2.Text;
         v.ComportGasName := ComboBoxComportGas.Text;
         v.BlowGasMinutes := TryEdToInt(EditDurMinutesBlowGas);
         v.HoldTemperatureMinutes := TryEdToInt(EditDurMinutesHoldTemperature);
@@ -298,11 +309,7 @@ begin
         p.MaxKSens50 := TryEdToNullFloat(EditKch50Max);
         p.MaxDNotMeasured := TryEdToNullFloat(EditNotMeasuredMax);
 
-        with p.Note do
-        begin
-            Valid := length(Trim(Memo1.Lines.Text)) > 0;
-            Str := Memo1.Lines.Text;
-        end;
+        p.Note := Trim(Memo1.Lines.Text);
 
         TLastPartySvc.SetValues(p);
     except
@@ -323,13 +330,14 @@ begin
 
 end;
 
-function TFormAppConfig.TryEdToNullFloat(ed: TEdit): TNullFloat64;
+function TFormAppConfig.TryEdToNullFloat(ed: TEdit): string;
+var v:double;
 begin
-    result.Valid := try_str_to_float(ed.Text, result.Float64);
-    if result.Valid = true then
-        exit;
+
+    if try_str_to_float(ed.Text, v) then
+        exit(ed.Text);
     if length(Trim(ed.Text))=0 then
-        exit;
+        exit('');
     ShowBalloonTip(ed, TIconKind.Error, 'не допустимое значение',
       'ожидалось число c плавающей точкой или пустая строка');
     ed.SetFocus;

@@ -15,6 +15,7 @@ type
         procedure FormDeactivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     private
         { Private declarations }
         FPlace1, FPlace2: integer;
@@ -55,15 +56,21 @@ end;
 procedure TFormProductTypeDialog.FormCreate(Sender: TObject);
 var s:string;
 begin
-    ComboBox1.Items.Add('');
-    for s in TProductTypesSvc.Names do
-        ComboBox1.Items.Add(s);
+    //
 
 end;
 
 procedure TFormProductTypeDialog.FormDeactivate(Sender: TObject);
 begin
     Hide;
+end;
+
+procedure TFormProductTypeDialog.FormShow(Sender: TObject);
+var s:string;
+begin
+    ComboBox1.Items.Add('');
+    for s in TProductTypesSvc.Names do
+        ComboBox1.Items.Add(s);
 end;
 
 end.

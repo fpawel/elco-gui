@@ -59,7 +59,7 @@ uses stringgridutils, services, stringutils, UnitFormFirmware,
 
 procedure TFormParty.FormCreate(Sender: TObject);
 begin
-    Party := services.TLastPartySvc.Party;
+    //
 end;
 
 procedure TFormParty.StringGrid1DblClick(Sender: TObject);

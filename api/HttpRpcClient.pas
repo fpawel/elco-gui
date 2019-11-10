@@ -16,19 +16,17 @@ type
 var
 
     { Timeout for operations }
-    TIMEOUT_CONNECT : integer = 500;
-    TIMEOUT_RECV : integer = 10000;
+    TIMEOUT_CONNECT: integer = 500;
+    TIMEOUT_RECV: integer = 10000;
 
 implementation
 
 uses HttpExceptions, registry, winapi.windows,
     ujsonrpc, classes, System.Net.URLClient, Grijjy.Http,
-    Grijjy.Bson.Serialization;
+    Grijjy.Bson.Serialization, logfile;
 
-
-
-class procedure ThttpRpcClient.Call<T>(url, method: string; params: ISuperobject;
-  var AResult: T);
+class procedure ThttpRpcClient.Call<T>(url, method: string;
+  params: ISuperobject; var AResult: T);
 var
     json: string;
 begin
@@ -53,8 +51,8 @@ begin
     end;
 end;
 
-class function ThttpRpcClient.GetResponse(url, method: string; params: ISuperobject)
-  : ISuperobject;
+class function ThttpRpcClient.GetResponse(url, method: string;
+  params: ISuperobject): ISuperobject;
 var
     Http: TgoHttpClient;
     JsonRpcParsedResponse: IJsonRpcParsed;
@@ -68,8 +66,7 @@ begin
         Http.RequestHeaders.AddOrSet('Accept', 'application/json');
         Http.RequestBody := TJsonRpcMessage.request(0, method, params).AsJSon;
 
-        if not Http.Post(url, AResponse, TIMEOUT_CONNECT,
-          TIMEOUT_RECV) then
+        if not Http.Post(url, AResponse, TIMEOUT_CONNECT, TIMEOUT_RECV) then
             raise ERpcNoResponseException.Create('нет связи с хост процессом');
 
         if Http.ResponseStatusCode <> 200 then
@@ -80,14 +77,20 @@ begin
           (TEncoding.UTF8.GetString(AResponse));
 
         if not Assigned(JsonRpcParsedResponse) then
-            raise ERpcWrongResponseException.Create
-              (Format('%s%s: unexpected nil response',
+        begin
+            LogfileWriteError(Format('unexpected nil response: %s: %s: ',
               [method, params.AsString]));
+            raise ERpcWrongResponseException.Create
+              (Format('unexpected nil response: %s', [method]));
+        end;
 
         if not Assigned(JsonRpcParsedResponse.GetMessagePayload) then
-            raise ERpcWrongResponseException.Create
-              (Format('%s%s: unexpected nil message payload',
+        begin
+            LogfileWriteError(Format('unexpected nil message payload: %s: %s',
               [method, params.AsString]));
+            raise ERpcWrongResponseException.Create
+              (Format('%s: unexpected nil message payload', [method]));
+        end;
 
         rx := JsonRpcParsedResponse.GetMessagePayload.AsJsonObject;
 
@@ -98,12 +101,19 @@ begin
         end;
 
         if Assigned(rx['error.message']) then
+        begin
+            LogfileWriteError(Format('%s: %s: %s', [rx['error'].S['message'],
+              method, params.AsString]));
             raise ERpcRemoteErrorException.Create
-            (Format('%s%s: %s',
-              [method, params.AsString, rx['error'].S['message']]));
+              (Format('%s: %s', [rx['error'].S['message'], method]));
+        end;
+
+        LogfileWriteError(Format('%s: %s:'#13'%s'#13'message type: %s', [method, params.AsString,
+          JsonRpcParsedResponse.GetMessagePayload,
+          formatMessagetype(JsonRpcParsedResponse.GetMessageType)]));
 
         raise ERpcWrongResponseException.Create
-          (Format('%s%s'#13'%s'#13'message type: %s', [method, params.AsString,
+          (Format('%s'#13'%s'#13'message type: %s', [method,
           JsonRpcParsedResponse.GetMessagePayload,
           formatMessagetype(JsonRpcParsedResponse.GetMessageType)]));
 

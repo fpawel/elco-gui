@@ -16,17 +16,18 @@ type
         StringGrid1: TStringGrid;
         Timer1: TTimer;
         ComboBox1: TComboBox;
-    Button1: TButton;
+        Button1: TButton;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
           var CanSelect: Boolean);
         procedure Edit1Change(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure StringGrid1DblClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+        procedure Button1Click(Sender: TObject);
+        procedure Edit1KeyDown(Sender: TObject; var Key: Word;
+          Shift: TShiftState);
+        procedure StringGrid1DblClick(Sender: TObject);
+        procedure FormShow(Sender: TObject);
     private
         { Private declarations }
         FTable: TArray<TArray<TCell>>;
@@ -42,9 +43,10 @@ implementation
 {$R *.dfm}
 
 uses stringgridutils, services, UnitFormLastParty, UnitFormFirmware,
-  UnitFormFirmwareChart, UnitFormProductCurrents;
+    UnitFormFirmwareChart, UnitFormProductCurrents, UnitFormProduct;
 
-procedure SetTableGridColsWidths(grd: TStringGrid; ATable: TArray < TArray < TCell >> );
+procedure SetTableGridColsWidths(grd: TStringGrid;
+  ATable: TArray < TArray < TCell >> );
 var
     Row: TArray<TCell>;
     w, ACol, ARow: Integer;
@@ -99,11 +101,19 @@ begin
     GetCursorPos(pt);
     pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-    if (ARow < 1)  then
+    if (ARow < 1) then
         exit;
-    FormFirmware.product := TProductsCatalogueSvc.ProductInfoByID(
-    StrToInt(StringGrid1.Cells[0,Arow]));
-    FormFirmware.show;
+
+    with FormProduct do
+    begin
+        SetProduct(TProductsCatalogueSvc.ProductInfoByID
+          (StrToInt(StringGrid1.Cells[0, ARow])));
+        Parent := self;
+        Align := alRight;
+        Font.Assign(self.Font);
+        BorderStyle := bsNone;
+        show;
+    end;
 end;
 
 procedure TFormJournalProducts.StringGrid1DrawCell(Sender: TObject;

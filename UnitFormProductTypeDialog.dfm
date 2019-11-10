@@ -14,6 +14,7 @@ object FormProductTypeDialog: TFormProductTypeDialog
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 21
   object GroupBox1: TGroupBox

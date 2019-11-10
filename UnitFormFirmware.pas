@@ -31,12 +31,6 @@ type
         ComboBoxGas: TComboBox;
         Label5: TLabel;
         ComboBoxUnits: TComboBox;
-        Label6: TLabel;
-        EditScaleBegin: TEdit;
-        Label8: TLabel;
-        EditScaleEnd: TEdit;
-        Label7: TLabel;
-        EditSens: TEdit;
         GroupBox2: TGroupBox;
         StringGrid2: TStringGrid;
         ToolBar3: TToolBar;
@@ -46,9 +40,19 @@ type
         RadioButton2: TRadioButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    Panel3: TPanel;
+    Label6: TLabel;
+    EditScaleBegin: TEdit;
+    Label8: TLabel;
+    EditScaleEnd: TEdit;
+    Label7: TLabel;
+    EditSens: TEdit;
     EditSens1: TEdit;
     Label10: TLabel;
     EditFon: TEdit;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -67,6 +71,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -89,6 +94,8 @@ type
         procedure SetProduct(p: TProductInfo);
         procedure applyProduct;
 
+        function GetTFirmwareInfo2:TFirmwareInfo2;
+
     public
         { Public declarations }
         procedure SetReadFirmwareInfo(f: TFirmwareInfo);
@@ -104,7 +111,7 @@ implementation
 {$R *.dfm}
 
 uses System.Types, stringgridutils, stringutils, services, dateutils, math,
-    UnitElcoMainForm, UnitFormProductCurrents, UnitFormFirmwareChart;
+    UnitElcoMainForm,  UnitFormFirmwareChart;
 
 procedure TFormFirmware.FormCreate(Sender: TObject);
 var
@@ -208,19 +215,11 @@ begin
         end;
 end;
 
+
+
 procedure TFormFirmware.ToolButton122Click(Sender: TObject);
-var
-    t: TDateTime;
 begin
-    t := DateTimePicker1.DateTime;
-
-    // Year, Month, Day, Hour, Minute, Second
-
-    TPlaceFirmware.RunWritePlaceFirmware(ComboBoxPlace.ItemIndex, YearOf(t),
-      MonthOf(t), DayOf(t), HourOf(t), MinuteOf(t), SecondOf(t), EditSens.text,
-      EditSerial.text, ComboBoxProductType.text, ComboBoxGas.text,
-      ComboBoxUnits.text, EditScaleBegin.text, EditScaleEnd.text,
-      GetTemperatureValues);
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2);
 end;
 
 procedure TFormFirmware.ToolButton1Click(Sender: TObject);
@@ -267,6 +266,11 @@ procedure TFormFirmware.ToolButton4Click(Sender: TObject);
 begin
     TPlaceFirmware.RunReadPlaceFirmware(ComboBoxPlace.ItemIndex);
 
+end;
+
+procedure TFormFirmware.ToolButton5Click(Sender: TObject);
+begin
+    TPlaceFirmware.SaveProductType(GetTFirmwareInfo2);
 end;
 
 procedure TFormFirmware.ToolButton6Click(Sender: TObject);
@@ -614,8 +618,31 @@ end;
 procedure TFormFirmware.SetProduct(p: TProductInfo);
 begin
     FProduct := p;
-    FormProductCurrents.Load(p.ProductID);
+
     applyProduct;
+end;
+
+function TFormFirmware.GetTFirmwareInfo2:TFirmwareInfo2;
+var
+    t: TDateTime;
+begin
+    t := DateTimePicker1.DateTime;
+
+    Result.Place := ComboBoxPlace.ItemIndex;
+    Result.Year := YearOf(t);
+    Result.Month := MonthOf(t);
+    Result.Day :=  DayOf(t);
+    Result.Hour := HourOf(t);
+    Result.Minute := MinuteOf(t);
+    Result.Second := SecondOf(t);
+    Result.Sensitivity := EditSens.text;
+    Result.Serial := EditSerial.text;
+    Result.ProductType := ComboBoxProductType.text;
+    Result.Gas := ComboBoxGas.text;
+    Result.Units := ComboBoxUnits.text;
+    Result.ScaleBegin := EditScaleBegin.text;
+    Result.ScaleEnd :=  EditScaleEnd.text;
+    Result.Values := GetTemperatureValues;
 end;
 
 end.

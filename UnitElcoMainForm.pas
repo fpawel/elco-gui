@@ -46,8 +46,6 @@ type
         N12: TMenuItem;
         MenuGetCurrents: TMenuItem;
         MenuSetGas: TMenuItem;
-        N13: TMenuItem;
-        N14: TMenuItem;
         N15: TMenuItem;
         N17: TMenuItem;
         N18: TMenuItem;
@@ -58,16 +56,16 @@ type
         PDF2: TMenuItem;
         N21: TMenuItem;
         N22: TMenuItem;
+        PageControlMain: TPageControl;
+        TabSheetParty: TTabSheet;
+        TabSheetAppSettings: TTabSheet;
+        TabSheetArchiveParties: TTabSheet;
+        TabSheetTermoChamber: TTabSheet;
+        TabSheetConsole: TTabSheet;
+        TabSheetScenary: TTabSheet;
+        TabSheetInterrogate: TTabSheet;
         N1: TMenuItem;
-        N2: TMenuItem;
-        N3: TMenuItem;
-        N4: TMenuItem;
-        N5: TMenuItem;
-        N6: TMenuItem;
-        N7: TMenuItem;
-        N8: TMenuItem;
-        N9: TMenuItem;
-    N16: TMenuItem;
+        TabSheetFindProduct: TTabSheet;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure FormResize(Sender: TObject);
@@ -78,34 +76,27 @@ type
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure TimerPerformingTimer(Sender: TObject);
-        procedure N3Click(Sender: TObject);
-        procedure MenuItem8Click(Sender: TObject);
         procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
         procedure N203Click(Sender: TObject);
         procedure PDF1Click(Sender: TObject);
         procedure N11Click(Sender: TObject);
         procedure N12Click(Sender: TObject);
-        procedure N14Click(Sender: TObject);
         procedure N15Click(Sender: TObject);
         procedure N18Click(Sender: TObject);
         procedure I201Click(Sender: TObject);
         procedure N20Click(Sender: TObject);
-        procedure N2Click(Sender: TObject);
-        procedure N4Click(Sender: TObject);
-        procedure N5Click(Sender: TObject);
-        procedure N6Click(Sender: TObject);
-        procedure N7Click(Sender: TObject);
-        procedure N9Click(Sender: TObject);
-        procedure N8Click(Sender: TObject);
-    procedure N16Click(Sender: TObject);
-    procedure PDF2Click(Sender: TObject);
+        procedure PDF2Click(Sender: TObject);
+        procedure PageControlMainDrawTab(Control: TCustomTabControl;
+          TabIndex: Integer; const Rect: TRect; Active: Boolean);
+        procedure PageControlMainChange(Sender: TObject);
     private
         { Private declarations }
         FInitialized: Boolean;
         FhWndTip: THandle;
 
-        procedure AppException(Sender: TObject; E: Exception);
+        function ExceptionDialog(e: Exception): Boolean;
+        procedure AppException(Sender: TObject; e: Exception);
 
         procedure RunReadAndSaveProductCurrentsMenuClick(Sender: TObject);
         procedure RunSwitchGasMenuClick(Sender: TObject);
@@ -145,13 +136,15 @@ implementation
 uses stringgridutils, stringutils, JclDebug,
     superobject, UnitFormLastParty, vclutils,
     services, UnitFormParty,
-    notify_services, UnitFormEditText, UnitFormSelectStendPlacesDialog, ioutils,
+    notify_services, UnitFormEditAppConfig, UnitFormSelectStendPlacesDialog,
+    ioutils,
     dateutils, math, UnitFormSelectTemperaturesDialog, richeditutils, parproc,
     uitypes, types, UnitFormFirmware,
     UnitFormInterrogate, UnitFormConsole, UnitFormKtx500, HttpRpcClient,
     UnitFormAppConfig, UnitFormJournalParties, UnitFormModalMessage,
     UnitFormJournalProducts, UnitFormPopup, UnitFormNewPartyDialog,
-    UnitFormFirmwareChart, UnitFormProductCurrents, UnitFormScriptSource;
+    UnitFormFirmwareChart, UnitFormProductCurrents, UnitFormScriptSource,
+    logfile;
 
 const
     WorkItems: array [0 .. 11, 0 .. 1] of string = (('20"C ПГС1', 'i_f_plus20'),
@@ -167,7 +160,7 @@ const
 
 procedure ShowFormCenterScreen(AForm: TForm);
 begin
-    //AForm.Parent := ElcoMainForm;
+    // AForm.Parent := ElcoMainForm;
     AForm.Position := poScreenCenter;
     AForm.Show;
     ShowWindow(AForm.Handle, SW_RESTORE);
@@ -178,7 +171,6 @@ var
     i: Integer;
     menu: TMenuItem;
 begin
-
     if GetParentProcessName = 'cmd.exe' then
         Writeln('we are cmd.exe');
 
@@ -221,6 +213,19 @@ var
     fs: TFileStream;
     FileName: string;
     i: Integer;
+
+    procedure MakeInlineForm(AForm: TForm; tbs: TTabSheet);
+    begin
+        with AForm do
+        begin
+            Font.Assign(self.Font);
+            Parent := tbs;
+            BorderStyle := bsNone;
+            Align := alClient;
+            Show;
+        end;
+    end;
+
 begin
     if FInitialized then
         exit;
@@ -245,24 +250,26 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
-    with FormLastParty do
-    begin
-        Font.Assign(self.Font);
-        Parent := PanelPlaceholderMain;
-        BorderStyle := bsNone;
-        Align := alClient;
-        reload_data;
-        Show;
-    end;
-
+    FormLastParty.reload_data;
+    MakeInlineForm(FormLastParty, TabSheetParty);
     with FormParty do
     begin
         Font.Assign(self.Font);
         Parent := FormJournalParties;
         BorderStyle := bsNone;
         Align := alClient;
+        Party := services.TLastPartySvc.Party;
         Show;
     end;
+    FormJournalParties.FetchYearsMonths;
+    MakeInlineForm(FormJournalParties, TabSheetArchiveParties);
+    FormAppConfig.Upload;
+    MakeInlineForm(FormAppConfig, TabSheetAppSettings);
+    MakeInlineForm(FormKtx500, TabSheetTermoChamber);
+    MakeInlineForm(FormConsole, TabSheetConsole);
+    MakeInlineForm(FormScriptSource, TabSheetScenary);
+    MakeInlineForm(FormInterrogate, TabSheetInterrogate);
+    MakeInlineForm(FormJournalProducts, TabSheetFindProduct);
 
     SetOnReadCurrent(OnReadCurrent);
 
@@ -376,15 +383,17 @@ begin
     fs.Write(wp, SizeOf(wp));
     fs.Free;
 
-    with FormSelectStendPlacesDialog.CheckListBox1 do
-        for i := 0 to 11 do
-            FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
-              Checked[i]);
+    if Assigned(FormSelectStendPlacesDialog) then
+        with FormSelectStendPlacesDialog.CheckListBox1 do
+            for i := 0 to 11 do
+                FIni.WriteBool('FormSelectStendPlacesDialog', inttostr(i),
+                  Checked[i]);
 
-    with FormSelectTemperaturesDialog.CheckListBox1 do
-        for i := 0 to 2 do
-            FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
-              Checked[i]);
+    if Assigned(FormSelectTemperaturesDialog) then
+        with FormSelectTemperaturesDialog.CheckListBox1 do
+            for i := 0 to 2 do
+                FIni.WriteBool('FormSelectTemperaturesDialog', inttostr(i),
+                  Checked[i]);
 
     // SendMessage(FindWindow('ElcoServerWindow', nil), WM_CLOSE, 0, 0);
 end;
@@ -399,6 +408,29 @@ begin
     end;
 end;
 
+procedure TElcoMainForm.PageControlMainChange(Sender: TObject);
+var
+    PageControl: TPageControl;
+begin
+    PageControl := Sender as TPageControl;
+    PageControl.Repaint;
+    if PageControl.ActivePage = TabSheetParty then
+        FormLastParty.reload_data
+    else if PageControl.ActivePage = TabSheetArchiveParties then
+        FormJournalParties.FetchYearsMonths
+    else if PageControl.ActivePage = TabSheetInterrogate then
+        FormInterrogate.UpdateCheckBlocks
+    else if PageControl.ActivePage = TabSheetAppSettings then
+        FormAppConfig.Upload;
+
+end;
+
+procedure TElcoMainForm.PageControlMainDrawTab(Control: TCustomTabControl;
+TabIndex: Integer; const Rect: TRect; Active: Boolean);
+begin
+    PageControl_DrawVerticalTab1(Control, TabIndex, Rect, Active);
+end;
+
 procedure TElcoMainForm.PDF1Click(Sender: TObject);
 begin
     TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
@@ -406,7 +438,7 @@ end;
 
 procedure TElcoMainForm.PDF2Click(Sender: TObject);
 begin
-    TPdfSvc.RunPartyID(TLastPartySvc.PartyID);
+    TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
 
 end;
 
@@ -441,57 +473,27 @@ begin
     TRunnerSvc.SkipDelay;
 end;
 
-procedure TElcoMainForm.AppException(Sender: TObject; E: Exception);
-var
-    stackList: TJclStackInfoList; // JclDebug.pas
-    sl: TStringList;
-    stacktrace: string;
+function TElcoMainForm.ExceptionDialog(e: Exception): Boolean;
+begin
+    Result := MessageBox(Handle, PChar(e.ClassName + #10#10 + e.Message +
+      #10#10), PChar(ExtractFileName(Application.ExeName)),
+      MB_ABORTRETRYIGNORE or MB_ICONERROR) = IDABORT;
+end;
 
-    FErrorLog: TextFile;
-    ErrorLogFileName: string;
+procedure TElcoMainForm.AppException(Sender: TObject; e: Exception);
 begin
 
-    stackList := JclCreateStackList(false, 0, Caller(0, false));
-    sl := TStringList.Create;
-    stackList.AddToStrings(sl, true, false, true, false);
-    stacktrace := sl.Text;
-    sl.Free;
-    stackList.Free;
-    OutputDebugStringW(PWideChar(E.Message + #10#13 + stacktrace));
+    LogfileWriteException(e);
 
-    ErrorLogFileName := ExtractFileDir(paramstr(0)) + '\elco.log';
-    AssignFile(FErrorLog, ErrorLogFileName, CP_UTF8);
-    if FileExists(ErrorLogFileName) then
-        Append(FErrorLog)
-    else
-        Rewrite(FErrorLog);
-
-    Writeln(FErrorLog, FormatDateTime('dd/MM/yy hh:nn:ss', now), ' ',
-      'DELPHI_EXCEPTION', ' ', E.ClassName, ' ', stringreplace(Trim(E.Message),
-      #13, ' ', [rfReplaceAll, rfIgnoreCase]));
-
-    Writeln(FErrorLog, StringOfChar('-', 120));
-
-    Writeln(FErrorLog, stringreplace(Trim(stacktrace), #13, ' ',
-      [rfReplaceAll, rfIgnoreCase]));
-
-    Writeln(FErrorLog, StringOfChar('-', 120));
-
-    CloseFile(FErrorLog);
-
-    if E is EHostApplicationPanic then
+    if e is EHostApplicationPanic then
     begin
-        Application.ShowException(E);
+        Application.ShowException(e);
         Application.Terminate;
         exit;
     end;
 
-    if MessageDlg(E.Message, mtError, [mbAbort, mbIgnore], 0) = mrAbort then
-    begin
-        Application.OnException := nil;
-        Application.Terminate;
-        exit;
-    end;
+    if ExceptionDialog(e) then
+        Close;
 end;
 
 procedure TElcoMainForm.ShowBalloonTip(c: TWinControl; Icon: TIconKind;
@@ -541,11 +543,6 @@ l:
     FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
 end;
 
-procedure TElcoMainForm.MenuItem8Click(Sender: TObject);
-begin
-    FormEditText.Show;
-end;
-
 procedure TElcoMainForm.N11Click(Sender: TObject);
 begin
     ShowFormCenterScreen(FormSelectTemperaturesDialog);
@@ -554,23 +551,14 @@ end;
 procedure TElcoMainForm.N12Click(Sender: TObject);
 begin
     TRunnerSvc.RunWritePartyFirmware;
-end;
 
-procedure TElcoMainForm.N14Click(Sender: TObject);
-begin
-    FormAppConfig.Position := poScreenCenter;
-    FormAppConfig.ShowModal;
 end;
 
 procedure TElcoMainForm.N15Click(Sender: TObject);
 begin
-    FormEditText.Position := poScreenCenter;
-    FormEditText.ShowModal;
-end;
-
-procedure TElcoMainForm.N16Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormScriptSource);
+    FormEditAppConfig.Position := poScreenCenter;
+    FormEditAppConfig.ShowModal;
+    FormLastParty.reload_data;
 end;
 
 procedure TElcoMainForm.N18Click(Sender: TObject);
@@ -615,48 +603,6 @@ l:
     if not try_str_to_float(s, v) then
         goto l;
     FormLastParty.SetParty(TLastPartySvc.CalculateSensPlus50(v));
-end;
-
-procedure TElcoMainForm.N3Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormFirmwarechart);
-end;
-
-procedure TElcoMainForm.N4Click(Sender: TObject);
-begin
-    FormJournalParties.FetchYearsMonths;
-    ShowFormCenterScreen(FormProductCurrents);
-end;
-
-procedure TElcoMainForm.N5Click(Sender: TObject);
-begin
-    FormInterrogate.UpdateCheckBlocks;
-    ShowFormCenterScreen(FormInterrogate);
-end;
-
-procedure TElcoMainForm.N6Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormKtx500);
-end;
-
-procedure TElcoMainForm.N7Click(Sender: TObject);
-begin
-    // if FormParty.party.PartyID = 0 then
-    // FormParty.party := TPartiesCatalogueSvc.party(FormParty.party.PartyID)
-    // else
-    // FormParty.party := TLastPartySvc.party;
-    FormJournalParties.FetchYearsMonths;
-    ShowFormCenterScreen(FormJournalParties);
-end;
-
-procedure TElcoMainForm.N8Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormJournalProducts);
-end;
-
-procedure TElcoMainForm.N9Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormConsole);
 end;
 
 procedure TElcoMainForm.SetupDelay(i: TDelayInfo);
@@ -714,7 +660,7 @@ begin
     SetLength(s, length(v));
     for i := 0 to length(v) - 1 do
         s[i] := Format('%d:%g', [i, v[i]]);
-    result := string.Join(' ', s);
+    Result := string.Join(' ', s);
 end;
 
 Function GetTextSize(const Text: String; Font: TFont): TSize;
@@ -724,7 +670,7 @@ begin
     LBmp := TBitmap.Create;
     try
         LBmp.Canvas.Font := Font;
-        result := LBmp.Canvas.TextExtent(Text);
+        Result := LBmp.Canvas.TextExtent(Text);
     finally
         LBmp.Free;
     end;
@@ -814,11 +760,6 @@ end;
 procedure TElcoMainForm.N20Click(Sender: TObject);
 begin
     FormLastParty.SetParty(TLastPartySvc.SelectOnlyOkProductsProduction);
-end;
-
-procedure TElcoMainForm.N2Click(Sender: TObject);
-begin
-    ShowFormCenterScreen(FormFirmware);
 end;
 
 end.

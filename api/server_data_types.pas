@@ -9,251 +9,272 @@ type
     
     TNullString = record
     public
-          [BsonElement('String')]Str  : string;
-          Valid  : Boolean;
+        [BsonElement('String')]Str  : string;
+        Valid : Boolean;
         
     end;
     
     TParty2 = record
     public
-          Day  : Integer;
-          ProductTypeName  : string;
-          Note  : TNullString;
-          Last  : Boolean;
-          PartyID  : Int64;
+        PartyID : Int64;
+        Day : Integer;
+        ProductTypeName : string;
+        Note : TNullString;
+        Last : Boolean;
         
     end;
     
     TNullInt64 = record
     public
-          Int64  : Int64;
-          Valid  : Boolean;
+        Int64 : Int64;
+        Valid : Boolean;
         
     end;
     
     TNullFloat64 = record
     public
-          Float64  : Double;
-          Valid  : Boolean;
+        Float64 : Double;
+        Valid : Boolean;
         
     end;
     
     TProductInfo = record
     public
-          IFPlus50  : TNullFloat64;
-          OKMaxKSens20  : Boolean;
-          NoteParty  : TNullString;
-          CreatedAt  : TDateTime;
-          IFMinus20  : TNullFloat64;
-          DFon20  : TNullFloat64;
-          OKDFon20  : Boolean;
-          OKMinKSens20  : Boolean;
-          OKDFon50  : Boolean;
-          AppliedProductTypeName  : string;
-          UnitsName  : string;
-          ProductID  : Int64;
-          LifetimeMonths  : Int64;
-          PointsMethod  : TNullInt64;
-          AppliedPointsMethod  : Int64;
-          NobleMetalContent  : Double;
-          Variation  : TNullFloat64;
-          OKMinFon20  : Boolean;
-          OKMaxFon20r  : Boolean;
-          OKMinKSens50  : Boolean;
-          Production  : Boolean;
-          PartyID  : Int64;
-          NoteProduct  : TNullString;
-          ISPlus50  : TNullFloat64;
-          KSensMinus20  : TNullFloat64;
-          GasCode  : Byte;
-          ISPlus20  : TNullFloat64;
-          I17  : TNullFloat64;
-          HasFirmware  : Boolean;
-          Scale  : Double;
-          I24  : TNullFloat64;
-          IFPlus20  : TNullFloat64;
-          ISMinus20  : TNullFloat64;
-          I13  : TNullFloat64;
-          I35  : TNullFloat64;
-          NotMeasured  : TNullFloat64;
-          KSens50  : TNullFloat64;
-          OKMaxFon20  : Boolean;
-          Serial  : TNullInt64;
-          OKMaxKSens50  : Boolean;
-          Ok  : Boolean;
-          UnitsCode  : Byte;
-          GasName  : string;
-          ProductTypeName  : TNullString;
-          OKMinFon20r  : Boolean;
-          I26  : TNullFloat64;
-          KSens20  : TNullFloat64;
-          DFon50  : TNullFloat64;
-          DNotMeasured  : TNullFloat64;
-          OKDNotMeasured  : Boolean;
-          Place  : Integer;
+        ISPlus20 : TNullFloat64;
+        DNotMeasured : TNullFloat64;
+        NobleMetalContent : Double;
+        ProductTypeName : TNullString;
+        NoteProduct : TNullString;
+        PartyID : Int64;
+        IFMinus20 : TNullFloat64;
+        IFPlus20 : TNullFloat64;
+        IFPlus50 : TNullFloat64;
+        I35 : TNullFloat64;
+        I26 : TNullFloat64;
+        KSens20 : TNullFloat64;
+        DFon20 : TNullFloat64;
+        Scale : Double;
+        Serial : TNullInt64;
+        Place : Integer;
+        KSens50 : TNullFloat64;
+        OKMaxFon20r : Boolean;
+        OKMinKSens20 : Boolean;
+        Ok : Boolean;
+        I17 : TNullFloat64;
+        KSensMinus20 : TNullFloat64;
+        DFon50 : TNullFloat64;
+        OKMinKSens50 : Boolean;
+        OKMaxKSens50 : Boolean;
+        UnitsCode : Byte;
+        AppliedPointsMethod : Int64;
+        I13 : TNullFloat64;
+        OKMaxFon20 : Boolean;
+        OKDFon50 : Boolean;
+        Production : Boolean;
+        AppliedProductTypeName : string;
+        ISMinus20 : TNullFloat64;
+        ISPlus50 : TNullFloat64;
+        OKDFon20 : Boolean;
+        OKDNotMeasured : Boolean;
+        GasName : string;
+        CreatedAt : TDateTime;
+        I24 : TNullFloat64;
+        Variation : TNullFloat64;
+        OKMinFon20 : Boolean;
+        OKMinFon20r : Boolean;
+        OKMaxKSens20 : Boolean;
+        GasCode : Byte;
+        UnitsName : string;
+        LifetimeMonths : Int64;
+        PointsMethod : TNullInt64;
+        NoteParty : TNullString;
+        ProductID : Int64;
+        NotMeasured : TNullFloat64;
+        HasFirmware : Boolean;
         
     end;
     
     TParty1 = record
     public
-          CreatedAt  : TDateTime;
-          Products  : TArray<TProductInfo>;
-          PartyID  : Int64;
+        PartyID : Int64;
+        CreatedAt : TDateTime;
+        Products : TArray<TProductInfo>;
         
     end;
     
     TYearMonth = record
     public
-          Year  : Integer;
-          Month  : Integer;
+        Year : Integer;
+        Month : Integer;
         
     end;
     
     TGetCheckBlocksArg = record
     public
-          Check  : TArray<Boolean>;
+        Check : TArray<Boolean>;
         
     end;
     
     TParty3 = record
     public
-          MaxKSens50  : TNullFloat64;
-          MinDTemp  : TNullFloat64;
-          MaxDTemp  : TNullFloat64;
-          ProductTypeName  : string;
-          Concentration1  : Double;
-          Note  : TNullString;
-          MinFon  : TNullFloat64;
-          MaxKSens20  : TNullFloat64;
-          PointsMethod  : Int64;
-          MaxDNotMeasured  : TNullFloat64;
-          Concentration3  : Double;
-          MaxFon  : TNullFloat64;
-          MinKSens20  : TNullFloat64;
-          Concentration2  : Double;
-          MaxDFon  : TNullFloat64;
-          MinKSens50  : TNullFloat64;
+        PointsMethod : Int64;
+        MaxKSens50 : string;
+        MinDTemp : string;
+        MaxDNotMeasured : string;
+        ProductTypeName : string;
+        Note : string;
+        MaxFon : string;
+        MaxDFon : string;
+        MaxKSens20 : string;
+        MinKSens50 : string;
+        MaxDTemp : string;
+        Concentration2 : Double;
+        Concentration3 : Double;
+        MinFon : string;
+        Concentration1 : Double;
+        MinKSens20 : string;
         
     end;
     
     TGoDateTime = record
     public
-          Minute  : Integer;
-          Second  : Integer;
-          Millisecond  : Integer;
-          Year  : Integer;
-          Month  : Integer;
-          Day  : Integer;
-          Hour  : Integer;
+        Second : Integer;
+        Millisecond : Integer;
+        Year : Integer;
+        Month : Integer;
+        Day : Integer;
+        Hour : Integer;
+        Minute : Integer;
         
     end;
     
     TFirmwareInfo = record
     public
-          Sensitivity1  : string;
-          IFPlus20  : string;
-          ISPlus50  : string;
-          Place  : Integer;
-          CreatedAt  : TGoDateTime;
-          Units  : string;
-          ScaleBeg  : string;
-          ISMinus20  : string;
-          Temp  : TArray<Double>;
-          Sens  : TArray<Double>;
-          Gas  : string;
-          ScaleEnd  : string;
-          Sensitivity  : string;
-          Serial  : string;
-          ISPlus20  : string;
-          Fon  : TArray<Double>;
-          ProductType  : string;
+        ISMinus20 : string;
+        ISPlus20 : string;
+        Place : Integer;
+        Sensitivity : string;
+        Serial : string;
+        Gas : string;
+        ScaleEnd : string;
+        Temp : TArray<Double>;
+        Fon : TArray<Double>;
+        ProductType : string;
+        ScaleBeg : string;
+        Sens : TArray<Double>;
+        CreatedAt : TGoDateTime;
+        Sensitivity1 : string;
+        Units : string;
+        IFPlus20 : string;
+        ISPlus50 : string;
+        
+    end;
+    
+    TFirmwareInfo2 = record
+    public
+        Values : TArray<string>;
+        Day : Integer;
+        Minute : Integer;
+        Second : Integer;
+        Sensitivity : string;
+        Serial : string;
+        ProductType : string;
+        ScaleBegin : string;
+        Month : Integer;
+        Place : Integer;
+        Units : string;
+        ScaleEnd : string;
+        Year : Integer;
+        Hour : Integer;
+        Gas : string;
         
     end;
     
     TTempPoints = record
     public
-          Temp  : TArray<Double>;
-          Fon  : TArray<Double>;
-          Sens  : TArray<Double>;
+        Temp : TArray<Double>;
+        Fon : TArray<Double>;
+        Sens : TArray<Double>;
         
     end;
     
     TRunScriptResult = record
     public
-          ErrorLine  : string;
-          ErrorLineno  : Integer;
+        ErrorLineno : Integer;
+        ErrorLine : string;
         
     end;
     
     TPublicAppConfig = record
     public
-          BlowGasMinutes  : Integer;
-          HoldTemperatureMinutes  : Integer;
-          EndScaleGas2  : Boolean;
-          ComportName  : string;
-          ComportGasName  : string;
-          LogComm  : Boolean;
-          ChipType  : string;
-          AmbientTemperature  : Double;
+        ComportGasName : string;
+        ComportName2 : string;
+        LogComm : Boolean;
+        AmbientTemperature : Double;
+        ComportName : string;
+        ChipType : string;
+        BlowGasMinutes : Integer;
+        HoldTemperatureMinutes : Integer;
+        EndScaleGas2 : Boolean;
         
     end;
     
     TCell = record
     public
-          Str  : string;
-          Res  : Integer;
-          TextAlignment  : Integer;
+        TextAlignment : Integer;
+        Str : string;
+        Res : Integer;
         
     end;
     
     TProductCurrent = record
     public
-          ProductCurrentID  : Int64;
-          StoredAt  : TDateTime;
-          ProductID  : Int64;
-          Temperature  : Double;
-          Gas  : Integer;
-          CurrentValue  : Double;
-          Note  : string;
+        StoredAt : TDateTime;
+        ProductID : Int64;
+        Temperature : Double;
+        Gas : Integer;
+        CurrentValue : Double;
+        Note : string;
+        ProductCurrentID : Int64;
         
     end;
     
     TReadCurrent = record
     public
-          Values  : TArray<Double>;
-          Block  : Integer;
+        Values : TArray<Double>;
+        Block : Integer;
         
     end;
     
     TWorkResult = record
     public
-          Tag  : Integer;
-          Message  : string;
-          WorkName  : string;
+        WorkName : string;
+        Tag : Integer;
+        Message : string;
         
     end;
     
     TKtx500Info = record
     public
-          Temperature  : Double;
-          Destination  : Double;
-          TemperatureOn  : Boolean;
-          CoolOn  : Boolean;
+        Temperature : Double;
+        Destination : Double;
+        TemperatureOn : Boolean;
+        CoolOn : Boolean;
         
     end;
     
     TDelayInfo = record
     public
-          What  : string;
-          TotalSeconds  : Integer;
-          ElapsedSeconds  : Integer;
+        ElapsedSeconds : Integer;
+        What : string;
+        TotalSeconds : Integer;
         
     end;
     
     TScriptLine = record
     public
-          Line  : string;
-          Lineno  : Integer;
+        Lineno : Integer;
+        Line : string;
         
     end;
     
