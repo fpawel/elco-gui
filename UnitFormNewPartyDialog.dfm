@@ -33,7 +33,6 @@ object FormNewPartyDialog: TFormNewPartyDialog
     Font.Style = []
     ParentFont = False
     WordWrap = True
-    ExplicitTop = 380
     ExplicitWidth = 35
   end
   object Panel1: TPanel
@@ -46,7 +45,6 @@ object FormNewPartyDialog: TFormNewPartyDialog
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
-    ExplicitHeight = 394
     object Button1: TButton
       AlignWithMargins = True
       Left = 3
@@ -58,7 +56,6 @@ object FormNewPartyDialog: TFormNewPartyDialog
       TabOrder = 0
       WordWrap = True
       OnClick = Button1Click
-      ExplicitWidth = 101
     end
   end
   object StringGrid1: TStringGrid
@@ -82,10 +79,6 @@ object FormNewPartyDialog: TFormNewPartyDialog
     OnDrawCell = StringGrid1DrawCell
     OnSelectCell = StringGrid1SelectCell
     OnSetEditText = StringGrid1SetEditText
-    ExplicitLeft = 11
-    ExplicitTop = 11
-    ExplicitWidth = 629
-    ExplicitHeight = 294
     ColWidths = (
       64
       64

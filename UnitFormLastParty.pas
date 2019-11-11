@@ -73,7 +73,7 @@ type
         procedure SetProductionAll(production: Boolean);
         procedure SetProductionBlock(block: Integer; production: Boolean);
         procedure SetParty(party: TParty1);
-        procedure reload_data;
+        procedure upload;
 
         procedure SetReadPlace(APlace: Integer);
         procedure SetReadBlock(ABlock: Integer);
@@ -114,7 +114,7 @@ end;
 
 procedure TFormLastParty.FormShow(Sender: TObject);
 begin
-    reload_data;
+    upload;
 end;
 
 procedure TFormLastParty.StringGrid1SelectCell(Sender: TObject;
@@ -496,7 +496,7 @@ begin
 
 end;
 
-procedure TFormLastParty.reload_data;
+procedure TFormLastParty.upload;
 var p:TParty1;
 begin
     p := TLastPartySvc.party;
@@ -558,7 +558,7 @@ begin
     with StringGrid1.Selection do
         TLastPartySvc.SetPointsMethodInPlacesRange(Top - 1, Bottom - 1,
           (Sender as TComponent).Tag);
-    reload_data;
+    upload;
 
 end;
 

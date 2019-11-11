@@ -58,10 +58,13 @@ begin
         for cl := 1 to 8 do
             xs[(ro - 1) * 8 + cl - 1] :=
               StrToIntDef(StringGrid1.Cells[cl, ro], 0);
-    TRunnerSvc.NewParty(xs);
+    TThread.CreateAnonymousThread(
+        procedure
+        begin
+            TRunnerSvc.NewParty(xs);
+        end).Start;
     N4.Click;
     hide;
-
 end;
 
 procedure TFormNewPartyDialog.FormCreate(Sender: TObject);
@@ -119,7 +122,7 @@ begin
 end;
 
 procedure TFormNewPartyDialog.StringGrid1DrawCell(Sender: TObject;
-  ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
     grd: TStringGrid;
     cnv: TCanvas;
@@ -150,7 +153,7 @@ begin
 end;
 
 procedure TFormNewPartyDialog.StringGrid1SelectCell(Sender: TObject;
-  ACol, ARow: Integer; var CanSelect: Boolean);
+ACol, ARow: Integer; var CanSelect: Boolean);
 var
     grd: TStringGrid;
 
@@ -172,7 +175,7 @@ begin
 end;
 
 procedure TFormNewPartyDialog.StringGrid1SetEditText(Sender: TObject;
-  ACol, ARow: Integer; const Value: string);
+ACol, ARow: Integer; const Value: string);
 var
     serial: int64;
     cl, ro: Integer;

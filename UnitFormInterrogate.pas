@@ -127,7 +127,10 @@ end;
 
 procedure TFormInterrogate.Button1Click(Sender: TObject);
 begin
-    TRunnerSvc.RunReadCurrent;
+    TThread.CreateAnonymousThread(procedure begin
+        TRunnerSvc.RunReadCurrent;
+    end).Start;
+
 end;
 
 procedure TFormInterrogate.DrawCellText(ACol, ARow: Integer; Rect: TRect;

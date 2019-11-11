@@ -43,7 +43,6 @@ object FormScriptSource: TFormScriptSource
     ParentBackground = False
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 613
     object ToolBar6: TToolBar
       Left = 0
       Top = 0
@@ -59,7 +58,6 @@ object FormScriptSource: TFormScriptSource
       Images = ImageList4
       ParentColor = False
       TabOrder = 0
-      ExplicitWidth = 613
       object ToolButtonStop: TToolButton
         Left = 0
         Top = 0
@@ -108,8 +106,6 @@ object FormScriptSource: TFormScriptSource
     ParentFont = False
     TabOrder = 1
     Zoom = 100
-    ExplicitLeft = -2
-    ExplicitWidth = 607
   end
   object ImageList4: TImageList
     ColorDepth = cd32Bit

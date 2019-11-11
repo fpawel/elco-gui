@@ -36,7 +36,6 @@ object FormAppConfig: TFormAppConfig
       Height = 21
       Align = alTop
       Caption = #1048#1089#1087#1086#1083#1085#1077#1085#1080#1077
-      ExplicitTop = 3
       ExplicitWidth = 88
     end
     object Label4: TLabel
@@ -47,7 +46,6 @@ object FormAppConfig: TFormAppConfig
       Height = 21
       Align = alTop
       Caption = #1043#1057#1054'-'#1055#1043#1057'1'
-      ExplicitTop = 62
       ExplicitWidth = 74
     end
     object Label5: TLabel
@@ -58,7 +56,6 @@ object FormAppConfig: TFormAppConfig
       Height = 21
       Align = alTop
       Caption = #1043#1057#1054'-'#1055#1043#1057'2'
-      ExplicitTop = 121
       ExplicitWidth = 74
     end
     object Label7: TLabel
@@ -69,7 +66,6 @@ object FormAppConfig: TFormAppConfig
       Height = 21
       Align = alTop
       Caption = #1043#1057#1054'-'#1055#1043#1057'3'
-      ExplicitTop = 180
       ExplicitWidth = 74
     end
     object Label8: TLabel
@@ -80,7 +76,6 @@ object FormAppConfig: TFormAppConfig
       Height = 21
       Align = alTop
       Caption = #1055#1043#1057' '#1082#1086#1085#1094#1072' '#1096#1082#1072#1083#1099
-      ExplicitTop = 239
       ExplicitWidth = 129
     end
     object Label9: TLabel
@@ -197,7 +192,6 @@ object FormAppConfig: TFormAppConfig
       Items.Strings = (
         #1055#1043#1057'2'
         #1055#1043#1057'3')
-      ExplicitTop = 266
     end
     object ComboBoxChipType: TComboBox
       AlignWithMargins = True
@@ -221,8 +215,6 @@ object FormAppConfig: TFormAppConfig
         '24LC16'
         '24LC64'
         '24LC256')
-      ExplicitLeft = 6
-      ExplicitTop = -2
     end
   end
   object GroupBox4: TGroupBox
@@ -271,7 +263,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1060#1086#1085','#1084#1080#1085'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 3
       ExplicitWidth = 94
     end
     object Label23: TLabel
@@ -283,7 +274,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1060#1086#1085','#1084#1072#1082#1089'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 62
       ExplicitWidth = 99
     end
     object Label17: TLabel
@@ -295,7 +285,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = 'D.'#1092#1086#1085'20.'#1084#1072#1082#1089'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 121
       ExplicitWidth = 130
     end
     object Label24: TLabel
@@ -307,7 +296,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1050#1095'20.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
       WordWrap = True
-      ExplicitTop = 180
       ExplicitWidth = 145
     end
     object Label25: TLabel
@@ -319,7 +307,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1050#1095'20.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
       WordWrap = True
-      ExplicitTop = 239
       ExplicitWidth = 150
     end
     object Label6: TLabel
@@ -331,6 +318,7 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1056#1072#1089#1095#1105#1090' T '#8304'C'
       WordWrap = True
+      ExplicitWidth = 80
     end
     object Editfon20Min: TEdit
       AlignWithMargins = True
@@ -503,7 +491,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1055#1088#1086#1076#1091#1074#1082#1072' '#1075#1072#1079#1072', '#1084#1080#1085'.'
       WordWrap = True
-      ExplicitTop = 180
       ExplicitWidth = 142
     end
     object Label16: TLabel
@@ -515,7 +502,6 @@ object FormAppConfig: TFormAppConfig
       Align = alTop
       Caption = #1042#1099#1076#1077#1088#1078#1082#1072'  '#1058#8304'C, '#1084#1080#1085'.'
       WordWrap = True
-      ExplicitTop = 239
       ExplicitWidth = 145
     end
     object Label10: TLabel
@@ -550,7 +536,6 @@ object FormAppConfig: TFormAppConfig
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
         'COM1')
-      ExplicitWidth = 178
     end
     object ComboBoxComportGas: TComboBox
       AlignWithMargins = True
@@ -574,7 +559,6 @@ object FormAppConfig: TFormAppConfig
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
         'COM1')
-      ExplicitWidth = 178
     end
     object EditAmbientTemp: TEdit
       AlignWithMargins = True
@@ -658,8 +642,6 @@ object FormAppConfig: TFormAppConfig
       OnChange = ComboBoxComportProductsChange
       Items.Strings = (
         'COM1')
-      ExplicitLeft = 0
-      ExplicitWidth = 195
     end
   end
   object Panel4: TPanel
@@ -678,55 +660,47 @@ object FormAppConfig: TFormAppConfig
       AlignWithMargins = True
       Left = 3
       Top = 62
-      Width = 162
+      Width = 150
       Height = 21
       Align = alTop
       Caption = #1050#1095'50.'#1084#1072#1082#1089'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'
       WordWrap = True
-      ExplicitTop = 3
-      ExplicitWidth = 150
     end
     object Label28: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 121
-      Width = 162
+      Width = 125
       Height = 21
       Align = alTop
       Caption = 'D.'#1092#1086#1085'50.'#1084#1080#1085'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 62
-      ExplicitWidth = 125
     end
     object Label29: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 180
-      Width = 162
+      Width = 130
       Height = 21
       Align = alTop
       Caption = 'D.'#1092#1086#1085'50.'#1084#1072#1082#1089'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 121
-      ExplicitWidth = 130
     end
     object Label30: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 239
-      Width = 162
+      Width = 159
       Height = 21
       Align = alTop
       Caption = 'D.'#1092#1086#1085'.'#1085#1077#1080#1079#1084'.'#1084#1072#1082#1089'.'#1084#1082#1040
       WordWrap = True
-      ExplicitTop = 180
-      ExplicitWidth = 159
     end
     object Label26: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 162
+      Width = 145
       Height = 21
       Align = alTop
       Caption = #1050#1095'50.'#1084#1080#1085'.'#1084#1082#1040'/'#1082#1086#1085#1094'.'

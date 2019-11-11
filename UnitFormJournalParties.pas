@@ -67,8 +67,9 @@ procedure TFormJournalParties.MenuCopyItemClick(Sender: TObject);
 begin
     if StringGrid1.Row < 1 then
         exit;
-    TRunnerSvc.CopyParty(Party.PartyID);
-    FormLastParty.reload_data;
+    TThread.CreateAnonymousThread(procedure begin
+        TRunnerSvc.CopyParty(Party.PartyID);
+    end).Start;
 end;
 
 procedure TFormJournalParties.MenuDeleteItemClick(Sender: TObject);
@@ -81,7 +82,7 @@ begin
         TRunnerSvc.StopHardware;
     TPartiesCatalogueSvc.DeletePartyID(Party.PartyID);
     ComboBox1Change(nil);
-    FormLastParty.reload_data;
+    FormLastParty.upload;
 end;
 
 procedure TFormJournalParties.MenuPDFClick(Sender: TObject);

@@ -86,6 +86,10 @@ object FormProduct: TFormProduct
     object TabSheet2: TTabSheet
       Caption = #1046#1091#1088#1085#1072#1083' '#1089#1085#1103#1090#1080#1103
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object ImageList4: TImageList

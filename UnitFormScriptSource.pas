@@ -7,7 +7,8 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
     Vcl.ToolWin,
-    Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, server_data_types;
+    Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, server_data_types,
+  UnitElcoMainForm;
 
 type
     TFormScriptSource = class(TForm)
@@ -23,7 +24,7 @@ type
         procedure ToolButton1Click(Sender: TObject);
         procedure ToolButton2Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+        procedure FormDestroy(Sender: TObject);
     private
         { Private declarations }
     public
@@ -69,7 +70,6 @@ begin
         if Execute then
             RichEdit1.Lines.LoadFromFile(FileName);
 
-
         Free;
     end;
 end;
@@ -98,6 +98,11 @@ procedure TFormScriptSource.ToolButtonStopClick(Sender: TObject);
 var
     r: TRunScriptResult;
 begin
+    if ElcoMainForm.FWorkStarted then
+    begin
+        TRunnerSvc.StopHardware;
+        Exit;
+    end;
     r := TRunnerSvc.RunScript(RichEdit1.Lines.Text);
     if r.ErrorLineno > -1 then
     begin
@@ -109,7 +114,6 @@ begin
     begin
         Label1.Hide;
     end;
-
 end;
 
 procedure TFormScriptSource.OnScriptLine(x: TScriptLine);

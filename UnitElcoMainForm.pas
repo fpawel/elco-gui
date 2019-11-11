@@ -117,6 +117,7 @@ type
     public
         { Public declarations }
         FIni: TIniFile;
+        FWorkStarted:boolean;
         procedure ShowBalloonTip(c: TWinControl; Icon: TIconKind;
           const Title, Text: string);
     end;
@@ -171,6 +172,7 @@ var
     i: Integer;
     menu: TMenuItem;
 begin
+    FWorkStarted := false;
     if GetParentProcessName = 'cmd.exe' then
         Writeln('we are cmd.exe');
 
@@ -250,7 +252,7 @@ begin
             Checked[i] := FIni.ReadBool('FormSelectTemperaturesDialog',
               inttostr(i), false);
 
-    FormLastParty.reload_data;
+    FormLastParty.upload;
     MakeInlineForm(FormLastParty, TabSheetParty);
     with FormParty do
     begin
@@ -276,6 +278,7 @@ begin
     SetOnWorkStarted(
         procedure(s: string)
         begin
+            FWorkStarted := true;
             PanelMessageBox.Hide;
             ToolBarStop.Show;
             LabelStatusTop.Caption := TimeToStr(now) + ' ' + s;
@@ -296,9 +299,9 @@ begin
     SetOnWarning(OnWarning);
 
     SetOnLastPartyChanged(
-        procedure(party: TParty1)
+        procedure(Party: TParty1)
         begin
-            FormLastParty.SetParty(party);
+            FormLastParty.SetParty(Party);
             FormJournalParties.FetchYearsMonths;
         end);
 
@@ -355,6 +358,7 @@ begin
     SetOnEndDelay(
         procedure(s: string)
         begin
+            FWorkStarted := true;
             PanelDelay.Hide;
         end);
     SetOnScriptLine(FormScriptSource.OnScriptLine);
@@ -415,7 +419,7 @@ begin
     PageControl := Sender as TPageControl;
     PageControl.Repaint;
     if PageControl.ActivePage = TabSheetParty then
-        FormLastParty.reload_data
+        FormLastParty.upload
     else if PageControl.ActivePage = TabSheetArchiveParties then
         FormJournalParties.FetchYearsMonths
     else if PageControl.ActivePage = TabSheetInterrogate then
@@ -439,7 +443,6 @@ end;
 procedure TElcoMainForm.PDF2Click(Sender: TObject);
 begin
     TPDfSvc.RunPartyID(TLastPartySvc.PartyID);
-
 end;
 
 procedure TElcoMainForm.RichEditlMessageBoxTextMouseDown(Sender: TObject;
@@ -538,7 +541,7 @@ l:
     then
         exit;
     s := s.Trim;
-    if not try_str_to_float(s, v) then
+    if not TryStrToFloat2(s, v) then
         goto l;
     FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
 end;
@@ -550,15 +553,18 @@ end;
 
 procedure TElcoMainForm.N12Click(Sender: TObject);
 begin
-    TRunnerSvc.RunWritePartyFirmware;
-
+    TThread.CreateAnonymousThread(
+        procedure
+        begin
+            TRunnerSvc.RunWritePartyFirmware;
+        end).Start;
 end;
 
 procedure TElcoMainForm.N15Click(Sender: TObject);
 begin
     FormEditAppConfig.Position := poScreenCenter;
     FormEditAppConfig.ShowModal;
-    FormLastParty.reload_data;
+    FormLastParty.upload;
 end;
 
 procedure TElcoMainForm.N18Click(Sender: TObject);
@@ -583,7 +589,7 @@ l:
     then
         exit;
     s := s.Trim;
-    if not try_str_to_float(s, v) then
+    if not TryStrToFloat2(s, v) then
         goto l;
     FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
 end;
@@ -600,7 +606,7 @@ l:
     then
         exit;
     s := s.Trim;
-    if not try_str_to_float(s, v) then
+    if not TryStrToFloat2(s, v) then
         goto l;
     FormLastParty.SetParty(TLastPartySvc.CalculateSensPlus50(v));
 end;
@@ -643,13 +649,22 @@ var
     n: Integer;
 begin
     n := (Sender as TMenuItem).Tag;
-    TRunnerSvc.RunReadAndSaveProductCurrents(WorkItems[n][1],
-      GasTempItems[n][0], GasTempItems[n][1]);
+
+    TThread.CreateAnonymousThread(
+        procedure
+        begin
+            TRunnerSvc.RunReadAndSaveProductCurrents(WorkItems[n][1],
+              GasTempItems[n][0], GasTempItems[n][1]);
+        end).Start;
 end;
 
 procedure TElcoMainForm.RunSwitchGasMenuClick(Sender: TObject);
 begin
-    TRunnerSvc.RunSwitchGas((Sender as TMenuItem).Tag);
+    TThread.CreateAnonymousThread(
+        procedure
+        begin
+            TRunnerSvc.RunSwitchGas((Sender as TMenuItem).Tag);
+        end).Start;
 end;
 
 function FormatFloatArray(v: TArray<double>): string;
@@ -678,6 +693,7 @@ end;
 
 procedure TElcoMainForm.OnWorkComplete(X: TWorkResult);
 begin
+    FWorkStarted := false;
     ToolBarStop.Visible := false;
 
     TimerPerforming.Enabled := false;

@@ -10,7 +10,7 @@ function str_replace_unicode_chars(s: string): string;
 function inttostr2(n: integer): string;
 function cut_str(s:string;c:TCanvas; w:integer):string;
 function month_name(month_number:integer):string;
-function try_str_to_float(s:string; var v:double):boolean;
+function TryStrToFloat2(s:string; var v:double):boolean;
 
 implementation
 
@@ -41,7 +41,7 @@ begin
 
 end;
 
-function try_str_to_float(s:string; var v:double):boolean;
+function TryStrToFloat2(s:string; var v:double):boolean;
 begin
     result := TryStrToFloat(str_validate_decimal_separator(s), v);
 

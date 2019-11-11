@@ -58,6 +58,7 @@ object FormInterrogate: TFormInterrogate
       Caption = #1047#1072#1087#1091#1089#1090#1080#1090#1100' '#1086#1087#1088#1086#1089
       TabOrder = 0
       OnClick = Button1Click
+      ExplicitTop = -3
     end
   end
 end

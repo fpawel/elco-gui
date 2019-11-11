@@ -46,11 +46,22 @@ begin
 end;
 
 procedure TFormSelectTemperaturesDialog.ToolButton2Click(Sender: TObject);
+var
+    c1, c2, c3, c4: boolean;
 begin
     hide;
     with CheckListBox1 do
-        TRunnerSvc.RunMain(Checked[0], Checked[1], Checked[2], Checked[3]);
-    hide;
+    begin
+        c1 := Checked[0];
+        c2 := Checked[1];
+        c3 := Checked[2];
+        c4 := Checked[3];
+    end;
+    TThread.CreateAnonymousThread(
+        procedure
+        begin
+            TRunnerSvc.RunMain(c1, c2, c3, c4);
+        end).Start;
 end;
 
 end.

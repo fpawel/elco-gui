@@ -130,7 +130,7 @@ end;
 procedure setNullFloatEd(ed: TEdit; s: string);
 var v:double;
 begin
-    if try_str_to_float(s, v) then
+    if TryStrToFloat2(s, v) then
         ed.Text := FloatToStr(v)
     else
         ed.Text := '';
@@ -321,7 +321,7 @@ end;
 
 function TFormAppConfig.TryEdToFloat(ed: TEdit): double;
 begin
-    if try_str_to_float(ed.Text, result) then
+    if TryStrToFloat2(ed.Text, result) then
         exit(result);
     ShowBalloonTip(ed, TIconKind.Error, 'не допустимое значение',
       'ожидалось число c плавающей точкой');
@@ -334,7 +334,7 @@ function TFormAppConfig.TryEdToNullFloat(ed: TEdit): string;
 var v:double;
 begin
 
-    if try_str_to_float(ed.Text, v) then
+    if TryStrToFloat2(ed.Text, v) then
         exit(ed.Text);
     if length(Trim(ed.Text))=0 then
         exit('');

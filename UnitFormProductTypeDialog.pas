@@ -50,7 +50,7 @@ end;
 procedure TFormProductTypeDialog.Button1Click(Sender: TObject);
 begin
     TLastPartySvc.SetProductTypeAtPlacesRange(FPlace1, FPlace2, ComboBox1.Text);
-    FormLastParty.reload_data;
+    FormLastParty.upload;
 end;
 
 procedure TFormProductTypeDialog.FormCreate(Sender: TObject);
