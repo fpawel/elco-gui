@@ -55,8 +55,6 @@ type
     EditDfon50Min: TEdit;
     Label29: TLabel;
     EditDfon50Max: TEdit;
-    Label30: TLabel;
-    EditNotMeasuredMax: TEdit;
     ComboBoxComport2: TComboBox;
     Label10: TLabel;
     Label6: TLabel;
@@ -65,6 +63,14 @@ type
     EditKch50Min: TEdit;
     Label9: TLabel;
     ComboBoxChipType: TComboBox;
+    Label30: TLabel;
+    EditNotMeasuredMax: TEdit;
+    Label11: TLabel;
+    EdMaxD1: TEdit;
+    Label12: TLabel;
+    EdMaxD2: TEdit;
+    Label18: TLabel;
+    EdMaxD3: TEdit;
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ComboBoxComportProductsChange(Sender: TObject);
@@ -192,6 +198,10 @@ begin
     setNullFloatEd(EditKch50Max, p.MaxKSens50);
     setNullFloatEd(EditNotMeasuredMax, p.MaxDNotMeasured);
 
+    setNullFloatEd(EdMaxD1, p.MaxD1);
+    setNullFloatEd(EdMaxD2, p.MaxD2);
+    setNullFloatEd(EdMaxD3, p.MaxD3);
+
     Memo1.Lines.Text := p.Note;
     FEnableOnEdit := true;
 end;
@@ -308,6 +318,9 @@ begin
         p.MinKSens50 := TryEdToNullFloat(EditKch50Min);
         p.MaxKSens50 := TryEdToNullFloat(EditKch50Max);
         p.MaxDNotMeasured := TryEdToNullFloat(EditNotMeasuredMax);
+        p.MaxD1 := TryEdToNullFloat(EdMaxD1);
+        p.MaxD2 := TryEdToNullFloat(EdMaxD2);
+        p.MaxD3 := TryEdToNullFloat(EdMaxD3);
 
         p.Note := Trim(Memo1.Lines.Text);
 

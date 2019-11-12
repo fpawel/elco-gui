@@ -10,7 +10,11 @@ type
 
       pcFon20, pcSens20, pcKSens20,
 
-      pcFon20_2, pci24, pci35, pci26, pci17, pcNotMeasured,
+      pcFon20_2, pci24, pci35, pci26, pci17,
+
+      pcD13, pcD24, pcD35, pcD26, pcD17,
+
+      pcNotMeasured,
 
       pcFonMinus20, pcSensMinus20, pcKSensMinus20,
 
@@ -37,7 +41,12 @@ const
 
       'ФОН20',  'Ч20', 'Kч20',
 
-      'ФОН20.2', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1', 'неизм.',
+      'ФОН20.2', 'ПГС2', 'ПГС3', 'ПГС2.2', 'ПГС1',
+
+      'D.ПГС1', 'D.ПГС2', 'D.ПГС3', 'D.ПГС2.2', 'D.ПГС1.2',
+
+
+      'неизм.',
 
       'ФОН-20', 'Ч-20', 'Kч-20',
 
@@ -152,7 +161,7 @@ begin
                 if ProductTypeName.Valid = true then
                     Result.Value := ProductTypeName.Str;
             pcFon20:
-                Result := Chk2(IFPlus20, OkMinFon20, OkMaxFon20);
+                Result := Chk3(IFPlus20, OkMinFon20, OkMaxFon20, OkMaxD13);
             pcFon20_2:
                 Result := Chk3(I13, OkDFon20, OkMinFon20r, OkMaxFon20r);
             pcSens20:
@@ -176,13 +185,28 @@ begin
                 Result := Chk2(KSens50, OkMinKSens50, OkMaxKSens50);
 
             pci24:
-                Result.Value := ff(I24);
+                Result := Chk(I24, OKMaxD24);
             pci35:
-                Result.Value := ff(I35);
+                Result := Chk(I35, OKMaxD35);
             pci26:
-                Result.Value := ff(I26);
+                Result := Chk(I26, OKMaxD26);
             pci17:
-                Result.Value := ff(I17);
+                Result := Chk(I17, OKMaxD17);
+
+            pcD13:
+                Result := Chk(D13, OKMaxD13);
+
+            pcD24:
+                Result := Chk(D24, OKMaxD24);
+            pcD35:
+                Result := Chk(D35, OKMaxD35);
+            pcD26:
+                Result := Chk(D26, OKMaxD26);
+            pcD17:
+                Result := Chk(D17, OKMaxD17);
+
+
+
             pcNotMeasured:
                 Result := Chk(NotMeasured, OKDNotMeasured);
 

@@ -110,21 +110,11 @@ function GetHttpServerAddr: string;
 
 implementation 
 
-uses System.SysUtils, registry, winapi.windows, HttpRpcClient, SuperObjectHelp, Grijjy.Bson.Serialization;
+uses System.SysUtils,  winapi.windows, HttpRpcClient, SuperObjectHelp, Grijjy.Bson.Serialization;
 
 function GetHttpServerAddr: string;
-var
-    key: TRegistry;
 begin
-    key := TRegistry.Create(KEY_READ);
-    try
-        if not key.OpenKey( 'elco\http', False) then
-            raise Exception.Create('cant open elco\http');
-        result := key.ReadString('addr');
-    finally
-        key.CloseKey;
-        key.Free;
-    end;
+    result := 'http://127.0.0.1:' + GetEnvironmentVariable('ELCO_API_PORT');
 end;
 
  
