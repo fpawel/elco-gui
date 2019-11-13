@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
     Vcl.Imaging.pngimage, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
-    server_data_types, Product_Column, Vcl.Menus;
+    server_data_types, Product_Column, Vcl.Menus, UnitFormProduct;
 
 type
     TFormParty = class(TForm)
@@ -15,7 +15,7 @@ type
         PopupMenu1: TPopupMenu;
         MenuCheck: TMenuItem;
         MenuUncheck: TMenuItem;
-    N1: TMenuItem;
+        N1: TMenuItem;
         procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -25,7 +25,7 @@ type
         procedure MenuCheckClick(Sender: TObject);
         procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
           var CanSelect: Boolean);
-    procedure N1Click(Sender: TObject);
+        procedure N1Click(Sender: TObject);
     private
         { Private declarations }
         FParty: TParty1;
@@ -53,7 +53,7 @@ var
 implementation
 
 uses stringgridutils, services, stringutils, UnitFormFirmware,
-  UnitFormLastParty, UnitFormFirmwareChart, UnitFormProductCurrents;
+    UnitFormLastParty, UnitFormFirmwareChart, UnitFormProductCurrents;
 
 {$R *.dfm}
 
@@ -74,8 +74,16 @@ begin
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
     if (ARow < 1) or (ARow >= Length(FParty.Products)) then
         exit;
-    FormFirmware.product := FParty.Products[ARow - 1];
-    FormFirmware.show;
+
+    with FormProduct do
+    begin
+        SetProduct(FParty.Products[ARow - 1]);
+        Parent := self;
+        Align := alRight;
+        Font.Assign(self.Font);
+        BorderStyle := bsNone;
+        show;
+    end;
 end;
 
 procedure TFormParty.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;

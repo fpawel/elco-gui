@@ -5625,10 +5625,18 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 6
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetAppSettings: TTabSheet
         Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetArchiveParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
@@ -5641,14 +5649,26 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetTermoChamber: TTabSheet
         Caption = #1058#1077#1088#1084#1086#1082#1072#1084#1077#1088#1072
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1086#1083#1100
         ImageIndex = 5
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetScenary: TTabSheet
         Caption = #1057#1094#1077#1085#1072#1088#1080#1081
         ImageIndex = 6
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
