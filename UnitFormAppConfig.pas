@@ -226,6 +226,9 @@ begin
     end;
     TLastPartySvc.SetProductType(ComboBoxProductTypeName.Text);
     FormShow(self);
+    if Sender = ComboBoxProductTypeName then
+        Upload;
+
 end;
 
 procedure TFormAppConfig.ComboBoxComportProductsChange(Sender: TObject);
@@ -251,6 +254,9 @@ begin
         on EWrongInputExcpetion do
             exit;
     end;
+    
+
+
 end;
 
 procedure TFormAppConfig.WMEnterSizeMove(var Msg: TMessage);
