@@ -161,9 +161,9 @@ begin
                 if ProductTypeName.Valid = true then
                     Result.Value := ProductTypeName.Str;
             pcFon20:
-                Result := Chk3(IFPlus20, OkMinFon20, OkMaxFon20, OkMaxD13);
+                Result := Chk2(IFPlus20, OkMinFon20, OkMaxFon20);
             pcFon20_2:
-                Result := Chk3(I13, OkDFon20, OkMinFon20r, OkMaxFon20r);
+                Result := Chk2(I13, OkMinFon20r, OkMaxFon20r);
             pcSens20:
                 Result := Chk2(ISPlus20, OkMinKSens20, OkMaxKSens20);
             pcKSens20:
