@@ -16,11 +16,11 @@ type
     
     TParty2 = record
     public
-          Last  : Boolean;
           PartyID  : Int64;
           Day  : Integer;
           ProductTypeName  : string;
           Note  : TNullString;
+          Last  : Boolean;
         
     end;
     
@@ -40,67 +40,68 @@ type
     
     TProductInfo = record
     public
-          I13  : TNullFloat64;
-          I35  : TNullFloat64;
-          OKMinFon20r  : Boolean;
-          AppliedProductTypeName  : string;
-          GasName  : string;
-          UnitsName  : string;
-          LifetimeMonths  : Int64;
-          AppliedPointsMethod  : Int64;
-          IFPlus20  : TNullFloat64;
-          ISPlus20  : TNullFloat64;
-          DFon50  : TNullFloat64;
-          D13  : TNullFloat64;
-          D17  : TNullFloat64;
-          NoteProduct  : TNullString;
-          NoteParty  : TNullString;
-          OKMaxKSens20  : Boolean;
-          PartyID  : Int64;
-          OKMaxFon20  : Boolean;
-          OKMaxD17  : Boolean;
-          CreatedAt  : TDateTime;
-          D35  : TNullFloat64;
-          OKMaxKSens50  : Boolean;
-          PointsMethod  : TNullInt64;
-          IFPlus50  : TNullFloat64;
-          NotMeasured  : TNullFloat64;
-          DFon20  : TNullFloat64;
-          OKMinFon20  : Boolean;
-          ProductTypeName  : TNullString;
-          Serial  : TNullInt64;
-          I17  : TNullFloat64;
-          KSensMinus20  : TNullFloat64;
-          KSens20  : TNullFloat64;
-          OKDFon20  : Boolean;
-          I24  : TNullFloat64;
-          I26  : TNullFloat64;
-          KSens50  : TNullFloat64;
-          D26  : TNullFloat64;
-          HasFirmware  : Boolean;
-          ProductID  : Int64;
-          DNotMeasured  : TNullFloat64;
-          OKMaxFon20r  : Boolean;
-          OKMinKSens50  : Boolean;
-          OKDFon50  : Boolean;
-          Place  : Integer;
-          D24  : TNullFloat64;
-          OKDNotMeasured  : Boolean;
-          OKMaxD24  : Boolean;
-          ISMinus20  : TNullFloat64;
-          Production  : Boolean;
-          Scale  : Double;
-          Variation  : TNullFloat64;
-          OKMaxD26  : Boolean;
-          UnitsCode  : Byte;
-          ISPlus50  : TNullFloat64;
           OKMinKSens20  : Boolean;
+          AppliedPointsMethod  : Int64;
+          KSensMinus20  : TNullFloat64;
+          DNotMeasured  : TNullFloat64;
+          OKDFon50  : Boolean;
+          AppliedProductTypeName  : string;
+          UnitsCode  : Byte;
+          Scale  : Double;
+          ISMinus20  : TNullFloat64;
+          VariationConcentration  : TNullFloat64;
+          OKMaxD26  : Boolean;
+          Production  : Boolean;
+          OKMinFon20  : Boolean;
           OKMaxD35  : Boolean;
-          IFMinus20  : TNullFloat64;
-          Ok  : Boolean;
-          GasCode  : Byte;
-          OKMaxD13  : Boolean;
+          OKMaxD17  : Boolean;
+          I17  : TNullFloat64;
+          NotMeasured  : TNullFloat64;
+          OKMaxFon20  : Boolean;
+          OKDFon20  : Boolean;
+          OKMaxKSens20  : Boolean;
+          OKMinKSens50  : Boolean;
           NobleMetalContent  : Double;
+          PointsMethod  : TNullInt64;
+          ProductID  : Int64;
+          Variation  : TNullFloat64;
+          D26  : TNullFloat64;
+          LifetimeMonths  : Int64;
+          Place  : Integer;
+          KSens20  : TNullFloat64;
+          GasName  : string;
+          IFMinus20  : TNullFloat64;
+          OKMinFon20r  : Boolean;
+          OKMaxD24  : Boolean;
+          OKMaxKSens50  : Boolean;
+          UnitsName  : string;
+          Serial  : TNullInt64;
+          KSens50  : TNullFloat64;
+          DFon20  : TNullFloat64;
+          I13  : TNullFloat64;
+          I26  : TNullFloat64;
+          OKMaxFon20r  : Boolean;
+          IFPlus50  : TNullFloat64;
+          D13  : TNullFloat64;
+          D35  : TNullFloat64;
+          D17  : TNullFloat64;
+          IFPlus20  : TNullFloat64;
+          D24  : TNullFloat64;
+          DFon50  : TNullFloat64;
+          ProductTypeName  : TNullString;
+          NoteParty  : TNullString;
+          ISPlus20  : TNullFloat64;
+          ISPlus50  : TNullFloat64;
+          I35  : TNullFloat64;
+          OKMaxD13  : Boolean;
+          Ok  : Boolean;
+          NoteProduct  : TNullString;
+          PartyID  : Int64;
+          I24  : TNullFloat64;
+          HasFirmware  : Boolean;
+          GasCode  : Byte;
+          CreatedAt  : TDateTime;
+          OKDNotMeasured  : Boolean;
         
     end;
     
@@ -127,25 +128,33 @@ type
     
     TParty3 = record
     public
-          MaxKSens20  : string;
-          MaxKSens50  : string;
-          MaxDNotMeasured  : string;
           ProductTypeName  : string;
           Concentration1  : Double;
-          Concentration3  : Double;
           MinKSens20  : string;
           Concentration2  : Double;
-          MinKSens50  : string;
+          Concentration3  : Double;
+          MaxDFon  : string;
+          MaxKSens20  : string;
           MinDTemp  : string;
-          PointsMethod  : Int64;
           MaxDTemp  : string;
+          MaxKSens50  : string;
+          PointsMethod  : Int64;
           MaxD1  : string;
-          MaxD2  : string;
           MaxD3  : string;
           Note  : string;
           MinFon  : string;
           MaxFon  : string;
-          MaxDFon  : string;
+          MinKSens50  : string;
+          MaxDNotMeasured  : string;
+          MaxD2  : string;
+        
+    end;
+    
+    TTempPoints = record
+    public
+          Temp  : TArray<Double>;
+          Fon  : TArray<Double>;
+          Sens  : TArray<Double>;
         
     end;
     
@@ -163,51 +172,70 @@ type
     
     TFirmwareInfo = record
     public
-          Sens  : TArray<Double>;
+          SensitivityLab73  : string;
+          SensitivityProduct  : string;
+          Fon20  : string;
           Serial  : string;
-          ProductType  : string;
-          ISPlus20  : string;
-          ISPlus50  : string;
-          Place  : Integer;
-          CreatedAt  : TGoDateTime;
-          Sensitivity  : string;
-          Units  : string;
-          ScaleEnd  : string;
-          Temp  : TArray<Double>;
-          Sensitivity1  : string;
           Gas  : string;
+          Units  : string;
+          ProductTempPoints  : TTempPoints;
+          CreatedAt  : TGoDateTime;
           ScaleBeg  : string;
-          ISMinus20  : string;
-          Fon  : TArray<Double>;
-          IFPlus20  : string;
+          ScaleEnd  : string;
+          Place  : Integer;
+          ProductType  : string;
+        
+    end;
+    
+    TProductType2 = record
+    public
+          MinKSens20  : TNullFloat64;
+          MaxDTemp  : TNullFloat64;
+          MaxD1  : TNullFloat64;
+          GasName  : string;
+          LifetimeMonths  : Int64;
+          MaxDFon  : TNullFloat64;
+          MinDTemp  : TNullFloat64;
+          KSens20  : TNullFloat64;
+          Fon20  : TNullFloat64;
+          ChipType  : string;
+          MaxD3  : TNullFloat64;
+          Scale  : Double;
+          MinFon  : TNullFloat64;
+          MaxFon  : TNullFloat64;
+          TempPoints  : TTempPoints;
+          MaxDNotMeasured  : TNullFloat64;
+          Currents  : TArray<TArray<string>>;
+          UnitsName  : string;
+          MaxKSens20  : TNullFloat64;
+          MaxKSens50  : TNullFloat64;
+          MaxD2  : TNullFloat64;
+          PointsMethod  : Int64;
+          ProductTypeName  : string;
+          NobleMetalContent  : Double;
+          MinKSens50  : TNullFloat64;
         
     end;
     
     TFirmwareInfo2 = record
     public
-          Month  : Integer;
-          Minute  : Integer;
-          ProductType  : string;
-          Year  : Integer;
-          Values  : TArray<string>;
-          Sensitivity  : string;
-          Units  : string;
-          ScaleEnd  : string;
+          SensitivityProduct  : string;
           Gas  : string;
+          Place  : Integer;
+          Year  : Integer;
+          Minute  : Integer;
+          Month  : Integer;
+          Second  : Integer;
+          SensitivityLab73  : string;
+          Fon20  : string;
+          Units  : string;
+          ProductType  : string;
+          ScaleBegin  : string;
+          ScaleEnd  : string;
+          Values  : TArray<string>;
           Day  : Integer;
           Hour  : Integer;
-          Second  : Integer;
           Serial  : string;
-          ScaleBegin  : string;
-          Place  : Integer;
-        
-    end;
-    
-    TTempPoints = record
-    public
-          Sens  : TArray<Double>;
-          Temp  : TArray<Double>;
-          Fon  : TArray<Double>;
         
     end;
     
@@ -220,15 +248,15 @@ type
     
     TPublicAppConfig = record
     public
-          ChipType  : string;
           AmbientTemperature  : Double;
-          EndScaleGas2  : Boolean;
-          ComportName  : string;
-          ComportGasName  : string;
-          LogComm  : Boolean;
-          ComportName2  : string;
           BlowGasMinutes  : Integer;
           HoldTemperatureMinutes  : Integer;
+          ComportName  : string;
+          ComportName2  : string;
+          ChipType  : string;
+          ComportGasName  : string;
+          LogComm  : Boolean;
+          EndScaleGas2  : Boolean;
         
     end;
     
@@ -242,13 +270,13 @@ type
     
     TProductCurrent = record
     public
-          Gas  : Integer;
-          CurrentValue  : Double;
-          Note  : string;
           ProductCurrentID  : Int64;
           StoredAt  : TDateTime;
           ProductID  : Int64;
           Temperature  : Double;
+          Gas  : Integer;
+          CurrentValue  : Double;
+          Note  : string;
         
     end;
     
@@ -269,18 +297,18 @@ type
     
     TKtx500Info = record
     public
-          TemperatureOn  : Boolean;
-          CoolOn  : Boolean;
           Temperature  : Double;
           Destination  : Double;
+          TemperatureOn  : Boolean;
+          CoolOn  : Boolean;
         
     end;
     
     TDelayInfo = record
     public
+          TotalSeconds  : Integer;
           ElapsedSeconds  : Integer;
           What  : string;
-          TotalSeconds  : Integer;
         
     end;
     

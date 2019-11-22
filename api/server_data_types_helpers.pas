@@ -47,7 +47,7 @@ end;
 
 function TNullFloat64Helper.GetStr: string;
 begin
-    if Valid then
+    if Valid=true then
         result := floattostr(Float64)
     else
         result := '';
@@ -55,7 +55,7 @@ end;
 
 function TNullInt64Helper.GetStr: string;
 begin
-    if Valid then
+    if Valid = true then
         result := IntToStr(Int64)
     else
         result := '';

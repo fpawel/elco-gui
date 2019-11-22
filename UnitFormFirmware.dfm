@@ -3,7 +3,7 @@ object FormFirmware: TFormFirmware
   Top = 0
   BorderStyle = bsNone
   Caption = '"'#1055#1088#1086#1096#1080#1074#1082#1072'"'
-  ClientHeight = 444
+  ClientHeight = 452
   ClientWidth = 685
   Color = clWindow
   Constraints.MinWidth = 400
@@ -28,7 +28,7 @@ object FormFirmware: TFormFirmware
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 703
+    ExplicitLeft = 10
     object ToolBar2: TToolBar
       Left = 526
       Top = 0
@@ -42,7 +42,6 @@ object FormFirmware: TFormFirmware
       EdgeOuter = esNone
       Images = ImageList3
       TabOrder = 0
-      ExplicitLeft = 552
       object ToolButton8: TToolButton
         Left = 0
         Top = 0
@@ -98,9 +97,6 @@ object FormFirmware: TFormFirmware
       TabOrder = 1
       TabStop = True
       OnClick = RadioButton1Click
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitHeight = 35
     end
     object RadioButton2: TRadioButton
       AlignWithMargins = True
@@ -112,43 +108,37 @@ object FormFirmware: TFormFirmware
       Caption = #1056#1072#1089#1095#1080#1090#1072#1085#1086
       TabOrder = 2
       OnClick = RadioButton2Click
-      ExplicitLeft = 89
-      ExplicitTop = 0
-      ExplicitHeight = 35
     end
   end
   object Panel2: TPanel
     Left = 337
     Top = 41
     Width = 348
-    Height = 403
+    Height = 411
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
-    ExplicitLeft = 313
-    ExplicitWidth = 356
-    ExplicitHeight = 474
+    ExplicitHeight = 403
     object GroupBox2: TGroupBox
       AlignWithMargins = True
       Left = 5
       Top = 3
       Width = 338
-      Height = 397
+      Height = 405
       Margins.Left = 5
       Margins.Right = 5
       Align = alClient
       Caption = #1058#1077#1084#1087#1077#1088#1072#1090#1091#1088#1085#1099#1077' '#1090#1086#1095#1082#1080
       TabOrder = 0
-      ExplicitWidth = 396
-      ExplicitHeight = 342
+      ExplicitHeight = 397
       object StringGrid2: TStringGrid
         AlignWithMargins = True
         Left = 7
         Top = 23
         Width = 324
-        Height = 305
+        Height = 313
         Margins.Left = 5
         Margins.Right = 5
         Align = alClient
@@ -168,9 +158,7 @@ object FormFirmware: TFormFirmware
         OnMouseDown = StringGrid2MouseDown
         OnSelectCell = StringGrid2SelectCell
         OnSetEditText = StringGrid2SetEditText
-        ExplicitLeft = 5
-        ExplicitWidth = 348
-        ExplicitHeight = 282
+        ExplicitHeight = 305
         ColWidths = (
           80
           80
@@ -181,7 +169,7 @@ object FormFirmware: TFormFirmware
       object LinkLabel1: TLinkLabel
         AlignWithMargins = True
         Left = 12
-        Top = 336
+        Top = 344
         Width = 321
         Height = 22
         Margins.Left = 10
@@ -197,14 +185,13 @@ object FormFirmware: TFormFirmware
         ParentFont = False
         TabOrder = 1
         OnClick = LinkLabel1Click
-        ExplicitLeft = 10
-        ExplicitTop = 313
-        ExplicitWidth = 379
+        ExplicitTop = 336
+        ExplicitWidth = 307
       end
       object LinkLabel2: TLinkLabel
         AlignWithMargins = True
         Left = 12
-        Top = 368
+        Top = 376
         Width = 321
         Height = 22
         Margins.Left = 10
@@ -220,8 +207,8 @@ object FormFirmware: TFormFirmware
         ParentFont = False
         TabOrder = 2
         OnClick = LinkLabel2Click
-        ExplicitTop = 313
-        ExplicitWidth = 307
+        ExplicitLeft = 14
+        ExplicitTop = 329
       end
     end
   end
@@ -229,27 +216,25 @@ object FormFirmware: TFormFirmware
     Left = 0
     Top = 41
     Width = 337
-    Height = 403
+    Height = 411
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel5'
     ShowCaption = False
     TabOrder = 2
-    ExplicitHeight = 474
+    ExplicitHeight = 403
     object Panel4: TPanel
       AlignWithMargins = True
       Left = 3
       Top = 3
       Width = 150
-      Height = 333
+      Height = 341
       Align = alLeft
       BevelOuter = bvNone
       Caption = 'Panel4'
       ShowCaption = False
       TabOrder = 0
-      ExplicitLeft = 11
-      ExplicitTop = 6
-      ExplicitHeight = 375
+      ExplicitHeight = 333
       object Label9: TLabel
         AlignWithMargins = True
         Left = 3
@@ -310,6 +295,7 @@ object FormFirmware: TFormFirmware
         Height = 18
         Align = alTop
         Caption = #1045#1076'. '#1080#1079#1084'.'
+        ExplicitTop = 247
         ExplicitWidth = 56
       end
       object ComboBoxPlace: TComboBox
@@ -349,7 +335,6 @@ object FormFirmware: TFormFirmware
         Time = 0.487553599537932300
         Color = clGradientInactiveCaption
         TabOrder = 2
-        ExplicitTop = 139
       end
       object ComboBoxProductType: TComboBox
         AlignWithMargins = True
@@ -367,7 +352,6 @@ object FormFirmware: TFormFirmware
         OnDropDown = ComboBoxProductTypeDropDown
         Items.Strings = (
           '035')
-        ExplicitTop = 195
       end
       object ComboBoxGas: TComboBox
         AlignWithMargins = True
@@ -387,7 +371,7 @@ object FormFirmware: TFormFirmware
         OnDropDown = ComboBoxGasDropDown
         Items.Strings = (
           'CO')
-        ExplicitTop = 251
+        ExplicitTop = 271
       end
       object ComboBoxUnits: TComboBox
         AlignWithMargins = True
@@ -408,21 +392,19 @@ object FormFirmware: TFormFirmware
         Items.Strings = (
           #1084#1075'/'#1084'3'
           'ppm')
-        ExplicitTop = 307
       end
     end
     object Panel3: TPanel
       Left = 156
       Top = 0
       Width = 149
-      Height = 339
+      Height = 347
       Align = alLeft
       BevelOuter = bvNone
       Caption = 'Panel3'
       ShowCaption = False
       TabOrder = 1
-      ExplicitTop = 41
-      ExplicitHeight = 348
+      ExplicitHeight = 339
       object Label6: TLabel
         AlignWithMargins = True
         Left = 3
@@ -446,22 +428,33 @@ object FormFirmware: TFormFirmware
       object Label7: TLabel
         AlignWithMargins = True
         Left = 3
-        Top = 171
-        Width = 143
-        Height = 18
-        Align = alTop
-        Caption = #1063#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100
-        ExplicitWidth = 128
-      end
-      object Label10: TLabel
-        AlignWithMargins = True
-        Left = 3
         Top = 115
         Width = 143
         Height = 18
         Align = alTop
-        Caption = #1060#1086#1085#1086#1074#1099#1081' '#1090#1086#1082
-        ExplicitWidth = 88
+        Caption = #1063#1091#1074#1089'-'#1090#1100' '#1083#1072#1073'.73'
+        ExplicitTop = 171
+        ExplicitWidth = 104
+      end
+      object Label11: TLabel
+        AlignWithMargins = True
+        Left = 3
+        Top = 171
+        Width = 143
+        Height = 18
+        Align = alTop
+        Caption = #1063#1091#1074#1089'-'#1090#1100' '#1083#1072#1073'.73'
+        ExplicitTop = 243
+      end
+      object Label10: TLabel
+        AlignWithMargins = True
+        Left = 3
+        Top = 227
+        Width = 143
+        Height = 18
+        Align = alTop
+        Caption = #1060#1086#1085#1086#1074#1099#1081' '#1090#1086#1082', '#1084#1082#1040
+        ExplicitWidth = 124
       end
       object EditScaleBegin: TEdit
         AlignWithMargins = True
@@ -485,18 +478,20 @@ object FormFirmware: TFormFirmware
         TabOrder = 1
         Text = '0'
       end
-      object EditSens: TEdit
+      object EditSensLab73: TEdit
         AlignWithMargins = True
         Left = 3
-        Top = 227
+        Top = 139
         Width = 143
         Height = 26
         Align = alTop
-        Color = clInfoBk
+        Color = cl3DLight
+        ReadOnly = True
         TabOrder = 2
         Text = '100'
+        ExplicitTop = 195
       end
-      object EditSens1: TEdit
+      object EditSensProduct: TEdit
         AlignWithMargins = True
         Left = 3
         Top = 195
@@ -506,23 +501,25 @@ object FormFirmware: TFormFirmware
         Color = clInfoBk
         TabOrder = 3
         Text = '100'
+        ExplicitTop = 299
       end
-      object EditFon: TEdit
+      object EditFon20: TEdit
         AlignWithMargins = True
         Left = 3
-        Top = 139
+        Top = 251
         Width = 143
         Height = 26
         Align = alTop
         Color = clInfoBk
         TabOrder = 4
         Text = '100'
+        ExplicitTop = 355
       end
     end
     object LinkLabel5: TLinkLabel
       AlignWithMargins = True
       Left = 10
-      Top = 376
+      Top = 384
       Width = 324
       Height = 22
       Margins.Left = 10
@@ -538,13 +535,13 @@ object FormFirmware: TFormFirmware
       ParentFont = False
       TabOrder = 2
       OnClick = LinkLabel4Click
-      ExplicitTop = 378
+      ExplicitTop = 376
       ExplicitWidth = 239
     end
     object LinkLabel3: TLinkLabel
       AlignWithMargins = True
       Left = 10
-      Top = 344
+      Top = 352
       Width = 324
       Height = 22
       Margins.Left = 10
@@ -560,7 +557,7 @@ object FormFirmware: TFormFirmware
       ParentFont = False
       TabOrder = 3
       OnClick = LinkLabel3Click
-      ExplicitTop = 415
+      ExplicitTop = 344
       ExplicitWidth = 190
     end
   end

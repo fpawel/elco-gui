@@ -51,8 +51,8 @@ type
 
     TPlaceFirmware = class
     public
-        class function CalculateFirmwareByProductType(ProductTypeName:string; Place:Integer; Serial:Integer):TFirmwareInfo;static;
         class function CalculateFirmwareInfo(param1:Int64):TFirmwareInfo;static;
+        class function GetProductType(param1:string):TProductType2;static;
         class procedure RunReadPlaceFirmware(param1:Integer);static;
         class procedure RunWritePlaceFirmware(X:TFirmwareInfo2);static;
         class procedure SaveProductType(X:TFirmwareInfo2);static;
@@ -398,16 +398,6 @@ begin
 end;
 
  
-class function TPlaceFirmware.CalculateFirmwareByProductType(ProductTypeName:string; Place:Integer; Serial:Integer):TFirmwareInfo;
-var
-    req : ISuperobject;s:string;
-begin
-    req := SO;
-      SuperObject_SetField(req, 'ProductTypeName', ProductTypeName);   SuperObject_SetField(req, 'Place', Place);   SuperObject_SetField(req, 'Serial', Serial); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateFirmwareByProductType', req, Result);   
-end;
-
-
 class function TPlaceFirmware.CalculateFirmwareInfo(param1:Int64):TFirmwareInfo;
 var
     req : ISuperobject;
@@ -415,6 +405,16 @@ begin
     req := SA([]);
       req.AsArray.Add(param1); 
        ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateFirmwareInfo', req, Result);   
+end;
+
+
+class function TPlaceFirmware.GetProductType(param1:string):TProductType2;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+      req.AsArray.Add(param1); 
+       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.GetProductType', req, Result);   
 end;
 
 
