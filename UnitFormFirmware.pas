@@ -9,33 +9,21 @@ uses
     Vcl.ExtCtrls, server_data_types, server_data_types_helpers,
     System.ImageList, Vcl.ImgList, Vcl.ToolWin, Vcl.Grids, VclTee.TeeGDIPlus,
     VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, VclTee.Series,
-    UnitFormLastParty;
+    UnitFormLastParty, Vcl.Menus;
 
 type
     TFormFirmware = class(TForm)
         ImageList3: TImageList;
         Panel1: TPanel;
-        ToolBar2: TToolBar;
-        ToolButton3: TToolButton;
-        ToolButton4: TToolButton;
         Panel2: TPanel;
         GroupBox2: TGroupBox;
         StringGrid2: TStringGrid;
-        RadioButton1: TRadioButton;
-        RadioButton2: TRadioButton;
-        ToolButton7: TToolButton;
-        LinkLabel1: TLinkLabel;
-        LinkLabel2: TLinkLabel;
-        ToolButton8: TToolButton;
-        ToolButton9: TToolButton;
         Panel5: TPanel;
         Panel4: TPanel;
-        Label9: TLabel;
         Label2: TLabel;
         Label1: TLabel;
         Label3: TLabel;
         Label4: TLabel;
-        ComboBoxPlace: TComboBox;
         EditSerial: TEdit;
         DateTimePicker1: TDateTimePicker;
         ComboBoxProductType: TComboBox;
@@ -48,13 +36,26 @@ type
         EditScaleEnd: TEdit;
         EditSensLab73: TEdit;
         EditSensProduct: TEdit;
-        LinkLabel5: TLinkLabel;
-        LinkLabel3: TLinkLabel;
         Label11: TLabel;
         ComboBoxUnits: TComboBox;
         Label5: TLabel;
         EditFon20: TEdit;
         Label10: TLabel;
+        ToolBar1: TToolBar;
+        ToolButton1: TToolButton;
+        ToolButton2: TToolButton;
+    ButtonWrite: TButton;
+        Button2: TButton;
+        Button3: TButton;
+    Button1: TButton;
+    Button4: TButton;
+    PopupMenu1: TPopupMenu;
+    MenuCalcProduct: TMenuItem;
+    MenuUseSelectedProductType: TMenuItem;
+    MenuSaveProductType: TMenuItem;
+    Label9: TLabel;
+    ComboBoxPlace: TComboBox;
+    Label12: TLabel;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -64,10 +65,6 @@ type
           var CanSelect: Boolean);
         procedure StringGrid2SetEditText(Sender: TObject; ACol, ARow: Integer;
           const Value: string);
-        procedure ToolButton122Click(Sender: TObject);
-        procedure RadioButton1Click(Sender: TObject);
-        procedure RadioButton2Click(Sender: TObject);
-        procedure ToolButton4Click(Sender: TObject);
         procedure FormShow(Sender: TObject);
         procedure ComboBoxProductTypeDropDown(Sender: TObject);
         procedure ComboBoxGasDropDown(Sender: TObject);
@@ -76,8 +73,14 @@ type
         procedure LinkLabel2Click(Sender: TObject);
         procedure ToolButton8Click(Sender: TObject);
         procedure ToolButton9Click(Sender: TObject);
-        procedure LinkLabel3Click(Sender: TObject);
-        procedure LinkLabel4Click(Sender: TObject);
+        procedure Button2Click(Sender: TObject);
+        procedure MenuCalcProductClick(Sender: TObject);
+        procedure MenuUseSelectedProductTypeClick(Sender: TObject);
+        procedure MenuSaveProductTypeClick(Sender: TObject);
+    procedure ButtonWriteClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -95,18 +98,16 @@ type
 
         function GetTemperatureValues: TArray<string>;
 
-        procedure SetFirmwareInfo(f: TFirmwareInfo);
         procedure ClearFirmwareInfo;
 
-        procedure SetProduct(p: TProductInfo);
         procedure applyProduct;
 
         function GetTFirmwareInfo2: TFirmwareInfo2;
 
     public
         { Public declarations }
-        procedure SetReadFirmwareInfo(f: TFirmwareInfo);
-        property Product: TProductInfo read FProduct write SetProduct;
+        procedure SetFirmwareInfo(f: TFirmwareInfo);
+        procedure SetProduct(p: TProductInfo);
 
     end;
 
@@ -221,16 +222,6 @@ begin
         end;
 end;
 
-procedure TFormFirmware.ToolButton122Click(Sender: TObject);
-begin
-    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2);
-end;
-
-procedure TFormFirmware.ToolButton4Click(Sender: TObject);
-begin
-    TPlaceFirmware.RunReadPlaceFirmware(ComboBoxPlace.ItemIndex);
-end;
-
 procedure TFormFirmware.ToolButton8Click(Sender: TObject);
 var
     cl, ro: Integer;
@@ -312,14 +303,67 @@ begin
     ax.SetMinMax(min_v - d_ax, max_v + d_ax);
 end;
 
+procedure TFormFirmware.ButtonWriteClick(Sender: TObject);
+begin
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2, ComboBoxPlace.ItemIndex);
+end;
+
+procedure TFormFirmware.Button1Click(Sender: TObject);
+begin
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2, 0);
+end;
+
+procedure TFormFirmware.Button2Click(Sender: TObject);
+begin
+    TPlaceFirmware.RunReadPlaceFirmware(ComboBoxPlace.ItemIndex);
+end;
+
+procedure TFormFirmware.Button3Click(Sender: TObject);
+var productType:string;
+begin
+    MenuCalcProduct.Visible := FProduct.ProductID <> 0;
+    MenuCalcProduct.Caption := Format('Расчёт по данным ЭХЯ %d',
+      [FProduct.ProductID]);
+
+    if ComboBoxProductType.text = '' then
+        ComboBoxProductType.text := FProduct.AppliedProductTypeName;
+
+    if ComboBoxProductType.text = '' then
+        ComboBoxProductType.text := TLastPartySvc.GetValues.ProductTypeName;
+
+    if EditSerial.text = '' then
+        EditSerial.text := FProduct.Serial.Str;
+
+    MenuUseSelectedProductType.Caption := 'Использовать данные исполнения ' +
+      ComboBoxProductType.text;
+    MenuSaveProductType.Caption := 'Сохранить для исполнения ' +
+      ComboBoxProductType.text;
+
+
+    with Mouse.CursorPos do
+        (Sender as TButton).PopupMenu.Popup(X, Y);
+end;
+
+procedure TFormFirmware.Button4Click(Sender: TObject);
+begin
+     TPlaceFirmware.RunReadPlaceFirmware(0);
+end;
+
+procedure TFormFirmware.MenuCalcProductClick(Sender: TObject);
+begin
+    SetFirmwareInfo(TPlaceFirmware.CalculateFirmwareInfo(FProduct.ProductID));
+end;
+
 procedure TFormFirmware.ClearFirmwareInfo;
 begin
-    DateTimePicker1.DateTime := now;
+    DateTimePicker1.DateTime := 0;
     EditSerial.text := '';
     EditSensProduct.text := '';
     EditSensLab73.text := '';
     EditScaleBegin.text := '';
     EditScaleEnd.text := '';
+    EditFon20.text := '';
+
     SetComboBoxText(ComboBoxProductType, '');
     SetComboBoxText(ComboBoxUnits, '');
     SetComboBoxText(ComboBoxGas, '');
@@ -414,20 +458,6 @@ begin
 
 end;
 
-procedure TFormFirmware.RadioButton1Click(Sender: TObject);
-begin
-    RadioButton2.OnClick := nil;
-    applyProduct;
-    RadioButton2.OnClick := RadioButton2Click;
-end;
-
-procedure TFormFirmware.RadioButton2Click(Sender: TObject);
-begin
-    RadioButton1.OnClick := nil;
-    applyProduct;
-    RadioButton1.OnClick := RadioButton1Click;
-end;
-
 procedure TFormFirmware.SetTemperaturePointsChart(ATemp: TArray<Double>;
   AFon: TArray<Double>; ASens: TArray<Double>);
 var
@@ -435,12 +465,6 @@ var
 begin
     FormFirmwareChart.Caption := Format('График ЭХЯ %d - ',
       [FProduct.ProductID]);
-    if RadioButton1.Checked then
-        FormFirmwareChart.Caption := FormFirmwareChart.Caption +
-          RadioButton1.Caption
-    else
-        FormFirmwareChart.Caption := FormFirmwareChart.Caption +
-          RadioButton2.Caption;
 
     FormFirmwareChart.Series1.Clear;
     FormFirmwareChart.Series2.Clear;
@@ -487,50 +511,24 @@ begin
 
 end;
 
-procedure TFormFirmware.SetReadFirmwareInfo(f: TFirmwareInfo);
-var
-    n: Integer;
-begin
-    RadioButton1.OnClick := nil;
-    RadioButton2.OnClick := nil;
-    SetFirmwareInfo(f);
-    RadioButton1.Checked := true;
-    RadioButton1.OnClick := RadioButton1Click;
-    RadioButton2.OnClick := RadioButton2Click;
-end;
-
 procedure TFormFirmware.applyProduct;
 begin
 
     Caption := 'Прошивка ЭХЯ ' + inttostr(FProduct.ProductID);
 
-    if FProduct.ProductID <> 0 then
-    begin
-        if RadioButton1.Checked then
-        begin
-            if FProduct.HasFirmware = true then
-                SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo
-                  (FProduct.ProductID))
-            else
-            begin
-                ClearFirmwareInfo;
-            end;
-        end
-        else
-            SetFirmwareInfo(TPlaceFirmware.CalculateFirmwareInfo
-              (FProduct.ProductID));
-    end
+    if FProduct.HasFirmware = true then
+        SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo(FProduct.ProductID))
     else
     begin
         ClearFirmwareInfo;
     end;
     ComboBoxPlace.ItemIndex := FProduct.Place;
+
 end;
 
 procedure TFormFirmware.SetProduct(p: TProductInfo);
 begin
     FProduct := p;
-
     applyProduct;
 end;
 
@@ -675,17 +673,12 @@ begin
 
 end;
 
-procedure TFormFirmware.LinkLabel3Click(Sender: TObject);
-begin
-    TPlaceFirmware.SaveProductType(GetTFirmwareInfo2);
-end;
-
-procedure TFormFirmware.LinkLabel4Click(Sender: TObject);
+procedure TFormFirmware.MenuUseSelectedProductTypeClick(Sender: TObject);
 var
     i: Integer;
     t: TProductType2;
     xs: TArray<TArray<string>>;
-    s:string;
+    s: string;
 begin
 
     t := TPlaceFirmware.GetProductType(ComboBoxProductType.text);
@@ -697,18 +690,18 @@ begin
     for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
 
-    EditSensProduct.text := t.KSens20.Str;
-    EditSensLab73.text := t.KSens20.Str;
+    EditSensProduct.text := t.KSens20.str;
+    EditSensLab73.text := t.KSens20.str;
     EditScaleBegin.text := '0';
-    EditScaleEnd.text := floattostr(t.Scale);
-    EditFon20.text := t.Fon20.Str;
+    EditScaleEnd.text := FloatToStr(t.scale);
+    EditFon20.text := t.Fon20.str;
+    DateTimePicker1.DateTime := Now;
 
     SetComboBoxText(ComboBoxUnits, t.UnitsName);
     SetComboBoxText(ComboBoxGas, t.GasName);
 
-
-    SetTemperaturePointsChart(t.TempPoints.Temp,
-      t.TempPoints.Fon, t.TempPoints.Sens);
+    SetTemperaturePointsChart(t.TempPoints.Temp, t.TempPoints.Fon,
+      t.TempPoints.Sens);
     xs := t.Currents;
     with StringGrid2 do
     begin
@@ -723,6 +716,11 @@ begin
         end;
     end;
 
+end;
+
+procedure TFormFirmware.MenuSaveProductTypeClick(Sender: TObject);
+begin
+    TPlaceFirmware.SaveProductType(GetTFirmwareInfo2);
 end;
 
 end.

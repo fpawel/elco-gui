@@ -372,15 +372,7 @@ begin
 
         try
             TLastPartySvc.DeleteProductAtPlace(Row - 1);
-            with FProducts[Row - 1] do
-            begin
-                Place := Row - 1;
-                ProductId := 0;
-            end;
-
-            Cells[0, Row] := ProductValues[0, Row - 1].Value;
-            for ACol := 1 to colcount - 1 do
-                Cells[ACol, Row] := '';
+            upload;
             PanelError.Visible := false;
         except
             on E: ERpcRemoteErrorException do
@@ -488,11 +480,6 @@ begin
             end;
         end;
     end;
-
-    // MenuProductType.Clear;
-    // m := TMenuItem.Create(self);
-    // m.Caption := 'как в партии';
-    // MenuProductType.Add(m);
 
 end;
 

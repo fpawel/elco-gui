@@ -95,7 +95,7 @@ begin
       FProduct.Place div 8 + 1, FProduct.Place mod 8 + 1
 
       ]);
-    FormFirmware.Product := FProduct;
+    FormFirmware.SetProduct( FProduct );
     FormProductCurrents.Load(FProduct.ProductID);
 end;
 

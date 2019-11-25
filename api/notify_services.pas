@@ -6,15 +6,15 @@ interface
 uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
 
 type
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
-    TWorkResultHandler = reference to procedure (x:TWorkResult);
-    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
+    TParty1Handler = reference to procedure (x:TParty1);
     TScriptLineHandler = reference to procedure (x:TScriptLine);
-    TIntegerHandler = reference to procedure (x:Integer);
     TStringHandler = reference to procedure (x:string);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
-    TParty1Handler = reference to procedure (x:TParty1);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
+    TIntegerHandler = reference to procedure (x:Integer);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TWorkResultHandler = reference to procedure (x:TWorkResult);
     
 
 procedure HandleCopydata(var Message: TMessage);

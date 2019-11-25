@@ -54,7 +54,7 @@ type
         class function CalculateFirmwareInfo(param1:Int64):TFirmwareInfo;static;
         class function GetProductType(param1:string):TProductType2;static;
         class procedure RunReadPlaceFirmware(param1:Integer);static;
-        class procedure RunWritePlaceFirmware(X:TFirmwareInfo2);static;
+        class procedure RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo2; PlaceDevice:Integer);static;
         class procedure SaveProductType(X:TFirmwareInfo2);static;
         class function StoredFirmwareInfo(param1:Int64):TFirmwareInfo;static;
         class function TempPoints(Values:TArray<string>):TTempPoints;static;
@@ -428,12 +428,12 @@ begin
 end;
 
 
-class procedure TPlaceFirmware.RunWritePlaceFirmware(X:TFirmwareInfo2);
+class procedure TPlaceFirmware.RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo2; PlaceDevice:Integer);
 var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      TgoBsonSerializer.serialize(X, s); req['X'] := SO(s); 
+      TgoBsonSerializer.serialize(FirmwareInfo, s); req['FirmwareInfo'] := SO(s);   SuperObject_SetField(req, 'PlaceDevice', PlaceDevice); 
       ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.RunWritePlaceFirmware', req);  
 end;
 

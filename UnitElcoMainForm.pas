@@ -305,7 +305,7 @@ begin
             FormJournalParties.FetchYearsMonths;
         end);
 
-    SetOnReadFirmware(FormFirmware.SetReadFirmwareInfo);
+    SetOnReadFirmware(FormFirmware.SetFirmwareInfo);
     SetOnPanic(
         procedure(pnicStr: String)
         begin

@@ -40,11 +40,10 @@ object FormProduct: TFormProduct
       Left = 3
       Top = 6
       Width = 41
-      Height = 22
+      Height = 18
       Margins.Top = 6
       Align = alLeft
       Caption = 'Label1'
-      ExplicitHeight = 18
     end
     object ToolBar6: TToolBar
       Left = 660
@@ -82,6 +81,10 @@ object FormProduct: TFormProduct
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = #1055#1088#1086#1096#1080#1074#1082#1072
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object TabSheet2: TTabSheet
       Caption = #1046#1091#1088#1085#1072#1083' '#1089#1085#1103#1090#1080#1103

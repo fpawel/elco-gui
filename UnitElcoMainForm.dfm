@@ -5641,10 +5641,18 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetArchiveParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetFindProduct: TTabSheet
         Caption = #1055#1086#1080#1089#1082' '#1069#1061#1071
         ImageIndex = 7
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetTermoChamber: TTabSheet
         Caption = #1058#1077#1088#1084#1086#1082#1072#1084#1077#1088#1072
