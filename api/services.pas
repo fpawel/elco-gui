@@ -51,12 +51,12 @@ type
 
     TPlaceFirmware = class
     public
-        class function CalculateFirmwareInfo(param1:Int64):TFirmwareInfo;static;
+        class function CalculateFirmware(param1:Int64):TFirmware;static;
         class function GetProductType(param1:string):TProductType2;static;
         class procedure RunReadPlaceFirmware(param1:Integer);static;
-        class procedure RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo2; PlaceDevice:Integer);static;
-        class procedure SaveProductType(X:TFirmwareInfo2);static;
-        class function StoredFirmwareInfo(param1:Int64):TFirmwareInfo;static;
+        class procedure RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer);static;
+        class procedure SaveProductType(X:TFirmwareInfo);static;
+        class function StoredFirmware(param1:Int64):TFirmware;static;
         class function TempPoints(Values:TArray<string>):TTempPoints;static;
          
     end;
@@ -398,13 +398,13 @@ begin
 end;
 
  
-class function TPlaceFirmware.CalculateFirmwareInfo(param1:Int64):TFirmwareInfo;
+class function TPlaceFirmware.CalculateFirmware(param1:Int64):TFirmware;
 var
     req : ISuperobject;
 begin
     req := SA([]);
       req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateFirmwareInfo', req, Result);   
+       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateFirmware', req, Result);   
 end;
 
 
@@ -428,7 +428,7 @@ begin
 end;
 
 
-class procedure TPlaceFirmware.RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo2; PlaceDevice:Integer);
+class procedure TPlaceFirmware.RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer);
 var
     req : ISuperobject;s:string;
 begin
@@ -438,7 +438,7 @@ begin
 end;
 
 
-class procedure TPlaceFirmware.SaveProductType(X:TFirmwareInfo2);
+class procedure TPlaceFirmware.SaveProductType(X:TFirmwareInfo);
 var
     req : ISuperobject;s:string;
 begin
@@ -448,13 +448,13 @@ begin
 end;
 
 
-class function TPlaceFirmware.StoredFirmwareInfo(param1:Int64):TFirmwareInfo;
+class function TPlaceFirmware.StoredFirmware(param1:Int64):TFirmware;
 var
     req : ISuperobject;
 begin
     req := SA([]);
       req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.StoredFirmwareInfo', req, Result);   
+       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.StoredFirmware', req, Result);   
 end;
 
 

@@ -72,7 +72,8 @@ uses
   UnitFormScriptSource in 'UnitFormScriptSource.pas' {FormScriptSource},
   Grijjy.OpenSSL.API in 'grijjy\Grijjy.OpenSSL.API.pas',
   UnitFormProduct in 'UnitFormProduct.pas' {FormProduct},
-  logfile in 'logfile.pas';
+  logfile in 'logfile.pas',
+  UnitFormFirmwareBytes in 'UnitFormFirmwareBytes.pas' {FormFirmwareBytes};
 
 {$R *.res}
 
@@ -112,6 +113,7 @@ begin
   Application.CreateForm(TFormNewPartyDialog, FormNewPartyDialog);
   Application.CreateForm(TFormScriptSource, FormScriptSource);
   Application.CreateForm(TFormProduct, FormProduct);
+  Application.CreateForm(TFormFirmwareBytes, FormFirmwareBytes);
   Application.Run;
 
 end.

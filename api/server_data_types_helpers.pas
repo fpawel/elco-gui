@@ -16,9 +16,9 @@ type
         property Str: string read GetStr;
     end;
 
-    TGoDateTimeHelper = record helper for TGoDateTime
-        function DateTime: TDateTime;
-    end;
+//    TGoDateTimeHelper = record helper for TGoDateTime
+//        function DateTime: TDateTime;
+//    end;
 
 function is_main_temperature(X: Double): Boolean;
 
@@ -27,8 +27,7 @@ implementation
 uses sysutils, dateutils;
 
 const
-    main_temperatures: array [0 .. 7] of Double = (-40, -20, 0, 20, 30,
-      40, 45, 50);
+    main_temperatures: array [0 .. 4] of Double = (-40, -20, 0, 20, 50);
 
 function is_main_temperature(X: Double): Boolean;
 var
@@ -40,10 +39,10 @@ begin
     exit(false);
 end;
 
-function TGoDateTimeHelper.DateTime: TDateTime;
-begin
-    exit(EncodeDateTime(Year, Month, Day, Hour, Minute, Second, Millisecond));
-end;
+//function TGoDateTimeHelper.DateTime: TDateTime;
+//begin
+//    exit(EncodeDateTime(Year, Month, Day, Hour, Minute, Second, Millisecond));
+//end;
 
 function TNullFloat64Helper.GetStr: string;
 begin

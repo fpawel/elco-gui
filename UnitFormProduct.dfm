@@ -2,7 +2,7 @@ object FormProduct: TFormProduct
   Left = 0
   Top = 0
   Caption = 'FormProduct'
-  ClientHeight = 337
+  ClientHeight = 583
   ClientWidth = 693
   Color = clHighlightText
   Font.Charset = DEFAULT_CHARSET
@@ -40,10 +40,11 @@ object FormProduct: TFormProduct
       Left = 3
       Top = 6
       Width = 41
-      Height = 18
+      Height = 22
       Margins.Top = 6
       Align = alLeft
       Caption = 'Label1'
+      ExplicitHeight = 18
     end
     object ToolBar6: TToolBar
       Left = 660
@@ -74,25 +75,36 @@ object FormProduct: TFormProduct
     Left = 0
     Top = 31
     Width = 693
-    Height = 306
+    Height = 552
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
     OnChange = PageControl1Change
+    ExplicitHeight = 306
     object TabSheet1: TTabSheet
       Caption = #1055#1088#1086#1096#1080#1074#1082#1072
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 278
+      object PageControl2: TPageControl
+        Left = 0
+        Top = 0
+        Width = 685
+        Height = 524
+        ActivePage = TabSheetChart
+        Align = alClient
+        TabOrder = 0
+        object TabSheetChart: TTabSheet
+          Caption = #1043#1088#1072#1092#1080#1082
+        end
+        object TabSheetBytes: TTabSheet
+          Caption = #1041#1072#1081#1090#1099
+          ImageIndex = 1
+        end
+      end
     end
     object TabSheet2: TTabSheet
       Caption = #1046#1091#1088#1085#1072#1083' '#1089#1085#1103#1090#1080#1103
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 278
     end
   end
   object ImageList4: TImageList

@@ -305,7 +305,7 @@ begin
             FormJournalParties.FetchYearsMonths;
         end);
 
-    SetOnReadFirmware(FormFirmware.SetFirmwareInfo);
+    SetOnReadFirmware(FormFirmware.SetFirmware);
     SetOnPanic(
         procedure(pnicStr: String)
         begin
@@ -457,6 +457,8 @@ begin
     with LabelStatusTop.Font do
         if Color = clRed then
             Color := clblue
+        else if Color = clblue then
+            Color := clGreen
         else
             Color := clRed;
 end;

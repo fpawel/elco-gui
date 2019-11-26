@@ -8,7 +8,7 @@ uses
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
     Vcl.ToolWin,
     server_data_types, server_data_types_helpers, System.ImageList, Vcl.ImgList,
-    Vcl.ExtCtrls;
+    Vcl.ExtCtrls, UnitFormFirmwareBytes;
 
 type
     TFormProduct = class(TForm)
@@ -20,6 +20,9 @@ type
         PageControl1: TPageControl;
         TabSheet1: TTabSheet;
         TabSheet2: TTabSheet;
+    PageControl2: TPageControl;
+    TabSheetChart: TTabSheet;
+    TabSheetBytes: TTabSheet;
         procedure ToolButtonStopClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
@@ -54,7 +57,15 @@ begin
     with FormFirmwareChart do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheet1;
+        Parent := TabSheetChart;
+        BorderStyle := bsNone;
+        Align := alClient;
+        Show;
+    end;
+    with FormFirmwareBytes do
+    begin
+        Font.Assign(self.Font);
+        Parent := TabSheetBytes;
         BorderStyle := bsNone;
         Align := alClient;
         Show;

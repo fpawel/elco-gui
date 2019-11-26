@@ -44,18 +44,18 @@ type
         ToolBar1: TToolBar;
         ToolButton1: TToolButton;
         ToolButton2: TToolButton;
-    ButtonWrite: TButton;
+        ButtonWrite: TButton;
         Button2: TButton;
         Button3: TButton;
-    Button1: TButton;
-    Button4: TButton;
-    PopupMenu1: TPopupMenu;
-    MenuCalcProduct: TMenuItem;
-    MenuUseSelectedProductType: TMenuItem;
-    MenuSaveProductType: TMenuItem;
-    Label9: TLabel;
-    ComboBoxPlace: TComboBox;
-    Label12: TLabel;
+        Button1: TButton;
+        Button4: TButton;
+        PopupMenu1: TPopupMenu;
+        MenuCalcProduct: TMenuItem;
+        MenuUseSelectedProductType: TMenuItem;
+        MenuSaveProductType: TMenuItem;
+        Label9: TLabel;
+        ComboBoxPlace: TComboBox;
+        Label12: TLabel;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -77,10 +77,10 @@ type
         procedure MenuCalcProductClick(Sender: TObject);
         procedure MenuUseSelectedProductTypeClick(Sender: TObject);
         procedure MenuSaveProductTypeClick(Sender: TObject);
-    procedure ButtonWriteClick(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
+        procedure ButtonWriteClick(Sender: TObject);
+        procedure Button3Click(Sender: TObject);
+        procedure Button1Click(Sender: TObject);
+        procedure Button4Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -93,8 +93,10 @@ type
         procedure SetTemperaturePointsChart(ATemp: TArray<Double>;
           AFon: TArray<Double>; ASens: TArray<Double>);
 
-        procedure SetTemperaturePointsGrid(ATemp: TArray<Double>;
-          AFon: TArray<Double>; ASens: TArray<Double>);
+//        procedure SetTemperaturePointsGrid(ATemp: TArray<Double>;
+//          AFon: TArray<Double>; ASens: TArray<Double>);
+
+        procedure SetTemperaturePointsGrid(AValues:TArray<string>);
 
         function GetTemperatureValues: TArray<string>;
 
@@ -102,11 +104,13 @@ type
 
         procedure applyProduct;
 
-        function GetTFirmwareInfo2: TFirmwareInfo2;
+        function GetTFirmwareInfo: TFirmwareInfo;
+        procedure SetFirmwareInfo(f: TFirmwareInfo);
 
     public
         { Public declarations }
-        procedure SetFirmwareInfo(f: TFirmwareInfo);
+
+        procedure SetFirmware(f: TFirmware);
         procedure SetProduct(p: TProductInfo);
 
     end;
@@ -119,7 +123,7 @@ implementation
 {$R *.dfm}
 
 uses System.Types, stringgridutils, stringutils, services, dateutils, math,
-    UnitElcoMainForm, UnitFormFirmwareChart;
+    UnitElcoMainForm, UnitFormFirmwareChart, UnitFormFirmwareBytes;
 
 procedure TFormFirmware.FormCreate(Sender: TObject);
 var
@@ -305,12 +309,13 @@ end;
 
 procedure TFormFirmware.ButtonWriteClick(Sender: TObject);
 begin
-    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2, ComboBoxPlace.ItemIndex);
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo,
+      ComboBoxPlace.ItemIndex);
 end;
 
 procedure TFormFirmware.Button1Click(Sender: TObject);
 begin
-    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo2, 0);
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo, 0);
 end;
 
 procedure TFormFirmware.Button2Click(Sender: TObject);
@@ -319,7 +324,8 @@ begin
 end;
 
 procedure TFormFirmware.Button3Click(Sender: TObject);
-var productType:string;
+var
+    productType: string;
 begin
     MenuCalcProduct.Visible := FProduct.ProductID <> 0;
     MenuCalcProduct.Caption := Format('Расчёт по данным ЭХЯ %d',
@@ -339,19 +345,18 @@ begin
     MenuSaveProductType.Caption := 'Сохранить для исполнения ' +
       ComboBoxProductType.text;
 
-
     with Mouse.CursorPos do
         (Sender as TButton).PopupMenu.Popup(X, Y);
 end;
 
 procedure TFormFirmware.Button4Click(Sender: TObject);
 begin
-     TPlaceFirmware.RunReadPlaceFirmware(0);
+    TPlaceFirmware.RunReadPlaceFirmware(0);
 end;
 
 procedure TFormFirmware.MenuCalcProductClick(Sender: TObject);
 begin
-    SetFirmwareInfo(TPlaceFirmware.CalculateFirmwareInfo(FProduct.ProductID));
+    SetFirmware(TPlaceFirmware.CalculateFirmware(FProduct.ProductID));
 end;
 
 procedure TFormFirmware.ClearFirmwareInfo;
@@ -374,36 +379,43 @@ end;
 
 procedure TFormFirmware.ComboBoxGasDropDown(Sender: TObject);
 var
-    str, s: string;
+    Str, s: string;
 begin
-    str := ComboBoxGas.text;
+    Str := ComboBoxGas.text;
     ComboBoxGas.Items.Clear;
     for s in TProductTypesSvc.Gases do
         ComboBoxGas.Items.Add(s);
-    ComboBoxGas.ItemIndex := ComboBoxGas.Items.IndexOf(str);
+    ComboBoxGas.ItemIndex := ComboBoxGas.Items.IndexOf(Str);
 end;
 
 procedure TFormFirmware.ComboBoxProductTypeDropDown(Sender: TObject);
 var
-    str, s: string;
+    Str, s: string;
 begin
-    str := ComboBoxProductType.text;
+    Str := ComboBoxProductType.text;
     ComboBoxProductType.Items.Clear;
     for s in TProductTypesSvc.Names do
         ComboBoxProductType.Items.Add(s);
-    ComboBoxProductType.ItemIndex := ComboBoxProductType.Items.IndexOf(str);
+    ComboBoxProductType.ItemIndex := ComboBoxProductType.Items.IndexOf(Str);
 
 end;
 
 procedure TFormFirmware.ComboBoxUnitsDropDown(Sender: TObject);
 var
-    str, s: string;
+    Str, s: string;
 begin
-    str := ComboBoxUnits.text;
+    Str := ComboBoxUnits.text;
     ComboBoxUnits.Items.Clear;
     for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
-    ComboBoxUnits.ItemIndex := ComboBoxUnits.Items.IndexOf(str);
+    ComboBoxUnits.ItemIndex := ComboBoxUnits.Items.IndexOf(Str);
+end;
+
+procedure TFormFirmware.SetFirmware(f: TFirmware);
+begin
+    SetFirmwareInfo(f.FirmwareInfo);
+    FormFirmwareBytes.setup(f.Bytes);
+
 end;
 
 procedure TFormFirmware.SetFirmwareInfo(f: TFirmwareInfo);
@@ -422,21 +434,21 @@ begin
         ComboBoxUnits.Items.Add(s);
 
     ComboBoxPlace.ItemIndex := f.Place;
-    DateTimePicker1.DateTime := f.CreatedAt.DateTime;
-    EditSerial.text := f.serial;
+
+    DateTimePicker1.DateTime := EncodeDatetime(f.Year, f.Month, f.Day, f.Hour, f.Minute, f.Second, 0);
+    EditSerial.text := f.Serial;
     EditSensProduct.text := f.SensitivityProduct;
     EditSensLab73.text := f.SensitivityLab73;
     EditScaleBegin.text := f.ScaleBeg;
     EditScaleEnd.text := f.ScaleEnd;
     EditFon20.text := f.Fon20;
 
-    SetComboBoxText(ComboBoxProductType, f.ProductType);
+    SetComboBoxText(ComboBoxProductType, f.productType);
     SetComboBoxText(ComboBoxUnits, f.Units);
     SetComboBoxText(ComboBoxGas, f.Gas);
     SetTemperaturePointsChart(f.ProductTempPoints.Temp, f.ProductTempPoints.Fon,
       f.ProductTempPoints.Sens);
-    SetTemperaturePointsGrid(f.ProductTempPoints.Temp, f.ProductTempPoints.Fon,
-      f.ProductTempPoints.Sens);
+    SetTemperaturePointsGrid(f.TempValues);
 
 end;
 
@@ -481,35 +493,56 @@ begin
 
 end;
 
-procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
-  AFon: TArray<Double>; ASens: TArray<Double>);
+procedure TFormFirmware.SetTemperaturePointsGrid(AValues:TArray<string>);
 var
     i: Integer;
     has_null: Boolean;
 begin
-    StringGrid2.RowCount := 1;
-    has_null := false;
-    for i := 0 to length(ATemp) - 1 do
+    with StringGrid2 do
     begin
-        if is_main_temperature(ATemp[i]) then
-            with StringGrid2 do
-            begin
-                if (ATemp[i] = 0) then
-                begin
-                    if has_null then
-                        continue;
-                    has_null := true;
-                end;
-
-                RowCount := RowCount + 1;
-                Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
-                Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
-                Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
-                FixedRows := 1;
-            end;
+        RowCount := 1;
+        i:=0;
+        while i < length(AValues) - 1 do
+        begin
+            RowCount := RowCount + 1;
+            Cells[0, RowCount - 1] := AValues[i];
+            Cells[1, RowCount - 1] := AValues[i+1];
+            Cells[2, RowCount - 1] := AValues[i+2];
+            FixedRows := 1;
+            Inc(i,3);
+        end;
     end;
-
 end;
+
+//procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
+//  AFon: TArray<Double>; ASens: TArray<Double>);
+//var
+//    i: Integer;
+//    has_null: Boolean;
+//begin
+//    StringGrid2.RowCount := 1;
+//    has_null := false;
+//    for i := 0 to length(ATemp) - 1 do
+//    begin
+//        if is_main_temperature(ATemp[i]) then
+//            with StringGrid2 do
+//            begin
+//                if (ATemp[i] = 0) then
+//                begin
+//                    if has_null then
+//                        continue;
+//                    has_null := true;
+//                end;
+//
+//                RowCount := RowCount + 1;
+//                Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
+//                Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
+//                Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
+//                FixedRows := 1;
+//            end;
+//    end;
+//
+//end;
 
 procedure TFormFirmware.applyProduct;
 begin
@@ -517,10 +550,11 @@ begin
     Caption := 'Прошивка ЭХЯ ' + inttostr(FProduct.ProductID);
 
     if FProduct.HasFirmware = true then
-        SetFirmwareInfo(TPlaceFirmware.StoredFirmwareInfo(FProduct.ProductID))
+        SetFirmware(TPlaceFirmware.StoredFirmware(FProduct.ProductID))
     else
     begin
         ClearFirmwareInfo;
+        FormFirmwareBytes.setup([]);
     end;
     ComboBoxPlace.ItemIndex := FProduct.Place;
 
@@ -532,7 +566,7 @@ begin
     applyProduct;
 end;
 
-function TFormFirmware.GetTFirmwareInfo2: TFirmwareInfo2;
+function TFormFirmware.GetTFirmwareInfo: TFirmwareInfo;
 var
     t: TDateTime;
 begin
@@ -547,13 +581,13 @@ begin
     Result.Second := SecondOf(t);
     Result.SensitivityProduct := EditSensProduct.text;
     Result.SensitivityLab73 := EditSensLab73.text;
-    Result.serial := EditSerial.text;
-    Result.ProductType := ComboBoxProductType.text;
+    Result.Serial := EditSerial.text;
+    Result.productType := ComboBoxProductType.text;
     Result.Gas := ComboBoxGas.text;
     Result.Units := ComboBoxUnits.text;
-    Result.ScaleBegin := EditScaleBegin.text;
+    Result.ScaleBeg := EditScaleBegin.text;
     Result.ScaleEnd := EditScaleEnd.text;
-    Result.Values := GetTemperatureValues;
+    Result.TempValues := GetTemperatureValues;
     Result.Fon20 := EditFon20.text;
 end;
 
@@ -690,11 +724,11 @@ begin
     for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
 
-    EditSensProduct.text := t.KSens20.str;
-    EditSensLab73.text := t.KSens20.str;
+    EditSensProduct.text := t.KSens20.Str;
+    EditSensLab73.text := t.KSens20.Str;
     EditScaleBegin.text := '0';
     EditScaleEnd.text := FloatToStr(t.scale);
-    EditFon20.text := t.Fon20.str;
+    EditFon20.text := t.Fon20.Str;
     DateTimePicker1.DateTime := Now;
 
     SetComboBoxText(ComboBoxUnits, t.UnitsName);
@@ -720,7 +754,12 @@ end;
 
 procedure TFormFirmware.MenuSaveProductTypeClick(Sender: TObject);
 begin
-    TPlaceFirmware.SaveProductType(GetTFirmwareInfo2);
+    if MessageDlg(Format('Подтвердите сохранения данных для исполнения "%s".',
+      [ComboBoxProductType.Text]), mtConfirmation, [mbYes, mbNo], 0) <> mrYes
+    then
+        exit;
+
+    TPlaceFirmware.SaveProductType(GetTFirmwareInfo);
 end;
 
 end.

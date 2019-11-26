@@ -5441,12 +5441,11 @@ object ElcoMainForm: TElcoMainForm
       Left = 43
       Top = 5
       Width = 100
-      Height = 23
+      Height = 18
       Margins.Left = 5
       Margins.Top = 5
       Align = alLeft
       Caption = 'LabelStatusTop'
-      ExplicitHeight = 18
     end
     object PanelDelay: TPanel
       Left = 146
@@ -5471,7 +5470,7 @@ object ElcoMainForm: TElcoMainForm
         Left = 5
         Top = 3
         Width = 58
-        Height = 25
+        Height = 18
         Margins.Left = 5
         Margins.Right = 5
         Align = alLeft
@@ -5483,14 +5482,13 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitHeight = 18
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
         Left = 739
         Top = 3
         Width = 50
-        Height = 25
+        Height = 18
         Margins.Left = 5
         Margins.Right = 5
         Align = alRight
@@ -5504,7 +5502,6 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
         Left = 794
@@ -5621,6 +5618,10 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
@@ -5932,6 +5933,7 @@ object ElcoMainForm: TElcoMainForm
         Left = 544
         Top = 0
         Width = 33
+        Height = 29
         Align = alRight
         ButtonHeight = 31
         ButtonWidth = 32
@@ -6006,19 +6008,17 @@ object ElcoMainForm: TElcoMainForm
       Left = 0
       Top = 0
       Width = 74
-      Height = 20
+      Height = 18
       Align = alLeft
       Caption = 'LabelStatus'
-      ExplicitHeight = 18
     end
     object LabelStatusKtx500: TLabel
       Left = 479
       Top = 0
       Width = 74
-      Height = 20
+      Height = 18
       Align = alLeft
       Caption = 'LabelStatus'
-      ExplicitHeight = 18
     end
   end
   object ImageList3: TImageList
@@ -11739,7 +11739,7 @@ object ElcoMainForm: TElcoMainForm
   end
   object TimerPerforming: TTimer
     Enabled = False
-    Interval = 100
+    Interval = 200
     OnTimer = TimerPerformingTimer
     Left = 120
     Top = 56
