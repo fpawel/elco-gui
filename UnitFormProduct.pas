@@ -20,9 +20,6 @@ type
         PageControl1: TPageControl;
         TabSheet1: TTabSheet;
         TabSheet2: TTabSheet;
-    PageControl2: TPageControl;
-    TabSheetChart: TTabSheet;
-    TabSheetBytes: TTabSheet;
         procedure ToolButtonStopClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
@@ -57,19 +54,12 @@ begin
     with FormFirmwareChart do
     begin
         Font.Assign(self.Font);
-        Parent := TabSheetChart;
+        Parent := TabSheet1;
         BorderStyle := bsNone;
         Align := alClient;
         Show;
     end;
-    with FormFirmwareBytes do
-    begin
-        Font.Assign(self.Font);
-        Parent := TabSheetBytes;
-        BorderStyle := bsNone;
-        Align := alClient;
-        Show;
-    end;
+
     with FormProductCurrents do
     begin
         Font.Assign(self.Font);

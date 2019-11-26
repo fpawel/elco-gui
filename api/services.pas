@@ -51,13 +51,15 @@ type
 
     TPlaceFirmware = class
     public
-        class function CalculateFirmware(param1:Int64):TFirmware;static;
+        class function CalculateTempPoints(TempValues:TArray<string>):TTempPoints;static;
+        class function CalculatedProductFirmware(param1:Int64):TFirmwareInfo;static;
+        class function GetFirmwareBytes(FirmwareInfo:TFirmwareInfo):TArray<string>;static;
         class function GetProductType(param1:string):TProductType2;static;
         class procedure RunReadPlaceFirmware(param1:Integer);static;
-        class procedure RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer);static;
+        class procedure RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer; PlaceProduct:Integer);static;
         class procedure SaveProductType(X:TFirmwareInfo);static;
-        class function StoredFirmware(param1:Int64):TFirmware;static;
-        class function TempPoints(Values:TArray<string>):TTempPoints;static;
+        class function SetFirmwareBytes(Bytes:TArray<string>):TFirmwareInfo;static;
+        class function StoredProductFirmware(param1:Int64):TFirmwareInfo;static;
          
     end;
 
@@ -123,8 +125,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.DeletePartyID', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.DeletePartyID', req); 
 end;
 
 
@@ -133,8 +135,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Year', Year);   SuperObject_SetField(req, 'Month', Month); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.PartiesOfYearMonth', req, Result);   
+    SuperObject_SetField(req, 'Year', Year); SuperObject_SetField(req, 'Month', Month); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.PartiesOfYearMonth', req, Result); 
 end;
 
 
@@ -143,8 +145,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.Party', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.Party', req, Result); 
 end;
 
 
@@ -153,8 +155,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'ProductIDs', ProductIDs);   SuperObject_SetField(req, 'Production', Production); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.SetProductsProduction', req);  
+    SuperObject_SetField(req, 'ProductIDs', ProductIDs); SuperObject_SetField(req, 'Production', Production); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.SetProductsProduction', req); 
 end;
 
 
@@ -163,8 +165,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.ToggleProductProduction', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.ToggleProductProduction', req); 
 end;
 
 
@@ -174,7 +176,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.YearsMonths', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PartiesCatalogueSvc.YearsMonths', req, Result); 
 end;
 
  
@@ -184,7 +186,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateFonMinus20', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateFonMinus20', req, Result); 
 end;
 
 
@@ -193,8 +195,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateSensMinus20', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateSensMinus20', req, Result); 
 end;
 
 
@@ -203,8 +205,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateSensPlus50', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateSensPlus50', req, Result); 
 end;
 
 
@@ -213,8 +215,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.DeleteProductAtPlace', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.DeleteProductAtPlace', req); 
 end;
 
 
@@ -224,7 +226,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.GetCheckBlocks', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.GetCheckBlocks', req, Result); 
 end;
 
 
@@ -234,7 +236,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.GetValues', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.GetValues', req, Result); 
 end;
 
 
@@ -244,7 +246,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.Party', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.Party', req, Result); 
 end;
 
 
@@ -254,7 +256,7 @@ var
 begin
     req := SO;
     
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.PartyID', req), Result);   
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.PartyID', req), Result); 
 end;
 
 
@@ -263,8 +265,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.ProductAtPlace', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.ProductAtPlace', req, Result); 
 end;
 
 
@@ -273,8 +275,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SelectAll', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SelectAll', req); 
 end;
 
 
@@ -284,7 +286,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.SelectOnlyOkProductsProduction', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.SelectOnlyOkProductsProduction', req, Result); 
 end;
 
 
@@ -293,8 +295,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1);   req.AsArray.Add(param2); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetBlockChecked', req), Result);   
+    req.AsArray.Add(param1); req.AsArray.Add(param2); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetBlockChecked', req), Result); 
 end;
 
 
@@ -303,8 +305,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Place1', Place1);   SuperObject_SetField(req, 'Place2', Place2);   SuperObject_SetField(req, 'Value', Value); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetPointsMethodInPlacesRange', req), Result);   
+    SuperObject_SetField(req, 'Place1', Place1); SuperObject_SetField(req, 'Place2', Place2); SuperObject_SetField(req, 'Value', Value); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetPointsMethodInPlacesRange', req), Result); 
 end;
 
 
@@ -313,8 +315,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Place', Place);   SuperObject_SetField(req, 'Note', Note); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductNoteAtPlace', req), Result);   
+    SuperObject_SetField(req, 'Place', Place); SuperObject_SetField(req, 'Note', Note); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductNoteAtPlace', req), Result); 
 end;
 
 
@@ -323,8 +325,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1);   req.AsArray.Add(param2); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductSerialAtPlace', req), Result);   
+    req.AsArray.Add(param1); req.AsArray.Add(param2); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductSerialAtPlace', req), Result); 
 end;
 
 
@@ -333,8 +335,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductType', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductType', req); 
 end;
 
 
@@ -343,8 +345,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Place1', Place1);   SuperObject_SetField(req, 'Place2', Place2);   SuperObject_SetField(req, 'ProductType', ProductType); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductTypeAtPlacesRange', req), Result);   
+    SuperObject_SetField(req, 'Place1', Place1); SuperObject_SetField(req, 'Place2', Place2); SuperObject_SetField(req, 'ProductType', ProductType); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductTypeAtPlacesRange', req), Result); 
 end;
 
 
@@ -353,8 +355,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      TgoBsonSerializer.serialize(P, s); req['P'] := SO(s); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetValues', req);  
+    TgoBsonSerializer.serialize(P, s); req['P'] := SO(s); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetValues', req); 
 end;
 
 
@@ -363,8 +365,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.ToggleProductProductionAtPlace', req), Result);   
+    req.AsArray.Add(param1); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.ToggleProductProductionAtPlace', req), Result); 
 end;
 
  
@@ -374,7 +376,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Gases', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Gases', req, Result); 
 end;
 
 
@@ -384,7 +386,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Names', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Names', req, Result); 
 end;
 
 
@@ -394,17 +396,37 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Units', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductTypesSvc.Units', req, Result); 
 end;
 
  
-class function TPlaceFirmware.CalculateFirmware(param1:Int64):TFirmware;
+class function TPlaceFirmware.CalculateTempPoints(TempValues:TArray<string>):TTempPoints;
+var
+    req : ISuperobject;s:string;
+begin
+    req := SO;
+    SuperObject_SetField(req, 'TempValues', TempValues); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateTempPoints', req, Result); 
+end;
+
+
+class function TPlaceFirmware.CalculatedProductFirmware(param1:Int64):TFirmwareInfo;
 var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculateFirmware', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.CalculatedProductFirmware', req, Result); 
+end;
+
+
+class function TPlaceFirmware.GetFirmwareBytes(FirmwareInfo:TFirmwareInfo):TArray<string>;
+var
+    req : ISuperobject;s:string;
+begin
+    req := SO;
+    TgoBsonSerializer.serialize(FirmwareInfo, s); req['FirmwareInfo'] := SO(s); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.GetFirmwareBytes', req, Result); 
 end;
 
 
@@ -413,8 +435,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.GetProductType', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.GetProductType', req, Result); 
 end;
 
 
@@ -423,18 +445,18 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.RunReadPlaceFirmware', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.RunReadPlaceFirmware', req); 
 end;
 
 
-class procedure TPlaceFirmware.RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer);
+class procedure TPlaceFirmware.RunWritePlaceFirmware(FirmwareInfo:TFirmwareInfo; PlaceDevice:Integer; PlaceProduct:Integer);
 var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      TgoBsonSerializer.serialize(FirmwareInfo, s); req['FirmwareInfo'] := SO(s);   SuperObject_SetField(req, 'PlaceDevice', PlaceDevice); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.RunWritePlaceFirmware', req);  
+    TgoBsonSerializer.serialize(FirmwareInfo, s); req['FirmwareInfo'] := SO(s); SuperObject_SetField(req, 'PlaceDevice', PlaceDevice); SuperObject_SetField(req, 'PlaceProduct', PlaceProduct); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.RunWritePlaceFirmware', req); 
 end;
 
 
@@ -443,28 +465,28 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      TgoBsonSerializer.serialize(X, s); req['X'] := SO(s); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.SaveProductType', req);  
+    TgoBsonSerializer.serialize(X, s); req['X'] := SO(s); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PlaceFirmware.SaveProductType', req); 
 end;
 
 
-class function TPlaceFirmware.StoredFirmware(param1:Int64):TFirmware;
-var
-    req : ISuperobject;
-begin
-    req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.StoredFirmware', req, Result);   
-end;
-
-
-class function TPlaceFirmware.TempPoints(Values:TArray<string>):TTempPoints;
+class function TPlaceFirmware.SetFirmwareBytes(Bytes:TArray<string>):TFirmwareInfo;
 var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Values', Values); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.TempPoints', req, Result);   
+    SuperObject_SetField(req, 'Bytes', Bytes); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.SetFirmwareBytes', req, Result); 
+end;
+
+
+class function TPlaceFirmware.StoredProductFirmware(param1:Int64):TFirmwareInfo;
+var
+    req : ISuperobject;
+begin
+    req := SA([]);
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'PlaceFirmware.StoredProductFirmware', req, Result); 
 end;
 
  
@@ -473,8 +495,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.CopyParty', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.CopyParty', req); 
 end;
 
 
@@ -483,8 +505,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Serials', Serials); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.NewParty', req);  
+    SuperObject_SetField(req, 'Serials', Serials); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.NewParty', req); 
 end;
 
 
@@ -493,8 +515,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1);   req.AsArray.Add(param2);   req.AsArray.Add(param3);   req.AsArray.Add(param4); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunMain', req);  
+    req.AsArray.Add(param1); req.AsArray.Add(param2); req.AsArray.Add(param3); req.AsArray.Add(param4); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunMain', req); 
 end;
 
 
@@ -503,8 +525,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      SuperObject_SetField(req, 'Column', Column);   SuperObject_SetField(req, 'Gas', Gas);   SuperObject_SetField(req, 'Temperature', Temperature); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadAndSaveProductCurrents', req);  
+    SuperObject_SetField(req, 'Column', Column); SuperObject_SetField(req, 'Gas', Gas); SuperObject_SetField(req, 'Temperature', Temperature); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadAndSaveProductCurrents', req); 
 end;
 
 
@@ -514,7 +536,7 @@ var
 begin
     req := SO;
     
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadCurrent', req);  
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunReadCurrent', req); 
 end;
 
 
@@ -523,8 +545,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunScript', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunScript', req, Result); 
 end;
 
 
@@ -533,8 +555,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunSwitchGas', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunSwitchGas', req); 
 end;
 
 
@@ -544,7 +566,7 @@ var
 begin
     req := SO;
     
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunWritePartyFirmware', req);  
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.RunWritePartyFirmware', req); 
 end;
 
 
@@ -554,7 +576,7 @@ var
 begin
     req := SO;
     
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.SkipDelay', req);  
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.SkipDelay', req); 
 end;
 
 
@@ -564,7 +586,7 @@ var
 begin
     req := SO;
     
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.StopHardware', req);  
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'RunnerSvc.StopHardware', req); 
 end;
 
  
@@ -573,8 +595,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PdfSvc.RunPartyID', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PdfSvc.RunPartyID', req); 
 end;
 
 
@@ -583,8 +605,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PdfSvc.RunProductID', req);  
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'PdfSvc.RunProductID', req); 
 end;
 
  
@@ -594,7 +616,7 @@ var
 begin
     req := SO;
     
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ConfigSvc.GetConfig', req, Result);   
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ConfigSvc.GetConfig', req, Result); 
 end;
 
 
@@ -604,7 +626,7 @@ var
 begin
     req := SO;
     
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.GetYAML', req), Result);   
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.GetYAML', req), Result); 
 end;
 
 
@@ -613,8 +635,8 @@ var
     req : ISuperobject;s:string;
 begin
     req := SO;
-      TgoBsonSerializer.serialize(C, s); req['C'] := SO(s); 
-      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.SetConfig', req);  
+    TgoBsonSerializer.serialize(C, s); req['C'] := SO(s); 
+    ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.SetConfig', req); 
 end;
 
 
@@ -623,8 +645,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.SetYAML', req), Result);   
+    req.AsArray.Add(param1); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ConfigSvc.SetYAML', req), Result); 
 end;
 
  
@@ -633,8 +655,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsByNote', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsByNote', req, Result); 
 end;
 
 
@@ -643,8 +665,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsByPartyID', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsByPartyID', req, Result); 
 end;
 
 
@@ -653,8 +675,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsBySerial', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ListProductsBySerial', req, Result); 
 end;
 
 
@@ -663,8 +685,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByID', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByID', req, Result); 
 end;
 
 
@@ -673,8 +695,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByIDHasFirmware', req), Result);   
+    req.AsArray.Add(param1); 
+    SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductByIDHasFirmware', req), Result); 
 end;
 
 
@@ -683,8 +705,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductCurrents', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductCurrents', req, Result); 
 end;
 
 
@@ -693,8 +715,8 @@ var
     req : ISuperobject;
 begin
     req := SA([]);
-      req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductInfoByID', req, Result);   
+    req.AsArray.Add(param1); 
+    ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'ProductsCatalogueSvc.ProductInfoByID', req, Result); 
 end;
 
  

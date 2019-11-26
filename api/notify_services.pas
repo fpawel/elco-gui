@@ -6,14 +6,14 @@ interface
 uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
 
 type
-    TWorkResultHandler = reference to procedure (x:TWorkResult);
-    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
-    TParty1Handler = reference to procedure (x:TParty1);
-    TFirmwareHandler = reference to procedure (x:TFirmware);
-    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
-    TStringHandler = reference to procedure (x:string);
-    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     TIntegerHandler = reference to procedure (x:Integer);
+    TReadCurrentHandler = reference to procedure (x:TReadCurrent);
+    TWorkResultHandler = reference to procedure (x:TWorkResult);
+    TStringHandler = reference to procedure (x:string);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
+    TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TParty1Handler = reference to procedure (x:TParty1);
     TScriptLineHandler = reference to procedure (x:TScriptLine);
     
 
@@ -29,7 +29,7 @@ procedure SetOnWarning( AHandler : TStringHandler);
 procedure SetOnDelay( AHandler : TDelayInfoHandler);
 procedure SetOnEndDelay( AHandler : TStringHandler);
 procedure SetOnLastPartyChanged( AHandler : TParty1Handler);
-procedure SetOnReadFirmware( AHandler : TFirmwareHandler);
+procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 procedure SetOnPanic( AHandler : TStringHandler);
 procedure SetOnWriteConsole( AHandler : TStringHandler);
 procedure SetOnReadPlace( AHandler : TIntegerHandler);
@@ -61,7 +61,7 @@ var
     _OnDelay : TDelayInfoHandler;
     _OnEndDelay : TStringHandler;
     _OnLastPartyChanged : TParty1Handler;
-    _OnReadFirmware : TFirmwareHandler;
+    _OnReadFirmware : TFirmwareInfoHandler;
     _OnPanic : TStringHandler;
     _OnWriteConsole : TStringHandler;
     _OnReadPlace : TIntegerHandler;
@@ -156,7 +156,7 @@ begin
         begin
             if not Assigned(_OnReadFirmware) then
                 raise Exception.Create('_OnReadFirmware must be set');
-            _OnReadFirmware(_deserializer.deserialize<TFirmware>(str));
+            _OnReadFirmware(_deserializer.deserialize<TFirmwareInfo>(str));
         end;
         CmdPanic:
         begin
@@ -254,7 +254,7 @@ begin
         raise Exception.Create('_OnLastPartyChanged already set');
     _OnLastPartyChanged := AHandler;
 end;
-procedure SetOnReadFirmware( AHandler : TFirmwareHandler);
+procedure SetOnReadFirmware( AHandler : TFirmwareInfoHandler);
 begin
     if Assigned(_OnReadFirmware) then
         raise Exception.Create('_OnReadFirmware already set');

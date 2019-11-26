@@ -80,31 +80,12 @@ object FormProduct: TFormProduct
     Align = alClient
     TabOrder = 1
     OnChange = PageControl1Change
-    ExplicitHeight = 306
     object TabSheet1: TTabSheet
       Caption = #1055#1088#1086#1096#1080#1074#1082#1072
-      ExplicitHeight = 278
-      object PageControl2: TPageControl
-        Left = 0
-        Top = 0
-        Width = 685
-        Height = 524
-        ActivePage = TabSheetChart
-        Align = alClient
-        TabOrder = 0
-        object TabSheetChart: TTabSheet
-          Caption = #1043#1088#1072#1092#1080#1082
-        end
-        object TabSheetBytes: TTabSheet
-          Caption = #1041#1072#1081#1090#1099
-          ImageIndex = 1
-        end
-      end
     end
     object TabSheet2: TTabSheet
       Caption = #1046#1091#1088#1085#1072#1083' '#1089#1085#1103#1090#1080#1103
       ImageIndex = 1
-      ExplicitHeight = 278
     end
   end
   object ImageList4: TImageList

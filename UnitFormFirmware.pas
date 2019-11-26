@@ -56,6 +56,9 @@ type
         Label9: TLabel;
         ComboBoxPlace: TComboBox;
         Label12: TLabel;
+        N1: TMenuItem;
+        N2: TMenuItem;
+    Button5: TButton;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -81,6 +84,7 @@ type
         procedure Button3Click(Sender: TObject);
         procedure Button1Click(Sender: TObject);
         procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -93,10 +97,10 @@ type
         procedure SetTemperaturePointsChart(ATemp: TArray<Double>;
           AFon: TArray<Double>; ASens: TArray<Double>);
 
-//        procedure SetTemperaturePointsGrid(ATemp: TArray<Double>;
-//          AFon: TArray<Double>; ASens: TArray<Double>);
+        // procedure SetTemperaturePointsGrid(ATemp: TArray<Double>;
+        // AFon: TArray<Double>; ASens: TArray<Double>);
 
-        procedure SetTemperaturePointsGrid(AValues:TArray<string>);
+        procedure SetTemperaturePointsGrid(AValues: TArray<string>);
 
         function GetTemperatureValues: TArray<string>;
 
@@ -105,12 +109,12 @@ type
         procedure applyProduct;
 
         function GetTFirmwareInfo: TFirmwareInfo;
-        procedure SetFirmwareInfo(f: TFirmwareInfo);
+
+        procedure UploadTempPoints;
 
     public
         { Public declarations }
-
-        procedure SetFirmware(f: TFirmware);
+        procedure SetFirmwareInfo(f: TFirmwareInfo);
         procedure SetProduct(p: TProductInfo);
 
     end;
@@ -214,9 +218,9 @@ begin
         begin // Only after user ends editing the cell
             Last_Edited_Col := -1; // Indicate no cell is edited
             Last_Edited_Row := -1; // Indicate no cell is edited
+
             // Do whatever wanted after user has finish editing a cell
-            with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-                SetTemperaturePointsChart(Temp, Fon, Sens);
+            UploadTempPoints;
 
         end
         else
@@ -224,6 +228,15 @@ begin
             Last_Edited_Col := ACol; // Remember column of cell being edited
             Last_Edited_Row := ARow; // Remember row of cell being edited
         end;
+end;
+
+procedure TFormFirmware.UploadTempPoints;
+var
+    tt: TTempPoints;
+begin
+    tt := TPlaceFirmware.CalculateTempPoints(GetTFirmwareInfo.TempValues);
+    SetTemperaturePointsChart(tt.Temp, tt.Fon, tt.Sens);
+    // FormFirmwareBytes.setup(f.Bytes);
 end;
 
 procedure TFormFirmware.ToolButton8Click(Sender: TObject);
@@ -243,8 +256,7 @@ begin
             Row := Row + 1;
         end;
     end;
-    with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-        SetTemperaturePointsChart(Temp, Fon, Sens);
+    UploadTempPoints;
 end;
 
 procedure TFormFirmware.ToolButton9Click(Sender: TObject);
@@ -262,8 +274,7 @@ begin
         RowCount := RowCount - 1;
     end;
 
-    with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-        SetTemperaturePointsChart(Temp, Fon, Sens);
+    UploadTempPoints;
 end;
 
 procedure TFormFirmware.DrawCellText(text: string; ACnv: TCanvas; Rect: TRect;
@@ -310,12 +321,13 @@ end;
 procedure TFormFirmware.ButtonWriteClick(Sender: TObject);
 begin
     TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo,
-      ComboBoxPlace.ItemIndex);
+      ComboBoxPlace.ItemIndex, ComboBoxPlace.ItemIndex);
 end;
 
 procedure TFormFirmware.Button1Click(Sender: TObject);
 begin
-    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo, 0);
+    TPlaceFirmware.RunWritePlaceFirmware(GetTFirmwareInfo, 0,
+      ComboBoxPlace.ItemIndex);
 end;
 
 procedure TFormFirmware.Button2Click(Sender: TObject);
@@ -354,9 +366,27 @@ begin
     TPlaceFirmware.RunReadPlaceFirmware(0);
 end;
 
+procedure TFormFirmware.Button5Click(Sender: TObject);
+begin
+    try
+        ElcoMainForm.Hide;
+        FormFirmwareBytes.SetupBytes
+          (TPlaceFirmware.GetFirmwareBytes(GetTFirmwareInfo));
+
+        FormFirmwareBytes.ShowModal;
+        if FormFirmwareBytes.ModalResult = mrOk then
+            SetFirmwareInfo(TPlaceFirmware.SetFirmwareBytes
+              (FormFirmwareBytes.Getbytes));
+    finally
+        ElcoMainForm.Show;
+
+    end;
+end;
+
 procedure TFormFirmware.MenuCalcProductClick(Sender: TObject);
 begin
-    SetFirmware(TPlaceFirmware.CalculateFirmware(FProduct.ProductID));
+    SetFirmwareInfo(TPlaceFirmware.CalculatedProductFirmware
+      (FProduct.ProductID));
 end;
 
 procedure TFormFirmware.ClearFirmwareInfo;
@@ -411,13 +441,6 @@ begin
     ComboBoxUnits.ItemIndex := ComboBoxUnits.Items.IndexOf(Str);
 end;
 
-procedure TFormFirmware.SetFirmware(f: TFirmware);
-begin
-    SetFirmwareInfo(f.FirmwareInfo);
-    FormFirmwareBytes.setup(f.Bytes);
-
-end;
-
 procedure TFormFirmware.SetFirmwareInfo(f: TFirmwareInfo);
 var
     i: Integer;
@@ -433,9 +456,8 @@ begin
     for s in TProductTypesSvc.Units do
         ComboBoxUnits.Items.Add(s);
 
-    ComboBoxPlace.ItemIndex := f.Place;
-
-    DateTimePicker1.DateTime := EncodeDatetime(f.Year, f.Month, f.Day, f.Hour, f.Minute, f.Second, 0);
+    DateTimePicker1.DateTime := EncodeDatetime(f.Year, f.Month, f.Day, f.Hour,
+      f.Minute, f.Second, 0);
     EditSerial.text := f.Serial;
     EditSensProduct.text := f.SensitivityProduct;
     EditSensLab73.text := f.SensitivityLab73;
@@ -493,7 +515,7 @@ begin
 
 end;
 
-procedure TFormFirmware.SetTemperaturePointsGrid(AValues:TArray<string>);
+procedure TFormFirmware.SetTemperaturePointsGrid(AValues: TArray<string>);
 var
     i: Integer;
     has_null: Boolean;
@@ -501,60 +523,60 @@ begin
     with StringGrid2 do
     begin
         RowCount := 1;
-        i:=0;
+        i := 0;
         while i < length(AValues) - 1 do
         begin
             RowCount := RowCount + 1;
             Cells[0, RowCount - 1] := AValues[i];
-            Cells[1, RowCount - 1] := AValues[i+1];
-            Cells[2, RowCount - 1] := AValues[i+2];
+            Cells[1, RowCount - 1] := AValues[i + 1];
+            Cells[2, RowCount - 1] := AValues[i + 2];
             FixedRows := 1;
-            Inc(i,3);
+            Inc(i, 3);
         end;
     end;
 end;
 
-//procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
-//  AFon: TArray<Double>; ASens: TArray<Double>);
-//var
-//    i: Integer;
-//    has_null: Boolean;
-//begin
-//    StringGrid2.RowCount := 1;
-//    has_null := false;
-//    for i := 0 to length(ATemp) - 1 do
-//    begin
-//        if is_main_temperature(ATemp[i]) then
-//            with StringGrid2 do
-//            begin
-//                if (ATemp[i] = 0) then
-//                begin
-//                    if has_null then
-//                        continue;
-//                    has_null := true;
-//                end;
+// procedure TFormFirmware.SetTemperaturePointsGrid(ATemp: TArray<Double>;
+// AFon: TArray<Double>; ASens: TArray<Double>);
+// var
+// i: Integer;
+// has_null: Boolean;
+// begin
+// StringGrid2.RowCount := 1;
+// has_null := false;
+// for i := 0 to length(ATemp) - 1 do
+// begin
+// if is_main_temperature(ATemp[i]) then
+// with StringGrid2 do
+// begin
+// if (ATemp[i] = 0) then
+// begin
+// if has_null then
+// continue;
+// has_null := true;
+// end;
 //
-//                RowCount := RowCount + 1;
-//                Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
-//                Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
-//                Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
-//                FixedRows := 1;
-//            end;
-//    end;
+// RowCount := RowCount + 1;
+// Cells[0, RowCount - 1] := FloatToStr(ATemp[i]);
+// Cells[1, RowCount - 1] := FloatToStr(AFon[i]);
+// Cells[2, RowCount - 1] := FloatToStr(ASens[i]);
+// FixedRows := 1;
+// end;
+// end;
 //
-//end;
+// end;
 
 procedure TFormFirmware.applyProduct;
 begin
 
     Caption := 'Прошивка ЭХЯ ' + inttostr(FProduct.ProductID);
-
     if FProduct.HasFirmware = true then
-        SetFirmware(TPlaceFirmware.StoredFirmware(FProduct.ProductID))
+        SetFirmwareInfo(TPlaceFirmware.StoredProductFirmware
+          (FProduct.ProductID))
     else
     begin
         ClearFirmwareInfo;
-        FormFirmwareBytes.setup([]);
+        // FormFirmwareBytes.setup([]);
     end;
     ComboBoxPlace.ItemIndex := FProduct.Place;
 
@@ -563,6 +585,7 @@ end;
 procedure TFormFirmware.SetProduct(p: TProductInfo);
 begin
     FProduct := p;
+    ComboBoxPlace.ItemIndex := p.Place;
     applyProduct;
 end;
 
@@ -572,7 +595,6 @@ var
 begin
     t := DateTimePicker1.DateTime;
 
-    Result.Place := ComboBoxPlace.ItemIndex;
     Result.Year := YearOf(t);
     Result.Month := MonthOf(t);
     Result.Day := DayOf(t);
@@ -643,8 +665,7 @@ begin
         end;
     end;
 
-    with TPlaceFirmware.TempPoints(GetTemperatureValues) do
-        SetTemperaturePointsChart(Temp, Fon, Sens);
+    UploadTempPoints;
 
 end;
 
@@ -749,13 +770,12 @@ begin
             FixedRows := 1;
         end;
     end;
-
 end;
 
 procedure TFormFirmware.MenuSaveProductTypeClick(Sender: TObject);
 begin
     if MessageDlg(Format('Подтвердите сохранения данных для исполнения "%s".',
-      [ComboBoxProductType.Text]), mtConfirmation, [mbYes, mbNo], 0) <> mrYes
+      [ComboBoxProductType.text]), mtConfirmation, [mbYes, mbNo], 0) <> mrYes
     then
         exit;
 
