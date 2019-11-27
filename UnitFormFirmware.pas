@@ -58,7 +58,7 @@ type
         Label12: TLabel;
         N1: TMenuItem;
         N2: TMenuItem;
-    Button5: TButton;
+        N3: TMenuItem;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -84,7 +84,7 @@ type
         procedure Button3Click(Sender: TObject);
         procedure Button1Click(Sender: TObject);
         procedure Button4Click(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
+        procedure N3Click(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -364,23 +364,6 @@ end;
 procedure TFormFirmware.Button4Click(Sender: TObject);
 begin
     TPlaceFirmware.RunReadPlaceFirmware(0);
-end;
-
-procedure TFormFirmware.Button5Click(Sender: TObject);
-begin
-    try
-        ElcoMainForm.Hide;
-        FormFirmwareBytes.SetupBytes
-          (TPlaceFirmware.GetFirmwareBytes(GetTFirmwareInfo));
-
-        FormFirmwareBytes.ShowModal;
-        if FormFirmwareBytes.ModalResult = mrOk then
-            SetFirmwareInfo(TPlaceFirmware.SetFirmwareBytes
-              (FormFirmwareBytes.Getbytes));
-    finally
-        ElcoMainForm.Show;
-
-    end;
 end;
 
 procedure TFormFirmware.MenuCalcProductClick(Sender: TObject);
@@ -770,6 +753,17 @@ begin
             FixedRows := 1;
         end;
     end;
+end;
+
+procedure TFormFirmware.N3Click(Sender: TObject);
+begin
+    FormFirmwareBytes.SetupBytes(TPlaceFirmware.GetFirmwareBytes
+      (GetTFirmwareInfo));
+
+    FormFirmwareBytes.ShowModal;
+    if FormFirmwareBytes.ModalResult = mrOk then
+        SetFirmwareInfo(TPlaceFirmware.SetFirmwareBytes
+          (FormFirmwareBytes.Getbytes));
 end;
 
 procedure TFormFirmware.MenuSaveProductTypeClick(Sender: TObject);

@@ -28,7 +28,6 @@ object FormFirmware: TFormFirmware
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 677
     object Label9: TLabel
       AlignWithMargins = True
       Left = 424
@@ -39,7 +38,6 @@ object FormFirmware: TFormFirmware
       Margins.Bottom = 1
       Align = alRight
       Caption = #1052#1077#1089#1090#1086
-      ExplicitLeft = 403
       ExplicitHeight = 18
     end
     object Label12: TLabel
@@ -52,7 +50,6 @@ object FormFirmware: TFormFirmware
       Margins.Bottom = 1
       Align = alRight
       Caption = #1052#1077#1089#1090#1086' 1 :'
-      ExplicitLeft = 152
       ExplicitHeight = 18
     end
     object ButtonWrite: TButton
@@ -65,7 +62,6 @@ object FormFirmware: TFormFirmware
       Caption = #1047#1072#1087#1080#1089#1072#1090#1100
       TabOrder = 0
       OnClick = ButtonWriteClick
-      ExplicitLeft = 518
     end
     object Button2: TButton
       AlignWithMargins = True
@@ -77,7 +73,6 @@ object FormFirmware: TFormFirmware
       Caption = #1057#1095#1080#1090#1072#1090#1100
       TabOrder = 1
       OnClick = Button2Click
-      ExplicitLeft = 599
     end
     object Button3: TButton
       AlignWithMargins = True
@@ -101,7 +96,6 @@ object FormFirmware: TFormFirmware
       Caption = #1047#1072#1087#1080#1089#1072#1090#1100
       TabOrder = 3
       OnClick = Button1Click
-      ExplicitLeft = 224
     end
     object Button4: TButton
       AlignWithMargins = True
@@ -114,7 +108,6 @@ object FormFirmware: TFormFirmware
       Caption = #1057#1095#1080#1090#1072#1090#1100
       TabOrder = 4
       OnClick = Button4Click
-      ExplicitLeft = 305
     end
     object ComboBoxPlace: TComboBox
       AlignWithMargins = True
@@ -130,20 +123,6 @@ object FormFirmware: TFormFirmware
       Color = clInfoBk
       ItemHeight = 20
       TabOrder = 5
-      ExplicitLeft = 452
-    end
-    object Button5: TButton
-      AlignWithMargins = True
-      Left = 84
-      Top = 3
-      Width = 75
-      Height = 29
-      Align = alLeft
-      Caption = #1041#1072#1081#1090#1099
-      PopupMenu = PopupMenu1
-      TabOrder = 6
-      OnClick = Button5Click
-      ExplicitLeft = 123
     end
   end
   object Panel2: TPanel
@@ -156,7 +135,6 @@ object FormFirmware: TFormFirmware
     Caption = 'Panel2'
     ShowCaption = False
     TabOrder = 1
-    ExplicitWidth = 348
     object GroupBox2: TGroupBox
       AlignWithMargins = True
       Left = 5
@@ -168,7 +146,6 @@ object FormFirmware: TFormFirmware
       Align = alClient
       Caption = #1058#1077#1084#1087#1077#1088#1072#1090#1091#1088#1085#1099#1077' '#1090#1086#1095#1082#1080
       TabOrder = 0
-      ExplicitWidth = 338
       object StringGrid2: TStringGrid
         AlignWithMargins = True
         Left = 7
@@ -194,9 +171,6 @@ object FormFirmware: TFormFirmware
         OnMouseDown = StringGrid2MouseDown
         OnSelectCell = StringGrid2SelectCell
         OnSetEditText = StringGrid2SetEditText
-        ExplicitTop = 60
-        ExplicitWidth = 324
-        ExplicitHeight = 214
         ColWidths = (
           80
           80
@@ -217,8 +191,6 @@ object FormFirmware: TFormFirmware
         EdgeOuter = esNone
         Images = ImageList3
         TabOrder = 1
-        ExplicitLeft = 2
-        ExplicitHeight = 334
         object ToolButton1: TToolButton
           Left = 0
           Top = 0
@@ -1523,6 +1495,10 @@ object FormFirmware: TFormFirmware
     object N2: TMenuItem
       Caption = #1055#1077#1088#1077#1089#1095#1080#1090#1072#1090#1100' % '#1050#1095' '#1074' '#1090#1086#1082' '#1095#1091#1074#1089#1090#1074#1080#1090#1077#1083#1100#1085#1086#1089#1090#1080
       OnClick = LinkLabel2Click
+    end
+    object N3: TMenuItem
+      Caption = #1041#1072#1081#1090#1099' '#1087#1072#1084#1103#1090#1080
+      OnClick = N3Click
     end
   end
 end
