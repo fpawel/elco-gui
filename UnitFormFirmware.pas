@@ -599,19 +599,9 @@ end;
 procedure TFormFirmware.LinkLabel1Click(Sender: TObject);
 var
     n, i: Integer;
-    Temp, Ifon20, Isens20, Ifon, Isens, scale_end, scale_begin, scale: Double;
+    Temp, Ifon20, Isens20, Ifon, Isens: Double;
     f: Boolean;
 begin
-    if not TryStrToFloat2(EditScaleEnd.text, scale_end) then
-        raise Exception.Create('Не задан конец шкалы');
-
-    if not TryStrToFloat2(EditScaleBegin.text, scale_begin) then
-        raise Exception.Create('Не задано начало шкалы');
-
-    scale := scale_end - scale_begin;
-
-    if scale = 0 then
-        raise Exception.Create('Шкала не должна быть нулевой');
 
     with StringGrid2 do
     begin
@@ -633,16 +623,14 @@ begin
             raise Exception.Create
               ('Фоновый ток при 20"С не должен быть равен току чувствительности при 20"С');
 
-        EditSensProduct.text := FloatToStr((Isens20 - Ifon20) / scale);
-        EditSensLab73.text := EditSensProduct.text;
-
         for i := 1 to RowCount - 1 do
         begin
             if TryStrToFloat2(Cells[1, i], Ifon) and
               TryStrToFloat2(Cells[2, i], Isens) then
             begin
                 Cells[2, i] :=
-                  FloatToStr(100 * abs((Isens - Ifon) / (Isens20 - Ifon20)));
+                  inttostr(
+                  Ceil(100 * abs((Isens - Ifon) / (Isens20 - Ifon20))));
 
             end;
         end;

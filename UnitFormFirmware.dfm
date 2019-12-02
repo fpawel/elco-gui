@@ -396,22 +396,24 @@ object FormFirmware: TFormFirmware
       object Label7: TLabel
         AlignWithMargins = True
         Left = 3
+        Top = 171
+        Width = 143
+        Height = 18
+        Align = alTop
+        Caption = #1063#1091#1074#1089'-'#1090#1100' '#1040#1053#1050#1040#1058
+        ExplicitLeft = 0
+        ExplicitTop = 179
+      end
+      object Label11: TLabel
+        AlignWithMargins = True
+        Left = 3
         Top = 115
         Width = 143
         Height = 18
         Align = alTop
         Caption = #1063#1091#1074#1089'-'#1090#1100' '#1083#1072#1073'.73'
-        ExplicitWidth = 104
-      end
-      object Label11: TLabel
-        AlignWithMargins = True
-        Left = 3
-        Top = 171
-        Width = 143
-        Height = 18
-        Align = alTop
-        Caption = #1063#1091#1074#1089'-'#1090#1100' '#1083#1072#1073'.73'
-        ExplicitWidth = 104
+        ExplicitLeft = 0
+        ExplicitTop = 107
       end
       object Label10: TLabel
         AlignWithMargins = True
@@ -467,6 +469,7 @@ object FormFirmware: TFormFirmware
         Color = clInfoBk
         TabOrder = 3
         Text = '100'
+        ExplicitLeft = 0
       end
       object EditFon20: TEdit
         AlignWithMargins = True
