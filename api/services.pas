@@ -31,11 +31,11 @@ type
         class procedure SelectAll(param1:Boolean);static;
         class function SelectOnlyOkProductsProduction:TParty1;static;
         class function SetBlockChecked(param1:Integer; param2:Integer):Int64;static;
-        class function SetPointsMethodInPlacesRange(Place1:Integer; Place2:Integer; Value:Integer):Int64;static;
+        class procedure SetPointsMethodInPlacesRange(Place1:Integer; Place2:Integer; Value:Integer);static;
         class function SetProductNoteAtPlace(Place:Integer; Note:string):Int64;static;
         class function SetProductSerialAtPlace(param1:Integer; param2:Integer):Int64;static;
         class procedure SetProductType(param1:string);static;
-        class function SetProductTypeAtPlacesRange(Place1:Integer; Place2:Integer; ProductType:string):Int64;static;
+        class procedure SetProductTypeAtPlacesRange(Place1:Integer; Place2:Integer; ProductType:string);static;
         class procedure SetValues(P:TParty3);static;
         class function ToggleProductProductionAtPlace(param1:Integer):Int64;static;
          
@@ -300,13 +300,13 @@ begin
 end;
 
 
-class function TLastPartySvc.SetPointsMethodInPlacesRange(Place1:Integer; Place2:Integer; Value:Integer):Int64;
+class procedure TLastPartySvc.SetPointsMethodInPlacesRange(Place1:Integer; Place2:Integer; Value:Integer);
 var
     req : ISuperobject;s:string;
 begin
     req := SO;
       SuperObject_SetField(req, 'Place1', Place1);   SuperObject_SetField(req, 'Place2', Place2);   SuperObject_SetField(req, 'Value', Value); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetPointsMethodInPlacesRange', req), Result);   
+      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetPointsMethodInPlacesRange', req);  
 end;
 
 
@@ -340,13 +340,13 @@ begin
 end;
 
 
-class function TLastPartySvc.SetProductTypeAtPlacesRange(Place1:Integer; Place2:Integer; ProductType:string):Int64;
+class procedure TLastPartySvc.SetProductTypeAtPlacesRange(Place1:Integer; Place2:Integer; ProductType:string);
 var
     req : ISuperobject;s:string;
 begin
     req := SO;
       SuperObject_SetField(req, 'Place1', Place1);   SuperObject_SetField(req, 'Place2', Place2);   SuperObject_SetField(req, 'ProductType', ProductType); 
-       SuperObject_Get(ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductTypeAtPlacesRange', req), Result);   
+      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.SetProductTypeAtPlacesRange', req);  
 end;
 
 
