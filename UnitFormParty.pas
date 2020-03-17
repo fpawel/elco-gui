@@ -72,7 +72,7 @@ begin
     GetCursorPos(pt);
     pt := StringGrid1.ScreenToClient(pt);
     StringGrid1.MouseToCell(pt.X, pt.Y, ACol, ARow);
-    if (ARow < 1) or (ARow >= Length(FParty.Products)) then
+    if (ARow < 1) or (ARow -1 >= Length(FParty.Products)) then
         exit;
 
     with FormProduct do

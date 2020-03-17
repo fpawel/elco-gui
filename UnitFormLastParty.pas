@@ -7,7 +7,7 @@ uses
     System.Classes, Vcl.Graphics,
     Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
     Vcl.Imaging.pngimage, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
-    server_data_types, product_column, Vcl.Menus;
+    server_data_types, product_column, Vcl.Menus, System.Generics.Collections;
 
 type
     TFormLastParty = class(TForm)

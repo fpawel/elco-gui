@@ -48,6 +48,8 @@ begin
           '\scenary.scn');
 
     Label1.Hide;
+    RichEdit1.Font.Size := 20;
+    RichEdit1.Font.Name := 'Consolas';
 end;
 
 procedure TFormScriptSource.FormDestroy(Sender: TObject);

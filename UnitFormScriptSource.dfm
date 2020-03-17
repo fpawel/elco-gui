@@ -100,7 +100,7 @@ object FormScriptSource: TFormScriptSource
     BorderStyle = bsNone
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
-    Font.Height = -15
+    Font.Height = -29
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
