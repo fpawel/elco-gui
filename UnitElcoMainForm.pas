@@ -117,7 +117,7 @@ type
     public
         { Public declarations }
         FIni: TIniFile;
-        FWorkStarted:boolean;
+        FWorkStarted: Boolean;
         procedure ShowBalloonTip(c: TWinControl; Icon: TIconKind;
           const Title, Text: string);
     end;
@@ -265,7 +265,7 @@ begin
     end;
     FormJournalParties.FetchYearsMonths;
     MakeInlineForm(FormJournalParties, TabSheetArchiveParties);
-    FormAppConfig.Upload;
+    FormAppConfig.upload;
     MakeInlineForm(FormAppConfig, TabSheetAppSettings);
     MakeInlineForm(FormKtx500, TabSheetTermoChamber);
     MakeInlineForm(FormConsole, TabSheetConsole);
@@ -363,6 +363,31 @@ begin
         end);
     SetOnScriptLine(FormScriptSource.OnScriptLine);
 
+    SetOnWorkStartedPlaceFirmware(
+        procedure(s: string)
+        begin
+            FormFirmware.PanelWorkStatus.Caption := TimeToStr(now) + ' ' + s;
+            FormFirmware.PanelWorkStatus.Font.Color := clBlue;
+            FormFirmware.TimerPerforming.Enabled := true;
+        end);
+
+    SetOnWorkCompletePlaceFirmware(
+        procedure(X: TWorkResult)
+        begin
+            FormFirmware.PanelWorkStatus.Caption := TimeToStr(now) + ' ' +
+              X.WorkName + ': ' + X.Message;
+            FormFirmware.TimerPerforming.Enabled := false;
+
+            case X.Tag of
+                0:
+                    FormFirmware.PanelWorkStatus.Font.Color := clNavy;
+                1:
+                    FormFirmware.PanelWorkStatus.Font.Color := clMaroon;
+                2:
+                    FormFirmware.PanelWorkStatus.Font.Color := clRed;
+            end;
+        end);
+
     NotifyServices_SetEnabled(true);
     TRunnerSvc.StopHardware;
 end;
@@ -425,7 +450,7 @@ begin
     else if PageControl.ActivePage = TabSheetInterrogate then
         FormInterrogate.UpdateCheckBlocks
     else if PageControl.ActivePage = TabSheetAppSettings then
-        FormAppConfig.Upload;
+        FormAppConfig.upload;
 
 end;
 
@@ -456,8 +481,8 @@ procedure TElcoMainForm.TimerPerformingTimer(Sender: TObject);
 begin
     with LabelStatusTop.Font do
         if Color = clRed then
-            Color := clblue
-        else if Color = clblue then
+            Color := clBlue
+        else if Color = clBlue then
             Color := clGreen
         else
             Color := clRed;

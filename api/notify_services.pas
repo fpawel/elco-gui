@@ -6,15 +6,15 @@ interface
 uses superobject, Winapi.Windows, Winapi.Messages, server_data_types;
 
 type
-    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
-    TParty1Handler = reference to procedure (x:TParty1);
+    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TIntegerHandler = reference to procedure (x:Integer);
     TScriptLineHandler = reference to procedure (x:TScriptLine);
     TReadCurrentHandler = reference to procedure (x:TReadCurrent);
     TWorkResultHandler = reference to procedure (x:TWorkResult);
     TStringHandler = reference to procedure (x:string);
-    TKtx500InfoHandler = reference to procedure (x:TKtx500Info);
     TDelayInfoHandler = reference to procedure (x:TDelayInfo);
+    TParty1Handler = reference to procedure (x:TParty1);
+    TFirmwareInfoHandler = reference to procedure (x:TFirmwareInfo);
     
 
 procedure HandleCopydata(var Message: TMessage);
@@ -35,6 +35,8 @@ procedure SetOnWriteConsole( AHandler : TStringHandler);
 procedure SetOnReadPlace( AHandler : TIntegerHandler);
 procedure SetOnReadBlock( AHandler : TIntegerHandler);
 procedure SetOnScriptLine( AHandler : TScriptLineHandler);
+procedure SetOnWorkCompletePlaceFirmware( AHandler : TWorkResultHandler);
+procedure SetOnWorkStartedPlaceFirmware( AHandler : TStringHandler);
 
 procedure NotifyServices_SetEnabled(enabled:boolean);
 
@@ -43,8 +45,8 @@ implementation
 uses Grijjy.Bson.Serialization, stringutils, sysutils;
 
 type
-    TServerAppCmd = (CmdReadCurrent, CmdWorkComplete, CmdWorkStarted, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, CmdReadBlock, 
-    CmdScriptLine);
+    TServerAppCmd = (CmdReadCurrent, CmdWorkComplete, CmdWorkStarted, CmdStatus, CmdKtx500Info, CmdKtx500Error, CmdWarning, CmdDelay, CmdEndDelay, CmdLastPartyChanged, CmdReadFirmware, CmdPanic, CmdWriteConsole, CmdReadPlace, CmdReadBlock, CmdScriptLine, CmdWorkCompletePlaceFirmware, 
+    CmdWorkStartedPlaceFirmware);
 
     type _deserializer = record
         class function deserialize<T>(str:string):T;static;
@@ -67,6 +69,8 @@ var
     _OnReadPlace : TIntegerHandler;
     _OnReadBlock : TIntegerHandler;
     _OnScriptLine : TScriptLineHandler;
+    _OnWorkCompletePlaceFirmware : TWorkResultHandler;
+    _OnWorkStartedPlaceFirmware : TStringHandler;
     _enabled:boolean;
 
 class function _deserializer.deserialize<T>(str:string):T;
@@ -188,6 +192,18 @@ begin
                 raise Exception.Create('_OnScriptLine must be set');
             _OnScriptLine(_deserializer.deserialize<TScriptLine>(str));
         end;
+        CmdWorkCompletePlaceFirmware:
+        begin
+            if not Assigned(_OnWorkCompletePlaceFirmware) then
+                raise Exception.Create('_OnWorkCompletePlaceFirmware must be set');
+            _OnWorkCompletePlaceFirmware(_deserializer.deserialize<TWorkResult>(str));
+        end;
+        CmdWorkStartedPlaceFirmware:
+        begin
+            if not Assigned(_OnWorkStartedPlaceFirmware) then
+                raise Exception.Create('_OnWorkStartedPlaceFirmware must be set');
+            _OnWorkStartedPlaceFirmware(str);
+        end;
         
     else
         raise Exception.Create('wrong message: ' + IntToStr(Message.WParam));
@@ -289,6 +305,18 @@ begin
     if Assigned(_OnScriptLine) then
         raise Exception.Create('_OnScriptLine already set');
     _OnScriptLine := AHandler;
+end;
+procedure SetOnWorkCompletePlaceFirmware( AHandler : TWorkResultHandler);
+begin
+    if Assigned(_OnWorkCompletePlaceFirmware) then
+        raise Exception.Create('_OnWorkCompletePlaceFirmware already set');
+    _OnWorkCompletePlaceFirmware := AHandler;
+end;
+procedure SetOnWorkStartedPlaceFirmware( AHandler : TStringHandler);
+begin
+    if Assigned(_OnWorkStartedPlaceFirmware) then
+        raise Exception.Create('_OnWorkStartedPlaceFirmware already set');
+    _OnWorkStartedPlaceFirmware := AHandler;
 end;
 
 

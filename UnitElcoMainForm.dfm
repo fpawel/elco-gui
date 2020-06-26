@@ -5441,11 +5441,12 @@ object ElcoMainForm: TElcoMainForm
       Left = 43
       Top = 5
       Width = 100
-      Height = 18
+      Height = 23
       Margins.Left = 5
       Margins.Top = 5
       Align = alLeft
       Caption = 'LabelStatusTop'
+      ExplicitHeight = 18
     end
     object PanelDelay: TPanel
       Left = 146
@@ -5470,7 +5471,7 @@ object ElcoMainForm: TElcoMainForm
         Left = 5
         Top = 3
         Width = 58
-        Height = 18
+        Height = 25
         Margins.Left = 5
         Margins.Right = 5
         Align = alLeft
@@ -5482,13 +5483,14 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitHeight = 18
       end
       object LabelProgress: TLabel
         AlignWithMargins = True
         Left = 739
         Top = 3
         Width = 50
-        Height = 18
+        Height = 25
         Margins.Left = 5
         Margins.Right = 5
         Align = alRight
@@ -5502,6 +5504,7 @@ object ElcoMainForm: TElcoMainForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
+        ExplicitHeight = 18
       end
       object ToolBar6: TToolBar
         Left = 794
@@ -5618,66 +5621,34 @@ object ElcoMainForm: TElcoMainForm
       object TabSheetParty: TTabSheet
         Caption = #1055#1072#1088#1090#1080#1103
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetInterrogate: TTabSheet
         Caption = #1054#1087#1088#1086#1089
         ImageIndex = 6
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetAppSettings: TTabSheet
         Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetArchiveParties: TTabSheet
         Caption = #1040#1088#1093#1080#1074
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetFindProduct: TTabSheet
         Caption = #1055#1086#1080#1089#1082' '#1069#1061#1071
         ImageIndex = 7
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetTermoChamber: TTabSheet
         Caption = #1058#1077#1088#1084#1086#1082#1072#1084#1077#1088#1072
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetConsole: TTabSheet
         Caption = #1050#1086#1085#1089#1086#1083#1100
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object TabSheetScenary: TTabSheet
         Caption = #1057#1094#1077#1085#1072#1088#1080#1081
         ImageIndex = 6
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -5933,7 +5904,6 @@ object ElcoMainForm: TElcoMainForm
         Left = 544
         Top = 0
         Width = 33
-        Height = 29
         Align = alRight
         ButtonHeight = 31
         ButtonWidth = 32
@@ -6008,17 +5978,19 @@ object ElcoMainForm: TElcoMainForm
       Left = 0
       Top = 0
       Width = 74
-      Height = 18
+      Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
+      ExplicitHeight = 18
     end
     object LabelStatusKtx500: TLabel
       Left = 479
       Top = 0
       Width = 74
-      Height = 18
+      Height = 20
       Align = alLeft
       Caption = 'LabelStatus'
+      ExplicitHeight = 18
     end
   end
   object ImageList3: TImageList

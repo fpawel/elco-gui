@@ -59,6 +59,8 @@ type
         N1: TMenuItem;
         N2: TMenuItem;
         N3: TMenuItem;
+    PanelWorkStatus: TPanel;
+    TimerPerforming: TTimer;
         procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
           Rect: TRect; State: TGridDrawState);
         procedure FormCreate(Sender: TObject);
@@ -85,6 +87,7 @@ type
         procedure Button1Click(Sender: TObject);
         procedure Button4Click(Sender: TObject);
         procedure N3Click(Sender: TObject);
+    procedure TimerPerformingTimer(Sender: TObject);
     private
         { Private declarations }
         Last_Edited_Col, Last_Edited_Row: Integer;
@@ -237,6 +240,17 @@ begin
     tt := TPlaceFirmware.CalculateTempPoints(GetTFirmwareInfo.TempValues);
     SetTemperaturePointsChart(tt.Temp, tt.Fon, tt.Sens);
     // FormFirmwareBytes.setup(f.Bytes);
+end;
+
+procedure TFormFirmware.TimerPerformingTimer(Sender: TObject);
+begin
+    with PanelWorkStatus.Font do
+        if Color = clRed then
+            Color := clblue
+        else if Color = clblue then
+            Color := clGreen
+        else
+            Color := clRed;
 end;
 
 procedure TFormFirmware.ToolButton8Click(Sender: TObject);

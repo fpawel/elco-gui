@@ -162,14 +162,16 @@ procedure TFormParty.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
     ACol, ARow: Integer;
-    p: TProductInfo;
+    p: ^TProductInfo;
 begin
     if (GetAsyncKeyState(VK_LBUTTON) >= 0) then
         exit;
     StringGrid1.MouseToCell(X, Y, ACol, ARow);
-    if (ACol > 0) or (ARow = 0) then
+
+    if (ACol <> 0) or (ARow <= 0) or (ARow - 1 >= length(FParty.Products)  ) then
         exit;
-    p := FParty.Products[ARow - 1];
+
+    p := @FParty.Products[ARow - 1];
 
     try
         TPartiesCatalogueSvc.ToggleProductProduction(p.ProductID);
