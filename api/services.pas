@@ -19,8 +19,7 @@ type
 
     TLastPartySvc = class
     public
-        class function CalculateFonMinus20:TParty1;static;
-        class function CalculateSensMinus20(param1:Double):TParty1;static;
+        class procedure CalculateMinus20(param1:Double);static;
         class function CalculateSensPlus50(param1:Double):TParty1;static;
         class procedure DeleteProductAtPlace(param1:Integer);static;
         class function GetCheckBlocks:TGetCheckBlocksArg;static;
@@ -180,23 +179,13 @@ begin
 end;
 
  
-class function TLastPartySvc.CalculateFonMinus20:TParty1;
-var
-    req : ISuperobject;
-begin
-    req := SO;
-    
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateFonMinus20', req, Result);   
-end;
-
-
-class function TLastPartySvc.CalculateSensMinus20(param1:Double):TParty1;
+class procedure TLastPartySvc.CalculateMinus20(param1:Double);
 var
     req : ISuperobject;
 begin
     req := SA([]);
       req.AsArray.Add(param1); 
-       ThttpRpcClient.Call(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateSensMinus20', req, Result);   
+      ThttpRpcClient.GetResponse(GetHttpServerAddr + '/rpc', 'LastPartySvc.CalculateMinus20', req);  
 end;
 
 

@@ -11749,7 +11749,7 @@ object ElcoMainForm: TElcoMainForm
         Caption = '-'
       end
       object I201: TMenuItem
-        Caption = #1056#1072#1089#1095#1080#1090#1072#1090#1100' I'#1095' -20"'#1057
+        Caption = #1056#1072#1089#1095#1080#1090#1072#1090#1100' '#1090#1086#1082' '#1087#1088#1080' -20"'#1057
         OnClick = I201Click
       end
       object I501: TMenuItem

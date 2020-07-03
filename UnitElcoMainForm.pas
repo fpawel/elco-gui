@@ -76,7 +76,6 @@ type
         procedure RichEditlMessageBoxTextMouseDown(Sender: TObject;
           Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
         procedure TimerPerformingTimer(Sender: TObject);
-        procedure N201Click(Sender: TObject);
         procedure N202Click(Sender: TObject);
         procedure N203Click(Sender: TObject);
         procedure PDF1Click(Sender: TObject);
@@ -564,13 +563,14 @@ label l;
 begin
     s := '1';
 l:
-    if not InputQuery('Пересчёт Iч -20"С', 'Укажите коэффициент пересчёта', s)
+    if not InputQuery('Пересчёт токов -20"С',
+        'Укажите коэффициент пересчёта чувствительности', s)
     then
         exit;
     s := s.Trim;
     if not TryStrToFloat2(s, v) then
         goto l;
-    FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
+    TLastPartySvc.CalculateMinus20(v)
 end;
 
 procedure TElcoMainForm.N11Click(Sender: TObject);
@@ -599,11 +599,6 @@ begin
     ShowFormCenterScreen(FormNewPartyDialog);
 end;
 
-procedure TElcoMainForm.N201Click(Sender: TObject);
-begin
-    FormLastParty.SetParty(TLastPartySvc.CalculateFonMinus20);
-end;
-
 procedure TElcoMainForm.N202Click(Sender: TObject);
 var
     s: string;
@@ -618,7 +613,7 @@ l:
     s := s.Trim;
     if not TryStrToFloat2(s, v) then
         goto l;
-    FormLastParty.SetParty(TLastPartySvc.CalculateSensMinus20(v));
+    TLastPartySvc.CalculateMinus20(v);
 end;
 
 procedure TElcoMainForm.N203Click(Sender: TObject);
